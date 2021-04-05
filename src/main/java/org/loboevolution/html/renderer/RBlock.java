@@ -1,53 +1,43 @@
 /*
- GNU LESSER GENERAL PUBLIC LICENSE
- Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
- Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.html.renderer;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
-import java.awt.event.MouseEvent;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.logging.Logger;
-
-import javax.swing.JScrollBar;
-
-import org.loboevolution.info.FloatingInfo;
 import org.loboevolution.html.dom.HTMLHtmlElement;
-import org.loboevolution.html.dom.domimpl.ModelNode;
-import org.loboevolution.html.dom.domimpl.NodeImpl;
+import org.loboevolution.html.dom.nodeimpl.ModelNode;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
 import org.loboevolution.html.renderstate.BlockRenderState;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.html.renderstate.RenderThreadState;
 import org.loboevolution.html.style.HtmlValues;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
-import java.util.Objects;
+import org.loboevolution.info.FloatingInfo;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseEvent;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
 
 /**
  * Represents a HTML block in a rendered document, typically a DIV. The root
@@ -56,114 +46,16 @@ import java.util.Objects;
  * Immediately below an RBlock you will find a node of type
  * {@link org.loboevolution.html.renderer.RBlockViewport}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class RBlock extends BaseElementRenderable {
-	private static class LayoutKey {
-		public final int availHeight;
-		public final int availWidth;
-		public final int defaultOverflowX;
-		public final int defaultOverflowY;
-		public final boolean expandHeight;
-		public final boolean expandWidth;
-		public final FloatingBoundsSource floatBoundsSource;
-		public final Font font;
-		public final boolean useDeclaredSize;
-		public final int whitespace;
-
-		public LayoutKey(int availWidth, int availHeight, boolean expandWidth, boolean expandHeight,
-				FloatingBoundsSource floatBoundsSource, int defaultOverflowX, int defaultOverflowY, int whitespace,
-				Font font) {
-			super();
-			this.availWidth = availWidth;
-			this.availHeight = availHeight;
-			this.floatBoundsSource = floatBoundsSource;
-			this.defaultOverflowX = defaultOverflowX;
-			this.defaultOverflowY = defaultOverflowY;
-			this.whitespace = whitespace;
-			this.font = font;
-			this.expandWidth = expandWidth;
-			this.expandHeight = expandHeight;
-			this.useDeclaredSize = true;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == this) {
-				return true;
-			}
-			if (!(obj instanceof LayoutKey)) {
-				return false;
-			}
-			final LayoutKey other = (LayoutKey) obj;
-			return other.availWidth == this.availWidth && other.availHeight == this.availHeight
-					&& other.defaultOverflowX == this.defaultOverflowX
-					&& other.defaultOverflowY == this.defaultOverflowY && other.whitespace == this.whitespace
-					&& other.expandWidth == this.expandWidth && other.expandHeight == this.expandHeight
-					&& other.useDeclaredSize == this.useDeclaredSize && Objects.equals(other.font, this.font)
-					&& Objects.equals(other.floatBoundsSource, this.floatBoundsSource);
-		}
-
-		@Override
-		public int hashCode() {
-			final Font font = this.font;
-			return this.availWidth * 1000 + this.availHeight ^ (font == null ? 0 : font.hashCode())
-					^ (this.expandWidth ? 2 : 0) ^ (this.expandHeight ? 1 : 0);
-		}
-	}
-
-	private static class LayoutValue {
-		public final boolean hasHScrollBar;
-		public final boolean hasVScrollBar;
-		public final int height;
-		public final int width;
-
-		public LayoutValue(int width, int height, boolean hasHScrollBar, boolean hasVScrollBar) {
-			this.width = width;
-			this.height = height;
-			this.hasHScrollBar = hasHScrollBar;
-			this.hasVScrollBar = hasVScrollBar;
-		}
-	}
-
-	private class LocalAdjustmentListener implements AdjustmentListener {
-		private final int orientation;
-
-		public LocalAdjustmentListener(int orientation) {
-			this.orientation = orientation;
-		}
-
-		@Override
-		public void adjustmentValueChanged(AdjustmentEvent e) {
-			if (RBlock.this.resettingScrollBars) {
-				return;
-			}
-			switch (e.getAdjustmentType()) {
-			case AdjustmentEvent.UNIT_INCREMENT:
-				// fall through
-			case AdjustmentEvent.UNIT_DECREMENT:
-				// fall through
-			case AdjustmentEvent.BLOCK_INCREMENT:
-				// fall through
-			case AdjustmentEvent.BLOCK_DECREMENT:
-				// fall through
-			case AdjustmentEvent.TRACK: {
-				final int value = e.getValue();
-				scrollToSBValue(this.orientation, value);
-				break;
-			}
-			}
-		}
-	}
 
 	/** Constant logger */
 	protected static final Logger logger = Logger.getLogger(RBlock.class.getName());
-	private static final int MAX_CACHE_SIZE = 10;
 	private BoundableRenderable armedRenderable;
 	protected final RBlockViewport bodyLayout;
 
-	protected final Map<LayoutKey, LayoutValue> cachedLayout = new Hashtable<LayoutKey, LayoutValue>();
 	protected int defaultOverflowX = RenderState.OVERFLOW_NONE;
 	protected int defaultOverflowY = RenderState.OVERFLOW_NONE;
 	protected RenderableSpot endSelection;
@@ -172,12 +64,6 @@ public class RBlock extends BaseElementRenderable {
 
 	protected boolean hasVScrollBar = false;
 	protected JScrollBar hScrollBar;
-
-	private LayoutKey lastLayoutKey = null;
-	private LayoutValue lastLayoutValue = null;
-
-	private int relativeOffsetX = 0;
-	private int relativeOffsetY = 0;
 
 	protected final int listNesting;
 
@@ -192,7 +78,7 @@ public class RBlock extends BaseElementRenderable {
 	/**
 	 * <p>Constructor for RBlock.</p>
 	 *
-	 * @param modelNode a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param modelNode a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 * @param listNesting a int.
 	 * @param pcontext a {@link org.loboevolution.http.UserAgentContext} object.
 	 * @param rcontext a {@link org.loboevolution.http.HtmlRendererContext} object.
@@ -221,28 +107,6 @@ public class RBlock extends BaseElementRenderable {
 		this.overflowY = this.defaultOverflowY;
 	}
 
-	private final boolean correctViewportOrigin(Insets insets, int blockWidth, int blockHeight) {
-		final RBlockViewport bodyLayout = this.bodyLayout;
-		final int viewPortX = bodyLayout.x;
-		final int viewPortY = bodyLayout.y;
-		boolean corrected = false;
-		if (viewPortX > insets.left) {
-			bodyLayout.x = insets.left;
-			corrected = true;
-		} else if (viewPortX < blockWidth - insets.right - bodyLayout.width) {
-			bodyLayout.x = Math.min(insets.left, blockWidth - insets.right - bodyLayout.width);
-			corrected = true;
-		}
-		if (viewPortY > insets.top) {
-			bodyLayout.y = insets.top;
-			corrected = true;
-		} else if (viewPortY < blockHeight - insets.bottom - bodyLayout.height) {
-			bodyLayout.y = Math.min(insets.top, blockHeight - insets.bottom - bodyLayout.height);
-			corrected = true;
-		}
-		return corrected;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public final void doLayout(int availWidth, int availHeight, boolean sizeOnly) {
@@ -267,50 +131,18 @@ public class RBlock extends BaseElementRenderable {
 	 */
 	public void doLayout(int availWidth, int availHeight, boolean expandWidth, boolean expandHeight,
 			FloatingBoundsSource floatBoundsSource, int defaultOverflowX, int defaultOverflowY, boolean sizeOnly) {
-		// Expected to be invoked in the GUI thread.
+
 		final RenderState renderState = this.modelNode.getRenderState();
-		final Font font = renderState == null ? null : renderState.getFont();
-		final int whiteSpace = renderState == null ? RenderState.WS_NORMAL : renderState.getWhiteSpace();
-		final LayoutKey key = new LayoutKey(availWidth, availHeight, expandWidth, expandHeight, floatBoundsSource,
-				defaultOverflowX, defaultOverflowY, whiteSpace, font);
-		final Map<LayoutKey, LayoutValue> cachedLayout = this.cachedLayout;
-		LayoutValue value;
-		if (sizeOnly) {
-			value = (LayoutValue) cachedLayout.get(key);
-		} else {
-			if (Objects.equals(key, this.lastLayoutKey)) {
-				value = this.lastLayoutValue;
-			} else {
-				value = null;
-			}
-		}
-		if (value == null) {
-			value = forceLayout(renderState, availWidth, availHeight, expandWidth, expandHeight, floatBoundsSource,
-					defaultOverflowX, defaultOverflowY, sizeOnly);
-			if (sizeOnly) {
-				this.lastLayoutKey = null;
-				this.lastLayoutValue = null;
-				if (cachedLayout.size() > MAX_CACHE_SIZE) {
-					// Unlikely, but we should keep it bounded.
-					cachedLayout.clear();
-				}
-				cachedLayout.put(key, value);
-			} else {
-				this.lastLayoutKey = key;
-				this.lastLayoutValue = value;
-			}
-		}
+		LayoutValue value = forceLayout(renderState, availWidth, availHeight, expandWidth, expandHeight, floatBoundsSource, defaultOverflowX, defaultOverflowY, sizeOnly);
 		this.width = value.width;
 		this.height = value.height;
 		this.hasHScrollBar = value.hasHScrollBar;
 		this.hasVScrollBar = value.hasVScrollBar;
 
-		// Even if we didn't do layout, the parent is
-		// expected to have removed its GUI components.
+		bodyLayout.positionDelayed();
+
 		sendGUIComponentsToParent();
 
-		// Even if we didn't do layout, the parent is
-		// expected to have removed its delayed pairs.
 		sendDelayedPairsToParent();
 	}
 
@@ -327,6 +159,7 @@ public class RBlock extends BaseElementRenderable {
 			final int origX = bodyLayout.x;
 			final int origY = bodyLayout.y;
 			final Insets insets = getInsetsMarginBorder(hscroll, vscroll);
+
 			if (hscroll) {
 				if (point.x < insets.left) {
 					bodyLayout.x += insets.left - point.x;
@@ -375,16 +208,22 @@ public class RBlock extends BaseElementRenderable {
 
 	/**
 	 * Lays out the block without checking for prior dimensions.
-	 * 
-	 * @param declaredWidth   The declared width of the block.
-	 * @param declaredHeight  The declared height of the block.
-	 * @param tentativeWidth  Presumed width of the whole block (with margins).
-	 * @param tentativeHeight
-	 * @return
+	 *
+	 * @param renderState a {@link org.loboevolution.html.renderstate.RenderState} object.
+	 * @param availWidth a int.
+	 * @param availHeight a int.
+	 * @param expandWidth a boolean.
+	 * @param expandHeight a boolean.
+	 * @param blockFloatBoundsSource a {@link org.loboevolution.html.renderer.FloatingBoundsSource} object.
+	 * @param defaultOverflowX a int.
+	 * @param defaultOverflowY a int.
+	 * @param sizeOnly a boolean.
+	 * @return a {@link org.loboevolution.html.renderer.RBlock.LayoutValue} object.
 	 */
-	private final LayoutValue forceLayout(RenderState renderState, int availWidth, int availHeight, boolean expandWidth,
+	private LayoutValue forceLayout(RenderState renderState, int availWidth, int availHeight, boolean expandWidth,
 			boolean expandHeight, FloatingBoundsSource blockFloatBoundsSource, int defaultOverflowX,
 			int defaultOverflowY, boolean sizeOnly) {
+
 		RenderState rs = renderState;
 		if (rs == null) {
 			rs = new BlockRenderState(null);
@@ -399,29 +238,14 @@ public class RBlock extends BaseElementRenderable {
 			return new LayoutValue(insets.left + insets.right, insets.bottom + insets.top, false, false);
 		}
 
-		Insets paddingInsets = this.paddingInsets;
-		if (paddingInsets == null) {
-			paddingInsets = RBlockViewport.ZERO_INSETS;
-		}
-		Insets borderInsets = this.borderInsets;
-		if (borderInsets == null) {
-			borderInsets = RBlockViewport.ZERO_INSETS;
-		}
-		Insets marginInsets = this.marginInsets;
-		if (marginInsets == null) {
-			marginInsets = RBlockViewport.ZERO_INSETS;
-		}
+		Insets paddingInsets = (this.paddingInsets == null) ? RBlockViewport.ZERO_INSETS : this.paddingInsets;
+
 		final int paddingTotalWidth = paddingInsets.left + paddingInsets.right;
 		final int paddingTotalHeight = paddingInsets.top + paddingInsets.bottom;
 
-		int overflowX = this.overflowX;
-		if (overflowX == RenderState.OVERFLOW_NONE) {
-			overflowX = defaultOverflowX;
-		}
-		int overflowY = this.overflowY;
-		if (overflowY == RenderState.OVERFLOW_NONE) {
-			overflowY = defaultOverflowY;
-		}
+		int overflowX = (this.overflowX == RenderState.OVERFLOW_NONE) ? defaultOverflowX : this.overflowX;
+		int overflowY = (this.overflowY == RenderState.OVERFLOW_NONE) ? defaultOverflowY : this.overflowY;
+
 		final boolean vauto = overflowY == RenderState.OVERFLOW_AUTO;
 		boolean hscroll = overflowX == RenderState.OVERFLOW_SCROLL;
 		final boolean hauto = overflowX == RenderState.OVERFLOW_AUTO;
@@ -431,34 +255,32 @@ public class RBlock extends BaseElementRenderable {
 		int insetsTotalWidth = insets.left + insets.right;
 		int insetsTotalHeight = insets.top + insets.bottom;
 		int actualAvailWidth = availWidth - paddingTotalWidth - insetsTotalWidth;
-		final int actualAvailHeight = availWidth - paddingTotalHeight - insetsTotalHeight;
-		Integer dw = getDeclaredWidth(renderState, actualAvailWidth);
+		final int actualAvailHeight = availHeight - paddingTotalHeight - insetsTotalHeight;
+		final Integer dw = getDeclaredWidth(renderState, actualAvailWidth);
 		final Integer dh = getDeclaredHeight(renderState, actualAvailHeight);
-		int declaredWidth = -1;
-		int declaredHeight = -1;
-		if (dw != null) {
-			declaredWidth = dw.intValue();
-		}
-		if (dh != null) {
-			declaredHeight = dh.intValue();
-		}
+		int declaredWidth = dw != null ? dw : -1;
+		int declaredHeight = dh != null ? dh : -1;
 
 		clearGUIComponents();
 
 		int tentativeWidth;
 		int tentativeHeight;
 
-		tentativeWidth = declaredWidth == -1 ? availWidth : declaredWidth + insetsTotalWidth + paddingTotalWidth;
-		tentativeHeight = declaredHeight == -1 ? availHeight : declaredHeight + insetsTotalHeight + paddingTotalHeight;
+		if ("border-box".equals(rs.getBoxSizing())) {
+			tentativeWidth = declaredWidth == -1 ? availWidth : declaredWidth;
+			tentativeHeight = declaredHeight == -1 ? availHeight : declaredHeight;
+		} else {
+			tentativeWidth = declaredWidth == -1 ? availWidth : declaredWidth + insetsTotalWidth + paddingTotalWidth;
+			tentativeHeight = declaredHeight == -1 ? availHeight : declaredHeight + insetsTotalHeight + paddingTotalHeight;
+		}
+
 		if (declaredWidth == -1 && !expandWidth && availWidth > insetsTotalWidth + paddingTotalWidth) {
 			final RenderThreadState state = RenderThreadState.getState();
 			final boolean prevOverrideNoWrap = state.overrideNoWrap;
 			if (!prevOverrideNoWrap) {
 				state.overrideNoWrap = true;
 				try {
-					final int desiredViewportWidth = paddingTotalWidth;
-					final int desiredViewportHeight = paddingTotalHeight;
-					bodyLayout.layout(desiredViewportWidth, desiredViewportHeight, paddingInsets, -1, null, true);
+					bodyLayout.layout(paddingTotalWidth, paddingTotalHeight, paddingInsets, -1, null, true);
 					if (bodyLayout.width + insetsTotalWidth < tentativeWidth) {
 						tentativeWidth = bodyLayout.width + insetsTotalWidth;
 						tentativeHeight = bodyLayout.height + insetsTotalHeight;
@@ -485,12 +307,11 @@ public class RBlock extends BaseElementRenderable {
 			insets = getInsetsMarginBorder(hscroll, vscroll);
 			insetsTotalWidth = insets.left + insets.right;
 			actualAvailWidth = availWidth - paddingTotalWidth - insetsTotalWidth;
-			dw = getDeclaredWidth(renderState, actualAvailWidth);
-			declaredWidth = dw == null ? -1 : dw.intValue();
+			Integer newdw = getDeclaredWidth(renderState, actualAvailWidth);
+			declaredWidth = newdw == null ? -1 : newdw;
 			desiredViewportWidth = tentativeWidth - insetsTotalWidth;
 			if (blockFloatBounds != null) {
-				viewportFloatBounds = new ShiftedFloatingBounds(blockFloatBounds, -insets.left, -insets.right,
-						-insets.top);
+				viewportFloatBounds = new ShiftedFloatingBounds(blockFloatBounds, -insets.left, -insets.right, -insets.top);
 			}
 			bodyLayout.layout(desiredViewportWidth, desiredViewportHeight, paddingInsets, -1, viewportFloatBounds, sizeOnly);
 		}
@@ -511,20 +332,19 @@ public class RBlock extends BaseElementRenderable {
 			}
 		}
 
-		int adjDeclaredWidth = -1;
-		int adjDeclaredHeight = -1;
-		
-		if("border-box".equals(rs.getBoxSizing())) {
-			adjDeclaredWidth = declaredWidth == -1 ? -1 : declaredWidth;
-			adjDeclaredHeight = declaredHeight == -1 ? -1 : declaredHeight;
+		int adjDeclaredWidth;
+		int adjDeclaredHeight;
+
+		if ("border-box".equals(rs.getBoxSizing())) {
+			adjDeclaredWidth = declaredWidth;
+			adjDeclaredHeight = declaredHeight;
 		} else {
 			adjDeclaredWidth = declaredWidth == -1 ? -1 : declaredWidth + insets.left + insets.right + paddingInsets.left + paddingInsets.right;
 			adjDeclaredHeight = declaredHeight == -1 ? -1 : declaredHeight + insets.top + insets.bottom + paddingInsets.top + paddingInsets.bottom;
 		}
 
 		// Adjust insets and other dimensions base on overflow-y=auto.
-		if (hauto && (adjDeclaredWidth != -1 && prelimBlockWidth > adjDeclaredWidth
-				|| prelimBlockWidth > tentativeWidth)) {
+		if (hauto && (adjDeclaredWidth != -1 && prelimBlockWidth > adjDeclaredWidth || prelimBlockWidth > tentativeWidth)) {
 			hscroll = true;
 			insets = getInsetsMarginBorder(hscroll, vscroll);
 			insetsTotalHeight = insets.top + insets.bottom;
@@ -533,6 +353,7 @@ public class RBlock extends BaseElementRenderable {
 
 		int resultingWidth;
 		int resultingHeight;
+
 		if (adjDeclaredWidth == -1) {
 			resultingWidth = expandWidth ? Math.max(prelimBlockWidth, tentativeWidth) : prelimBlockWidth;
 			if (hscroll && resultingWidth > tentativeWidth) {
@@ -541,38 +362,31 @@ public class RBlock extends BaseElementRenderable {
 		} else {
 			resultingWidth = adjDeclaredWidth;
 		}
-		if (!sizeOnly) {
-			// Align horizontally now. This may change canvas height.
-			final int alignmentXPercent = rs.getAlignXPercent();
-			if (alignmentXPercent > 0) {
-				// TODO: OPTIMIZATION: alignment should not be done in table cell
-				// sizing determination.
-				final int canvasWidth = Math.max(bodyLayout.width, resultingWidth - insets.left - insets.right);
-				// Alignment is done afterwards because canvas dimensions might have
-				// changed.
-				bodyLayout.alignX(alignmentXPercent, canvasWidth, paddingInsets);
-			}
-		}
+
 		if (adjDeclaredHeight == -1) {
 			resultingHeight = expandHeight ? Math.max(prelimBlockHeight, tentativeHeight) : prelimBlockHeight;
 			if (vscroll && resultingHeight > tentativeHeight) {
 				resultingHeight = Math.max(tentativeHeight, SCROLL_BAR_THICKNESS);
 			}
 		} else {
-		      resultingHeight = adjDeclaredHeight;
+			resultingHeight = adjDeclaredHeight;
 		}
+
 		if (!sizeOnly) {
-			// Align vertically now
 			final int alignmentYPercent = rs.getAlignYPercent();
+			final int alignmentXPercent = rs.getAlignXPercent();
+
+			if (alignmentXPercent > 0) {
+				final int canvasWidth = Math.max(bodyLayout.width, resultingWidth - insets.left - insets.right);
+				bodyLayout.alignX(alignmentXPercent, canvasWidth, paddingInsets);
+			}
+
 			if (alignmentYPercent > 0) {
-				// TODO: OPTIMIZATION: alignment should not be done in table cell
-				// sizing determination.
 				final int canvasHeight = Math.max(bodyLayout.height, resultingHeight - insets.top - insets.bottom);
-				// Alignment is done afterwards because canvas dimensions might have
-				// changed.
 				bodyLayout.alignY(alignmentYPercent, canvasHeight, paddingInsets);
 			}
 		}
+
 		if (vscroll) {
 			final JScrollBar sb = getVScrollBar();
 			addComponent(sb);
@@ -598,40 +412,7 @@ public class RBlock extends BaseElementRenderable {
 			bodyLayout.x = insets.left;
 			bodyLayout.y = insets.top;
 		}
-
-	    setupRelativePosition(rs, availWidth);
 		return new LayoutValue(resultingWidth, resultingHeight, hscroll, vscroll);
-	}
-
-	  private void setupRelativePosition(final RenderState rs, final int availWidth) {
-		if (rs.getPosition() == RenderState.POSITION_RELATIVE) {
-			final String leftText = rs.getLeft();
-			final String topText = rs.getTop();
-			int left = 0;
-			if (leftText != null) {
-				left = HtmlValues.getPixelSize(leftText, rs, 0, availWidth);
-			} else {
-				final String rightText = rs.getRight();
-				if (rightText != null) {
-					final int right = HtmlValues.getPixelSize(rightText, rs, 0, availWidth);
-					left = -right;
-				}
-			}
-
-			int top = 0;
-			if (topText != null) {
-				top = HtmlValues.getPixelSize(topText, rs, top, this.height);
-			} else {
-				final String bottomText = rs.getBottom();
-				if (bottomText != null) {
-					final int bottom = HtmlValues.getPixelSize(bottomText, rs, 0, this.height);
-					top = -bottom;
-				}
-			}
-
-			this.relativeOffsetX = left;
-			this.relativeOffsetY = top;
-		}
 	}
 
 	/**
@@ -822,9 +603,6 @@ public class RBlock extends BaseElementRenderable {
 	@Override
 	public void invalidateLayoutLocal() {
 		super.invalidateLayoutLocal();
-		this.cachedLayout.clear();
-		this.lastLayoutKey = null;
-		this.lastLayoutValue = null;
 		final JScrollBar hScrollBar = this.hScrollBar;
 		if (hScrollBar != null) {
 			// Necessary
@@ -946,10 +724,7 @@ public class RBlock extends BaseElementRenderable {
 				return false;
 			}
 		}
-		if (this.backgroundColor != null) {
-			return false;
-		}
-		return true;
+		return this.backgroundColor == null;
 	}
 
 	/** {@inheritDoc} */
@@ -964,10 +739,7 @@ public class RBlock extends BaseElementRenderable {
 		if (!HtmlController.getInstance().onMouseClick(this.modelNode, event, x, y)) {
 			return false;
 		}
-		if (this.backgroundColor != null) {
-			return false;
-		}
-		return true;
+		return this.backgroundColor == null;
 	}
 
 	/** {@inheritDoc} */
@@ -1013,10 +785,7 @@ public class RBlock extends BaseElementRenderable {
 		if (!HtmlController.getInstance().onMouseDown(this.modelNode, event, x, y)) {
 			return false;
 		}
-		if (this.backgroundColor != null) {
-			return false;
-		}
-		return true;
+		return this.backgroundColor == null;
 	}
 
 	/*
@@ -1048,10 +817,7 @@ public class RBlock extends BaseElementRenderable {
 		if (!HtmlController.getInstance().onMouseUp(this.modelNode, event, x, y)) {
 			return false;
 		}
-		if (this.backgroundColor != null) {
-			return false;
-		}
-		return true;
+		return this.backgroundColor == null;
 	}
 
 	/** {@inheritDoc} */
@@ -1213,6 +979,8 @@ public class RBlock extends BaseElementRenderable {
 				return scrollHorizontalTo(bodyLayout.x - offset);
 			case JScrollBar.VERTICAL:
 				return scrollVerticalTo(bodyLayout.y - offset);
+			default:
+				break;
 			}
 		}
 		return false;
@@ -1240,14 +1008,13 @@ public class RBlock extends BaseElementRenderable {
 		final RBlockViewport bodyLayout = this.bodyLayout;
 		if (bodyLayout != null) {
 			final Insets insets = getInsetsMarginBorder(this.hasHScrollBar, this.hasVScrollBar);
-			final int viewPortX = newX;
 			final int prevX = bodyLayout.x;
-			if (viewPortX > insets.left) {
+			if (newX > insets.left) {
 				bodyLayout.x = insets.left;
-			} else if (viewPortX < this.width - insets.right - bodyLayout.width) {
+			} else if (newX < this.width - insets.right - bodyLayout.width) {
 				bodyLayout.x = Math.min(insets.left, this.width - insets.right - bodyLayout.width);
 			} else {
-				bodyLayout.x = viewPortX;
+				bodyLayout.x = newX;
 			}
 			resetScrollBars(null);
 			this.updateWidgetBounds();
@@ -1322,14 +1089,13 @@ public class RBlock extends BaseElementRenderable {
 		final RBlockViewport bodyLayout = this.bodyLayout;
 		if (bodyLayout != null) {
 			final Insets insets = getInsetsMarginBorder(this.hasHScrollBar, this.hasVScrollBar);
-			final int viewPortY = newY;
 			final int prevY = bodyLayout.y;
-			if (viewPortY > insets.top) {
+			if (newY > insets.top) {
 				bodyLayout.y = insets.top;
-			} else if (viewPortY < this.height - insets.bottom - bodyLayout.height) {
+			} else if (newY < this.height - insets.bottom - bodyLayout.height) {
 				bodyLayout.y = Math.min(insets.top, this.height - insets.bottom - bodyLayout.height);
 			} else {
-				bodyLayout.y = viewPortY;
+				bodyLayout.y = newY;
 			}
 			resetScrollBars(null);
 			this.updateWidgetBounds();
@@ -1414,6 +1180,65 @@ public class RBlock extends BaseElementRenderable {
 					vsb.setBounds(guiX + this.width - insets.right, guiY + insets.top, SCROLL_BAR_THICKNESS,
 							this.height - insets.top - insets.bottom);
 				}
+			}
+		}
+	}
+
+	private void correctViewportOrigin(Insets insets, int blockWidth, int blockHeight) {
+		final RBlockViewport bodyLayout = this.bodyLayout;
+		final int viewPortX = bodyLayout.x;
+		final int viewPortY = bodyLayout.y;
+
+		if (viewPortX > insets.left) {
+			bodyLayout.x = insets.left;
+		} else if (viewPortX < blockWidth - insets.right - bodyLayout.width) {
+			bodyLayout.x = Math.min(insets.left, blockWidth - insets.right - bodyLayout.width);
+		}
+		if (viewPortY > insets.top) {
+			bodyLayout.y = insets.top;
+		} else if (viewPortY < blockHeight - insets.bottom - bodyLayout.height) {
+			bodyLayout.y = Math.min(insets.top, blockHeight - insets.bottom - bodyLayout.height);
+		}
+	}
+
+	private static class LayoutValue {
+		public final boolean hasHScrollBar;
+		public final boolean hasVScrollBar;
+		public final int height;
+		public final int width;
+
+		public LayoutValue(int width, int height, boolean hasHScrollBar, boolean hasVScrollBar) {
+			this.width = width;
+			this.height = height;
+			this.hasHScrollBar = hasHScrollBar;
+			this.hasVScrollBar = hasVScrollBar;
+		}
+	}
+
+	private class LocalAdjustmentListener implements AdjustmentListener {
+		private final int orientation;
+
+		public LocalAdjustmentListener(int orientation) {
+			this.orientation = orientation;
+		}
+
+		@Override
+		public void adjustmentValueChanged(AdjustmentEvent e) {
+			if (RBlock.this.resettingScrollBars) {
+				return;
+			}
+			switch (e.getAdjustmentType()) {
+				case AdjustmentEvent.UNIT_INCREMENT:
+				case AdjustmentEvent.UNIT_DECREMENT:
+				case AdjustmentEvent.BLOCK_INCREMENT:
+				case AdjustmentEvent.BLOCK_DECREMENT:
+				case AdjustmentEvent.TRACK: {
+					final int value = e.getValue();
+					scrollToSBValue(this.orientation, value);
+					break;
+				}
+				default:
+					break;
 			}
 		}
 	}

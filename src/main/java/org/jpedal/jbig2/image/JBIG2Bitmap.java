@@ -69,13 +69,15 @@ import org.jpedal.jbig2.util.BinaryOperation;
 /**
  * <p>JBIG2Bitmap class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public final class JBIG2Bitmap {
 	
 	private static final Logger logger = Logger.getLogger(JBIG2Bitmap.class.getName());
-	private int width, height, line;
+	private final int width;
+    private int height;
+    private final int line;
 	private int bitmapNumber;
 	public FastBitSet data;
 
@@ -83,9 +85,9 @@ public final class JBIG2Bitmap {
 	
 	//private static int counter = 0;
 	
-	private ArithmeticDecoder arithmeticDecoder;
-	private HuffmanDecoder huffmanDecoder;
-	private MMRDecoder mmrDecoder;
+	private final ArithmeticDecoder arithmeticDecoder;
+	private final HuffmanDecoder huffmanDecoder;
+	private final MMRDecoder mmrDecoder;
 	
 	/**
 	 * <p>Constructor for JBIG2Bitmap.</p>
@@ -311,6 +313,8 @@ public final class JBIG2Bitmap {
 				case 3:
 					ltpCX = 0x18a;
 					break;
+				default:
+					break;
 				}
 			}
 
@@ -482,6 +486,8 @@ public final class JBIG2Bitmap {
 						cx1 = ((BinaryOperation.bit32ShiftL(cx1, 1)) | cxPtr1.nextPixel()) & 0x1f;
 						cx2 = ((BinaryOperation.bit32ShiftL(cx2, 1)) | pixel) & 0x0f;
 					}
+					break;
+				default:
 					break;
 				}
 			}
@@ -828,32 +834,28 @@ public final class JBIG2Bitmap {
 					if (transposed) {
 						switch (referenceCorner) {
 						case 0: // bottom left
-							combine(symbolBitmap, tt, s, combinationOperator);
+							case 1: // top left
+								combine(symbolBitmap, tt, s, combinationOperator);
 							break;
-						case 1: // top left
-							combine(symbolBitmap, tt, s, combinationOperator);
+							case 2: // bottom right
+							case 3: // top right
+								combine(symbolBitmap, (tt - bitmapWidth), s, combinationOperator);
 							break;
-						case 2: // bottom right
-							combine(symbolBitmap, (tt - bitmapWidth), s, combinationOperator);
-							break;
-						case 3: // top right
-							combine(symbolBitmap, (tt - bitmapWidth), s, combinationOperator);
+							default:
 							break;
 						}
 						s += bitmapHeight;
 					} else {
 						switch (referenceCorner) {
 						case 0: // bottom left
-							combine(symbolBitmap, s, (tt - bitmapHeight), combinationOperator);
+							case 2: // bottom right
+								combine(symbolBitmap, s, (tt - bitmapHeight), combinationOperator);
 							break;
 						case 1: // top left
-							combine(symbolBitmap, s, tt, combinationOperator);
+							case 3: // top right
+								combine(symbolBitmap, s, tt, combinationOperator);
 							break;
-						case 2: // bottom right
-							combine(symbolBitmap, s, (tt - bitmapHeight), combinationOperator);
-							break;
-						case 3: // top right
-							combine(symbolBitmap, s, tt, combinationOperator);
+							default:
 							break;
 						}
 						s += bitmapWidth;
@@ -1019,9 +1021,7 @@ public final class JBIG2Bitmap {
 
 		else if (combOp == 4) {
 			if (x == 0 && y == 0 && srcHeight == height && srcWidth == width) {
-				for (int i=0; i < data.w.length; i++) {
-					data.w[i] = bitmap.data.w[i];
-				}
+				System.arraycopy(bitmap.data.w, 0, data.w, 0, data.w.length);
 			}
 			else {
 				for (int row = y; row < y + srcHeight; row++) {
@@ -1054,6 +1054,13 @@ public final class JBIG2Bitmap {
 //	public byte getPixelByte(int col, int row) {
 		//return data.getByte(row, col);
 //	}
+//	public byte getPixelByte(int col, int row) {
+		//return data.getByte(row, col);
+//	}
+
+//	public byte getPixelByte(int col, int row) {
+		//return data.getByte(row, col);
+//	}
 	private void duplicateRow(int yDest, int ySrc) {
 //		for (int i = 0; i < width;) {
 //			setPixelByte(i, yDest, getPixelByte(i, ySrc));
@@ -1065,7 +1072,7 @@ public final class JBIG2Bitmap {
 	}
 
 	/**
-	 * <p>Getter for the field width.</p>
+	 * <p>Getter for the field <code>width</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -1074,7 +1081,7 @@ public final class JBIG2Bitmap {
 	}
 
 	/**
-	 * <p>Getter for the field height.</p>
+	 * <p>Getter for the field <code>height</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -1083,7 +1090,7 @@ public final class JBIG2Bitmap {
 	}
 
 	/**
-	 * <p>Getter for the field data.</p>
+	 * <p>Getter for the field <code>data</code>.</p>
 	 *
 	 * @param switchPixelColor a boolean.
 	 * @return an array of {@link byte} objects.
@@ -1244,6 +1251,31 @@ public final class JBIG2Bitmap {
 //	public int getPixel(int col, int row) {
 //		return data.get(row, col) ? 1 : 0;
 //	}
+
+//	private void setPixelByte(int col, int row, FastBitSet data, byte bits) {
+//		data.setByte(row, col, bits);
+//	}
+
+//	public void setPixel(int col, int row, int value) {
+//		setPixel(col, row, data, value);
+//	}
+
+//	public int getPixel(int col, int row) {
+//		return data.get(row, col) ? 1 : 0;
+//	}
+
+
+//	private void setPixelByte(int col, int row, FastBitSet data, byte bits) {
+//		data.setByte(row, col, bits);
+//	}
+
+//	public void setPixel(int col, int row, int value) {
+//		setPixel(col, row, data, value);
+//	}
+
+//	public int getPixel(int col, int row) {
+//		return data.get(row, col) ? 1 : 0;
+//	}
 	private void setPixel(int col, int row, FastBitSet data, int value) {
 		int index = (row * width) + col;
 
@@ -1302,7 +1334,7 @@ public final class JBIG2Bitmap {
 	}
 
 	/**
-	 * <p>Setter for the field bitmapNumber.</p>
+	 * <p>Setter for the field <code>bitmapNumber</code>.</p>
 	 *
 	 * @param segmentNumber a int.
 	 */
@@ -1311,7 +1343,7 @@ public final class JBIG2Bitmap {
 	}
 
 	/**
-	 * <p>Getter for the field bitmapNumber.</p>
+	 * <p>Getter for the field <code>bitmapNumber</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -1349,14 +1381,14 @@ public final class JBIG2Bitmap {
 	/**
 	 * Faster BitSet implementation. Does not perfom any bound checks.
 	 *  
-	 * @author Boris von Loesch
+	 * Author Boris von Loesch
 	 *
 	 */
 	static final class FastBitSet {
-		long[] w;
-		static final int pot = (Long.SIZE == 32) ? 5 : (Long.SIZE == 16) ? 4 : (Long.SIZE == 64) ? 6 : 7;
+		final long[] w;
+		static final int pot = 6;
 		static final int mask = (int) ((-1L) >>> (Long.SIZE-pot));
-		int length;
+		final int length;
 		
 		
 		public FastBitSet(int length) {

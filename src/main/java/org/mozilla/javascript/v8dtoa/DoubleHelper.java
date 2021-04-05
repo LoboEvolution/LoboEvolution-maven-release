@@ -34,8 +34,8 @@ package org.mozilla.javascript.v8dtoa;
 /**
  * <p>DoubleHelper class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class DoubleHelper {
 

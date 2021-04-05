@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageReadParam;
@@ -76,12 +77,14 @@ import org.jpedal.jbig2.image.JBIG2Bitmap;
 /**
  * <p>JBIG2ImageReader class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBIG2ImageReader extends ImageReader {
 	
+	/** The Constant logger. */
 	private static final Logger logger = Logger.getLogger(JBIG2ImageReader.class.getName());
+	
 	private JBIG2Decoder decoder;
 	private ImageInputStream stream;
 	private boolean readFile;
@@ -217,7 +220,7 @@ public class JBIG2ImageReader extends ImageReader {
 			wrDst.setRect(destinationOffset.x, destinationOffset.y, raster);
 
 		} catch (RuntimeException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		return dst;
@@ -240,7 +243,7 @@ public class JBIG2ImageReader extends ImageReader {
 	}
 
 	/** {@inheritDoc} */
-	public Iterator getImageTypes(int imageIndex) throws IOException {
+	public Iterator<ImageTypeSpecifier> getImageTypes(int imageIndex) throws IOException {
 		readFile();
 
 		checkIndex(imageIndex);
@@ -251,7 +254,7 @@ public class JBIG2ImageReader extends ImageReader {
 		// to return an appropriate BufferedImage that contains the decoded
 		// image, and is accessed by an application.
 
-		List l = new ArrayList();
+		List<ImageTypeSpecifier> l = new ArrayList<>();
 
 		// The JBIG2 reader only uses a single List entry. This entry describes
 		// a
@@ -472,7 +475,7 @@ public class JBIG2ImageReader extends ImageReader {
 					System.err.println(((yy + (y * sampling)) * origLineLength) + " " + (((x * sampling) + (xx * comp) + jj)));
 					System.err.println("w=" + w + " h=" + h + " sampling=" + sampling + " x=" + x + " y=" + y);
 					// logger.info("xx="+xx+" yy="+yy);
-					e.printStackTrace();
+					logger.log(Level.SEVERE, e.getMessage(), e);
 					// <end-demo><end-full>
 				}
 			}
@@ -531,10 +534,10 @@ public class JBIG2ImageReader extends ImageReader {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (JBIG2Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		readFile = true;

@@ -26,8 +26,8 @@ import java.io.Serializable;
  * To customize initialization of constructor and prototype objects, descendant
  * may override scopeInit or fillConstructorProperties methods.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class IdScriptableObject extends ScriptableObject implements IdFunctionCall {
     private static final long serialVersionUID = -3744239272168621609L;
@@ -229,7 +229,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
                 if (cx.isStrictMode()) {
                     int nameSlot = (id  - 1) * SLOT_SPAN + NAME_SLOT;
                     String name = (String)valueArray[nameSlot];
-                    throw ScriptRuntime.typeError1("msg.delete.property.with.configurable.false", name);
+                    throw ScriptRuntime.typeErrorById("msg.delete.property.with.configurable.false", name);
                 }
             } else {
                 int valueSlot = (id  - 1) * SLOT_SPAN;
@@ -484,7 +484,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
         int info = findInstanceIdInfo(name);
         if (info != 0) {
             if (start == this && isSealed()) {
-                throw Context.reportRuntimeError1("msg.modify.sealed",
+                throw Context.reportRuntimeErrorById("msg.modify.sealed",
                                                   name);
             }
             int attr = (info >>> 16);
@@ -503,7 +503,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
             int id = prototypeValues.findId(name);
             if (id != 0) {
                 if (start == this && isSealed()) {
-                    throw Context.reportRuntimeError1("msg.modify.sealed",
+                    throw Context.reportRuntimeErrorById("msg.modify.sealed",
                                                       name);
                 }
                 prototypeValues.set(id, start, value);
@@ -520,7 +520,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
         int info = findInstanceIdInfo(key);
         if (info != 0) {
             if (start == this && isSealed()) {
-                throw Context.reportRuntimeError0("msg.modify.sealed");
+                throw Context.reportRuntimeErrorById("msg.modify.sealed");
             }
             int attr = (info >>> 16);
             if ((attr & READONLY) == 0) {
@@ -538,7 +538,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
             int id = prototypeValues.findId(key);
             if (id != 0) {
                 if (start == this && isSealed()) {
-                    throw Context.reportRuntimeError0("msg.modify.sealed");
+                    throw Context.reportRuntimeErrorById("msg.modify.sealed");
                 }
                 prototypeValues.set(id, start, value);
                 return;
@@ -560,7 +560,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
                 if ((attr & PERMANENT) != 0) {
                     Context cx = Context.getContext();
                     if (cx.isStrictMode()) {
-                        throw ScriptRuntime.typeError1("msg.delete.property.with.configurable.false", name);
+                        throw ScriptRuntime.typeErrorById("msg.delete.property.with.configurable.false", name);
                     }
                 } else {
                     int id = (info & 0xFFFF);
@@ -594,7 +594,7 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
                 if ((attr & PERMANENT) != 0) {
                     Context cx = Context.getContext();
                     if (cx.isStrictMode()) {
-                        throw ScriptRuntime.typeError0("msg.delete.property.with.configurable.false");
+                        throw ScriptRuntime.typeErrorById("msg.delete.property.with.configurable.false");
                     }
                 } else {
                     int id = (info & 0xFFFF);
@@ -1051,31 +1051,33 @@ public abstract class IdScriptableObject extends ScriptableObject implements IdF
     }
 
     /**
-     * Utility method to construct type error to indicate incompatible call
-     * when converting script thisObj to a particular type is not possible.
+     * Utility method to check the type and do the cast or throw an incompatible call
+     * error.
      * Possible usage would be to have a private function like realThis:
      * <pre>
-     *  private static NativeSomething realThis(Scriptable thisObj,
-     *                                          IdFunctionObject f)
+     *  private static NativeSomething realThis(Scriptable thisObj, IdFunctionObject f)
      *  {
-     *      if (!(thisObj instanceof NativeSomething))
-     *          throw incompatibleCallError(f);
-     *      return (NativeSomething)thisObj;
+     *      return ensureType(thisObj, NativeSomething.class, f);
      * }
      * </pre>
-     * Note that although such function can be implemented universally via
-     * java.lang.Class.isInstance(), it would be much more slower.
      *
-     * @param f function that is attempting to convert 'this'
-     * object.
-     * @return Scriptable object suitable for a check by the instanceof
-     * operator.
-     * @throws java.lang.RuntimeException if no more instanceof target can be found
+     * @param obj the object to check/cast
+     * @param clazz the target type
+     * @param f function that is attempting to convert 'this' object.
+     * @return obj casted to the target type
+     * @throws org.mozilla.javascript.EcmaError if the cast failed.
+     * @param <T> a T object.
      */
-    protected static EcmaError incompatibleCallError(IdFunctionObject f)
+    @SuppressWarnings("unchecked")
+    protected static <T> T ensureType(Object obj, Class<T> clazz, IdFunctionObject f)
     {
-        throw ScriptRuntime.typeError1("msg.incompat.call",
-                                       f.getFunctionName());
+        if (clazz.isInstance(obj)) {
+            return (T) obj;
+        }
+        if (obj == null) {
+            throw ScriptRuntime.typeErrorById("msg.incompat.call.details", f.getFunctionName(), "null", clazz.getName());
+        }
+        throw ScriptRuntime.typeErrorById("msg.incompat.call.details", f.getFunctionName(), obj.getClass().getName(), clazz.getName());
     }
 
     private IdFunctionObject newIdFunction(Object tag, int id, String name,

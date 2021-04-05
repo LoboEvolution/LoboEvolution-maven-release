@@ -12,8 +12,8 @@ package org.mozilla.javascript;
  * The class of exceptions raised by the engine as described in
  * ECMA edition 3. See section 15.11.6 in particular.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class EcmaError extends RhinoException
 {

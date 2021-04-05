@@ -13,8 +13,8 @@ import org.mozilla.javascript.Token;
  * record its length and position for code-processing tools.
  * Node type is {@link org.mozilla.javascript.Token#LABEL}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Label extends Jump {
 

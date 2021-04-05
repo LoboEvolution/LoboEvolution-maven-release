@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.view;
 
 import java.awt.BorderLayout;
@@ -6,6 +26,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -24,15 +46,18 @@ import org.loboevolution.common.Strings;
 import org.loboevolution.http.HtmlContent;
 import org.loboevolution.info.MetaInfo;
 import org.loboevolution.net.HttpNetwork;
-import org.w3c.dom.Document;
+import org.loboevolution.html.node.Document;
 
 /**
  * <p>InfoPageWindow class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InfoPageWindow extends JFrame {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(InfoPageWindow.class.getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,8 +73,8 @@ public class InfoPageWindow extends JFrame {
 
 	private JScrollPane content(List<MetaInfo> infoList, String syntax) {
 		try {
-			final Object columnNames[] = { "" };
-			final List<String[]> values = new ArrayList<String[]>();
+			final Object[] columnNames = { "" };
+			final List<String[]> values = new ArrayList<>();
 			for (final MetaInfo info : infoList) {
 				if (Strings.isNotBlank(info.getName())) {
 					values.add(new String[] { info.getName() });
@@ -98,7 +123,7 @@ public class InfoPageWindow extends JFrame {
 			tablePanel.add(textArea);
 			return new JScrollPane(tablePanel);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}
@@ -141,8 +166,8 @@ public class InfoPageWindow extends JFrame {
 
 	private JScrollPane infoContent(List<MetaInfo> infoList) {
 		try {
-			final Object columnNames[] = { "", "" };
-			final List<String[]> values = new ArrayList<String[]>();
+			final Object[] columnNames = { "", "" };
+			final List<String[]> values = new ArrayList<>();
 			for (final MetaInfo info : infoList) {
 				if (Strings.isNotBlank(info.getName())) {
 					values.add(new String[] { info.getName(), info.getContent() });
@@ -161,7 +186,7 @@ public class InfoPageWindow extends JFrame {
 			jtable.setShowGrid(false);
 			return new JScrollPane(jtable);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}
@@ -174,8 +199,8 @@ public class InfoPageWindow extends JFrame {
 
 	private Component mediaContent(List<MetaInfo> mediaList) {
 		try {
-			final Object columnNames[] = { "" };
-			final List<String[]> values = new ArrayList<String[]>();
+			final Object[] columnNames = { "" };
+			final List<String[]> values = new ArrayList<>();
 			for (final MetaInfo info : mediaList) {
 				if (Strings.isNotBlank(info.getName())) {
 					values.add(new String[] { info.getName() });
@@ -213,7 +238,7 @@ public class InfoPageWindow extends JFrame {
 			tablePanel.add(jPanelImg);
 			return new JScrollPane(tablePanel);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}

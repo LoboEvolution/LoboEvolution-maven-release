@@ -43,13 +43,13 @@ import org.loboevolution.pdfview.font.ttf.TrueTypeFont;
 /**
  * A true-type font
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class TTFFont extends OutlineFont {
 
     /** the truetype font itself */
-    private TrueTypeFont font;
+    private final TrueTypeFont font;
 
     /** the number of units per em in the font */
     private float unitsPerEm;
@@ -146,8 +146,8 @@ public class TTFFont extends OutlineFont {
         CMap[] maps = cmap.getCMaps ();
 
         // try the maps in order
-        for (int i = 0; i < maps.length; i++) {
-            int idx = maps[i].map (src);
+        for (CMap cMap2 : maps) {
+            int idx = cMap2.map (src);
             if (idx != 0) {
                 return getOutline (idx, width);
             }
@@ -157,8 +157,8 @@ public class TTFFont extends OutlineFont {
         if (src >= 0 && src <= 0xFF) {
         	int[] symbolPages = new int[]{0xF000, 0xF100, 0xF200};        	
         	for (int codePage : symbolPages) {
-                for (int i = 0; i < maps.length; i++) {
-                    int idx = maps[i].map ( (char)(src | codePage));
+        		for (CMap cMap2 : maps) {
+                    int idx = cMap2.map ( (char)(src | codePage));
                     if (idx != 0) {
                         return getOutline (idx, width);
                     }
@@ -272,7 +272,7 @@ public class TTFFont extends OutlineFont {
         int curContour = 0;
 
         // the render state
-        RenderState rs = new RenderState ();
+        RenderState rs = new RenderState();
         rs.gp = new GeneralPath ();
 
         for (int i = 0; i < g.getNumPoints (); i++) {
@@ -369,7 +369,7 @@ public class TTFFont extends OutlineFont {
         rs.prevOff = rec;
     }
 
-    class RenderState {
+    static class RenderState {
         // the shape itself
 
         GeneralPath gp;
@@ -387,11 +387,11 @@ public class TTFFont extends OutlineFont {
     /** a point on the stack of points */
     static class PointRec {
 
-        int x;
+        final int x;
 
-        int y;
+        final int y;
 
-        boolean onCurve;
+        final boolean onCurve;
 
         public PointRec (int x, int y, boolean onCurve) {
             this.x = x;

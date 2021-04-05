@@ -18,8 +18,8 @@ import java.lang.reflect.Modifier;
 /**
  * <p>FunctionObject class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FunctionObject extends BaseFunction
 {
@@ -28,7 +28,7 @@ public class FunctionObject extends BaseFunction
     /**
      * Create a JavaScript function object from a Java method.
      *
-     * <p>The member argument must be either a java.lang.reflect.Method
+     * <p>The <code>member</code> argument must be either a java.lang.reflect.Method
      * or a java.lang.reflect.Constructor and must match one of two forms.<p>
      *
      * The first form is a member with zero or more parameters
@@ -68,15 +68,15 @@ public class FunctionObject extends BaseFunction
      * and an Object result.<p>
      *
      * When the function varargs form is called as part of a function call,
-     * the args parameter contains the
-     * arguments, with thisObj
-     * set to the JavaScript 'this' value. funObj
+     * the <code>args</code> parameter contains the
+     * arguments, with <code>thisObj</code>
+     * set to the JavaScript 'this' value. <code>funObj</code>
      * is the function object for the invoked function.<p>
      *
      * When the constructor varargs form is called or invoked while evaluating
-     * a new expression, args contains the
-     * arguments, ctorObj refers to this FunctionObject, and
-     * inNewExpr is true if and only if  a new
+     * a <code>new</code> expression, <code>args</code> contains the
+     * arguments, <code>ctorObj</code> refers to this FunctionObject, and
+     * <code>inNewExpr</code> is true if and only if  a <code>new</code>
      * expression caused the call. This supports defining a function that
      * has different behavior when called as a constructor than when
      * invoked as a normal function call. (For example, the Boolean
@@ -112,7 +112,7 @@ public class FunctionObject extends BaseFunction
                     types[2] != ScriptRuntime.FunctionClass ||
                     types[3] != Boolean.TYPE)
                 {
-                    throw Context.reportRuntimeError1(
+                    throw Context.reportRuntimeErrorById(
                         "msg.varargs.ctor", methodName);
                 }
                 parmsLength = VARARGS_CTOR;
@@ -123,7 +123,7 @@ public class FunctionObject extends BaseFunction
                     types[2].getComponentType() != ScriptRuntime.ObjectClass ||
                     types[3] != ScriptRuntime.FunctionClass)
                 {
-                    throw Context.reportRuntimeError1(
+                    throw Context.reportRuntimeErrorById(
                         "msg.varargs.fun", methodName);
                 }
                 parmsLength = VARARGS_METHOD;
@@ -135,7 +135,7 @@ public class FunctionObject extends BaseFunction
                 for (int i = 0; i != arity; ++i) {
                     int tag = getTypeTag(types[i]);
                     if (tag == JAVA_UNSUPPORTED_TYPE) {
-                        throw Context.reportRuntimeError2(
+                        throw Context.reportRuntimeErrorById(
                             "msg.bad.parms", types[i].getName(), methodName);
                     }
                     typeTags[i] = (byte)tag;
@@ -154,7 +154,7 @@ public class FunctionObject extends BaseFunction
         } else {
             Class<?> ctorType = member.getDeclaringClass();
             if (!ScriptRuntime.ScriptableClass.isAssignableFrom(ctorType)) {
-                throw Context.reportRuntimeError1(
+                throw Context.reportRuntimeErrorById(
                     "msg.bad.ctor.return", ctorType.getName());
             }
         }
@@ -165,7 +165,7 @@ public class FunctionObject extends BaseFunction
     /**
      * <p>getTypeTag.</p>
      *
-     * @return One of <tt>JAVA_*_TYPE</tt> constants to indicate desired type
+     * @return One of <code>JAVA_*_TYPE</code> constants to indicate desired type
      *         or {@link #JAVA_UNSUPPORTED_TYPE} if the convertion is not
      *         possible
      * @param type a {@link java.lang.Class} object.
@@ -280,7 +280,7 @@ public class FunctionObject extends BaseFunction
             Method method = methods[i];
             if (method != null && name.equals(method.getName())) {
                 if (found != null) {
-                    throw Context.reportRuntimeError2(
+                    throw Context.reportRuntimeErrorById(
                         "msg.no.overload", name,
                         method.getDeclaringClass().getName());
                 }
@@ -338,7 +338,7 @@ public class FunctionObject extends BaseFunction
      * Sets up the "prototype" and "constructor" properties. Also
      * calls setParent and setPrototype with appropriate values.
      * Then adds the function object as a property of the given scope, using
-     *      prototype.getClassName()
+     *      <code>prototype.getClassName()</code>
      * as the name of the property.
      *
      * @param scope the scope in which to define the constructor (typically
@@ -387,7 +387,7 @@ public class FunctionObject extends BaseFunction
     {
         int tag = getTypeTag(desired);
         if (tag == JAVA_UNSUPPORTED_TYPE) {
-            throw Context.reportRuntimeError1
+            throw Context.reportRuntimeErrorById
                 ("msg.cant.convert", desired.getName());
         }
         return convertArg(cx, scope, arg, tag);
@@ -450,8 +450,7 @@ public class FunctionObject extends BaseFunction
                     }
                     if (!compatible) {
                         // Couldn't find an object to call this on.
-                        throw ScriptRuntime.typeError1("msg.incompat.call",
-                                                       functionName);
+                        throw ScriptRuntime.typeErrorById("msg.incompat.call", functionName);
                     }
                 }
             }
@@ -567,19 +566,19 @@ public class FunctionObject extends BaseFunction
 
     private static boolean sawSecurityException;
 
-    /** Constant JAVA_UNSUPPORTED_TYPE=0 */
+    /** Constant <code>JAVA_UNSUPPORTED_TYPE=0</code> */
     public static final int JAVA_UNSUPPORTED_TYPE = 0;
-    /** Constant JAVA_STRING_TYPE=1 */
+    /** Constant <code>JAVA_STRING_TYPE=1</code> */
     public static final int JAVA_STRING_TYPE      = 1;
-    /** Constant JAVA_INT_TYPE=2 */
+    /** Constant <code>JAVA_INT_TYPE=2</code> */
     public static final int JAVA_INT_TYPE         = 2;
-    /** Constant JAVA_BOOLEAN_TYPE=3 */
+    /** Constant <code>JAVA_BOOLEAN_TYPE=3</code> */
     public static final int JAVA_BOOLEAN_TYPE     = 3;
-    /** Constant JAVA_DOUBLE_TYPE=4 */
+    /** Constant <code>JAVA_DOUBLE_TYPE=4</code> */
     public static final int JAVA_DOUBLE_TYPE      = 4;
-    /** Constant JAVA_SCRIPTABLE_TYPE=5 */
+    /** Constant <code>JAVA_SCRIPTABLE_TYPE=5</code> */
     public static final int JAVA_SCRIPTABLE_TYPE  = 5;
-    /** Constant JAVA_OBJECT_TYPE=6 */
+    /** Constant <code>JAVA_OBJECT_TYPE=6</code> */
     public static final int JAVA_OBJECT_TYPE      = 6;
 
     MemberBox member;

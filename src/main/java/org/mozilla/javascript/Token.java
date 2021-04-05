@@ -13,9 +13,9 @@ package org.mozilla.javascript;
  * in the jsref package.
  *
  * @see org.mozilla.javascript.Parser
- * @author Mike McCabe
- * @author Brendan Eich
- * @version $Id: $Id
+ * Author Mike McCabe
+ * Author Brendan Eich
+ *
  */
 public class Token
 {
@@ -24,7 +24,7 @@ public class Token
     }
 
     // debug flags
-    /** Constant printTrees=false */
+    /** Constant <code>printTrees=false</code> */
     public static final boolean printTrees = false;
     static final boolean printICode = false;
     static final boolean printNames = printTrees || printICode;
@@ -34,89 +34,90 @@ public class Token
      * jsscan.c.
      */
 
-    /** Constant EOF=0 */
-    /** Constant EOL=1 */
-    /** Constant FIRST_BYTECODE_TOKEN=2 */
-    /** Constant ENTERWITH=2 */
-    /** Constant LEAVEWITH=3 */
-    /** Constant RETURN=4 */
-    /** Constant GOTO=5 */
-    /** Constant IFEQ=6 */
-    /** Constant IFNE=7 */
-    /** Constant SETNAME=8 */
-    /** Constant BITOR=9 */
-    /** Constant BITXOR=10 */
-    /** Constant BITAND=11 */
-    /** Constant EQ=12 */
-    /** Constant NE=13 */
-    /** Constant LT=14 */
-    /** Constant LE=15 */
-    /** Constant GT=16 */
-    /** Constant GE=17 */
-    /** Constant LSH=18 */
-    /** Constant RSH=19 */
-    /** Constant URSH=20 */
-    /** Constant ADD=21 */
-    /** Constant SUB=22 */
-    /** Constant MUL=23 */
-    /** Constant DIV=24 */
-    /** Constant MOD=25 */
-    /** Constant NOT=26 */
-    /** Constant BITNOT=27 */
-    /** Constant POS=28 */
-    /** Constant NEG=29 */
-    /** Constant NEW=30 */
-    /** Constant DELPROP=31 */
-    /** Constant TYPEOF=32 */
-    /** Constant GETPROP=33 */
-    /** Constant GETPROPNOWARN=34 */
-    /** Constant SETPROP=35 */
-    /** Constant GETELEM=36 */
-    /** Constant SETELEM=37 */
-    /** Constant CALL=38 */
-    /** Constant NAME=39 */
-    /** Constant NUMBER=40 */
-    /** Constant STRING=41 */
-    /** Constant NULL=42 */
-    /** Constant THIS=43 */
-    /** Constant FALSE=44 */
-    /** Constant TRUE=45 */
-    /** Constant SHEQ=46 */
-    /** Constant SHNE=47 */
-    /** Constant REGEXP=48 */
-    /** Constant BINDNAME=49 */
-    /** Constant THROW=50 */
-    /** Constant RETHROW=51 */
-    /** Constant IN=52 */
-    /** Constant INSTANCEOF=53 */
-    /** Constant LOCAL_LOAD=54 */
-    /** Constant GETVAR=55 */
-    /** Constant SETVAR=56 */
-    /** Constant CATCH_SCOPE=57 */
-    /** Constant ENUM_INIT_KEYS=58 */
-    /** Constant ENUM_INIT_VALUES=59 */
-    /** Constant ENUM_INIT_ARRAY=60 */
-    /** Constant ENUM_INIT_VALUES_IN_ORDER=61 */
-    /** Constant ENUM_NEXT=62 */
-    /** Constant ENUM_ID=63 */
-    /** Constant THISFN=64 */
-    /** Constant RETURN_RESULT=65 */
-    /** Constant ARRAYLIT=66 */
-    /** Constant OBJECTLIT=67 */
-    /** Constant GET_REF=68 */
-    /** Constant SET_REF=69 */
-    /** Constant DEL_REF=70 */
-    /** Constant REF_CALL=71 */
-    /** Constant REF_SPECIAL=72 */
-    /** Constant YIELD=73 */
-    /** Constant STRICT_SETNAME=74 */
-    /** Constant DEFAULTNAMESPACE=75 */
-    /** Constant ESCXMLATTR=76 */
-    /** Constant ESCXMLTEXT=77 */
-    /** Constant REF_MEMBER=78 */
-    /** Constant REF_NS_MEMBER=79 */
-    /** Constant REF_NAME=80 */
-    /** Constant REF_NS_NAME=81 */
+    /** Constant <code>EOF=0</code> */
+    /** Constant <code>EOL=1</code> */
+    /** Constant <code>FIRST_BYTECODE_TOKEN=2</code> */
+    /** Constant <code>ENTERWITH=2</code> */
+    /** Constant <code>LEAVEWITH=3</code> */
+    /** Constant <code>RETURN=4</code> */
+    /** Constant <code>GOTO=5</code> */
+    /** Constant <code>IFEQ=6</code> */
+    /** Constant <code>IFNE=7</code> */
+    /** Constant <code>SETNAME=8</code> */
+    /** Constant <code>BITOR=9</code> */
+    /** Constant <code>BITXOR=10</code> */
+    /** Constant <code>BITAND=11</code> */
+    /** Constant <code>EQ=12</code> */
+    /** Constant <code>NE=13</code> */
+    /** Constant <code>LT=14</code> */
+    /** Constant <code>LE=15</code> */
+    /** Constant <code>GT=16</code> */
+    /** Constant <code>GE=17</code> */
+    /** Constant <code>LSH=18</code> */
+    /** Constant <code>RSH=19</code> */
+    /** Constant <code>URSH=20</code> */
+    /** Constant <code>ADD=21</code> */
+    /** Constant <code>SUB=22</code> */
+    /** Constant <code>MUL=23</code> */
+    /** Constant <code>DIV=24</code> */
+    /** Constant <code>MOD=25</code> */
+    /** Constant <code>NOT=26</code> */
+    /** Constant <code>BITNOT=27</code> */
+    /** Constant <code>POS=28</code> */
+    /** Constant <code>NEG=29</code> */
+    /** Constant <code>NEW=30</code> */
+    /** Constant <code>DELPROP=31</code> */
+    /** Constant <code>TYPEOF=32</code> */
+    /** Constant <code>GETPROP=33</code> */
+    /** Constant <code>GETPROPNOWARN=34</code> */
+    /** Constant <code>SETPROP=35</code> */
+    /** Constant <code>GETELEM=36</code> */
+    /** Constant <code>SETELEM=37</code> */
+    /** Constant <code>CALL=38</code> */
+    /** Constant <code>NAME=39</code> */
+    /** Constant <code>NUMBER=40</code> */
+    /** Constant <code>STRING=41</code> */
+    /** Constant <code>NULL=42</code> */
+    /** Constant <code>THIS=43</code> */
+    /** Constant <code>FALSE=44</code> */
+    /** Constant <code>TRUE=45</code> */
+    /** Constant <code>SHEQ=46</code> */
+    /** Constant <code>SHNE=47</code> */
+    /** Constant <code>REGEXP=48</code> */
+    /** Constant <code>BINDNAME=49</code> */
+    /** Constant <code>THROW=50</code> */
+    /** Constant <code>RETHROW=51</code> */
+    /** Constant <code>IN=52</code> */
+    /** Constant <code>INSTANCEOF=53</code> */
+    /** Constant <code>LOCAL_LOAD=54</code> */
+    /** Constant <code>GETVAR=55</code> */
+    /** Constant <code>SETVAR=56</code> */
+    /** Constant <code>CATCH_SCOPE=57</code> */
+    /** Constant <code>ENUM_INIT_KEYS=58</code> */
+    /** Constant <code>ENUM_INIT_VALUES=59</code> */
+    /** Constant <code>ENUM_INIT_ARRAY=60</code> */
+    /** Constant <code>ENUM_INIT_VALUES_IN_ORDER=61</code> */
+    /** Constant <code>ENUM_NEXT=62</code> */
+    /** Constant <code>ENUM_ID=63</code> */
+    /** Constant <code>THISFN=64</code> */
+    /** Constant <code>RETURN_RESULT=65</code> */
+    /** Constant <code>ARRAYLIT=66</code> */
+    /** Constant <code>OBJECTLIT=67</code> */
+    /** Constant <code>GET_REF=68</code> */
+    /** Constant <code>SET_REF=69</code> */
+    /** Constant <code>DEL_REF=70</code> */
+    /** Constant <code>REF_CALL=71</code> */
+    /** Constant <code>REF_SPECIAL=72</code> */
+    /** Constant <code>YIELD=73</code> */
+    /** Constant <code>STRICT_SETNAME=74</code> */
+    /** Constant <code>EXP=75</code> */
+    /** Constant <code>DEFAULTNAMESPACE=76</code> */
+    /** Constant <code>ESCXMLATTR=77</code> */
+    /** Constant <code>ESCXMLTEXT=78</code> */
+    /** Constant <code>REF_MEMBER=79</code> */
+    /** Constant <code>REF_NS_MEMBER=80</code> */
+    /** Constant <code>REF_NAME=81</code> */
+    /** Constant <code>REF_NS_NAME=82</code> */
     public final static int
     // start enum
         ERROR          = -1, // well-known as the only code < EOF
@@ -199,210 +200,216 @@ public class Token
         REF_SPECIAL    = 72, // reference for special properties like __proto
         YIELD          = 73,  // JS 1.7 yield pseudo keyword
         STRICT_SETNAME = 74,
+        EXP            = 75,  // Exponentiation Operator
 
         // For XML support:
-        DEFAULTNAMESPACE = 75, // default xml namespace =
-        ESCXMLATTR     = 76,
-        ESCXMLTEXT     = 77,
-        REF_MEMBER     = 78, // Reference for x.@y, x..y etc.
-        REF_NS_MEMBER  = 79, // Reference for x.ns::y, x..ns::y etc.
-        REF_NAME       = 80, // Reference for @y, @[y] etc.
-        REF_NS_NAME    = 81; // Reference for ns::y, @ns::y@[y] etc.
+        DEFAULTNAMESPACE = 76, // default xml namespace =
+        ESCXMLATTR     = 77,
+        ESCXMLTEXT     = 78,
+        REF_MEMBER     = 79, // Reference for x.@y, x..y etc.
+        REF_NS_MEMBER  = 80, // Reference for x.ns::y, x..ns::y etc.
+        REF_NAME       = 81, // Reference for @y, @[y] etc.
+        REF_NS_NAME    = 82; // Reference for ns::y, @ns::y@[y] etc.
 
         // End of interpreter bytecodes
-    /** Constant LAST_BYTECODE_TOKEN=REF_NS_NAME */
-    /** Constant TRY=82 */
-    /** Constant SEMI=83 */
-    /** Constant LB=84 */
-    /** Constant RB=85 */
-    /** Constant LC=86 */
-    /** Constant RC=87 */
-    /** Constant LP=88 */
-    /** Constant RP=89 */
-    /** Constant COMMA=90 */
-    /** Constant ASSIGN=91 */
-    /** Constant ASSIGN_BITOR=92 */
-    /** Constant ASSIGN_BITXOR=93 */
-    /** Constant ASSIGN_BITAND=94 */
-    /** Constant ASSIGN_LSH=95 */
-    /** Constant ASSIGN_RSH=96 */
-    /** Constant ASSIGN_URSH=97 */
-    /** Constant ASSIGN_ADD=98 */
-    /** Constant ASSIGN_SUB=99 */
-    /** Constant ASSIGN_MUL=100 */
-    /** Constant ASSIGN_DIV=101 */
-    /** Constant ASSIGN_MOD=102 */
+    /** Constant <code>LAST_BYTECODE_TOKEN=REF_NS_NAME</code> */
+    /** Constant <code>TRY=83</code> */
+    /** Constant <code>SEMI=84</code> */
+    /** Constant <code>LB=85</code> */
+    /** Constant <code>RB=86</code> */
+    /** Constant <code>LC=87</code> */
+    /** Constant <code>RC=88</code> */
+    /** Constant <code>LP=89</code> */
+    /** Constant <code>RP=90</code> */
+    /** Constant <code>COMMA=91</code> */
+    /** Constant <code>ASSIGN=92</code> */
+    /** Constant <code>ASSIGN_BITOR=93</code> */
+    /** Constant <code>ASSIGN_BITXOR=94</code> */
+    /** Constant <code>ASSIGN_BITAND=95</code> */
+    /** Constant <code>ASSIGN_LSH=96</code> */
+    /** Constant <code>ASSIGN_RSH=97</code> */
+    /** Constant <code>ASSIGN_URSH=98</code> */
+    /** Constant <code>ASSIGN_ADD=99</code> */
+    /** Constant <code>ASSIGN_SUB=100</code> */
+    /** Constant <code>ASSIGN_MUL=101</code> */
+    /** Constant <code>ASSIGN_DIV=102</code> */
+    /** Constant <code>ASSIGN_MOD=103</code> */
+    /** Constant <code>ASSIGN_EXP=104</code> */
     public final static int
         LAST_BYTECODE_TOKEN    = REF_NS_NAME,
 
-        TRY            = 82,
-        SEMI           = 83,  // semicolon
-        LB             = 84,  // left and right brackets
-        RB             = 85,
-        LC             = 86,  // left and right curlies (braces)
-        RC             = 87,
-        LP             = 88,  // left and right parentheses
-        RP             = 89,
-        COMMA          = 90,  // comma operator
+        TRY            = 83,
+        SEMI           = 84,  // semicolon
+        LB             = 85,  // left and right brackets
+        RB             = 86,
+        LC             = 87,  // left and right curlies (braces)
+        RC             = 88,
+        LP             = 89,  // left and right parentheses
+        RP             = 90,
+        COMMA          = 91,  // comma operator
 
-        ASSIGN         = 91,  // simple assignment  (=)
-        ASSIGN_BITOR   = 92,  // |=
-        ASSIGN_BITXOR  = 93,  // ^=
-        ASSIGN_BITAND  = 94,  // |=
-        ASSIGN_LSH     = 95,  // <<=
-        ASSIGN_RSH     = 96,  // >>=
-        ASSIGN_URSH    = 97,  // >>>=
-        ASSIGN_ADD     = 98,  // +=
-        ASSIGN_SUB     = 99,  // -=
-        ASSIGN_MUL     = 100,  // *=
-        ASSIGN_DIV     = 101,  // /=
-        ASSIGN_MOD     = 102;  // %=
+        ASSIGN         = 92,  // simple assignment  (=)
+        ASSIGN_BITOR   = 93,  // |=
+        ASSIGN_BITXOR  = 94,  // ^=
+        ASSIGN_BITAND  = 95,  // |=
+        ASSIGN_LSH     = 96,  // <<=
+        ASSIGN_RSH     = 97,  // >>=
+        ASSIGN_URSH    = 98,  // >>>=
+        ASSIGN_ADD     = 99,  // +=
+        ASSIGN_SUB     = 100, // -=
+        ASSIGN_MUL     = 101, // *=
+        ASSIGN_DIV     = 102, // /=
+        ASSIGN_MOD     = 103, // %=
+        ASSIGN_EXP     = 104; // **=
 
-    /** Constant FIRST_ASSIGN=ASSIGN */
-    /** Constant LAST_ASSIGN=ASSIGN_MOD */
-    /** Constant HOOK=103 */
-    /** Constant COLON=104 */
-    /** Constant OR=105 */
-    /** Constant AND=106 */
-    /** Constant INC=107 */
-    /** Constant DEC=108 */
-    /** Constant DOT=109 */
-    /** Constant FUNCTION=110 */
-    /** Constant EXPORT=111 */
-    /** Constant IMPORT=112 */
-    /** Constant IF=113 */
-    /** Constant ELSE=114 */
-    /** Constant SWITCH=115 */
-    /** Constant CASE=116 */
-    /** Constant DEFAULT=117 */
-    /** Constant WHILE=118 */
-    /** Constant DO=119 */
-    /** Constant FOR=120 */
-    /** Constant BREAK=121 */
-    /** Constant CONTINUE=122 */
-    /** Constant VAR=123 */
-    /** Constant WITH=124 */
-    /** Constant CATCH=125 */
-    /** Constant FINALLY=126 */
-    /** Constant VOID=127 */
-    /** Constant RESERVED=128 */
-    /** Constant EMPTY=129 */
-    /** Constant BLOCK=130 */
-    /** Constant LABEL=131 */
-    /** Constant TARGET=132 */
-    /** Constant LOOP=133 */
-    /** Constant EXPR_VOID=134 */
-    /** Constant EXPR_RESULT=135 */
-    /** Constant JSR=136 */
-    /** Constant SCRIPT=137 */
-    /** Constant TYPEOFNAME=138 */
-    /** Constant USE_STACK=139 */
-    /** Constant SETPROP_OP=140 */
-    /** Constant SETELEM_OP=141 */
-    /** Constant LOCAL_BLOCK=142 */
-    /** Constant SET_REF_OP=143 */
-    /** Constant DOTDOT=144 */
-    /** Constant COLONCOLON=145 */
-    /** Constant XML=146 */
-    /** Constant DOTQUERY=147 */
-    /** Constant XMLATTR=148 */
-    /** Constant XMLEND=149 */
-    /** Constant TO_OBJECT=150 */
-    /** Constant TO_DOUBLE=151 */
-    /** Constant GET=152 */
-    /** Constant SET=153 */
-    /** Constant LET=154 */
-    /** Constant CONST=155 */
-    /** Constant SETCONST=156 */
-    /** Constant SETCONSTVAR=157 */
-    /** Constant ARRAYCOMP=158 */
-    /** Constant LETEXPR=159 */
-    /** Constant WITHEXPR=160 */
-    /** Constant DEBUGGER=161 */
-    /** Constant COMMENT=162 */
-    /** Constant GENEXPR=163 */
-    /** Constant METHOD=164 */
-    /** Constant ARROW=165 */
-    /** Constant LAST_TOKEN=166 */
+    /** Constant <code>FIRST_ASSIGN=ASSIGN</code> */
+    /** Constant <code>LAST_ASSIGN=ASSIGN_EXP</code> */
+    /** Constant <code>HOOK=105</code> */
+    /** Constant <code>COLON=106</code> */
+    /** Constant <code>OR=107</code> */
+    /** Constant <code>AND=108</code> */
+    /** Constant <code>INC=109</code> */
+    /** Constant <code>DEC=110</code> */
+    /** Constant <code>DOT=111</code> */
+    /** Constant <code>FUNCTION=112</code> */
+    /** Constant <code>EXPORT=113</code> */
+    /** Constant <code>IMPORT=114</code> */
+    /** Constant <code>IF=115</code> */
+    /** Constant <code>ELSE=116</code> */
+    /** Constant <code>SWITCH=117</code> */
+    /** Constant <code>CASE=118</code> */
+    /** Constant <code>DEFAULT=119</code> */
+    /** Constant <code>WHILE=120</code> */
+    /** Constant <code>DO=121</code> */
+    /** Constant <code>FOR=122</code> */
+    /** Constant <code>BREAK=123</code> */
+    /** Constant <code>CONTINUE=124</code> */
+    /** Constant <code>VAR=125</code> */
+    /** Constant <code>WITH=126</code> */
+    /** Constant <code>CATCH=127</code> */
+    /** Constant <code>FINALLY=128</code> */
+    /** Constant <code>VOID=129</code> */
+    /** Constant <code>RESERVED=130</code> */
+    /** Constant <code>EMPTY=131</code> */
+    /** Constant <code>BLOCK=132</code> */
+    /** Constant <code>LABEL=133</code> */
+    /** Constant <code>TARGET=134</code> */
+    /** Constant <code>LOOP=135</code> */
+    /** Constant <code>EXPR_VOID=136</code> */
+    /** Constant <code>EXPR_RESULT=137</code> */
+    /** Constant <code>JSR=138</code> */
+    /** Constant <code>SCRIPT=139</code> */
+    /** Constant <code>TYPEOFNAME=140</code> */
+    /** Constant <code>USE_STACK=141</code> */
+    /** Constant <code>SETPROP_OP=142</code> */
+    /** Constant <code>SETELEM_OP=143</code> */
+    /** Constant <code>LOCAL_BLOCK=144</code> */
+    /** Constant <code>SET_REF_OP=145</code> */
+    /** Constant <code>DOTDOT=146</code> */
+    /** Constant <code>COLONCOLON=147</code> */
+    /** Constant <code>XML=148</code> */
+    /** Constant <code>DOTQUERY=149</code> */
+    /** Constant <code>XMLATTR=150</code> */
+    /** Constant <code>XMLEND=151</code> */
+    /** Constant <code>TO_OBJECT=152</code> */
+    /** Constant <code>TO_DOUBLE=153</code> */
+    /** Constant <code>GET=154</code> */
+    /** Constant <code>SET=155</code> */
+    /** Constant <code>LET=156</code> */
+    /** Constant <code>CONST=157</code> */
+    /** Constant <code>SETCONST=158</code> */
+    /** Constant <code>SETCONSTVAR=159</code> */
+    /** Constant <code>ARRAYCOMP=160</code> */
+    /** Constant <code>LETEXPR=161</code> */
+    /** Constant <code>WITHEXPR=162</code> */
+    /** Constant <code>DEBUGGER=163</code> */
+    /** Constant <code>COMMENT=164</code> */
+    /** Constant <code>GENEXPR=165</code> */
+    /** Constant <code>METHOD=166</code> */
+    /** Constant <code>ARROW=167</code> */
+    /** Constant <code>YIELD_STAR=168</code> */
+    /** Constant <code>LAST_TOKEN=169</code> */
     public final static int
         FIRST_ASSIGN   = ASSIGN,
-        LAST_ASSIGN    = ASSIGN_MOD,
+        LAST_ASSIGN    = ASSIGN_EXP,
 
-        HOOK           = 103, // conditional (?:)
-        COLON          = 104,
-        OR             = 105, // logical or (||)
-        AND            = 106, // logical and (&&)
-        INC            = 107, // increment/decrement (++ --)
-        DEC            = 108,
-        DOT            = 109, // member operator (.)
-        FUNCTION       = 110, // function keyword
-        EXPORT         = 111, // export keyword
-        IMPORT         = 112, // import keyword
-        IF             = 113, // if keyword
-        ELSE           = 114, // else keyword
-        SWITCH         = 115, // switch keyword
-        CASE           = 116, // case keyword
-        DEFAULT        = 117, // default keyword
-        WHILE          = 118, // while keyword
-        DO             = 119, // do keyword
-        FOR            = 120, // for keyword
-        BREAK          = 121, // break keyword
-        CONTINUE       = 122, // continue keyword
-        VAR            = 123, // var keyword
-        WITH           = 124, // with keyword
-        CATCH          = 125, // catch keyword
-        FINALLY        = 126, // finally keyword
-        VOID           = 127, // void keyword
-        RESERVED       = 128, // reserved keywords
+        HOOK           = 105, // conditional (?:)
+        COLON          = 106,
+        OR             = 107, // logical or (||)
+        AND            = 108, // logical and (&&)
+        INC            = 109, // increment/decrement (++ --)
+        DEC            = 110,
+        DOT            = 111, // member operator (.)
+        FUNCTION       = 112, // function keyword
+        EXPORT         = 113, // export keyword
+        IMPORT         = 114, // import keyword
+        IF             = 115, // if keyword
+        ELSE           = 116, // else keyword
+        SWITCH         = 117, // switch keyword
+        CASE           = 118, // case keyword
+        DEFAULT        = 119, // default keyword
+        WHILE          = 120, // while keyword
+        DO             = 121, // do keyword
+        FOR            = 122, // for keyword
+        BREAK          = 123, // break keyword
+        CONTINUE       = 124, // continue keyword
+        VAR            = 125, // var keyword
+        WITH           = 126, // with keyword
+        CATCH          = 127, // catch keyword
+        FINALLY        = 128, // finally keyword
+        VOID           = 129, // void keyword
+        RESERVED       = 130, // reserved keywords
 
-        EMPTY          = 129,
+        EMPTY          = 131,
 
         /* types used for the parse tree - these never get returned
          * by the scanner.
          */
 
-        BLOCK          = 130, // statement block
-        LABEL          = 131, // label
-        TARGET         = 132,
-        LOOP           = 133,
-        EXPR_VOID      = 134, // expression statement in functions
-        EXPR_RESULT    = 135, // expression statement in scripts
-        JSR            = 136,
-        SCRIPT         = 137, // top-level node for entire script
-        TYPEOFNAME     = 138, // for typeof(simple-name)
-        USE_STACK      = 139,
-        SETPROP_OP     = 140, // x.y op= something
-        SETELEM_OP     = 141, // x[y] op= something
-        LOCAL_BLOCK    = 142,
-        SET_REF_OP     = 143, // *reference op= something
+        BLOCK          = 132, // statement block
+        LABEL          = 133, // label
+        TARGET         = 134,
+        LOOP           = 135,
+        EXPR_VOID      = 136, // expression statement in functions
+        EXPR_RESULT    = 137, // expression statement in scripts
+        JSR            = 138,
+        SCRIPT         = 139, // top-level node for entire script
+        TYPEOFNAME     = 140, // for typeof(simple-name)
+        USE_STACK      = 141,
+        SETPROP_OP     = 142, // x.y op= something
+        SETELEM_OP     = 143, // x[y] op= something
+        LOCAL_BLOCK    = 144,
+        SET_REF_OP     = 145, // *reference op= something
 
         // For XML support:
-        DOTDOT         = 144,  // member operator (..)
-        COLONCOLON     = 145,  // namespace::name
-        XML            = 146,  // XML type
-        DOTQUERY       = 147,  // .() -- e.g., x.emps.emp.(name == "terry")
-        XMLATTR        = 148,  // @
-        XMLEND         = 149,
+        DOTDOT         = 146,  // member operator (..)
+        COLONCOLON     = 147,  // namespace::name
+        XML            = 148,  // XML type
+        DOTQUERY       = 149,  // .() -- e.g., x.emps.emp.(name == "terry")
+        XMLATTR        = 150,  // @
+        XMLEND         = 151,
 
         // Optimizer-only-tokens
-        TO_OBJECT      = 150,
-        TO_DOUBLE      = 151,
+        TO_OBJECT      = 152,
+        TO_DOUBLE      = 153,
 
-        GET            = 152,  // JS 1.5 get pseudo keyword
-        SET            = 153,  // JS 1.5 set pseudo keyword
-        LET            = 154,  // JS 1.7 let pseudo keyword
-        CONST          = 155,
-        SETCONST       = 156,
-        SETCONSTVAR    = 157,
-        ARRAYCOMP      = 158,  // array comprehension
-        LETEXPR        = 159,
-        WITHEXPR       = 160,
-        DEBUGGER       = 161,
-        COMMENT        = 162,
-        GENEXPR        = 163,
-        METHOD         = 164,  // ES6 MethodDefinition
-        ARROW          = 165,  // ES6 ArrowFunction
-        LAST_TOKEN     = 166;
+        GET            = 154,  // JS 1.5 get pseudo keyword
+        SET            = 155,  // JS 1.5 set pseudo keyword
+        LET            = 156,  // JS 1.7 let pseudo keyword
+        CONST          = 157,
+        SETCONST       = 158,
+        SETCONSTVAR    = 159,
+        ARRAYCOMP      = 160,  // array comprehension
+        LETEXPR        = 161,
+        WITHEXPR       = 162,
+        DEBUGGER       = 163,
+        COMMENT        = 164,
+        GENEXPR        = 165,
+        METHOD         = 166,  // ES6 MethodDefinition
+        ARROW          = 167,  // ES6 ArrowFunction
+        YIELD_STAR     = 168,  // ES6 "yield *", a specialization of yield
+        LAST_TOKEN     = 169;
+        
 
     /**
      * Returns a name for the token.  If Rhino is compiled with certain
@@ -531,6 +538,7 @@ public class Token
           case ASSIGN_MUL:      return "ASSIGN_MUL";
           case ASSIGN_DIV:      return "ASSIGN_DIV";
           case ASSIGN_MOD:      return "ASSIGN_MOD";
+          case ASSIGN_EXP:      return "ASSIGN_EXP";
           case HOOK:            return "HOOK";
           case COLON:           return "COLON";
           case OR:              return "OR";
@@ -584,6 +592,7 @@ public class Token
           case SET:             return "SET";
           case LET:             return "LET";
           case YIELD:           return "YIELD";
+          case EXP:             return "EXP";
           case CONST:           return "CONST";
           case SETCONST:        return "SETCONST";
           case ARRAYCOMP:       return "ARRAYCOMP";
@@ -594,6 +603,7 @@ public class Token
           case GENEXPR:         return "GENEXPR";
           case METHOD:          return "METHOD";
           case ARROW:           return "ARROW";
+          case YIELD_STAR:      return "YIELD_STAR";
         }
 
         // Token without name

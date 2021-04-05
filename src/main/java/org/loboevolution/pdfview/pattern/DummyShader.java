@@ -9,8 +9,8 @@ import org.loboevolution.pdfview.PDFPaint;
 /**
  * <p>DummyShader class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class DummyShader extends PDFShader {
 

@@ -14,8 +14,8 @@ package org.mozilla.javascript;
  * @deprecated Embeddings that wish to customize newly created
  * {@link org.mozilla.javascript.Context} instances should implement
  * {@link org.mozilla.javascript.ContextFactory.Listener}.
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 @Deprecated
 public interface ContextListener extends ContextFactory.Listener

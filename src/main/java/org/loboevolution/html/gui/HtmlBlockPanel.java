@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Apr 16, 2005
  */
@@ -62,12 +61,11 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import org.loboevolution.common.Nodes;
-import org.loboevolution.laf.ColorFactory;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
-import org.loboevolution.html.dom.domimpl.ModelNode;
-import org.loboevolution.html.dom.domimpl.NodeImpl;
 import org.loboevolution.html.dom.domimpl.UINode;
+import org.loboevolution.html.dom.nodeimpl.ModelNode;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
 import org.loboevolution.html.renderer.BoundableRenderable;
 import org.loboevolution.html.renderer.DelayedPair;
 import org.loboevolution.html.renderer.FrameContext;
@@ -82,7 +80,8 @@ import org.loboevolution.html.renderer.RenderableSpot;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
-import org.w3c.dom.Node;
+import org.loboevolution.laf.ColorFactory;
+import org.loboevolution.html.node.Node;
 
 /**
  * A Swing component that renders a HTML block, given by a DOM root or an
@@ -91,8 +90,8 @@ import org.w3c.dom.Node;
  * the DOM is determined <i>not</i> to be a FRAMESET.
  *
  * @see HtmlPanel
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
 public class HtmlBlockPanel extends JComponent implements NodeRenderer, RenderableContainer, ClipboardOwner {
 	private static final Logger logger = Logger.getLogger(HtmlBlockPanel.class.getName());
@@ -192,7 +191,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 				onMouseMoved(arg0);
 			}
 		});
-		addMouseWheelListener(e -> onMouseWheelMoved(e));
+		addMouseWheelListener(this::onMouseWheelMoved);
 	}
 
 	/**
@@ -211,7 +210,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	public Component addComponent(Component component) {
 		Set<Component> c = this.components;
 		if (c == null) {
-			c = new HashSet<Component>();
+			c = new HashSet<>();
 			this.components = c;
 		}
 		if (c.add(component)) {
@@ -365,8 +364,8 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 		if (uiNode == null) {
 			return null;
 		}
-		final RCollection relativeTo = relativeToScrollable ? (RCollection) block.getRBlockViewport()
-				: (RCollection) block;
+		final RCollection relativeTo = relativeToScrollable ? block.getRBlockViewport()
+				: block;
 		if (node == currentNode) {
 			final BoundableRenderable br = (BoundableRenderable) uiNode;
 			final Point guiPoint = br.getOriginRelativeTo(relativeTo);
@@ -430,7 +429,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	/**
 	 * <p>getRootNode.</p>
 	 *
-	 * @return a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @return a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public NodeImpl getRootNode() {
 		final RBlock block = this.rblock;
@@ -451,7 +450,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	 *
 	 * @return a {@link org.w3c.dom.Node} object.
 	 */
-	public org.w3c.dom.Node getSelectionNode() {
+	public Node getSelectionNode() {
 		final RenderableSpot start = this.startSelection;
 		final RenderableSpot end = this.endSelection;
 		if (start != null && end != null) {
@@ -487,11 +486,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	public boolean hasSelection() {
 		final RenderableSpot start = this.startSelection;
 		final RenderableSpot end = this.endSelection;
-		if (start != null && end != null && !start.equals(end)) {
-			return true;
-		} else {
-			return false;
-		}
+        return start != null && end != null && !start.equals(end);
 	}
 
 	/** {@inheritDoc} */
@@ -581,11 +576,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 			final int ry = point.y;
 			block.onMousePressed(event, point.x, point.y);
 			final RenderableSpot rp = block.getLowestRenderableSpot(rx, ry);
-			if (rp != null) {
-				this.frameContext.resetSelection(rp);
-			} else {
-				this.frameContext.resetSelection(null);
-			}
+            this.frameContext.resetSelection(rp);
 		}
 	}
 
@@ -659,6 +650,8 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 					}
 				} while ((!consumed) && (innerBlock != null));
 				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -726,55 +719,53 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 			// of noitifications probably come one by one.
 			boolean topLayout = false;
 			List<RElement> repainters = null;
-			final int length = notifications.length;
-			for (int i = 0; i < length; i++) {
-				final DocumentNotification dn = notifications[i];
+			for (final DocumentNotification dn : notifications) {
 				final int type = dn.type;
 				switch (type) {
-				case DocumentNotification.GENERIC:
-				case DocumentNotification.SIZE: {
-					final NodeImpl node = dn.node;
-					if (node == null) {
-						this.rblock.invalidateLayoutDeep();
-					} else {
+					case DocumentNotification.GENERIC:
+					case DocumentNotification.SIZE: {
+						final NodeImpl node = dn.node;
+						if (node == null) {
+							this.rblock.invalidateLayoutDeep();
+						} else {
+							final UINode uiNode = node.findUINode();
+							if (uiNode != null) {
+								final RElement relement = (RElement) uiNode;
+								relement.invalidateLayoutUpTree();
+							}
+						}
+						topLayout = true;
+						break;
+					}
+					case DocumentNotification.POSITION: {
+						// TODO: Could be more efficient.
+						final NodeImpl node = dn.node;
+						final NodeImpl parent = (NodeImpl) node.getParentNode();
+						if (parent != null) {
+							final UINode uiNode = parent.findUINode();
+							if (uiNode != null) {
+								final RElement relement = (RElement) uiNode;
+								relement.invalidateLayoutUpTree();
+							}
+						}
+						topLayout = true;
+						break;
+					}
+					case DocumentNotification.LOOK: {
+						final NodeImpl node = dn.node;
 						final UINode uiNode = node.findUINode();
 						if (uiNode != null) {
+							if (repainters == null) {
+								repainters = new ArrayList<>();
+							}
 							final RElement relement = (RElement) uiNode;
-							relement.invalidateLayoutUpTree();
-						} 
-					}
-					topLayout = true;
-					break;
-				}
-				case DocumentNotification.POSITION: {
-					// TODO: Could be more efficient.
-					final NodeImpl node = dn.node;
-					final NodeImpl parent = (NodeImpl) node.getParentNode();
-					if (parent != null) {
-						final UINode uiNode = parent.findUINode();
-						if (uiNode != null) {
-							final RElement relement = (RElement) uiNode;
-							relement.invalidateLayoutUpTree();
+							// relement.invalidateRenderStyle();
+							repainters.add(relement);
 						}
+						break;
 					}
-					topLayout = true;
-					break;
-				}
-				case DocumentNotification.LOOK: {
-					final NodeImpl node = dn.node;
-					final UINode uiNode = node.findUINode();
-					if (uiNode != null) {
-						if (repainters == null) {
-							repainters = new ArrayList<RElement>();
-						}
-						final RElement relement = (RElement) uiNode;
-						// relement.invalidateRenderStyle();
-						repainters.add(relement);
-					}
-					break;
-				}
-				default:
-					break;
+					default:
+						break;
 				}
 			}
 			if (topLayout) {
@@ -803,7 +794,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	/**
 	 * Implementation of UINode.repaint().
 	 *
-	 * @param modelNode a {@link org.loboevolution.html.dom.domimpl.ModelNode} object.
+	 * @param modelNode a {@link org.loboevolution.html.dom.nodeimpl.ModelNode} object.
 	 */
 	public void repaint(ModelNode modelNode) {
 		// this.rblock.invalidateRenderStyle();
@@ -1023,8 +1014,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 			}
 		} else {
 			// Remove children not in the set.
-			final Set<Component> workingSet = new HashSet<Component>();
-			workingSet.addAll(c);
+            final Set<Component> workingSet = new HashSet<>(c);
 			int count = getComponentCount();
 			for (int i = 0; i < count;) {
 				final Component component = getComponent(i);
@@ -1037,9 +1027,7 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 				}
 			}
 			// Add components in set that were not previously children.
-			final Iterator<Component> wsi = workingSet.iterator();
-			while (wsi.hasNext()) {
-				final Component component = (Component) wsi.next();
+			for (Component component : workingSet) {
 				this.add(component);
 			}
 		}
@@ -1077,6 +1065,12 @@ public class HtmlBlockPanel extends JComponent implements NodeRenderer, Renderab
 	/** {@inheritDoc} */
 	public Point translateDescendentPoint(BoundableRenderable descendent, int x, int y) {
 		return rblock.translateDescendentPoint(descendent, x, y);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Point getOriginRelativeToAbs(RCollection bodyLayout) {
+		return null;
 	}
 
 	/**

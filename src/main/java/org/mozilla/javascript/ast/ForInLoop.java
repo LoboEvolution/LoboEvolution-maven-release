@@ -16,8 +16,8 @@ import org.mozilla.javascript.Token;
  * <pre><b>for</b> ( LeftHandSideExpression <b>of</b> Expression ) Statement</pre>
  * <pre><b>for</b> ( ForDeclaration <b>of</b> Expression ) Statement</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ForInLoop extends Loop {
 

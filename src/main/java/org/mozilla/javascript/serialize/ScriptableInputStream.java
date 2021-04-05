@@ -25,8 +25,8 @@ import org.mozilla.javascript.UniqueTag;
  * replaced with references to the top-level scope specified during
  * creation of the ScriptableInputStream.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class ScriptableInputStream extends ObjectInputStream {
 

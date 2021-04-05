@@ -57,21 +57,21 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>RegionFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class RegionFlags extends Flags {
 
 	private static final Logger logger = Logger.getLogger(RegionFlags.class.getName());
-	/** Constant EXTERNAL_COMBINATION_OPERATOR="EXTERNAL_COMBINATION_OPERATOR" */
-	public static String EXTERNAL_COMBINATION_OPERATOR = "EXTERNAL_COMBINATION_OPERATOR";
+	/** Constant <code>EXTERNAL_COMBINATION_OPERATOR="EXTERNAL_COMBINATION_OPERATOR"</code> */
+	public static final String EXTERNAL_COMBINATION_OPERATOR = "EXTERNAL_COMBINATION_OPERATOR";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 
 		/** extract EXTERNAL_COMBINATION_OPERATOR */
-		flags.put(EXTERNAL_COMBINATION_OPERATOR, new Integer(flagsAsInt & 7));
+		flags.put(EXTERNAL_COMBINATION_OPERATOR, flagsAsInt & 7);
 
 		if (JBIG2StreamDecoder.debug)
 			logger.info("flags: " + flags);

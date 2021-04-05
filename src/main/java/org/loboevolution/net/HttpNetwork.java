@@ -1,7 +1,28 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.net;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -9,13 +30,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
 import javax.imageio.ImageIO;
@@ -28,15 +55,21 @@ import org.loboevolution.store.SQLiteCommon;
 /**
  * <p>HttpNetwork class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HttpNetwork {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(HttpNetwork.class.getName());
 
 	/** Constant GZIP_ENCODING="gzip" */
-	public static String GZIP_ENCODING = "gzip";
+	public static final String GZIP_ENCODING = "gzip";
+	
+	/** Constant TIMEOUT_VALUE="2000" */
+	public static final int TIMEOUT_VALUE = 2000;
 
-	private static String USER_AGENT = "SELECT DISTINCT description FROM USER_AGENT";
+	private static final String USER_AGENT = "SELECT DISTINCT description FROM USER_AGENT";
 
 	private static InputStream getGzipStream(URLConnection con) throws IOException {
 		final InputStream cis = con.getInputStream();
@@ -99,7 +132,7 @@ public class HttpNetwork {
 			if (href.contains(";base64,")) {
 				final String base64 = href.split(";base64,")[1];
 				byte[] decodedBytes = Base64.getDecoder().decode(Strings.linearize(base64));
-				try (InputStream stream = new ByteArrayInputStream(decodedBytes);) {
+				try (InputStream stream = new ByteArrayInputStream(decodedBytes)) {
 					return ImageIO.read(stream);
 				}
 			} else {
@@ -115,15 +148,23 @@ public class HttpNetwork {
 				final URLConnection connection = u.openConnection();
 				connection.setRequestProperty("User-Agent", HttpNetwork.getUserAgentValue());
 				try (InputStream in = HttpNetwork.openConnectionCheckRedirects(connection);
-						Reader reader = new InputStreamReader(in, "utf-8");) {
+						Reader reader = new InputStreamReader(in, "utf-8")) {
 
 					if (href.contains(";base64,")) {
 						final String base64 = href.split(";base64,")[1];
 						byte[] decodedBytes = Base64.getDecoder().decode(base64);
 						InputStream stream = new ByteArrayInputStream(decodedBytes);
 						return ImageIO.read(stream);
+					} else if (href.endsWith(".svg")) {
+						return null; //TODO SVG From URL
 					} else if (href.startsWith("https")) {
-						return Toolkit.getDefaultToolkit().createImage(ImageIO.read(in).getSource());
+						if (in != null) {
+							BufferedImage bi = ImageIO.read(in);
+							if (bi != null) {
+								return Toolkit.getDefaultToolkit().createImage(bi.getSource());
+							}
+						}
+						return null;
 					} else if (href.endsWith(".gif")) {
 						try {
 							return new ImageIcon(u).getImage();
@@ -134,15 +175,17 @@ public class HttpNetwork {
 						try {
 							return ImageIO.read(in);
 						} catch (final IOException e) {
-							e.printStackTrace();
+							logger.log(Level.SEVERE, e.getMessage(), e);
 						}
 					} else {
 						return ImageIO.read(in);
 					}
-				}
+				} catch (SocketTimeoutException e) {
+					logger.log(Level.SEVERE, "More than " + TIMEOUT_VALUE + " elapsed.");
+			    }
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return null;
 	}
@@ -161,8 +204,10 @@ public class HttpNetwork {
 		connection.setRequestProperty("User-Agent", getUserAgentValue());
 		try (InputStream in = openConnectionCheckRedirects(connection)) {
 			return toString(in);
-		}
-
+		} catch (SocketTimeoutException e) {
+			logger.log(Level.SEVERE, "More than " + TIMEOUT_VALUE + " elapsed.");
+	    }
+		return "";
 	}
 
 	/**
@@ -180,7 +225,7 @@ public class HttpNetwork {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return userAgent;
 	}
@@ -196,6 +241,8 @@ public class HttpNetwork {
 		boolean redir;
 		int redirects = 0;
 		InputStream in = null;
+		c.setConnectTimeout(TIMEOUT_VALUE);
+		c.setReadTimeout(TIMEOUT_VALUE);
 		do {
 			if (c instanceof HttpURLConnection) {
 				((HttpURLConnection) c).setInstanceFollowRedirects(false);
@@ -234,16 +281,20 @@ public class HttpNetwork {
 	 * @throws java.io.IOException if any.
 	 */
 	public static String toString(InputStream inputStream) throws IOException {
-		final String newLine = System.getProperty("line.separator");
-		final StringBuilder result = new StringBuilder();
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-			boolean flag = false;
-			for (String line; (line = reader.readLine()) != null;) {
-				result.append(flag ? newLine : "").append(line);
-				flag = true;
+		InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+		Stream<String> lines = new BufferedReader(inputStreamReader).lines();
+		String text = lines.collect(Collectors.joining("\n"));
+		return removeNonASCIIChar(text);
+	}
+	
+	private static String removeNonASCIIChar(String str) {
+		StringBuffer buff = new StringBuffer();
+		char chars[] = str.toCharArray();
+		for (char c : chars) {
+			if (0 < c && c < 127) {
+				buff.append(c);
 			}
 		}
-		return result.toString();
+		return buff.toString();
 	}
-
 }

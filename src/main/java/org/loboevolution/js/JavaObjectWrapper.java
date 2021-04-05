@@ -1,22 +1,21 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.js;
 
@@ -33,8 +32,8 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * <p>JavaObjectWrapper class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class JavaObjectWrapper extends ScriptableObject {
 
@@ -54,8 +53,8 @@ public class JavaObjectWrapper extends ScriptableObject {
 	 * Instantiates a new java object wrapper.
 	 *
 	 * @param classWrapper the class wrapper
-	 * @throws java.lang.InstantiationException the instantiation exception
-	 * @throws java.lang.IllegalAccessException the illegal access exception
+	 * @throws java.lang.InstantiationException if any.
+	 * @throws java.lang.IllegalAccessException if any.
 	 */
 	public JavaObjectWrapper(JavaClassWrapper classWrapper) throws InstantiationException, IllegalAccessException {
 		this.classWrapper = classWrapper;
@@ -127,7 +126,7 @@ public class JavaObjectWrapper extends ScriptableObject {
 				if (javaObject == null) {
 					throw new IllegalStateException("Java object (class=" + this.classWrapper + ") is null.");
 				}
-				Object raw = getter.invoke(javaObject, new Object[] { Integer.valueOf(index) });
+				Object raw = getter.invoke(javaObject, index);
 				if (raw != null) {
 					return JavaScript.getInstance().getJavascriptObject(raw, this.getParentScope());
 				}
@@ -187,7 +186,7 @@ public class JavaObjectWrapper extends ScriptableObject {
 							throw new IllegalStateException("Java object (class=" + this.classWrapper + ") is null.");
 						}
 						try {
-							Object val = getter.invoke(javaObject, new Object[] { name });
+							Object val = getter.invoke(javaObject, name);
 							if (val == null) {
 								// There might not be an indexer setter.
 								return super.get(name, start);
@@ -224,7 +223,7 @@ public class JavaObjectWrapper extends ScriptableObject {
 				}
 				Object actualValue;
 				actualValue = JavaScript.getInstance().getJavaObject(value, pinfo.getPropertyType());
-				setter.invoke(this.getJavaObject(), new Object[] { Integer.valueOf(index), actualValue });
+				setter.invoke(this.getJavaObject(), index, actualValue);
 			} catch (Exception err) {
 				logger.log(Level.SEVERE, err.getMessage(), err);
 			}
@@ -253,9 +252,7 @@ public class JavaObjectWrapper extends ScriptableObject {
 				try {
 					Object actualValue;
 					actualValue = JavaScript.getInstance().getJavaObject(value, pinfo.getPropertyType());
-					setter.invoke(this.getJavaObject(), new Object[] { actualValue });
-				} catch (IllegalArgumentException err) {
-					logger.log(Level.SEVERE, err.getMessage(), err);
+					setter.invoke(this.getJavaObject(), actualValue);
 				} catch (Exception err) {
 					logger.log(Level.SEVERE, err.getMessage(), err);
 				}
@@ -267,7 +264,7 @@ public class JavaObjectWrapper extends ScriptableObject {
 						try {
 							Object actualValue;
 							actualValue = JavaScript.getInstance().getJavaObject(value, ni.getPropertyType());
-							setter.invoke(this.getJavaObject(), new Object[] { name, actualValue });
+							setter.invoke(this.getJavaObject(), name, actualValue);
 						} catch (Exception err) {
 							logger.log(Level.SEVERE, err.getMessage(), err);
 						}

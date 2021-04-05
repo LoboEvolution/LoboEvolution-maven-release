@@ -55,14 +55,14 @@ import java.util.Map;
 /**
  * <p>Abstract Flags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class Flags {
 
 	protected int flagsAsInt;
 
-	protected Map flags = new LinkedHashMap();
+	protected final Map<String, Integer> flags = new LinkedHashMap<>();
 
 	/**
 	 * <p>getFlagValue.</p>
@@ -71,12 +71,12 @@ public abstract class Flags {
 	 * @return a int.
 	 */
 	public int getFlagValue(String key) {
-		Integer value = (Integer) flags.get(key);
-		return value.intValue();
+		Integer value = flags.get(key);
+		return value;
 	}
 
 	/**
-	 * <p>Setter for the field flags.</p>
+	 * <p>Setter for the field <code>flags</code>.</p>
 	 *
 	 * @param flagsAsInt a int.
 	 */

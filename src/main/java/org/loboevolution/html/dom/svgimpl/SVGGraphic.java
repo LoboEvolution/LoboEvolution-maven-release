@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.BasicStroke;
@@ -8,6 +28,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
 import org.loboevolution.common.Nodes;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.dom.svg.SVGAnimateElement;
 import org.loboevolution.html.dom.svg.SVGAnimateTransformElement;
 import org.loboevolution.html.dom.svg.SVGAnimatedTransformList;
@@ -16,15 +37,15 @@ import org.loboevolution.html.dom.svg.SVGLangSpace;
 import org.loboevolution.html.dom.svg.SVGTests;
 import org.loboevolution.html.dom.svg.SVGTransform;
 import org.loboevolution.html.dom.svg.SVGTransformList;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeList;
 
 /**
  * <p>SVGGraphic class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SVGTests, SVGExternalResourcesRequired {
 
@@ -45,7 +66,7 @@ public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SV
 
 	/** {@inheritDoc} */
 	@Override
-	public void setXMLlang(String xmllang) throws DOMException {
+	public void setXMLlang(String xmllang) {
 		setAttribute("xml:lang", xmllang);
 
 	}
@@ -58,7 +79,7 @@ public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SV
 
 	/** {@inheritDoc} */
 	@Override
-	public void setXMLspace(String xmlspace) throws DOMException {
+	public void setXMLspace(String xmlspace) {
 		setAttribute("xml:space", xmlspace);
 	}
 
@@ -114,7 +135,9 @@ public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SV
 			AffineTransform affine = new AffineTransform();
 			switch (point.getType()) {
 			case SVGTransform.SVG_TRANSFORM_MATRIX:
-				affine.concatenate(new AffineTransform(mtrx.getA(), mtrx.getB(), mtrx.getC(), mtrx.getD(), mtrx.getE(), mtrx.getF()));
+                case SVGTransform.SVG_TRANSFORM_SKEWY:
+                case SVGTransform.SVG_TRANSFORM_SKEWX:
+                    affine.concatenate(new AffineTransform(mtrx.getA(), mtrx.getB(), mtrx.getC(), mtrx.getD(), mtrx.getE(), mtrx.getF()));
 				break;
 			case SVGTransform.SVG_TRANSFORM_TRANSLATE:
 				affine.translate(mtrx.getE(), mtrx.getF());
@@ -125,13 +148,7 @@ public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SV
 			case SVGTransform.SVG_TRANSFORM_ROTATE:
 				affine.rotate(Math.toRadians(mtrx.getA()), mtrx.getB(), mtrx.getC());
 				break;
-			case SVGTransform.SVG_TRANSFORM_SKEWX:
-				affine.concatenate(new AffineTransform(mtrx.getA(), mtrx.getB(), mtrx.getC(), mtrx.getD(), mtrx.getE(), mtrx.getF()));
-				break;
-			case SVGTransform.SVG_TRANSFORM_SKEWY:
-				affine.concatenate(new AffineTransform(mtrx.getA(), mtrx.getB(), mtrx.getC(), mtrx.getD(), mtrx.getE(), mtrx.getF()));
-				break;
-			default:
+                default:
 				break;
 			}
 			graphics.transform(affine);
@@ -145,13 +162,13 @@ public class SVGGraphic extends SVGTransformableImpl implements SVGLangSpace, SV
 	 * @param elem a {@link org.loboevolution.html.dom.svgimpl.SVGElementImpl} object.
 	 */
 	protected void animate(SVGElementImpl elem) {
-		NodeList childNodes = elem.getChildNodes();
-		for (Node child : Nodes.iterable(childNodes)) {
+		NodeListImpl children = (NodeListImpl)elem.getChildNodes();
+		children.forEach(child -> {
 			if (child instanceof SVGAnimateElement || child instanceof SVGAnimateTransformElement) {
 				SVGAnimateElementImpl svga = (SVGAnimateElementImpl) child;				
 				SVGAnimateImpl animate = new SVGAnimateImpl(elem, svga);
 				svga.setAnimate(animate);
 			}
-		}
+		});
 	}
 }

@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.laf;
 
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -33,18 +33,18 @@ import org.loboevolution.common.IORoutines;
 /**
  * A factory for creating Icon objects.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class IconFactory {
 
-    private final static Logger LOGGER = Logger.getLogger(IconFactory.class.getName());
+    private final static Logger logger = Logger.getLogger(IconFactory.class.getName());
 
 	/** The Constant instance. */
 	private static final IconFactory instance = new IconFactory();
 	
 	/** The icon map. */
-	private Map<String, ImageIcon> iconMap = new HashMap<String, ImageIcon>();
+	private final Map<String, ImageIcon> iconMap = new HashMap<>();
 
 	/**
 	 * Instantiates a new icon factory.
@@ -75,7 +75,7 @@ public class IconFactory {
 				if (icon == null) {
 					InputStream in = this.getClass().getResourceAsStream(resourcePath);
 					if (in == null) {
-						LOGGER.info("getIcon(): Resource path " + resourcePath + " not found.");
+						logger.info("getIcon(): Resource path " + resourcePath + " not found.");
 						return null;
 					}
 					try {
@@ -88,8 +88,8 @@ public class IconFactory {
 				}
 				return icon;
 			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			return null;
 		}
 	}

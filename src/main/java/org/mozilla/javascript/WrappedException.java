@@ -12,8 +12,8 @@ package org.mozilla.javascript;
  * Used by the JavaScript runtime to wrap and propagate exceptions that occur
  * during runtime.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class WrappedException extends EvaluatorException
 {
@@ -27,7 +27,7 @@ public class WrappedException extends EvaluatorException
      */
     public WrappedException(Throwable exception)
     {
-        super("Wrapped " + exception.toString());
+        super("Wrapped " + exception);
         this.exception = exception;
         this.initCause(exception);
 

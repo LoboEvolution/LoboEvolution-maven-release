@@ -1,11 +1,33 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.js.geolocation;
 
 import java.net.UnknownHostException;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.loboevolution.html.dom.domimpl.NodeImpl;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
 import org.loboevolution.html.js.Executor;
-import org.loboevolution.html.js.Window;
+import org.loboevolution.html.js.WindowImpl;
 import org.loboevolution.js.AbstractScriptableDelegate;
 import org.mozilla.javascript.Function;
 
@@ -23,19 +45,22 @@ import org.mozilla.javascript.Function;
  * uses this geolocation package.</b>
  * </p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Geolocation extends AbstractScriptableDelegate {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(Geolocation.class.getName());
 
-	private Window window;
+	private final WindowImpl window;
 
 	/**
 	 * <p>Constructor for Geolocation.</p>
 	 *
-	 * @param window a {@link org.loboevolution.html.js.Window} object.
+	 * @param window a {@link org.loboevolution.html.node.js.Window} object.
 	 */
-	public Geolocation(Window window) {
+	public Geolocation(WindowImpl window) {
 		this.window = window;
 	}
 
@@ -74,16 +99,13 @@ public class Geolocation extends AbstractScriptableDelegate {
 	 */
 	public long watchPosition(final Function success) {
 		final long watchId = System.currentTimeMillis();
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					try {
-						getCurrentPosition(success);
-						Thread.sleep(500);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+		Thread t = new Thread(() -> {
+			while (true) {
+				try {
+					getCurrentPosition(success);
+					Thread.sleep(500);
+				} catch (Exception e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 			}
 		});
@@ -100,17 +122,14 @@ public class Geolocation extends AbstractScriptableDelegate {
 	 */
 	public long watchPosition(final Function success, final Function error) {
 		final long watchId = System.currentTimeMillis();
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					try {
-						getCurrentPosition(success, error);
-						Thread.sleep(500);
-					} catch (Exception e) {
-						geoError(error, e);
-						break;
-					}
+		Thread t = new Thread(() -> {
+			while (true) {
+				try {
+					getCurrentPosition(success, error);
+					Thread.sleep(500);
+				} catch (Exception e) {
+					geoError(error, e);
+					break;
 				}
 			}
 		});

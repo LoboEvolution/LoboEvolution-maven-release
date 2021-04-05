@@ -28,8 +28,8 @@ import java.awt.Color;
 /**
  * A helper class for handling color values.
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class ColorHelper {
 
@@ -86,7 +86,7 @@ public class ColorHelper {
 			return null;
 		}
 
-		Color colors[] = new Color[steps];
+		Color[] colors = new Color[steps];
 		double r = c1.getRed();
 		double g = c1.getGreen();
 		double b = c1.getBlue();

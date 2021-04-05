@@ -8,8 +8,8 @@ import java.net.URL;
 /**
  * <p>DefaultICCProfile class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class DefaultICCProfile {
 	/**

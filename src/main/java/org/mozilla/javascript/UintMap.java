@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * Map to associate non-negative integers to objects or integers.
@@ -18,14 +17,13 @@ import java.util.logging.Logger;
  * it from a single thread or do own synchronization or perform all mutation
  * operations on one thread before passing the map to others.
  *
- * @author Igor Bukanov
- * @version $Id: $Id
+ * Author Igor Bukanov
+ *
  */
+@SuppressWarnings("unused")
 public class UintMap implements Serializable
 {
     private static final long serialVersionUID = 4242698212885848444L;
-    
-    private static final Logger logger = Logger.getLogger(UintMap.class.getName());
 
 // Map implementation via hashtable,
 // follows "The Art of Computer Programming" by Donald E. Knuth
@@ -613,7 +611,7 @@ public class UintMap implements Serializable
         }
         checkSameMaps(map, (UintMap)writeAndRead(map));
 
-        logger.info(); System.out.flush();
+        System.out.println(); System.out.flush();
 
     }
 

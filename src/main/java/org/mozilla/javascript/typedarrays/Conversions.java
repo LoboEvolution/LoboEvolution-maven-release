@@ -11,8 +11,8 @@ import org.mozilla.javascript.ScriptRuntime;
 /**
  * Numeric conversions from section 7 of the ECMAScript 6 standard.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Conversions
 {

@@ -29,8 +29,8 @@ import org.loboevolution.pdfview.PDFParseException;
  * from one input value to n output values using a simple exponential
  * formula.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class FunctionType2 extends PDFFunction {
     /** the function's value at zero for the n outputs */

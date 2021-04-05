@@ -32,8 +32,8 @@ import org.loboevolution.pdfview.pattern.PDFPattern;
  * read from the resources of the current page.  The pattern space
  * may also have a base color space which the pattern is defined in.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PatternSpace extends PDFColorSpace {
     private PDFColorSpace base;

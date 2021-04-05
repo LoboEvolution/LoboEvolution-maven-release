@@ -82,8 +82,8 @@ import javax.swing.plaf.basic.BasicRootPaneUI;
  * see {@link java.beans.XMLEncoder}.
  *
  * @version 1.20 04/27/04
- * @author Terry Kellerman
- * @author Michael Hagen
+ * Author Terry Kellerman
+ * Author Michael Hagen
  * @since 1.4
  */
 public class BaseRootPaneUI extends BasicRootPaneUI {
@@ -120,7 +120,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
 		 * Instructs the layout manager to perform the layout for the specified
 		 * container.
 		 *
-		 * @param the Container for which this layout manager is being used
+		 * @param parent for which this layout manager is being used
 		 */
 		@Override
 		public void layoutContainer(Container parent) {
@@ -172,7 +172,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
 		/**
 		 * Returns the maximum amount of space the layout can use.
 		 *
-		 * @param the Container for which this layout manager is being used
+		 * @param target for which this layout manager is being used
 		 * @return a Dimension object containing the layout's maximum size
 		 */
 		@Override
@@ -183,7 +183,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
 		/**
 		 * Returns the minimum amount of space the layout needs.
 		 *
-		 * @param the Container for which this layout manager is being used
+		 * @param parent for which this layout manager is being used
 		 * @return a Dimension object containing the layout's minimum size
 		 */
 		@Override
@@ -194,7 +194,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
 		/**
 		 * Returns the amount of space the layout would like to have.
 		 *
-		 * @param the Container for which this layout manager is being used
+		 * @param parent for which this layout manager is being used
 		 * @return a Dimension object containing the layout's preferred size
 		 */
 		@Override
@@ -356,7 +356,7 @@ public class BaseRootPaneUI extends BasicRootPaneUI {
 
 		private int getMinScreenY() {
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice devices[] = ge.getScreenDevices();
+			GraphicsDevice[] devices = ge.getScreenDevices();
 			GraphicsDevice gd = devices[0];
 			GraphicsConfiguration gc = gd.getDefaultConfiguration();
 			int minScreenY = gc.getBounds().y + Toolkit.getDefaultToolkit().getScreenInsets(gc).top;

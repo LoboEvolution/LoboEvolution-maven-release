@@ -24,16 +24,17 @@ import java.util.Arrays;
 /**
  * Model the TrueType Post table
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class HmtxTable extends TrueTypeTable {
-    /** advance widths for any glyphs that have one */
-    short advanceWidths[];
+    
+	/** advance widths for any glyphs that have one */
+    final short[] advanceWidths;
     
     /** left side bearings for each glyph */
-    short leftSideBearings[];
-    
+    final short[] leftSideBearings;
+
     /**
      * Creates a new instance of HmtxTable
      *

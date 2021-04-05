@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 /*
  * $Id: XPathNSResolverImpl.java 1225426 2011-12-29 04:13:08Z mrglavas $
@@ -24,10 +23,9 @@
 
 package org.loboevolution.html.dom.xpath;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.xpath.XPathNSResolver;
-
-import com.sun.org.apache.xml.internal.utils.PrefixResolverDefault;
+import org.apache.xml.utils.PrefixResolverDefault;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.xpath.XPathNSResolver;
 
 /**
  *
@@ -48,20 +46,22 @@ import com.sun.org.apache.xml.internal.utils.PrefixResolverDefault;
  * by any application.
  * </p>
  *
- * @see org.w3c.dom.xpath.XPathNSResolver
- * 
- * @author utente
- * @version $Id: $Id
+ * @see org.loboevolution.html.xpath.XPathNSResolver
+ *
+ *
  */
 public class XPathNSResolverImpl extends PrefixResolverDefault implements XPathNSResolver {
 
+	
+
 	/**
-	 * Constructor for XPathNSResolverImpl.
+	 * <p>Constructor for XPathNSResolverImpl.</p>
 	 *
 	 * @param xpathExpressionContext a {@link org.w3c.dom.Node} object.
 	 */
-	public XPathNSResolverImpl(Node xpathExpressionContext) {
+	public XPathNSResolverImpl(org.w3c.dom.Node xpathExpressionContext) {
 		super(xpathExpressionContext);
+		// TODO Broken with new interfaces
 	}
 
 	/** {@inheritDoc} */

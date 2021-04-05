@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.dom.domimpl;
 
 import org.loboevolution.html.dom.HTMLHeadingElement;
@@ -28,10 +27,10 @@ import org.loboevolution.html.style.AbstractCSSProperties;
 /**
  * <p>HTMLHeadingElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLHeadingElementImpl extends HTMLAbstractUIElement implements HTMLHeadingElement {
+public class HTMLHeadingElementImpl extends HTMLElementImpl implements HTMLHeadingElement {
 	/**
 	 * <p>Constructor for HTMLHeadingElementImpl.</p>
 	 *
@@ -93,7 +92,7 @@ public class HTMLHeadingElementImpl extends HTMLAbstractUIElement implements HTM
 		return getAttribute("align");
 	}
 
-	private final float getHeadingFontSize() {
+	private float getHeadingFontSize() {
 		final String tagName = getTagName();
 		try {
 			final int lastCharValue = tagName.charAt(1) - '0';
@@ -110,14 +109,16 @@ public class HTMLHeadingElementImpl extends HTMLAbstractUIElement implements HTM
 				return 10.0f;
 			case 6:
 				return 8.0f;
+			default:
+				return 14.0f;
 			}
 		} catch (final Exception thrown) {
 			this.warn("getHeadingFontSize(): Bad heading tag: " + getTagName(), thrown);
+			return 14.0f;
 		}
-		return 14.0f;
 	}
 
-	private final String getHeadingFontSizeText() {
+	private String getHeadingFontSizeText() {
 		final String tagName = getTagName();
 		try {
 			final int lastCharValue = tagName.charAt(1) - '0';
@@ -134,16 +135,24 @@ public class HTMLHeadingElementImpl extends HTMLAbstractUIElement implements HTM
 				return "10pt";
 			case 6:
 				return "7.55pt";
+			default:
+				return "14px";
 			}
 		} catch (final Exception thrown) {
 			this.warn("getHeadingFontSizeText(): Bad heading tag: " + getTagName(), thrown);
+			return "14px";
 		}
-		return "14px";
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void setAlign(String align) {
 		setAttribute("align", align);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLHeadingElement]";
 	}
 }

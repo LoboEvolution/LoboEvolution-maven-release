@@ -5,8 +5,8 @@ import java.util.Stack;
 /**
  * <p>PostScriptOperation interface.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public interface PostScriptOperation {
 
@@ -15,7 +15,7 @@ public interface PostScriptOperation {
      *
      * @param environment a {@link java.util.Stack} object.
      */
-    public void eval(Stack<Object> environment);
+    void eval(Stack<Object> environment);
 
 }
 

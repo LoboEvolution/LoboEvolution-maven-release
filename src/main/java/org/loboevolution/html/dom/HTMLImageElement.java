@@ -1,278 +1,361 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+import org.loboevolution.jsenum.Decoding;
+
 /**
- * Embedded image. See the IMG element definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods for manipulating &lt;img&gt; elements.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLImageElement extends HTMLElement {
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlign();
+   
+    /**
+     * Sets or retrieves how the object is aligned with adjacent text.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlt();
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    @Deprecated
+    void setAlign(String align);
 
-	/**
-	 * Width of border around image. See the border attribute definition in HTML
-	 * 4.01. This attribute is deprecated in HTML 4.01. Note that the type of this
-	 * attribute was DOMString in DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>] .
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBorder();
+    /**
+     * Sets or retrieves a text alternative to the graphic.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAlt();
 
-	/**
-	 * Height of the image in pixels. See the height attribute definition in HTML
-	 * 4.01. Note that the type of this attribute was DOMString in DOM
-	 * Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getHeight();
+    
+    /**
+     * <p>setAlt.</p>
+     *
+     * @param alt a {@link java.lang.String} object.
+     */
+    void setAlt(String alt);
 
-	/**
-	 * Horizontal space to the left and right of this image in pixels. See the
-	 * hspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01. Note that the type of this attribute was DOMString in
-	 * DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getHspace();
+    /**
+     * Specifies the properties of a border drawn around an object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getBorder();
 
-	/**
-	 * Use server-side image map. See the ismap attribute definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getIsMap();
+    
+    /**
+     * <p>setBorder.</p>
+     *
+     * @param border a {@link java.lang.String} object.
+     */
+    void setBorder(String border);
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating a long description of this image or frame. See the longdesc
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getLongDesc();
+    /**
+     * Retrieves whether the object is fully loaded.
+     *
+     * @return a boolean.
+     */
+    boolean isComplete();
 
-	/**
-	 * The name of the element (for backwards compatibility).
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    
+    
+    /**
+     * <p>getCrossOrigin.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getCrossOrigin();
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating the source of this image. See the src attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getSrc();
+    
+    /**
+     * <p>setCrossOrigin.</p>
+     *
+     * @param crossOrigin a {@link java.lang.String} object.
+     */
+    void setCrossOrigin(String crossOrigin);
 
-	/**
-	 * Use client-side image map. See the usemap attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getUseMap();
+    
+    /**
+     * <p>getCurrentSrc.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getCurrentSrc();
 
-	/**
-	 * Vertical space above and below this image in pixels. See the vspace attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01. Note that
-	 * the type of this attribute was "DOMString" in DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getVspace();
+    
+    /**
+     * <p>getDecoding.</p>
+     *
+     * @return a {@link org.loboevolution.jsenum.Decoding} object.
+     */
+    Decoding getDecoding();
 
-	/**
-	 * The width of the image in pixels. See the width attribute definition in HTML
-	 * 4.01. Note that the type of this attribute was DOMString in DOM
-	 * Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getWidth();
+    
+    /**
+     * <p>setDecoding.</p>
+     *
+     * @param decoding a {@link org.loboevolution.jsenum.Decoding} object.
+     */
+    void setDecoding(Decoding decoding);
 
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param align a {@link java.lang.String} object.
-	 */
-	void setAlign(String align);
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * @return a double.
+     */
+    double getHeight();
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01.
-	 *
-	 * @param alt a {@link java.lang.String} object.
-	 */
-	void setAlt(String alt);
+    
+    /**
+     * <p>setHeight.</p>
+     *
+     * @param height a double.
+     */
+    void setHeight(double height);
 
-	/**
-	 * Width of border around image. See the border attribute definition in HTML
-	 * 4.01. This attribute is deprecated in HTML 4.01. Note that the type of this
-	 * attribute was DOMString in DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>] .
-	 *
-	 * @param border a {@link java.lang.String} object.
-	 */
-	void setBorder(String border);
+    /**
+     * Sets or retrieves the width of the border to draw around the object.
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getHspace();
 
-	/**
-	 * Height of the image in pixels. See the height attribute definition in HTML
-	 * 4.01. Note that the type of this attribute was DOMString in DOM
-	 * Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @param height a int.
-	 */
-	void setHeight(int height);
+    
+    /**
+     * <p>setHspace.</p>
+     *
+     * @param hspace a double.
+     */
+    void setHspace(double hspace);
 
-	/**
-	 * Horizontal space to the left and right of this image in pixels. See the
-	 * hspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01. Note that the type of this attribute was DOMString in
-	 * DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @param hspace a int.
-	 */
-	void setHspace(int hspace);
+    /**
+     * Sets or retrieves whether the image is a server-side image map.
+     *
+     * @return a boolean.
+     */
+    boolean isIsMap();
 
-	/**
-	 * Use server-side image map. See the ismap attribute definition in HTML 4.01.
-	 *
-	 * @param isMap a boolean.
-	 */
-	void setIsMap(boolean isMap);
+    
+    /**
+     * <p>setIsMap.</p>
+     *
+     * @param isMap a boolean.
+     */
+    void setIsMap(boolean isMap);
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating a long description of this image or frame. See the longdesc
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param longDesc a {@link java.lang.String} object.
-	 */
-	void setLongDesc(String longDesc);
+    /**
+     * Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getLongDesc();
 
-	/**
-	 * The name of the element (for backwards compatibility).
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    
+    /**
+     * <p>setLongDesc.</p>
+     *
+     * @param longDesc a {@link java.lang.String} object.
+     */
+    void setLongDesc(String longDesc);
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating the source of this image. See the src attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param src a {@link java.lang.String} object.
-	 */
-	void setSrc(String src);
+    /**
+     * <p>getLowsrc.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getLowsrc();
 
-	/**
-	 * Use client-side image map. See the usemap attribute definition in HTML 4.01.
-	 *
-	 * @param useMap a {@link java.lang.String} object.
-	 */
-	void setUseMap(String useMap);
+    
+    /**
+     * <p>setLowsrc.</p>
+     *
+     * @param lowsrc a {@link java.lang.String} object.
+     */
+    void setLowsrc(String lowsrc);
 
-	/**
-	 * Vertical space above and below this image in pixels. See the vspace attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01. Note that
-	 * the type of this attribute was "DOMString" in DOM Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @param vspace a int.
-	 */
-	void setVspace(int vspace);
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getName();
 
-	/**
-	 * The width of the image in pixels. See the width attribute definition in HTML
-	 * 4.01. Note that the type of this attribute was DOMString in DOM
-	 * Level 1 HTML
-	 * [<a href='http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001'>DOM Level
-	 * 1</a>].
-	 *
-	 * @version DOM Level 2
-	 * @param width a int.
-	 */
-	void setWidth(int width);
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
+
+    /**
+     * The original height of the image resource before sizing.
+     *
+     * @return a double.
+     */
+    double getNaturalHeight();
+
+    /**
+     * The original width of the image resource before sizing.
+     *
+     * @return a double.
+     */
+    double getNaturalWidth();
+
+    
+    /**
+     * <p>getReferrerPolicy.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getReferrerPolicy();
+
+    
+    /**
+     * <p>setReferrerPolicy.</p>
+     *
+     * @param referrerPolicy a {@link java.lang.String} object.
+     */
+    void setReferrerPolicy(String referrerPolicy);
+
+    
+    /**
+     * <p>getSizes.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSizes();
+
+    
+    /**
+     * <p>setSizes.</p>
+     *
+     * @param sizes a {@link java.lang.String} object.
+     */
+    void setSizes(String sizes);
+
+    /**
+     * The address or URL of the a media resource that is to be considered.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSrc();
+
+    
+    /**
+     * <p>setSrc.</p>
+     *
+     * @param src a {@link java.lang.String} object.
+     */
+    void setSrc(String src);
+
+    
+    /**
+     * <p>getSrcset.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSrcset();
+
+    
+    /**
+     * <p>setSrcset.</p>
+     *
+     * @param srcset a {@link java.lang.String} object.
+     */
+    void setSrcset(String srcset);
+
+    /**
+     * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getUseMap();
+
+    
+    /**
+     * <p>setUseMap.</p>
+     *
+     * @param useMap a {@link java.lang.String} object.
+     */
+    void setUseMap(String useMap);
+
+    /**
+     * Sets or retrieves the vertical margin for the object.
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getVspace();
+
+    
+    /**
+     * <p>setVspace.</p>
+     *
+     * @param vspace a double.
+     */
+    void setVspace(double vspace);
+
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a double.
+     */
+    double getWidth();
+
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a double.
+     */
+    void setWidth(double width);
+
+    
+    /**
+     * <p>getX.</p>
+     *
+     * @return a double.
+     */
+    double getX();
+
+    
+    /**
+     * <p>getY.</p>
+     *
+     * @return a double.
+     */
+    double getY();
 
 }

@@ -9,8 +9,8 @@ package org.mozilla.javascript.ast;
 /**
  * Abstract base type for loops.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class Loop extends Scope {
 

@@ -13,8 +13,8 @@ import org.mozilla.javascript.Token;
  * Node type, like {@link org.mozilla.javascript.ast.XmlLiteral}, is {@link org.mozilla.javascript.Token#XML}.  The node length
  * includes the curly braces.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlExpression extends XmlFragment {
 

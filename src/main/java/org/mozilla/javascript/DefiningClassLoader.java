@@ -7,8 +7,8 @@ package org.mozilla.javascript;
 /**
  * Load generated classes.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class DefiningClassLoader extends ClassLoader
     implements GeneratedClassLoader

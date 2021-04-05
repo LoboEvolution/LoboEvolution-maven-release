@@ -50,7 +50,6 @@
 package org.jpedal.jbig2.segment.region.text;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -69,19 +68,20 @@ import org.jpedal.jbig2.util.BinaryOperation;
 /**
  * <p>TextRegionSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class TextRegionSegment extends RegionSegment {
 	
 	private static final Logger logger = Logger.getLogger(TextRegionSegment.class.getName());
-	private TextRegionFlags textRegionFlags = new TextRegionFlags();
+	private final TextRegionFlags textRegionFlags = new TextRegionFlags();
 
-	private TextRegionHuffmanFlags textRegionHuffmanFlags = new TextRegionHuffmanFlags();
+	private final TextRegionHuffmanFlags textRegionHuffmanFlags = new TextRegionHuffmanFlags();
 
-	private boolean inlineImage;
+	private final boolean inlineImage;
 
-	private short[] symbolRegionAdaptiveTemplateX = new short[2], symbolRegionAdaptiveTemplateY = new short[2];
+	private final short[] symbolRegionAdaptiveTemplateX = new short[2];
+    private final short[] symbolRegionAdaptiveTemplateY = new short[2];
 
 	/**
 	 * <p>Constructor for TextRegionSegment.</p>
@@ -121,7 +121,7 @@ public class TextRegionSegment extends RegionSegment {
 		int[] referredToSegments = segmentHeader.getReferredToSegments();
 
 		//List codeTables = new ArrayList();
-		List<Segment> segmentsReferenced = new LinkedList<Segment>();
+		List<Segment> segmentsReferenced = new LinkedList<>();
 		int noOfSymbols = 0;
 
 		if (JBIG2StreamDecoder.debug)
@@ -149,12 +149,11 @@ public class TextRegionSegment extends RegionSegment {
 
 		int currentSymbol = 0;
 		JBIG2Bitmap[] symbols = new JBIG2Bitmap[noOfSymbols];
-		for (Iterator<Segment> it = segmentsReferenced.iterator(); it.hasNext();) {
-			Segment seg = it.next();
+		for (Segment seg : segmentsReferenced) {
 			if (seg.getSegmentHeader().getSegmentType() == Segment.SYMBOL_DICTIONARY) {
 				JBIG2Bitmap[] bitmaps = ((SymbolDictionarySegment) seg).getBitmaps();
-				for (int j = 0; j < bitmaps.length; j++) {
-					symbols[currentSymbol] = bitmaps[j];
+				for (JBIG2Bitmap jbig2Bitmap : bitmaps) {
+					symbols[currentSymbol] = jbig2Bitmap;
 					currentSymbol++;
 				}
 			}
@@ -371,7 +370,7 @@ public class TextRegionSegment extends RegionSegment {
 	}
 
 	/**
-	 * <p>Getter for the field textRegionFlags.</p>
+	 * <p>Getter for the field <code>textRegionFlags</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.region.text.TextRegionFlags} object.
 	 */
@@ -380,7 +379,7 @@ public class TextRegionSegment extends RegionSegment {
 	}
 
 	/**
-	 * <p>Getter for the field textRegionHuffmanFlags.</p>
+	 * <p>Getter for the field <code>textRegionHuffmanFlags</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.region.text.TextRegionHuffmanFlags} object.
 	 */

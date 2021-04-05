@@ -34,12 +34,12 @@ import org.loboevolution.pdfview.PDFObject;
  * and
  * http://partners.adobe.com/public/developer/en/font/5177.Type2.pdf
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class Type1CFont extends OutlineFont {
 
-    String chr2name[] = new String[256];
+    String[] chr2name = new String[256];
 
     byte[] data;
 
@@ -47,18 +47,18 @@ public class Type1CFont extends OutlineFont {
 
     byte[] subrs;
 
-    float[] stack = new float[100];
+    final float[] stack = new float[100];
 
     int stackptr = 0;
 
     int stemhints = 0;
 
-    String names[];
+    String[] names;
 
-    int glyphnames[];
+    int[] glyphnames;
 
-    int encoding[] = new int[256];
-
+	final int[] encoding = new int[256];
+	
     String fontname;
 
     AffineTransform at = new AffineTransform (0.001f, 0, 0, 0.001f, 0, 0);
@@ -69,11 +69,11 @@ public class Type1CFont extends OutlineFont {
 
     int type;
 
-    static int CMD = 0;
+    static final int CMD = 0;
 
-    static int NUM = 1;
+    static final int NUM = 1;
 
-    static int FLT = 2;
+    static final int FLT = 2;
 
     /**
      * create a new Type1CFont based on a font data stream and a descriptor
@@ -354,7 +354,7 @@ public class Type1CFont extends OutlineFont {
     // and code encoding[i]
     int charstringtype = 2;
 
-    float temps[] = new float[32];
+    final float[] temps = new float[32];
 
     int charsetbase = 0;
 
@@ -533,7 +533,6 @@ public class Type1CFont extends OutlineFont {
 
     /**
      * parse the font data.
-     * @param encdif a dictionary describing the encoding.
      */
     private void parse () throws IOException {
         int majorVersion = readByte ();
@@ -599,7 +598,7 @@ public class Type1CFont extends OutlineFont {
             if (c >= 32 && c < 128) {
                 sb.append (c);
             } else {
-                sb.append ("<" + (int) c + ">");
+                sb.append("<").append((int) c).append(">");
             }
         }
         return sb.toString ();
@@ -725,6 +724,7 @@ public class Type1CFont extends OutlineFont {
             switch (cmd) {
                 case 1: // hstem
                 case 3: // vstem
+                case 1000: // old dotsection command.  ignore.
                     this.stackptr = 0;
                     break;
                 case 4: // vmoveto
@@ -812,6 +812,7 @@ public class Type1CFont extends OutlineFont {
                     stemhints = 0;
                     break;
                 case 18: // hstemhm
+                case 23: // vstemhm
                     stemhints += (this.stackptr) / 2;
                     this.stackptr = 0;
                     break;
@@ -845,10 +846,6 @@ public class Type1CFont extends OutlineFont {
                     }
                     gp.moveTo (pt.x, pt.y);
                     pt.open = false;
-                    this.stackptr = 0;
-                    break;
-                case 23: // vstemhm
-                    stemhints += (this.stackptr) / 2;
                     this.stackptr = 0;
                     break;
                 case 24: // rcurveline
@@ -947,9 +944,6 @@ public class Type1CFont extends OutlineFont {
                     pt.open = true;
                     this.stackptr = 0;
                     break;
-                case 1000: // old dotsection command.  ignore.
-                    this.stackptr = 0;
-                    break;
                 case 1003: // and
                     x1 = this.stack[--this.stackptr];
                     y1 = this.stack[--this.stackptr];
@@ -1046,7 +1040,7 @@ public class Type1CFont extends OutlineFont {
                     }
                     // x x x x i y y y -> y y y x x x x i (where i=3)
                     if (i > 0) {
-                        float roll[] = new float[n];
+                        float[] roll = new float[n];
                         System.arraycopy (this.stack, this.stackptr - 1 - i, roll, 0, i);
                         System.arraycopy (this.stack, this.stackptr - 1 - n, roll, i,
                                 n - i);

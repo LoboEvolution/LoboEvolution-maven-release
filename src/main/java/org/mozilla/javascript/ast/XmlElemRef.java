@@ -30,8 +30,8 @@ import org.mozilla.javascript.Token;
  * right-bracket, or if it is missing due to a syntax error, through the
  * end of the index expression.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlElemRef extends XmlRef {
 

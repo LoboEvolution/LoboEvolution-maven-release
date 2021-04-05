@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.component;
 
 import java.awt.Color;
@@ -9,6 +29,8 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
@@ -20,12 +42,15 @@ import org.loboevolution.tab.TabbedPanePopupMenu;
 /**
  * <p>DragDropListener class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class DragDropListener implements DropTargetListener {
 	
-	private IBrowserPanel bpanel;
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(DragDropListener.class.getName());
+	
+	private final IBrowserPanel bpanel;
 
 	/**
 	 * <p>Constructor for DragDropListener.</p>
@@ -55,7 +80,7 @@ public class DragDropListener implements DropTargetListener {
 			}
 			dtde.rejectDrop();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 			dtde.rejectDrop();
 		}
 	}
@@ -65,8 +90,7 @@ public class DragDropListener implements DropTargetListener {
 		final DnDTabbedPane tabbedPane = bpanel.getTabbedPane();
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(bpanel));
 		int index = TabStore.getTabs().size();
-		final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(fullURL);
-		hpanel.setBrowserPanel(bpanel);
+		final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, fullURL);
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 		tabbedPane.insertTab(title, null, hpanel, title, index+1);

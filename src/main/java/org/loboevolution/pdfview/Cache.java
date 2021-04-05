@@ -27,8 +27,8 @@ import java.util.Map;
 /**
  * A cache of PDF pages and images.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class Cache {
 
@@ -39,7 +39,7 @@ public class Cache {
      * Creates a new instance of a Cache
      */
     public Cache() {
-        this.pages = Collections.synchronizedMap(new HashMap<Integer, SoftReference<PageRecord>>());
+        this.pages = Collections.synchronizedMap(new HashMap<>());
     }
 
     /**
@@ -187,7 +187,7 @@ public class Cache {
         rec.value = page;
         rec.generator = parser;
 
-        this.pages.put(pageNumber, new SoftReference<PageRecord>(rec));
+        this.pages.put(pageNumber, new SoftReference<>(rec));
 
         return rec;
     }
@@ -231,7 +231,7 @@ public class Cache {
     Record addImageRecord(PDFPage page, ImageInfo info,
             BufferedImage image, PDFRenderer renderer) {
         // first, find or create the relevant page record
-        Integer pageNumber = Integer.valueOf(page.getPageNumber());
+        Integer pageNumber = page.getPageNumber();
         PageRecord pageRec = getPageRecord(pageNumber);
         if (pageRec == null) {
             pageRec = addPageRecord(pageNumber, page, null);
@@ -243,7 +243,7 @@ public class Cache {
         rec.generator = renderer;
 
         // add it to the cache
-        pageRec.images.put(info, new SoftReference<Record>(rec));
+        pageRec.images.put(info, new SoftReference<>(rec));
 
         return rec;
     }
@@ -255,7 +255,7 @@ public class Cache {
      */
     Record getImageRecord(PDFPage page, ImageInfo info) {
         // first find the relevant page record
-        Integer pageNumber = Integer.valueOf(page.getPageNumber());
+        Integer pageNumber = page.getPageNumber();
 
         PDFDebugger.debug("Request for image on page " + pageNumber, 1000);
 
@@ -279,7 +279,7 @@ public class Cache {
      */
     Record removeImageRecord(PDFPage page, ImageInfo info) {
         // first find the relevant page record
-        Integer pageNumber = Integer.valueOf(page.getPageNumber());
+        Integer pageNumber = page.getPageNumber();
         PageRecord pageRec = getPageRecord(pageNumber);
         if (pageRec != null) {
             SoftReference<Record> ref = pageRec.images.remove(info);
@@ -293,7 +293,7 @@ public class Cache {
     }
 
     /** the basic information about a page or image */
-    class Record {
+    static class Record {
 
         /** the page or image itself */
         Object value;
@@ -305,11 +305,11 @@ public class Cache {
     class PageRecord extends Record {
 
         /** any images associated with the page */
-        Map<ImageInfo, SoftReference<Record>> images;
+        final Map<ImageInfo, SoftReference<Record>> images;
 
         /** create a new page record */
         public PageRecord() {
-            this.images = Collections.synchronizedMap(new HashMap<ImageInfo, SoftReference<Record>>());
+            this.images = Collections.synchronizedMap(new HashMap<>());
         }
     }
 }

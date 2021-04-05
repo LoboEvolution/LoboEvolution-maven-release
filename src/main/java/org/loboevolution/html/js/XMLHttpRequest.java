@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.js;
 
 import java.net.URL;
@@ -13,13 +33,13 @@ import org.loboevolution.js.JavaScript;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
-import org.w3c.dom.Document;
+import org.loboevolution.html.node.Document;
 
 /**
  * <p>XMLHttpRequest class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XMLHttpRequest extends AbstractScriptableDelegate {
 	// TODO: See reference:
@@ -229,7 +249,7 @@ public class XMLHttpRequest extends AbstractScriptableDelegate {
 	 * @throws java.lang.Exception if any.
 	 */
 	public void send() throws Exception {
-		this.request.send((String)null);
+		this.request.send(null);
 	}
 
 	/**
@@ -241,7 +261,7 @@ public class XMLHttpRequest extends AbstractScriptableDelegate {
 		synchronized (this) {
 			this.onreadystatechange = value;
 			if (value != null && !this.listenerAdded) {
-				this.request.addReadyStateChangeListener(() -> executeReadyStateChange());
+				this.request.addReadyStateChangeListener(this::executeReadyStateChange);
 				this.listenerAdded = true;
 			}
 		}

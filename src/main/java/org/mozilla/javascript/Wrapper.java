@@ -14,8 +14,8 @@ package org.mozilla.javascript;
  *
  * Wrapper defines a single method that can be called to unwrap the object.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface Wrapper {
 

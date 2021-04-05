@@ -32,8 +32,8 @@ import com.jtattoo.plaf.ColorHelper;
 /**
  * <p>McWinDefaultTheme class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class McWinDefaultTheme extends AbstractTheme {
 
@@ -128,14 +128,12 @@ public class McWinDefaultTheme extends AbstractTheme {
 					new Color(202, 237, 255), new Color(206, 247, 253), new Color(211, 255, 254),
 					new Color(208, 255, 254), new Color(206, 249, 255), new Color(202, 237, 255), };
 		} else {
-			Color color1[] = ColorHelper.createColorArr(controlColorLight, controlColorDark, 6);
+			Color[] color1 = ColorHelper.createColorArr(controlColorLight, controlColorDark, 6);
 			color1[0] = controlColorDark;
-			Color color2[] = ColorHelper.createColorArr(ColorHelper.brighter(controlColorDark, 10), controlColorLight,
+			Color[] color2 = ColorHelper.createColorArr(ColorHelper.brighter(controlColorDark, 10), controlColorLight,
 					15);
 			System.arraycopy(color1, 0, DEFAULT_COLORS, 0, 6);
-			for (int i = 5; i < 20; i++) {
-				DEFAULT_COLORS[i] = color2[i - 5];
-			}
+            System.arraycopy(color2, 0, DEFAULT_COLORS, 5, 15);
 		}
 		if (rolloverColorDark.equals(new ColorUIResource(106, 192, 150))) {
 			ROLLOVER_COLORS = new Color[] { new Color(106, 192, 150), new Color(154, 209, 190),
@@ -147,14 +145,12 @@ public class McWinDefaultTheme extends AbstractTheme {
 					new Color(211, 254, 255), new Color(208, 254, 255), new Color(206, 249, 255),
 					new Color(196, 247, 227), };
 		} else {
-			Color color1[] = ColorHelper.createColorArr(rolloverColorLight, rolloverColorDark, 6);
+			Color[] color1 = ColorHelper.createColorArr(rolloverColorLight, rolloverColorDark, 6);
 			color1[0] = rolloverColorDark;
-			Color color2[] = ColorHelper.createColorArr(ColorHelper.brighter(rolloverColorDark, 10), rolloverColorLight,
+			Color[] color2 = ColorHelper.createColorArr(ColorHelper.brighter(rolloverColorDark, 10), rolloverColorLight,
 					15);
 			System.arraycopy(color1, 0, ROLLOVER_COLORS, 0, 6);
-			for (int i = 5; i < 20; i++) {
-				ROLLOVER_COLORS[i] = color2[i - 5];
-			}
+            System.arraycopy(color2, 0, ROLLOVER_COLORS, 5, 15);
 		}
 
 		HIDEFAULT_COLORS = new Color[] { new Color(250, 250, 250), new Color(250, 250, 250), new Color(240, 240, 240),
@@ -194,13 +190,11 @@ public class McWinDefaultTheme extends AbstractTheme {
 			} else {
 				Color cHi = ColorHelper.brighter(controlColorLight, 10);
 				Color cLo = ColorHelper.brighter(controlColorDark, 10);
-				Color color1[] = ColorHelper.createColorArr(cHi, cLo, 6);
+				Color[] color1 = ColorHelper.createColorArr(cHi, cLo, 6);
 				color1[0] = cLo;
-				Color color2[] = ColorHelper.createColorArr(ColorHelper.brighter(cLo, 10), cHi, 15);
+				Color[] color2 = ColorHelper.createColorArr(ColorHelper.brighter(cLo, 10), cHi, 15);
 				System.arraycopy(color1, 0, THUMB_COLORS, 0, 6);
-				for (int i = 5; i < 20; i++) {
-					THUMB_COLORS[i] = color2[i - 5];
-				}
+                System.arraycopy(color2, 0, THUMB_COLORS, 5, 15);
 
 			}
 		} else {

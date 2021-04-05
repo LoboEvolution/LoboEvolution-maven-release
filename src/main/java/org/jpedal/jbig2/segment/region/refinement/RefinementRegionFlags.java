@@ -57,26 +57,26 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>RefinementRegionFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class RefinementRegionFlags extends Flags {
 	
 	private static final Logger logger = Logger.getLogger(RefinementRegionFlags.class.getName());
-	/** Constant GR_TEMPLATE="GR_TEMPLATE" */
-	public static String GR_TEMPLATE = "GR_TEMPLATE";
-	/** Constant TPGDON="TPGDON" */
-	public static String TPGDON = "TPGDON";
+	/** Constant <code>GR_TEMPLATE="GR_TEMPLATE"</code> */
+	public static final String GR_TEMPLATE = "GR_TEMPLATE";
+	/** Constant <code>TPGDON="TPGDON"</code> */
+	public static final String TPGDON = "TPGDON";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 
 		/** extract GR_TEMPLATE */
-		flags.put(GR_TEMPLATE, new Integer(flagsAsInt & 1));
+		flags.put(GR_TEMPLATE, flagsAsInt & 1);
 
 		/** extract TPGDON */
-		flags.put(TPGDON, new Integer((flagsAsInt >> 1) & 1));
+		flags.put(TPGDON, (flagsAsInt >> 1) & 1);
 
 		if (JBIG2StreamDecoder.debug)
 			logger.info("flags: " + flags);

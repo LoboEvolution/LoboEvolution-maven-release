@@ -18,8 +18,8 @@ import org.mozilla.javascript.Token;
  * nodes, but for now it's just a set of expressions evaluated to produce a
  * string to pass to the {@code XML} constructor function.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlLiteral extends AstNode {
 

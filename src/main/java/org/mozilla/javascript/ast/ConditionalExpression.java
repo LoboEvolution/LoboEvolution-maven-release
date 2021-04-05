@@ -22,8 +22,8 @@ import org.mozilla.javascript.Token;
  *        LogicalORExpressionNoIn ? AssignmentExpression
  *                                : AssignmentExpressionNoIn</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ConditionalExpression extends AstNode {
 

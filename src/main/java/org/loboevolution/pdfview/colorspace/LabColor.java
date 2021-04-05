@@ -27,14 +27,15 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * A ColorSpace for Lab color
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class LabColor extends ColorSpace {
-    float white[]= {1f, 1f, 1f};
-    float black[]= {0, 0, 0};
-    float range[]= {-100f, 100f, -100f, 100f};
-    static ColorSpace cie= ColorSpace.getInstance(ColorSpace.CS_sRGB);
+	
+	final float[] white = {1f, 1f, 1f};
+    final float[] black = {0, 0, 0};
+    final float[] range = {-100f, 100f, -100f, 100f};
+    static final ColorSpace cie= ColorSpace.getInstance(ColorSpace.CS_sRGB);
 
     /**
      * Create a new Lab color space object, given the description in
@@ -97,16 +98,16 @@ public class LabColor extends ColorSpace {
 	 * convert from Lab to RGB
 	 */
     @Override
-	public float[] toRGB(float comp[]) {
+	public float[] toRGB(float[] comp) {
 	if (comp.length==3) {
 	    float l= (comp[0]+16)/116+comp[1]/500;
 	    float m= (comp[0]+16)/116;
 	    float n= (comp[0]+16)/116-comp[2]/200;
-	    float xyz[]= {
+	    float[] xyz = {
 		this.white[0]*stage2(l),
 		this.white[0]*stage2(m),
 		this.white[0]*stage2(n)};
-	    float rgb[]= cie.fromCIEXYZ(xyz);
+	    float[] rgb = cie.fromCIEXYZ(xyz);
 	    return rgb;
 	} else {
 	    return this.black;

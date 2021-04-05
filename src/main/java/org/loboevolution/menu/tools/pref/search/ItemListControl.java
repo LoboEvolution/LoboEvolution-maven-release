@@ -1,22 +1,42 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.pref.search;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import org.loboevolution.gui.ItemEditorFactory;
 
+import com.jtattoo.plaf.lobo.LoboButton;
+
 /**
  * The Class ItemListControl.
  *
  * @param <T> the generic type
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ItemListControl<T> extends JComponent {
 
@@ -39,27 +59,26 @@ public class ItemListControl<T> extends JComponent {
 	 */
 	public ItemListControl(ItemEditorFactory<T> ief) {
 		this.itemEditorFactory = ief;
-		this.comboBox = new JComboBox<T>();
+		this.comboBox = new JComboBox<>();
 		createAndShowGUI();
 	}
 
 	private void createAndShowGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.getComboBox().setPreferredSize(new Dimension(100, 24));
 		this.getComboBox().setEditable(false);
-		final JButton setDefaultButton = new JButton();
-		setDefaultButton.setAction(new SetAsDefaultAction<T>(this));
+		final LoboButton setDefaultButton = new LoboButton();
+		setDefaultButton.setAction(new SetAsDefaultAction<>(this));
 		setDefaultButton.setText("Set Default");
-		final JButton editButton = new JButton();
-		editButton.setAction(new EditAction<T>(false, this));
+		final LoboButton editButton = new LoboButton();
+		editButton.setAction(new EditAction<>(false, this));
 		editButton.setText("Edit");
-		final JButton addButton = new JButton();
-		addButton.setAction(new EditAction<T>(true, this));
+		final LoboButton addButton = new LoboButton();
+		addButton.setAction(new EditAction<>(true, this));
 		addButton.setText("Add");
-		final JButton removeButton = new JButton();
-		removeButton.setAction(new RemoveAction<T>(this));
+		final LoboButton removeButton = new LoboButton();
+		removeButton.setAction(new RemoveAction<>(this));
 		removeButton.setText("Remove");
-		this.add(this.getComboBox());
+		this.add(getComboBox());
 		this.add(setDefaultButton);
 		this.add(editButton);
 		this.add(addButton);
@@ -99,7 +118,7 @@ public class ItemListControl<T> extends JComponent {
 	 * @return the items
 	 */
 	public Collection<T> getItems() {
-		final Collection<T> items = new ArrayList<T>();
+		final Collection<T> items = new ArrayList<>();
 		final int count = this.getComboBox().getItemCount();
 		for (int i = 0; i < count; i++) {
 			items.add(this.getComboBox().getItemAt(i));

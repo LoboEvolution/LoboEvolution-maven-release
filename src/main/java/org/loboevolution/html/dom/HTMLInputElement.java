@@ -1,340 +1,753 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.ValidityState;
+import org.loboevolution.jsenum.Direction;
+
+
 /**
- * Form control.Depending upon the environment in which the page is being
- * viewed, the value property may be read-only for the file upload input type.
- * For the "password" input type, the actual value returned may be masked to
- * prevent unauthorized use. See the INPUT element definition in
- * [<a href='http://www.w3.org/TR/1999/REC-html401-19991224'>HTML 4.01</a>].
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods for manipulating the options, layout, and presentation of &lt;input&gt; elements.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLInputElement extends HTMLElement {
-	/**
-	 * Removes keyboard focus from this element.
-	 */
-	void blur();
 
-	/**
-	 * Simulate a mouse-click. For INPUT elements whose
-	 * type attribute has one of the following values: "button",
-	 * "checkbox", "radio", "reset", or "submit".
-	 */
-	void click();
+    /**
+     * Sets or retrieves a comma-separated list of content types.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAccept();
+    
+    /**
+     * <p>setAccept.</p>
+     *
+     * @param accept a {@link java.lang.String} object.
+     */
+    void setAccept(String accept);
 
-	/**
-	 * Gives keyboard focus to this element.
-	 */
-	void focus();
-	
-	/**
-	 * <p>setSelectionRange.</p>
-	 *
-	 * @param start a int.
-	 * @param end a int.
-	 */
-	void setSelectionRange(int start, int end); 
-	
-	/**
-	 * <p>setRangeText.</p>
-	 *
-	 * @param select a {@link java.lang.String} object.
-	 * @param start a int.
-	 * @param end a int.
-	 * @param preserve a {@link java.lang.String} object.
-	 */
-	void setRangeText(String select, int start, int end, String preserve);
+    /**
+     * Sets or retrieves how the object is aligned with adjacent text.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * A comma-separated list of content types that a server processing this form
-	 * will handle correctly. See the accept attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAccept();
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    @Deprecated
+    void setAlign(String align);
 
-	/**
-	 * A single character access key to give access to the form control. See the
-	 * accesskey attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAccessKey();
+    /**
+     * Sets or retrieves a text alternative to the graphic.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAlt();
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlt();
+    
+    /**
+     * <p>setAlt.</p>
+     *
+     * @param alt a {@link java.lang.String} object.
+     */
+    void setAlt(String alt);
 
-	/**
-	 * When the type attribute of the element has the value "radio" or
-	 * "checkbox", this represents the current state of the form control, in an
-	 * interactive user agent. Changes to this attribute change the state of the
-	 * form control, but do not change the value of the HTML checked attribute of
-	 * the INPUT element.During the handling of a click event on an input element
-	 * with a type attribute that has the value "radio" or "checkbox", some
-	 * implementations may change the value of this property before the event is
-	 * being dispatched in the document. If the default action of the event is
-	 * canceled, the value of the property may be changed back to its original
-	 * value. This means that the value of this property during the handling of
-	 * click events is implementation dependent.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getChecked();
+    /**
+     * Specifies whether autocomplete is applied to an editable text field.
+     *
+     * @return a boolean.
+     */
+    boolean getAutocomplete();
 
+    
+    /**
+     * <p>setAutocomplete.</p>
+     *
+     * @param autocomplete a {@link java.lang.String} object.
+     */
+    void setAutocomplete(String autocomplete);
 
-	/**
-	 * The control is unavailable in this context. See the disabled attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getDisabled();
+    /**
+     * Provides a way to direct a user to a specific field when a document loads. This can provide both direction and convenience for a user, reducing the need to click or tab to a field when a page opens. This attribute is true when present on an element, and false when missing.
+     *
+     * @return a boolean.
+     */
+    boolean isAutofocus();
 
-	/**
-	 * Returns the FORM element containing this control. Returns
-	 * null if this control is not within the context of a form.
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
-	 */
-	HTMLFormElement getForm();
+    
+    /**
+     * <p>setAutofocus.</p>
+     *
+     * @param autofocus a boolean.
+     */
+    void setAutofocus(boolean autofocus);
 
-	/**
-	 * Maximum number of characters for text fields, when type has the
-	 * value "text" or "password". See the maxlength attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getMaxLength();
+    /**
+     * Sets or retrieves the state of the check box or radio button.
+     *
+     * @return a boolean.
+     */
+    boolean isChecked();
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    
+    /**
+     * <p>setChecked.</p>
+     *
+     * @param checked a boolean.
+     */
+    void setChecked(boolean checked);
 
-	/**
-	 * This control is read-only. Relevant only when type has the value
-	 * "text" or "password". See the readonly attribute definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getReadOnly();
+    /**
+     * Sets or retrieves the state of the check box or radio button.
+     *
+     * @return a boolean.
+     */
+    boolean isDefaultChecked();
 
-	/**
-	 * Size information. The precise meaning is specific to each type of field. See
-	 * the size attribute definition in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getSize();
+    
+    /**
+     * <p>setDefaultChecked.</p>
+     *
+     * @param defaultChecked a boolean.
+     */
+    void setDefaultChecked(boolean defaultChecked);
 
-	/**
-	 * When the type attribute has the value "image", this attribute
-	 * specifies the location of the image to be used to decorate the graphical
-	 * submit button. See the src attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getSrc();
+    /**
+     * Sets or retrieves the initial contents of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getDefaultValue();
 
-	/**
-	 * The type of control created (all lower case). See the type attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getType();
+    
+    /**
+     * <p>setDefaultValue.</p>
+     *
+     * @param defaultValue a {@link java.lang.String} object.
+     */
+    void setDefaultValue(String defaultValue);
 
-	/**
-	 * When the type attribute of the element has the value "text",
-	 * "file" or "password", this represents the current contents of the
-	 * corresponding form control, in an interactive user agent. Changing this
-	 * attribute changes the contents of the form control, but does not change the
-	 * value of the HTML value attribute of the element. When the type
-	 * attribute of the element has the value "button", "hidden", "submit", "reset",
-	 * "image", "checkbox" or "radio", this represents the HTML value attribute of
-	 * the element. See the value attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getValue();
-	
-	/**
-	 * <p>getAutocomplete.</p>
-	 *
-	 * @return a boolean.
-	 */
-	boolean getAutocomplete();
+    
+    /**
+     * <p>getDirName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getDirName();
 
-	/**
-	 * Select the contents of the text area. For INPUT elements whose
-	 * type attribute has one of the following values: "text", "file",
-	 * or "password".
-	 */
-	void select();
+    
+    /**
+     * <p>setDirName.</p>
+     *
+     * @param dirName a {@link java.lang.String} object.
+     */
+    void setDirName(String dirName);
 
-	/**
-	 * A comma-separated list of content types that a server processing this form
-	 * will handle correctly. See the accept attribute definition in HTML 4.01.
-	 *
-	 * @param accept a {@link java.lang.String} object.
-	 */
-	void setAccept(String accept);
+    
+    /**
+     * <p>isDisabled.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isDisabled();
 
-	/**
-	 * A single character access key to give access to the form control. See the
-	 * accesskey attribute definition in HTML 4.01.
-	 *
-	 * @param accessKey a {@link java.lang.String} object.
-	 */
-	void setAccessKey(String accessKey);
+    
+    /**
+     * <p>setDisabled.</p>
+     *
+     * @param disabled a boolean.
+     */
+    void setDisabled(boolean disabled);
 
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01.
-	 *
-	 * @param alt a {@link java.lang.String} object.
-	 */
-	void setAlt(String alt);
+        /**
+         * Retrieves a reference to the form that the object is embedded in.
+         *
+         * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
+         */
+        HTMLFormElement getForm();
 
-	/**
-	 * When the type attribute of the element has the value "radio" or
-	 * "checkbox", this represents the current state of the form control, in an
-	 * interactive user agent. Changes to this attribute change the state of the
-	 * form control, but do not change the value of the HTML checked attribute of
-	 * the INPUT element.During the handling of a click event on an input element
-	 * with a type attribute that has the value "radio" or "checkbox", some
-	 * implementations may change the value of this property before the event is
-	 * being dispatched in the document. If the default action of the event is
-	 * canceled, the value of the property may be changed back to its original
-	 * value. This means that the value of this property during the handling of
-	 * click events is implementation dependent.
-	 *
-	 * @param checked a boolean.
-	 */
-	void setChecked(boolean checked);
+    /**
+     * Overrides the action attribute (where the data on a form is sent) on the parent form element.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getFormAction();
 
+    
+    /**
+     * <p>setFormAction.</p>
+     *
+     * @param formAction a {@link java.lang.String} object.
+     */
+    void setFormAction(String formAction);
 
-	/**
-	 * The control is unavailable in this context. See the disabled attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param disabled a boolean.
-	 */
-	void setDisabled(boolean disabled);
+    /**
+     * Used to override the encoding (formEnctype attribute) specified on the form element.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getFormEnctype();
 
-	/**
-	 * Maximum number of characters for text fields, when type has the
-	 * value "text" or "password". See the maxlength attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param maxLength a int.
-	 */
-	void setMaxLength(int maxLength);
+    
+    /**
+     * <p>setFormEnctype.</p>
+     *
+     * @param formEnctype a {@link java.lang.String} object.
+     */
+    void setFormEnctype(String formEnctype);
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    /**
+     * Overrides the submit method attribute previously specified on a form element.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getFormMethod();
 
-	/**
-	 * This control is read-only. Relevant only when type has the value
-	 * "text" or "password". See the readonly attribute definition in HTML 4.01.
-	 *
-	 * @param readOnly a boolean.
-	 */
-	void setReadOnly(boolean readOnly);
+    
+    /**
+     * <p>setFormMethod.</p>
+     *
+     * @param formMethod a {@link java.lang.String} object.
+     */
+    void setFormMethod(String formMethod);
 
-	/**
-	 * Size information. The precise meaning is specific to each type of field. See
-	 * the size attribute definition in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @param size a int.
-	 */
-	void setSize(int size);
+    /**
+     * Overrides any validation or required attributes on a form or form elements to allow it to be submitted without validation. This can be used to create a "save draft"-type submit option.
+     *
+     * @return a boolean.
+     */
+    boolean isFormNoValidate();
 
-	/**
-	 * When the type attribute has the value "image", this attribute
-	 * specifies the location of the image to be used to decorate the graphical
-	 * submit button. See the src attribute definition in HTML 4.01.
-	 *
-	 * @param src a {@link java.lang.String} object.
-	 */
-	void setSrc(String src);
+    
+    /**
+     * <p>setFormNoValidate.</p>
+     *
+     * @param formNoValidate a boolean.
+     */
+    void setFormNoValidate(boolean formNoValidate);
 
-	/**
-	 * The type of control created (all lower case). See the type attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @param type a {@link java.lang.String} object.
-	 */
-	void setType(String type);
+    /**
+     * Overrides the target attribute on a form element.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getFormTarget();
 
-	/**
-	 * When the type attribute of the element has the value "text",
-	 * "file" or "password", this represents the current contents of the
-	 * corresponding form control, in an interactive user agent. Changing this
-	 * attribute changes the contents of the form control, but does not change the
-	 * value of the HTML value attribute of the element. When the type
-	 * attribute of the element has the value "button", "hidden", "submit", "reset",
-	 * "image", "checkbox" or "radio", this represents the HTML value attribute of
-	 * the element. See the value attribute definition in HTML 4.01.
-	 *
-	 * @param value a {@link java.lang.String} object.
-	 */
-	void setValue(String value);
+    
+    /**
+     * <p>setFormTarget.</p>
+     *
+     * @param formTarget a {@link java.lang.String} object.
+     */
+    void setFormTarget(String formTarget);
+
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * @return a double.
+     */
+    double getHeight();
+
+    
+    /**
+     * <p>setHeight.</p>
+     *
+     * @param height a double.
+     */
+    void setHeight(double height);
+
+    
+    /**
+     * <p>isIndeterminate.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isIndeterminate();
+
+    
+    /**
+     * <p>setIndeterminate.</p>
+     *
+     * @param indeterminate a boolean.
+     */
+    void setIndeterminate(boolean indeterminate);
+
+    
+    
+    /**
+     * <p>getLabels.</p>
+     *
+     * @return a {@link org.loboevolution.html.node.NodeList} object.
+     */
+    NodeList getLabels();
+
+    /**
+     * Specifies the ID of a pre-defined datalist of options for an input element.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
+     */
+    HTMLElement getList();
+
+    /**
+     * Defines the maximum acceptable value for an input element with type="number".When used with the min and step attributes, lets you control the range and increment (such as only even numbers) that the user can enter into an input field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getMax();
+
+    
+    /**
+     * <p>setMax.</p>
+     *
+     * @param max a {@link java.lang.String} object.
+     */
+    void setMax(String max);
+
+    /**
+     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
+     *
+     * @return a double.
+     */
+    double getMaxLength();
+
+    
+    /**
+     * <p>setMaxLength.</p>
+     *
+     * @param maxLength a double.
+     */
+    void setMaxLength(double maxLength);
+
+    /**
+     * Defines the minimum acceptable value for an input element with type="number". When used with the max and step attributes, lets you control the range and increment (such as even numbers only) that the user can enter into an input field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getMin();
+
+    
+    /**
+     * <p>setMin.</p>
+     *
+     * @param min a {@link java.lang.String} object.
+     */
+    void setMin(String min);
+
+    
+    /**
+     * <p>getMinLength.</p>
+     *
+     * @return a double.
+     */
+    double getMinLength();
+
+    
+    /**
+     * <p>setMinLength.</p>
+     *
+     * @param minLength a double.
+     */
+    void setMinLength(double minLength);
+
+    /**
+     * Sets or retrieves the Boolean value indicating whether multiple items can be selected from a list.
+     *
+     * @return a boolean.
+     */
+    boolean isMultiple();
+
+    
+    /**
+     * <p>setMultiple.</p>
+     *
+     * @param multiple a boolean.
+     */
+    void setMultiple(boolean multiple);
+
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getName();
+
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
+
+    /**
+     * Gets or sets a string containing a regular expression that the user's input must match.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getPattern();
+
+    
+    /**
+     * <p>setPattern.</p>
+     *
+     * @param pattern a {@link java.lang.String} object.
+     */
+    void setPattern(String pattern);
+
+    /**
+     * Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getPlaceholder();
+
+    
+    /**
+     * <p>setPlaceholder.</p>
+     *
+     * @param placeholder a {@link java.lang.String} object.
+     */
+    void setPlaceholder(String placeholder);
+
+    
+    /**
+     * <p>isReadOnly.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isReadOnly();
+
+    
+    /**
+     * <p>setReadOnly.</p>
+     *
+     * @param readOnly a boolean.
+     */
+    void setReadOnly(boolean readOnly);
+
+    /**
+     * When present, marks an element that can't be submitted without a value.
+     *
+     * @return a boolean.
+     */
+    boolean isRequired();
+
+    
+    /**
+     * <p>setRequired.</p>
+     *
+     * @param required a boolean.
+     */
+    void setRequired(boolean required);
+
+    
+    
+    /**
+     * <p>getSelectionDirection.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSelectionDirection();
+
+    
+    /**
+     * <p>setSelectionDirection.</p>
+     *
+     * @param selectionDirection a {@link java.lang.String} object.
+     */
+    void setSelectionDirection(String selectionDirection);
+
+    /**
+     * Gets or sets the end position or offset of a text selection.
+     *
+     * @return a int.
+     */
+    int getSelectionEnd();
+
+    
+    /**
+     * <p>setSelectionEnd.</p>
+     *
+     * @param selectionEnd a int.
+     */
+    void setSelectionEnd(int selectionEnd);
+
+    /**
+     * Gets or sets the starting position or offset of a text selection.
+     *
+     * @return a int.
+     */
+    int getSelectionStart();
+
+    
+    /**
+     * <p>setSelectionStart.</p>
+     *
+     * @param selectionStart a int.
+     */
+    void setSelectionStart(int selectionStart);
+
+    
+    /**
+     * <p>getSize.</p>
+     *
+     * @return a int.
+     */
+    int getSize();
+
+    
+    /**
+     * <p>setSize.</p>
+     *
+     * @param size a int.
+     */
+    void setSize(int size);
+
+    /**
+     * The address or URL of the a media resource that is to be considered.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSrc();
+
+    
+    /**
+     * <p>setSrc.</p>
+     *
+     * @param src a {@link java.lang.String} object.
+     */
+    void setSrc(String src);
+
+    /**
+     * Defines an increment or jump between values that you want to allow the user to enter. When used with the max and min attributes, lets you control the range and increment (for example, allow only even numbers) that the user can enter into an input field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getStep();
+
+    
+    /**
+     * <p>setStep.</p>
+     *
+     * @param step a {@link java.lang.String} object.
+     */
+    void setStep(String step);
+
+    /**
+     * Returns the content type of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getType();
+
+    
+    /**
+     * <p>setType.</p>
+     *
+     * @param type a {@link java.lang.String} object.
+     */
+    void setType(String type);
+
+    /**
+     * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getUseMap();
+
+    
+    /**
+     * <p>setUseMap.</p>
+     *
+     * @param useMap a {@link java.lang.String} object.
+     */
+    void setUseMap(String useMap);
+
+    /**
+     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getValidationMessage();
+
+    /**
+     * Returns a  ValidityState object that represents the validity states of an element.
+     *
+     * @return a {@link org.loboevolution.html.node.ValidityState} object.
+     */
+    ValidityState getValidity();
+
+    /**
+     * Returns the value of the data at the cursor's current position.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getValue();
+
+    
+    /**
+     * <p>setValue.</p>
+     *
+     * @param value a {@link java.lang.String} object.
+     */
+    void setValue(String value);
+
+    /**
+     * Returns the input field value as a number.
+     *
+     * @return a double.
+     */
+    double getValueAsNumber();
+
+    
+    /**
+     * <p>setValueAsNumber.</p>
+     *
+     * @param valueAsNumber a double.
+     */
+    void setValueAsNumber(double valueAsNumber);
+
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a double.
+     */
+    double getWidth();
+
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a double.
+     */
+    void setWidth(double width);
+
+    /**
+     * Returns whether an element will successfully validate based on forms validation rules and constraints.
+     *
+     * @return a boolean.
+     */
+    boolean isWillValidate();
+
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * @return a boolean.
+     */
+    boolean checkValidity();
+
+    /**
+     * <p>reportValidity.</p>
+     *
+     * @return a boolean.
+     */
+    boolean reportValidity();
+
+    /**
+     * Makes the selection equal to the current object.
+     */
+    void select();
+
+    /**
+     * Sets a custom error message that is displayed when a form is submitted.
+     *
+     * @param error Sets a custom error message that is displayed when a form is submitted.
+     */
+    void setCustomValidity(String error);
+
+    /**
+     * <p>setRangeText.</p>
+     *
+     * @param replacement a {@link java.lang.String} object.
+     */
+    void setRangeText(String replacement);
+
+    /**
+     * <p>setRangeText.</p>
+     *
+     * @param replacement a {@link java.lang.String} object.
+     * @param start a int.
+     * @param end a int.
+     */
+    void setRangeText(String replacement, int start, int end);
+    
+    /**
+     * <p>setRangeText.</p>
+     *
+     * @param select a {@link java.lang.String} object.
+     * @param start a int.
+     * @param end a int.
+     * @param preserve a {@link java.lang.String} object.
+     */
+    void setRangeText(String select, int start, int end, String preserve);
+
+    /**
+     * Sets the start and end positions of a selection in a text field.
+     *
+     * @param start     The offset into the text field for the start of the selection.
+     * @param end       The offset into the text field for the end of the selection.
+     * @param direction The direction in which the selection is performed.
+     */
+    void setSelectionRange(int start, int end, Direction direction);
+
+    /**
+     * <p>setSelectionRange.</p>
+     *
+     * @param start a int.
+     * @param end a int.
+     */
+    void setSelectionRange(int start, int end);
+
+    /**
+     * Decrements a range input control's value by the value given by the Step attribute. If the optional parameter is used, it will decrement the input control's step value multiplied by the parameter's value.
+     *
+     * @param n Value to decrement the value by.
+     */
+    void stepDown(double n);
+
+    /**
+     * <p>stepDown.</p>
+     */
+    void stepDown();
+
+    /**
+     * Increments a range input control's value by the value given by the Step attribute. If the optional parameter is used, will increment the input control's value by that value.
+     *
+     * @param n Value to increment the value by.
+     */
+    void stepUp(double n);
+
+    /**
+     * <p>stepUp.</p>
+     */
+    void stepUp();
 
 }

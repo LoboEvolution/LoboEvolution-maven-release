@@ -20,7 +20,8 @@ package org.loboevolution.pdfview.function;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.List;
+import java.util.Stack;
 
 import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.function.postscript.PostScriptParser;
@@ -35,8 +36,8 @@ import org.loboevolution.pdfview.function.postscript.operation.PostScriptOperati
  * http://www.adobe.com/devnet/acrobat/pdfs/adobe_supplement_iso32000.pdf
  * </p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class FunctionType4 extends PDFFunction {
 
@@ -79,11 +80,10 @@ public class FunctionType4 extends PDFFunction {
     @Override
 	protected void doFunction(float[] inputs, int inputOffset, float[] outputs, int outputOffset) {
     	prepareInitialStack(inputs, inputOffset);
-    	for (Iterator<String> iterator = this.tokens.iterator(); iterator.hasNext(); ) {
-			String token = iterator.next();
-			PostScriptOperation op = OperationSet.getInstance().getOperation(token);
-			op.eval(this.stack);
-		}
+        for (String token : this.tokens) {
+            PostScriptOperation op = OperationSet.getInstance().getOperation(token);
+            op.eval(this.stack);
+        }
     	assertResultIsCorrect(outputs, outputOffset);
     	prepareResult(outputs, outputOffset);
     }
@@ -106,9 +106,9 @@ public class FunctionType4 extends PDFFunction {
 	 ************************************************************************/
 	
 	private void prepareInitialStack(float[] inputs, int inputOffset) {
-		this.stack = new Stack<Object>();
+		this.stack = new Stack<>();
     	for (int i = inputOffset; i < inputs.length; i++) {
-    		this.stack.push(new Double(inputs[i]));
+    		this.stack.push((double) inputs[i]);
 		}
 	}
 

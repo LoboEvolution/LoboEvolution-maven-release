@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 /*
  * $Id: XPathExpressionImpl.java 1225426 2011-12-29 04:13:08Z mrglavas $
@@ -24,21 +23,22 @@
 
 package org.loboevolution.html.dom.xpath;
 
-import javax.xml.transform.TransformerException;
-
 import java.util.Objects;
+
+import javax.xml.transform.TransformerException;
 
 import org.apache.xpath.XPath;
 import org.apache.xpath.XPathContext;
 import org.apache.xpath.objects.XObject;
 import org.apache.xpath.res.XPATHErrorResources;
 import org.apache.xpath.res.XPATHMessages;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.xpath.XPathException;
-import org.w3c.dom.xpath.XPathExpression;
-import org.w3c.dom.xpath.XPathNamespace;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
+import org.loboevolution.html.node.Code;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeType;
+import org.loboevolution.html.xpath.XPathException;
+import org.loboevolution.html.xpath.XPathExpression;
 
 /**
  *
@@ -56,10 +56,9 @@ import org.w3c.dom.xpath.XPathNamespace;
  * XPath expression.
  * </p>
  *
- * @see org.w3c.dom.xpath.XPathExpression
- * 
- * @author utente
- * @version $Id: $Id
+ * @see org.loboevolution.html.xpath.XPathExpression
+ *
+ *
  */
 public class XPathExpressionImpl implements XPathExpression {
 
@@ -111,8 +110,7 @@ public class XPathExpressionImpl implements XPathExpression {
 	 *                XPathExpression. <br>
 	 *                NOT_SUPPORTED_ERR: The Node is not a type permitted as an
 	 *                XPath context node.
-	 * @see org.w3c.dom.xpath.XPathExpression#evaluate(Node, short, Object)
-	 * 
+	 * @see org.loboevolution.html.xpath.XPathExpression#evaluate(Node, short, Object)
 	 */
 	@Override
 	public Object evaluate(Node contextNode, short type, Object result) throws XPathException, DOMException {
@@ -123,25 +121,24 @@ public class XPathExpressionImpl implements XPathExpression {
 			// Check that the context node is owned by the same document
 			if (!Objects.equals(contextNode, m_doc) && !contextNode.getOwnerDocument().equals(m_doc)) {
 				String fmsg = XPATHMessages.createXPATHMessage(XPATHErrorResources.ER_WRONG_DOCUMENT, null);
-				throw new DOMException(DOMException.WRONG_DOCUMENT_ERR, fmsg);
+				throw new DOMException(Code.WRONG_DOCUMENT_ERR, fmsg);
 			}
 
 			// Check that the context node is an acceptable node type
-			short nodeType = contextNode.getNodeType();
+			NodeType nodeType = contextNode.getNodeType();
 			
 			switch (nodeType) {
-			case Node.DOCUMENT_NODE:
-			case Node.ELEMENT_NODE:
-			case Node.ATTRIBUTE_NODE:
-			case Node.TEXT_NODE:
-			case Node.CDATA_SECTION_NODE:
-			case Node.COMMENT_NODE:
-			case Node.PROCESSING_INSTRUCTION_NODE:
-			case XPathNamespace.XPATH_NAMESPACE_NODE:
+			case DOCUMENT_NODE:
+			case ELEMENT_NODE:
+			case ATTRIBUTE_NODE:
+			case TEXT_NODE:
+			case CDATA_SECTION_NODE:
+			case COMMENT_NODE:
+			case PROCESSING_INSTRUCTION_NODE:
 				break;
 			default:
 				String fmsg = XPATHMessages.createXPATHMessage(XPATHErrorResources.ER_WRONG_NODETYPE, null);
-				throw new DOMException(DOMException.NOT_SUPPORTED_ERR, fmsg);
+				throw new UnsupportedOperationException(fmsg);
 			}
 		}
 
@@ -150,7 +147,7 @@ public class XPathExpressionImpl implements XPathExpression {
 		// done with it!
 		if (!XPathResultImpl.isValidType(type)) {
 			String fmsg = XPATHMessages.createXPATHMessage(XPATHErrorResources.ER_INVALID_XPATH_TYPE,
-					new Object[] { Integer.valueOf(type) });
+					new Object[] {(int) type});
 			throw new XPathException(XPathException.TYPE_ERR, fmsg);
 		}
 
@@ -159,19 +156,21 @@ public class XPathExpressionImpl implements XPathExpression {
 		// expressions.
 		// Cache xpath context?
 		XPathContext xpathSupport = new XPathContext(false);
+		XObject xobj = null;
 
-		// if m_document is not null, build the DTM from the document
+		/* TODO Broken with new interfaces
+		 * if m_document is not null, build the DTM from the document
 		if (null != m_doc) {
-			xpathSupport.getDTMHandleFromNode(m_doc);
+			//xpathSupport.getDTMHandleFromNode(m_doc);
 		}
 
 		XObject xobj = null;
 		try {
-			xobj = m_xpath.execute(xpathSupport, contextNode, null);
+			//xobj = m_xpath.execute(xpathSupport, contextNode, null);
 		} catch (TransformerException te) {
 			// What should we do here?
 			throw new XPathException(XPathException.INVALID_EXPRESSION_ERR, te.getMessageAndLocation());
-		}
+		}*/
 
 		// Create a new XPathResult object
 		// Reuse result object passed in?

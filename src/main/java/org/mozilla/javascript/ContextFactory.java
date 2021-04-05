@@ -13,7 +13,7 @@ import java.security.PrivilegedAction;
 
 /**
  * Factory class that Rhino runtime uses to create new {@link org.mozilla.javascript.Context}
- * instances.  A ContextFactory can also notify listeners
+ * instances.  A <code>ContextFactory</code> can also notify listeners
  * about context creation and release.
  * <p>
  * When the Rhino runtime needs to create new {@link org.mozilla.javascript.Context} instance during
@@ -105,8 +105,8 @@ import java.security.PrivilegedAction;
  * }
  * </pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ContextFactory
 {
@@ -125,16 +125,21 @@ public class ContextFactory
      */
     public interface Listener
     {
-        /**
+       /**
          * Notify about newly created {@link Context} object.
-         * @param cx a Context to associate with the thread if possible
+         * <p>contextCreated.</p>
+         *
+         * @param cx a {@link org.mozilla.javascript.Context} object.
          */
+
         public void contextCreated(Context cx);
 
         /**
          * Notify that the specified {@link Context} instance is no longer
          * associated with the current thread.
-         * @param cx a Context to associate with the thread if possible
+         * <p>contextReleased.</p>
+         *
+         * @param cx a {@link org.mozilla.javascript.Context} object.
          */
         public void contextReleased(Context cx);
     }
@@ -219,7 +224,7 @@ public class ContextFactory
      * thread.
      * This is a callback method used by Rhino to create {@link org.mozilla.javascript.Context}
      * instance when it is necessary to associate one with the current
-     * execution thread. <tt>makeContext()</tt> is allowed to call
+     * execution thread. <code>makeContext()</code> is allowed to call
      * {@link org.mozilla.javascript.Context#seal(Object)} on the result to prevent
      * {@link org.mozilla.javascript.Context} changes by hostile scripts or applets.
      *
@@ -319,12 +324,15 @@ public class ContextFactory
 
           case Context.FEATURE_ENABLE_XML_SECURE_PARSING:
               return true;
+
+        case Context.FEATURE_ENABLE_JAVA_MAP_ACCESS:
+              return false;
         }
         // It is a bug to call the method with unknown featureIndex
         throw new IllegalArgumentException(String.valueOf(featureIndex));
     }
 
-    private boolean isDom3Present() {
+    private static boolean isDom3Present() {
         Class<?> nodeClass = Kit.classOrNull("org.w3c.dom.Node");
         if (nodeClass == null) return false;
         // Check to see whether DOM3 is present; use a new method defined in
@@ -340,7 +348,7 @@ public class ContextFactory
     /**
      * Provides a default
      * {@link org.mozilla.javascript.xml.XMLLib.Factory XMLLib.Factory}
-     * to be used by the Context instances produced by this
+     * to be used by the <code>Context</code> instances produced by this
      * factory. See {@link org.mozilla.javascript.Context#getE4xImplementationFactory} for details.
      *
      * May return null, in which case E4X functionality is not supported in
@@ -594,10 +602,10 @@ public class ContextFactory
      * Once a thread has entered a Context, then getCurrentContext() may be
      * called to find the context that is associated with the current thread.
      * <p>
-     * Calling enterContext() will return either the Context
+     * Calling <code>enterContext()</code> will return either the Context
      * currently associated with the thread, or will create a new context and
      * associate it with the current thread. Each call to
-     * enterContext() must have a matching call to
+     * <code>enterContext()</code> must have a matching call to
      * {@link org.mozilla.javascript.Context#exit()}.
      * <pre>
      *      Context cx = contextFactory.enterContext();
@@ -608,7 +616,7 @@ public class ContextFactory
      *          Context.exit();
      *      }
      * </pre>
-     * Instead of using <tt>enterContext()</tt>, <tt>exit()</tt> pair consider
+     * Instead of using <code>enterContext()</code>, <code>exit()</code> pair consider
      * using {@link #call(ContextAction)} which guarantees proper association
      * of Context instances with the current thread.
      * With this method the above example becomes:
@@ -659,16 +667,16 @@ public class ContextFactory
      * Get a Context associated with the current thread, using the given
      * Context if need be.
      * <p>
-     * The same as enterContext() except that cx
+     * The same as <code>enterContext()</code> except that <code>cx</code>
      * is associated with the current thread and returned if the current thread
-     * has no associated context and cx is not associated with any
+     * has no associated context and <code>cx</code> is not associated with any
      * other thread.
      *
      * @param cx a Context to associate with the thread if possible
      * @return a Context associated with the current thread
      * @see #enterContext()
      * @see #call(ContextAction)
-     * @throws java.lang.IllegalStateException if cx is already associated
+     * @throws java.lang.IllegalStateException if <code>cx</code> is already associated
      * with a different thread
      */
     public final Context enterContext(Context cx)

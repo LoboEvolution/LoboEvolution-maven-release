@@ -28,14 +28,15 @@ import org.loboevolution.pdfview.PDFParseException;
  * Performs identity decryption; that is, inputs aren't encrypted and
  * are returned right back.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
+  *
  */
 public class IdentityDecrypter implements PDFDecrypter {
 
-    private static IdentityDecrypter INSTANCE = new IdentityDecrypter();
+    private static final IdentityDecrypter INSTANCE = new IdentityDecrypter();
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public ByteBuffer decryptBuffer(String cryptFilterName,
             PDFObject streamObj, ByteBuffer streamBuf)
@@ -48,7 +49,7 @@ public class IdentityDecrypter implements PDFDecrypter {
         return streamBuf;
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public String decryptString(int objNum, int objGen, String inputBasicString) {
         return inputBasicString;
@@ -63,19 +64,19 @@ public class IdentityDecrypter implements PDFDecrypter {
         return INSTANCE;
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isEncryptionPresent() {
         return false;
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isEncryptionPresent(String cryptFilterName) {
         return false;
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isOwnerAuthorised() {
         return false;

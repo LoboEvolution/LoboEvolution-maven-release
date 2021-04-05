@@ -8,10 +8,10 @@ import java.util.StringTokenizer;
  ***************************************************************************
  * Very simple post script parser / tokenizer
  *
- * @author  Bernd Rosstauscher
+ * Author  Bernd Rosstauscher
  * @since 22.10.2010
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class PostScriptParser {
 	
@@ -33,7 +33,7 @@ public class PostScriptParser {
 	 ***********************************************************************
 	 */
 	public List<String> parse(String scriptContent) {
-		List<String> tokens = new LinkedList<String>();
+		List<String> tokens = new LinkedList<>();
 		StringTokenizer tok = new StringTokenizer(scriptContent, " \t\n\r"); 
 		while (tok.hasMoreTokens()) {
 			String t = tok.nextToken();

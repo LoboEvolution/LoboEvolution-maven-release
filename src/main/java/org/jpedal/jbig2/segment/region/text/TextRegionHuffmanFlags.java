@@ -57,56 +57,56 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>TextRegionHuffmanFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class TextRegionHuffmanFlags extends Flags {
 
 	private static final Logger logger = Logger.getLogger(TextRegionHuffmanFlags.class.getName());
-	/** Constant SB_HUFF_FS="SB_HUFF_FS" */
-	public static String SB_HUFF_FS = "SB_HUFF_FS";
-	/** Constant SB_HUFF_DS="SB_HUFF_DS" */
-	public static String SB_HUFF_DS = "SB_HUFF_DS";
-	/** Constant SB_HUFF_DT="SB_HUFF_DT" */
-	public static String SB_HUFF_DT = "SB_HUFF_DT";
-	/** Constant SB_HUFF_RDW="SB_HUFF_RDW" */
-	public static String SB_HUFF_RDW = "SB_HUFF_RDW";
-	/** Constant SB_HUFF_RDH="SB_HUFF_RDH" */
-	public static String SB_HUFF_RDH = "SB_HUFF_RDH";
-	/** Constant SB_HUFF_RDX="SB_HUFF_RDX" */
-	public static String SB_HUFF_RDX = "SB_HUFF_RDX";
-	/** Constant SB_HUFF_RDY="SB_HUFF_RDY" */
-	public static String SB_HUFF_RDY = "SB_HUFF_RDY";
-	/** Constant SB_HUFF_RSIZE="SB_HUFF_RSIZE" */
-	public static String SB_HUFF_RSIZE = "SB_HUFF_RSIZE";
+	/** Constant <code>SB_HUFF_FS="SB_HUFF_FS"</code> */
+	public static final String SB_HUFF_FS = "SB_HUFF_FS";
+	/** Constant <code>SB_HUFF_DS="SB_HUFF_DS"</code> */
+	public static final String SB_HUFF_DS = "SB_HUFF_DS";
+	/** Constant <code>SB_HUFF_DT="SB_HUFF_DT"</code> */
+	public static final String SB_HUFF_DT = "SB_HUFF_DT";
+	/** Constant <code>SB_HUFF_RDW="SB_HUFF_RDW"</code> */
+	public static final String SB_HUFF_RDW = "SB_HUFF_RDW";
+	/** Constant <code>SB_HUFF_RDH="SB_HUFF_RDH"</code> */
+	public static final String SB_HUFF_RDH = "SB_HUFF_RDH";
+	/** Constant <code>SB_HUFF_RDX="SB_HUFF_RDX"</code> */
+	public static final String SB_HUFF_RDX = "SB_HUFF_RDX";
+	/** Constant <code>SB_HUFF_RDY="SB_HUFF_RDY"</code> */
+	public static final String SB_HUFF_RDY = "SB_HUFF_RDY";
+	/** Constant <code>SB_HUFF_RSIZE="SB_HUFF_RSIZE"</code> */
+	public static final String SB_HUFF_RSIZE = "SB_HUFF_RSIZE";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 
 		/** extract SB_HUFF_FS */
-		flags.put(SB_HUFF_FS, new Integer(flagsAsInt & 3));
+		flags.put(SB_HUFF_FS, flagsAsInt & 3);
 
 		/** extract SB_HUFF_DS */
-		flags.put(SB_HUFF_DS, new Integer((flagsAsInt >> 2) & 3));
+		flags.put(SB_HUFF_DS, (flagsAsInt >> 2) & 3);
 
 		/** extract SB_HUFF_DT */
-		flags.put(SB_HUFF_DT, new Integer((flagsAsInt >> 4) & 3));
+		flags.put(SB_HUFF_DT, (flagsAsInt >> 4) & 3);
 
 		/** extract SB_HUFF_RDW */
-		flags.put(SB_HUFF_RDW, new Integer((flagsAsInt >> 6) & 3));
+		flags.put(SB_HUFF_RDW, (flagsAsInt >> 6) & 3);
 
 		/** extract SB_HUFF_RDH */
-		flags.put(SB_HUFF_RDH, new Integer((flagsAsInt >> 8) & 3));
+		flags.put(SB_HUFF_RDH, (flagsAsInt >> 8) & 3);
 
 		/** extract SB_HUFF_RDX */
-		flags.put(SB_HUFF_RDX, new Integer((flagsAsInt >> 10) & 3));
+		flags.put(SB_HUFF_RDX, (flagsAsInt >> 10) & 3);
 
 		/** extract SB_HUFF_RDY */
-		flags.put(SB_HUFF_RDY, new Integer((flagsAsInt >> 12) & 3));
+		flags.put(SB_HUFF_RDY, (flagsAsInt >> 12) & 3);
 
 		/** extract SB_HUFF_RSIZE */
-		flags.put(SB_HUFF_RSIZE, new Integer((flagsAsInt >> 14) & 1));
+		flags.put(SB_HUFF_RSIZE, (flagsAsInt >> 14) & 1);
 
 		if (JBIG2StreamDecoder.debug)
 			logger.info("flags: " + flags);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@ package com.gargoylesoftware.css.parser;
 /**
  * Lexical unit of css values.
  *
- * @author Ronald brill
- * @version $Id: $Id
+ * Author Ronald brill
+ *
  */
 public interface LexicalUnit {
 
@@ -44,6 +44,11 @@ public interface LexicalUnit {
         EM,
         REM,
         EX,
+        CH,
+        VW,
+        VH,
+        VMIN,
+        VMAX,
         PIXEL,
         INCH,
         CENTIMETER,
@@ -75,21 +80,21 @@ public interface LexicalUnit {
     /**
      * <p>getLexicalUnitType.</p>
      *
-     * @return an integer indicating the type of LexicalUnit.
+     * @return an integer indicating the type of <code>LexicalUnit</code>.
      */
     LexicalUnitType getLexicalUnitType();
 
     /**
      * <p>getNextLexicalUnit.</p>
      *
-     * @return the next value or null if any.
+     * @return the next value or <code>null</code> if any.
      */
     LexicalUnit getNextLexicalUnit();
 
     /**
      * <p>getPreviousLexicalUnit.</p>
      *
-     * @return the previous value or null if any.
+     * @return the previous value or <code>null</code> if any.
      */
     LexicalUnit getPreviousLexicalUnit();
 

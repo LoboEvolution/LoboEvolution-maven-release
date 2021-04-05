@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.BorderLayout;
@@ -16,14 +36,14 @@ import org.loboevolution.html.dom.domimpl.HTMLInputElementImpl;
 /**
  * <p>InputFile class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputFile {
 	
 	private final JTextField textField = new JTextField();
 	
-	private InputControl control;
+	private final InputControl control;
 
 	/**
 	 * <p>Constructor for InputFile.</p>
@@ -44,8 +64,8 @@ public class InputFile {
 			this.textField.setToolTipText(modelNode.getTitle());
 		textField.setVisible(!modelNode.getHidden());
 		textField.applyComponentOrientation(ic.direction(modelNode.getDir()));
-		textField.setEditable(Boolean.valueOf(modelNode.getContentEditable()));
-		textField.setEnabled(!modelNode.getDisabled());
+		textField.setEditable(Boolean.parseBoolean(modelNode.getContentEditable()));
+		textField.setEnabled(!modelNode.isDisabled());
 
 		Box buttonBar = Box.createHorizontalBox();
 		buttonBar.add(Box.createHorizontalGlue());

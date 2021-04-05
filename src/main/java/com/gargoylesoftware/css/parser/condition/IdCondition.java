@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,11 @@ import com.gargoylesoftware.css.parser.Locator;
 /**
  * <p>IdCondition class.</p>
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public class IdCondition extends AbstractLocatable implements Condition, Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
+
     private final String value_;
 
     /**

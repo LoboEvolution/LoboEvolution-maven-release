@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.component;
 
 import java.awt.event.ActionEvent;
@@ -7,18 +27,19 @@ import javax.swing.AbstractAction;
 import javax.swing.JTextField;
 
 import org.loboevolution.common.Strings;
+import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
+import org.loboevolution.html.gui.HtmlPanel;
+import org.loboevolution.info.BookmarkInfo;
 import org.loboevolution.store.NavigationStore;
 import org.loboevolution.store.TabStore;
 import org.loboevolution.tab.DnDTabbedPane;
 import org.loboevolution.tab.TabbedPanePopupMenu;
-import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
-import org.loboevolution.html.gui.HtmlPanel;
 
 /**
  * <p>ForwardAction class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ForwardAction extends AbstractAction {
 
@@ -46,20 +67,18 @@ public class ForwardAction extends AbstractAction {
 		final String url = this.addressBar.getText();
 		String text = url;
 		final int indexPanel = this.panel.getTabbedPane().getSelectedIndex();
-		List<String> tabsById = nh.getHostOrdered(indexPanel);
-		
+		List<BookmarkInfo> tabsById = nh.getRecentHost(indexPanel, true);
 		for (int i = 0; i < tabsById.size(); i++) {
-			String tab = tabsById.get(i);
+			BookmarkInfo info = tabsById.get(i);
+			String tab = info.getUrl();
 			if(tab.equals(url) && i < tabsById.size()-1) {
-				text = tabsById.get(i + 1);
+				text = tabsById.get(i + 1).getUrl();
 			}
 		}
 						
 		final DnDTabbedPane tabbedPane = this.panel.getTabbedPane();
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(this.panel));
-		final HtmlPanel htmlPanel = HtmlPanel.createHtmlPanel(text);
-		htmlPanel.setBrowserPanel(panel);
-		
+		final HtmlPanel htmlPanel = HtmlPanel.createHtmlPanel(panel, text);		
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) htmlPanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 		tabbedPane.remove(indexPanel);

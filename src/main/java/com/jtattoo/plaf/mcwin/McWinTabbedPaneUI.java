@@ -35,8 +35,8 @@ import com.jtattoo.plaf.ColorHelper;
 /**
  * <p>McWinTabbedPaneUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class McWinTabbedPaneUI extends BaseTabbedPaneUI {
 
@@ -45,9 +45,9 @@ public class McWinTabbedPaneUI extends BaseTabbedPaneUI {
 		return new McWinTabbedPaneUI();
 	}
 
-	private Color sepColors[] = null;
+	private Color[] sepColors = null;
 
-	private Color altSepColors[] = null;
+	private Color[] altSepColors = null;
 
 	/** {@inheritDoc} */
 	@Override

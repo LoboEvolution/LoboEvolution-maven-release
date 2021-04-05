@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
@@ -24,8 +23,8 @@ package org.loboevolution.html.dom;
 /**
  * The Interface HTMLCanvasElement.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLCanvasElement extends HTMLElement {
 	
@@ -62,80 +61,80 @@ public interface HTMLCanvasElement extends HTMLElement {
 	/** The clear rect. */
 	int CLEAR_RECT = 10;
 
-	/**
-	 * Gets the width.
-	 *
-	 * @return the width
-	 */
-	public int getWidth();
+    /**
+     * Gets the width.
+     *
+     * @return the width
+     */
+    int getWidth();
 
-	/**
-	 * Sets the width.
-	 *
-	 * @param width
-	 *            the new width
-	 */
-	public void setWidth(int width);
+    /**
+     * Sets the width.
+     *
+     * @param width
+     *            the new width
+     */
+    void setWidth(int width);
 
-	/**
-	 * Gets the height.
-	 *
-	 * @return the height
-	 */
-	public int getHeight();
+    /**
+     * Gets the height.
+     *
+     * @return the height
+     */
+    int getHeight();
 
-	/**
-	 * Sets the height.
-	 *
-	 * @param height
-	 *            the new height
-	 */
-	public void setHeight(int height);
+    /**
+     * Sets the height.
+     *
+     * @param height
+     *            the new height
+     */
+    void setHeight(int height);
 
-	/**
-	 * To data url.
-	 *
-	 * @return the string
-	 */
-	public String toDataURL();
+    /**
+     * To data url.
+     *
+     * @return the string
+     */
+    String toDataURL();
 
-	/**
-	 * To data url.
-	 *
-	 * @param type
-	 *            the type
-	 * @param args
-	 *            the args
-	 * @return the string
-	 */
-	public String toDataURL(String type, Object... args);
+    /**
+     * To data url.
+     *
+     * @param type
+     *            the type
+     * @param args
+     *            the args
+     * @return the string
+     */
+    String toDataURL(String type, Object... args);
 
-	/**
-	 * To blob.
-	 *
-	 * @param callback
-	 *            the callback
-	 */
-	public void toBlob(FileCallback callback);
+    /**
+     * To blob.
+     *
+     * @param callback
+     *            the callback
+     */
+    void toBlob(FileCallback callback);
 
-	/**
-	 * To blob.
-	 *
-	 * @param callback
-	 *            the callback
-	 * @param type
-	 *            the type
-	 * @param args
-	 *            the args
-	 */
-	public void toBlob(FileCallback callback, String type, Object... args);
+    /**
+     * To blob.
+     *
+     * @param callback
+     *            the callback
+     * @param type
+     *            the type
+     * @param args
+     *            the args
+     */
+    void toBlob(FileCallback callback, String type, Object... args);
 
-	/**
-	 * Gets the context.
-	 *
-	 * @param contextId
-	 *            the context id
-	 * @return the context
-	 */
-	public CanvasRenderingContext2D getContext(String contextId);
+    /**
+     * Gets the context.
+     *
+     * @param contextId
+     *            the context id
+     * @return the context
+     */
+    CanvasRenderingContext2D getContext(String contextId);
 }

@@ -9,8 +9,8 @@ package org.mozilla.javascript;
 /**
  * Object that can allows assignments to the result of function calls.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface RefCallable extends Callable
 {
@@ -22,7 +22,7 @@ public interface RefCallable extends Callable
      * not args array itself.
      *
      * @param cx the current Context for this thread
-     * @param thisObj the JavaScript this object
+     * @param thisObj the JavaScript <code>this</code> object
      * @param args the array of arguments
      * @return a {@link org.mozilla.javascript.Ref} object.
      */

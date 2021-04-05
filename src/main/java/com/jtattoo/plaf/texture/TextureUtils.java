@@ -40,8 +40,8 @@ import com.jtattoo.plaf.LazyImageIcon;
 /**
  * <p>TextureUtils class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class TextureUtils {
 
@@ -212,6 +212,8 @@ public class TextureUtils {
 			break;
 		case MENUBAR_TEXTURE_TYPE:
 			texture = menubarTexture;
+			break;
+		default:
 			break;
 		}
 		return texture;

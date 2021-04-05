@@ -33,8 +33,8 @@ package org.mozilla.javascript.v8dtoa;
 /**
  * <p>FastDtoa class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FastDtoa {
 

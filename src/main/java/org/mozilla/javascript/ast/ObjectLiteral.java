@@ -30,8 +30,8 @@ import org.mozilla.javascript.Token;
  *       StringLiteral
  *       NumericLiteral</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ObjectLiteral extends AstNode implements DestructuringForm {
 

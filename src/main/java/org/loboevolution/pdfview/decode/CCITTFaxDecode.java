@@ -9,8 +9,8 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * <p>CCITTFaxDecode class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class CCITTFaxDecode {
 

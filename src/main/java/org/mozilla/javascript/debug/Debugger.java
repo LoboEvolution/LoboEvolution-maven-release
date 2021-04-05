@@ -14,8 +14,8 @@ import org.mozilla.javascript.Context;
  *Interface to implement if the application is interested in receiving debug
  *information.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface Debugger {
 

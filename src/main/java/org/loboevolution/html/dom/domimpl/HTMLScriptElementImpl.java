@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Oct 8, 2005
  */
@@ -27,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -41,14 +41,15 @@ import org.loboevolution.net.HttpNetwork;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Scriptable;
-import org.w3c.dom.Document;
 import org.w3c.dom.UserDataHandler;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Element;
 
 /**
  * <p>HTMLScriptElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HTMLScriptElementImpl extends HTMLElementImpl implements HTMLScriptElement {
 	private static final Logger logger = Logger.getLogger(HTMLScriptElementImpl.class.getName());
@@ -81,7 +82,7 @@ public class HTMLScriptElementImpl extends HTMLElementImpl implements HTMLScript
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getDefer() {
+	public boolean isDefer() {
 		return this.defer;
 	}
 
@@ -151,11 +152,13 @@ public class HTMLScriptElementImpl extends HTMLElementImpl implements HTMLScript
 					final URLConnection connection = u.openConnection();
 					connection.setRequestProperty("User-Agent", HttpNetwork.getUserAgentValue());
 					try (InputStream in = HttpNetwork.openConnectionCheckRedirects(connection);
-							Reader reader = new InputStreamReader(in, "utf-8");) {
+							Reader reader = new InputStreamReader(in, "utf-8")) {
 						BufferedReader br = new BufferedReader(reader);						
 						ctx.evaluateReader(scope, br, scriptURI, 1, null);
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (SocketTimeoutException e) {
+						logger.log(Level.SEVERE, "More than " + connection.getConnectTimeout() + " elapsed.");
+				    } catch (Exception e) {
+						logger.log(Level.SEVERE, e.getMessage(), e);
 					}
 				} else {
 					String scriptURI = doc.getBaseURI();
@@ -165,6 +168,8 @@ public class HTMLScriptElementImpl extends HTMLElementImpl implements HTMLScript
 			} catch (final RhinoException ecmaError) {
 				final String error = ecmaError.sourceName() + ":" + ecmaError.lineNumber() + ": " + ecmaError.getMessage();
 				logger.log(Level.WARNING, "Javascript error at " + error, ecmaError.getMessage());
+			} catch (java.util.MissingResourceException mre) {
+				logger.log(Level.WARNING, mre.getMessage());
 			} catch (final Throwable err) {
 				logger.log(Level.WARNING, "Unable to evaluate Javascript code", err);
 			} finally {
@@ -216,5 +221,186 @@ public class HTMLScriptElementImpl extends HTMLElementImpl implements HTMLScript
 			processScript();
 		}
 		return super.setUserData(key, data, handler);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAccessKey(String accessKey) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isAsync() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAsync(boolean async) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getCrossOrigin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCrossOrigin(String crossOrigin) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getIntegrity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setIntegrity(String integrity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isNoModule() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setNoModule(boolean noModule) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getReferrerPolicy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setReferrerPolicy(String referrerPolicy) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLScriptElement]";
 	}
 }

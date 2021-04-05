@@ -44,8 +44,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AeroTabbedPaneUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AeroTabbedPaneUI extends BaseTabbedPaneUI {
 	/** {@inheritDoc} */
@@ -53,7 +53,7 @@ public class AeroTabbedPaneUI extends BaseTabbedPaneUI {
 		return new AeroTabbedPaneUI();
 	}
 
-	private Color sepColors[] = null;
+	private Color[] sepColors = null;
 
 	/** {@inheritDoc} */
 	@Override

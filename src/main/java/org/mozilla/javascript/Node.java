@@ -20,40 +20,40 @@ import org.mozilla.javascript.ast.ScriptNode;
 /**
  * This class implements the root of the intermediate representation.
  *
- * @author Norris Boyd
- * @author Mike McCabe
- * @version $Id: $Id
+ * Author Norris Boyd
+ * Author Mike McCabe
+ *
  */
 public class Node implements Iterable<Node>
 {
-    /** Constant FUNCTION_PROP=1 */
-    /** Constant LOCAL_PROP=2 */
-    /** Constant LOCAL_BLOCK_PROP=3 */
-    /** Constant REGEXP_PROP=4 */
-    /** Constant CASEARRAY_PROP=5 */
-    /** Constant TARGETBLOCK_PROP=6 */
-    /** Constant VARIABLE_PROP=7 */
-    /** Constant ISNUMBER_PROP=8 */
-    /** Constant DIRECTCALL_PROP=9 */
-    /** Constant SPECIALCALL_PROP=10 */
-    /** Constant SKIP_INDEXES_PROP=11 */
-    /** Constant OBJECT_IDS_PROP=12 */
-    /** Constant INCRDECR_PROP=13 */
-    /** Constant CATCH_SCOPE_PROP=14 */
-    /** Constant LABEL_ID_PROP=15 */
-    /** Constant MEMBER_TYPE_PROP=16 */
-    /** Constant NAME_PROP=17 */
-    /** Constant CONTROL_BLOCK_PROP=18 */
-    /** Constant PARENTHESIZED_PROP=19 */
-    /** Constant GENERATOR_END_PROP=20 */
-    /** Constant DESTRUCTURING_ARRAY_LENGTH=21 */
-    /** Constant DESTRUCTURING_NAMES=22 */
-    /** Constant DESTRUCTURING_PARAMS=23 */
-    /** Constant JSDOC_PROP=24 */
-    /** Constant EXPRESSION_CLOSURE_PROP=25 */
-    /** Constant DESTRUCTURING_SHORTHAND=26 */
-    /** Constant ARROW_FUNCTION_PROP=27 */
-    /** Constant LAST_PROP=27 */
+    /** Constant <code>FUNCTION_PROP=1</code> */
+    /** Constant <code>LOCAL_PROP=2</code> */
+    /** Constant <code>LOCAL_BLOCK_PROP=3</code> */
+    /** Constant <code>REGEXP_PROP=4</code> */
+    /** Constant <code>CASEARRAY_PROP=5</code> */
+    /** Constant <code>TARGETBLOCK_PROP=6</code> */
+    /** Constant <code>VARIABLE_PROP=7</code> */
+    /** Constant <code>ISNUMBER_PROP=8</code> */
+    /** Constant <code>DIRECTCALL_PROP=9</code> */
+    /** Constant <code>SPECIALCALL_PROP=10</code> */
+    /** Constant <code>SKIP_INDEXES_PROP=11</code> */
+    /** Constant <code>OBJECT_IDS_PROP=12</code> */
+    /** Constant <code>INCRDECR_PROP=13</code> */
+    /** Constant <code>CATCH_SCOPE_PROP=14</code> */
+    /** Constant <code>LABEL_ID_PROP=15</code> */
+    /** Constant <code>MEMBER_TYPE_PROP=16</code> */
+    /** Constant <code>NAME_PROP=17</code> */
+    /** Constant <code>CONTROL_BLOCK_PROP=18</code> */
+    /** Constant <code>PARENTHESIZED_PROP=19</code> */
+    /** Constant <code>GENERATOR_END_PROP=20</code> */
+    /** Constant <code>DESTRUCTURING_ARRAY_LENGTH=21</code> */
+    /** Constant <code>DESTRUCTURING_NAMES=22</code> */
+    /** Constant <code>DESTRUCTURING_PARAMS=23</code> */
+    /** Constant <code>JSDOC_PROP=24</code> */
+    /** Constant <code>EXPRESSION_CLOSURE_PROP=25</code> */
+    /** Constant <code>DESTRUCTURING_SHORTHAND=26</code> */
+    /** Constant <code>ARROW_FUNCTION_PROP=27</code> */
+    /** Constant <code>LAST_PROP=27</code> */
     public static final int
         FUNCTION_PROP      =  1,
         LOCAL_PROP         =  2,
@@ -97,31 +97,31 @@ public class Node implements Iterable<Node>
 
     // values of ISNUMBER_PROP to specify
     // which of the children are Number types
-    /** Constant BOTH=0 */
-    /** Constant LEFT=1 */
-    /** Constant RIGHT=2 */
+    /** Constant <code>BOTH=0</code> */
+    /** Constant <code>LEFT=1</code> */
+    /** Constant <code>RIGHT=2</code> */
     public static final int
         BOTH = 0,
         LEFT = 1,
         RIGHT = 2;
 
-    /** Constant NON_SPECIALCALL=0 */
-    /** Constant SPECIALCALL_EVAL=1 */
-    /** Constant SPECIALCALL_WITH=2 */
+    /** Constant <code>NON_SPECIALCALL=0</code> */
+    /** Constant <code>SPECIALCALL_EVAL=1</code> */
+    /** Constant <code>SPECIALCALL_WITH=2</code> */
     public static final int    // values for SPECIALCALL_PROP
         NON_SPECIALCALL  = 0,
         SPECIALCALL_EVAL = 1,
         SPECIALCALL_WITH = 2;
 
-    /** Constant DECR_FLAG=0x1 */
-    /** Constant POST_FLAG=0x2 */
+    /** Constant <code>DECR_FLAG=0x1</code> */
+    /** Constant <code>POST_FLAG=0x2</code> */
     public static final int   // flags for INCRDECR_PROP
         DECR_FLAG = 0x1,
         POST_FLAG = 0x2;
 
-    /** Constant PROPERTY_FLAG=0x1 */
-    /** Constant ATTRIBUTE_FLAG=0x2 */
-    /** Constant DESCENDANTS_FLAG=0x4 */
+    /** Constant <code>PROPERTY_FLAG=0x1</code> */
+    /** Constant <code>ATTRIBUTE_FLAG=0x2</code> */
+    /** Constant <code>DESCENDANTS_FLAG=0x4</code> */
     public static final int   // flags for MEMBER_TYPE_PROP
         PROPERTY_FLAG    = 0x1, // property access: element is valid name
         ATTRIBUTE_FLAG   = 0x2, // x.@y or x..@y
@@ -275,7 +275,7 @@ public class Node implements Iterable<Node>
     }
 
     /**
-     * <p>Getter for the field type.</p>
+     * <p>Getter for the field <code>type</code>.</p>
      *
      * @return a int.
      */
@@ -355,7 +355,7 @@ public class Node implements Iterable<Node>
     }
 
     /**
-     * <p>Getter for the field next.</p>
+     * <p>Getter for the field <code>next</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.Node} object.
      */
@@ -767,7 +767,7 @@ public class Node implements Iterable<Node>
     }
 
     /**
-     * <p>Setter for the field lineno.</p>
+     * <p>Setter for the field <code>lineno</code>.</p>
      *
      * @param lineno a int.
      */
@@ -776,7 +776,7 @@ public class Node implements Iterable<Node>
     }
 
     /**
-     * Can only be called when <tt>getType() == Token.NUMBER</tt>
+     * Can only be called when <code>getType() == Token.NUMBER</code>
      *
      * @return a double.
      */
@@ -851,7 +851,9 @@ public class Node implements Iterable<Node>
      */
     public final int labelId()
     {
-        if (type != Token.TARGET && type != Token.YIELD) Kit.codeBug();
+        if ((type != Token.TARGET) && (type != Token.YIELD) && (type != Token.YIELD_STAR)) {
+            Kit.codeBug();
+        }
         return getIntProp(LABEL_ID_PROP, -1);
     }
 
@@ -862,7 +864,9 @@ public class Node implements Iterable<Node>
      */
     public void labelId(int labelId)
     {
-        if (type != Token.TARGET  && type != Token.YIELD) Kit.codeBug();
+        if ((type != Token.TARGET) && (type != Token.YIELD) && (type != Token.YIELD_STAR)) {
+            Kit.codeBug();
+        }
         putIntProp(LABEL_ID_PROP, labelId);
     }
 
@@ -921,13 +925,13 @@ public class Node implements Iterable<Node>
      * Will be detected as (END_DROPS_OFF | END_RETURN_VALUE) by endCheck()
      */
     public static final int END_UNREACHED = 0;
-    /** Constant END_DROPS_OFF=1 */
+    /** Constant <code>END_DROPS_OFF=1</code> */
     public static final int END_DROPS_OFF = 1;
-    /** Constant END_RETURNS=2 */
+    /** Constant <code>END_RETURNS=2</code> */
     public static final int END_RETURNS = 2;
-    /** Constant END_RETURNS_VALUE=4 */
+    /** Constant <code>END_RETURNS_VALUE=4</code> */
     public static final int END_RETURNS_VALUE = 4;
-    /** Constant END_YIELDS=8 */
+    /** Constant <code>END_YIELDS=8</code> */
     public static final int END_YIELDS = 8;
 
     /**
@@ -1163,6 +1167,7 @@ public class Node implements Iterable<Node>
                 return END_DROPS_OFF;
 
             case Token.YIELD:
+            case Token.YIELD_STAR:
                 return END_YIELDS;
 
             case Token.CONTINUE:
@@ -1302,6 +1307,7 @@ public class Node implements Iterable<Node>
           case Token.LOCAL_BLOCK:
           case Token.SET_REF_OP:
           case Token.YIELD:
+          case Token.YIELD_STAR:
             return true;
 
           default:
@@ -1331,7 +1337,7 @@ public class Node implements Iterable<Node>
 
     private void resetTargets_r()
     {
-        if (type == Token.TARGET || type == Token.YIELD) {
+        if (type == Token.TARGET || type == Token.YIELD || type == Token.YIELD_STAR) {
             labelId(-1);
         }
         Node child = first;

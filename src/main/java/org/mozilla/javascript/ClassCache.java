@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Cache of generated classes and data structures to access Java runtime
  * from JavaScript.
  *
- * @author Igor Bukanov
+ * Author Igor Bukanov
  * @since Rhino 1.5 Release 5
- * @version $Id: $Id
+ *
  */
 public class ClassCache implements Serializable
 {
@@ -100,13 +100,13 @@ public class ClassCache implements Serializable
      * Set whether to cache some values.
      * <p>
      * By default, the engine will cache the results of
-     * <tt>Class.getMethods()</tt> and similar calls.
+     * <code>Class.getMethods()</code> and similar calls.
      * This can speed execution dramatically, but increases the memory
      * footprint. Also, with caching enabled, references may be held to
      * objects past the lifetime of any real usage.
      * <p>
      * If caching is enabled and this method is called with a
-     * false argument, the caches will be emptied.
+     * <code>false</code> argument, the caches will be emptied.
      * <p>
      * Caching is enabled by default.
      *

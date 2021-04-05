@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -31,8 +30,8 @@ import org.loboevolution.pdfview.PDFDebugger;
 /**
  * Represents the TTF "cmap" table
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class CmapTable extends TrueTypeTable {
     
@@ -52,7 +51,7 @@ public class CmapTable extends TrueTypeTable {
         
         setVersion((short) 0x0);
     
-        this.subtables = Collections.synchronizedSortedMap(new TreeMap<CmapSubtable,CMap>());
+        this.subtables = Collections.synchronizedSortedMap(new TreeMap<>());
     }
     
     /**
@@ -86,7 +85,7 @@ public class CmapTable extends TrueTypeTable {
      * @return an array of {@link org.loboevolution.pdfview.font.ttf.CMap} objects.
      */
     public CMap[] getCMaps() {
-        Collection<CMap> c = new ArrayList<CMap>();
+        Collection<CMap> c = new ArrayList<>();
         
         CMap cmap_3_1 = this.getCMap((short)3, (short)1);
         if (cmap_3_1 != null) {
@@ -102,7 +101,6 @@ public class CmapTable extends TrueTypeTable {
         		c.add(cmap);
         	}
         }
-                ;
         CMap[] maps = new CMap[c.size()];
         
         c.toArray(maps);
@@ -168,20 +166,18 @@ public class CmapTable extends TrueTypeTable {
         int curOffset = 4 + (this.subtables.size() * 8);
         
         // write the subtables
-        for (Iterator i = this.subtables.keySet().iterator(); i.hasNext();) {
-            CmapSubtable cms = (CmapSubtable) i.next();
+        for (CmapSubtable cms : this.subtables.keySet()) {
             CMap map = this.subtables.get(cms);
-            
+
             buf.putShort(cms.platformID);
             buf.putShort(cms.platformSpecificID);
             buf.putInt(curOffset);
-            
+
             curOffset += map.getLength();
         }
         
         // write the tables
-        for (Iterator i = this.subtables.values().iterator(); i.hasNext();) {
-            CMap map = (CMap) i.next();
+        for (CMap map : this.subtables.values()) {
             buf.put(map.getData());
         }
         
@@ -204,9 +200,8 @@ public class CmapTable extends TrueTypeTable {
         length += this.subtables.size() * 8;
         
         // add the size of the dynamic data
-        for (Iterator i = this.subtables.values().iterator(); i.hasNext();) {     
+        for (CMap map : this.subtables.values()) {
             // add the size of the subtable data
-            CMap map = (CMap) i.next();
             length += map.getLength();
         }
     
@@ -250,17 +245,14 @@ public class CmapTable extends TrueTypeTable {
         StringBuilder buf = new StringBuilder();
         String indent = "    ";
     
-        buf.append(indent + "Version: " + this.getVersion() + "\n");
-        buf.append(indent + "NumMaps: " + this.getNumberSubtables() + "\n");
-        
-        for (Iterator i = this.subtables.keySet().iterator(); i.hasNext();) {
-            CmapSubtable key = (CmapSubtable) i.next();
-            
-            buf.append(indent + "Map: platformID: " + key.platformID +
-                       " PlatformSpecificID: " + key.platformSpecificID + "\n");
-            
+        buf.append(indent).append("Version: ").append(this.getVersion()).append("\n");
+        buf.append(indent).append("NumMaps: ").append(this.getNumberSubtables()).append("\n");
+
+        for (CmapSubtable key : this.subtables.keySet()) {
+            buf.append(indent).append("Map: platformID: ").append(key.platformID).append(" PlatformSpecificID: ").append(key.platformSpecificID).append("\n");
+
             CMap map = this.subtables.get(key);
-            
+
             buf.append(map.toString());
         }
         
@@ -271,12 +263,12 @@ public class CmapTable extends TrueTypeTable {
         /**
          * The platformID for this subtable
          */
-        short platformID;
+        final short platformID;
         
         /**
          * The platform-specific id
          */
-        short platformSpecificID;
+        final short platformSpecificID;
         
         /** 
          * Create a Cmap subtable

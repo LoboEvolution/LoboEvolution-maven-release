@@ -22,8 +22,8 @@ import org.mozilla.javascript.Token;
  * {@link org.mozilla.javascript.ast.VariableDeclaration} node of type {@code Token.LET},
  * wrapped with an {@link org.mozilla.javascript.ast.ExpressionStatement}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class LetNode extends Scope {
 

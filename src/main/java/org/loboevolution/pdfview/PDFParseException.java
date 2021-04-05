@@ -23,8 +23,8 @@ import java.io.IOException;
 /**
  * an exception class for recording parse errors in the PDF file
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class PDFParseException extends IOException {
 

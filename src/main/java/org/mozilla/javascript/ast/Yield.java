@@ -15,21 +15,18 @@ import org.mozilla.javascript.Token;
  * <pre><i>Yield</i> :
  *   <b>yield</b> [<i>no LineTerminator here</i>] [non-paren Expression] ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Yield extends AstNode {
 
     private AstNode value;
 
-    {
-        type = Token.YIELD;
-    }
-
     /**
      * <p>Constructor for Yield.</p>
      */
     public Yield() {
+        type = Token.YIELD;
     }
 
     /**
@@ -39,6 +36,7 @@ public class Yield extends AstNode {
      */
     public Yield(int pos) {
         super(pos);
+        type = Token.YIELD;
     }
 
     /**
@@ -49,6 +47,7 @@ public class Yield extends AstNode {
      */
     public Yield(int pos, int len) {
         super(pos, len);
+        type = Token.YIELD;
     }
 
     /**
@@ -57,9 +56,11 @@ public class Yield extends AstNode {
      * @param pos a int.
      * @param len a int.
      * @param value a {@link org.mozilla.javascript.ast.AstNode} object.
+     * @param isStar a boolean.
      */
-    public Yield(int pos, int len, AstNode value) {
+    public Yield(int pos, int len, AstNode value, boolean isStar) {
         super(pos, len);
+        type = isStar ? Token.YIELD_STAR : Token.YIELD;
         setValue(value);
     }
 

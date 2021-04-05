@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The XAMJ Project
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.renderer;
 
 import java.awt.Insets;
@@ -29,8 +28,8 @@ import org.loboevolution.html.style.HtmlValues;
 /**
  * <p>DelayedPair class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class DelayedPair {
 
@@ -60,6 +59,8 @@ public class DelayedPair {
 
 	private boolean isFixed;
 
+	private boolean isRelative;
+
 	/**
 	 * <p>Constructor for DelayedPair.</p>
 	 */
@@ -68,48 +69,70 @@ public class DelayedPair {
 
 	/**
 	 * <p>positionPairChild.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.renderer.BoundableRenderable} object.
 	 */
-	public void positionPairChild() {
+	public BoundableRenderable positionPairChild() {
 		final RenderableContainer parent = this.containingBlock;
+		if (isRelative) {
+			final RElement rChild = (RElement) this.child;
+			rChild.setupRelativePosition(this.immediateContainingBlock);
+			TranslatedRenderable tr = new TranslatedRenderable(rChild);
+			return tr;
+		}
+
 		final BoundableRenderable child = this.child;
+		final Point tp = immediateContainingBlock.getOriginRelativeToAbs((RCollection) parent);
+		tp.translate(initX, initY);
+
+		if (this.immediateContainingBlock != parent) {
+			final Insets immediateInsets = this.immediateContainingBlock.getInsetsMarginBorder(false, false);
+			tp.translate(immediateInsets.left, immediateInsets.top);
+		}
+
 		Integer x = this.getLeft();
 		Integer y = this.getTop();
-	    Integer width = getWidth();
-	    Integer height = getHeight();
+
+		final Integer width = getWidth();
+		final Integer height = getHeight();
 		final Integer right = this.getRight();
 		final Integer bottom = this.getBottom();
 		if (right != null) {
 			if (x != null) {
-				width = parent.getInnerWidth() - (x + right);
+				child.setWidth(parent.getInnerWidth() - (x + right));
 			} else {
-		        final int childWidth = width == null? child.getWidth() : width;
-		        x = parent.getInnerWidth() - (childWidth + right);
+				if (width != null) {
+					child.setWidth(width);
+				}
+				final int childWidth = child.getWidth();
+				x = parent.getInnerWidth() - (childWidth + right);
+			}
+		} else {
+			if (width != null) {
+				child.setWidth(width);
 			}
 		}
+
 		if (bottom != null) {
 			if (y != null) {
-				height = parent.getInnerHeight() - (y + bottom);
+				child.setHeight(parent.getInnerHeight() - (y + bottom));
 			} else {
-		        final int childHeight = height == null? child.getHeight() : height;
-		        y = parent.getInnerHeight() - (childHeight + bottom);
+				if (height != null) {
+					child.setHeight(height);
+				}
+				final int childHeight = child.getHeight();
+				y = parent.getInnerHeight() - (childHeight + bottom);
+			}
+		} else {
+			if (height != null) {
+				child.setHeight(height);
 			}
 		}
 
-	    final Point tp = containingBlock.translateDescendentPoint((BoundableRenderable)(immediateContainingBlock), initX, initY);
-	    if (this.immediateContainingBlock != parent) {
-	        final Insets immediateInsets = this.immediateContainingBlock.getInsetsMarginBorder(false, false);
-	        tp.translate(immediateInsets.left, immediateInsets.top);
-	    }
+		child.setX((x == null ? tp.x : x));
+		child.setY((y == null ? tp.y : y));
 
-	    child.setX((x == null ? tp.x : x));
-	    child.setY((y == null ? tp.y : y));
-
-		if (width != null) {
-			child.setWidth(width);
-		}
-		if (height != null) {
-			child.setHeight(height);
-		}
+		return child;
 	}
 
 	private Integer getLeft() {
@@ -324,4 +347,18 @@ public class DelayedPair {
 	public void setFixed(boolean isFixed) {
 		this.isFixed = isFixed;
 	}
+
+	/**
+	 * <p>isRelative.</p>
+	 *
+	 * @return a boolean.
+	 */
+	public boolean isRelative() { return isRelative;	}
+
+	/**
+	 * <p>setRelative.</p>
+	 *
+	 * @param relative a boolean.
+	 */
+	public void setRelative(boolean relative) { isRelative = relative; }
 }

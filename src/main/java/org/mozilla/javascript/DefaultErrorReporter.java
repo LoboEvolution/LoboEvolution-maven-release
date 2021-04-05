@@ -9,7 +9,7 @@ package org.mozilla.javascript;
 /**
  * This is the default error reporter for JavaScript.
  *
- * @author Norris Boyd
+ * Author Norris Boyd
  */
 class DefaultErrorReporter implements ErrorReporter
 {

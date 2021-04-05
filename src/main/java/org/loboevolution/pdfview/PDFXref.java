@@ -39,13 +39,13 @@ import java.lang.ref.SoftReference;
  * This is an unhappy state of affairs, and should be fixed.  Fortunatly,
  * the two uses have already been factored out as two different methods.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class PDFXref {
 
-    private int id;
-    private int generation;
+    private final int id;
+    private final int generation;
     private final boolean compressed;
     
     // this field is only used in PDFFile.objIdx
@@ -159,10 +159,10 @@ public class PDFXref {
      * @param obj a {@link org.loboevolution.pdfview.PDFObject} object.
      */
     public void setObject(PDFObject obj) {
-        this.reference = new SoftReference<PDFObject>(obj);
+        this.reference = new SoftReference<>(obj);
     }
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean equals(Object obj) {
         return (obj instanceof PDFXref) &&

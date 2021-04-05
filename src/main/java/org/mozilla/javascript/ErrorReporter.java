@@ -12,8 +12,8 @@ package org.mozilla.javascript;
  * This is interface defines a protocol for the reporting of
  * errors during JavaScript translation or execution.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public interface ErrorReporter {
 

@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
  * AST node for a parenthesized expression.
  * Node type is {@link org.mozilla.javascript.Token#LP}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ParenthesizedExpression extends AstNode {
 

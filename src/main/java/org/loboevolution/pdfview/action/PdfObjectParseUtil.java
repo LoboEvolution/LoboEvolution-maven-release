@@ -10,10 +10,10 @@ import org.loboevolution.pdfview.PDFParseException;
  ***************************************************************************
  * Utility class for parsing values from a PDFObject
  *
- * @author  Katja Sondermann
+ * Author  Katja Sondermann
  * @since 08.07.2009
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class PdfObjectParseUtil {
 	
@@ -25,9 +25,8 @@ public class PdfObjectParseUtil {
 	 * @param key a {@link java.lang.String} object.
 	 * @param parent a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param mandatory a boolean.
-	 * @return String - can be null if not mandatory
-	 * @throws java.io.IOException if any. - in case of a parsing error
-	 ***********************************************************************
+	 * @return String - can be <code>null</code> if not mandatory
+	 * @throws java.io.IOException if any.
 	 */
 	public static String parseStringFromDict(String key, PDFObject parent, boolean mandatory) throws IOException{
 		PDFObject val = parent;
@@ -51,9 +50,8 @@ public class PdfObjectParseUtil {
 	 * @param key a {@link java.lang.String} object.
 	 * @param parent a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param mandatory a boolean.
-	 * @return boolean - false if not available and not mandatory
+	 * @return boolean - <code>false</code> if not available and not mandatory
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public static boolean parseBooleanFromDict(String key, PDFObject parent, boolean mandatory) throws IOException{
 		PDFObject val = parent.getDictRef(key);
@@ -76,7 +74,6 @@ public class PdfObjectParseUtil {
 	 * @param mandatory a boolean.
 	 * @return int - returns "0" in case the value is not a number
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public static int parseIntegerFromDict(String key, PDFObject parent, boolean mandatory) throws IOException{
 		PDFObject val = parent.getDictRef(key);
@@ -97,9 +94,8 @@ public class PdfObjectParseUtil {
 	 * @param parent a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param root a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param mandatory a boolean.
-	 * @return PDFDestination  - can be null if not mandatory
+	 * @return PDFDestination  - can be <code>null</code> if not mandatory
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public static PDFDestination parseDestination(String key, PDFObject parent, PDFObject root, boolean mandatory) throws IOException{
 		PDFObject destObj = parent.getDictRef(key);

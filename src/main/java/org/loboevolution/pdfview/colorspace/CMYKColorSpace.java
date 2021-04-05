@@ -33,7 +33,7 @@ import org.loboevolution.pdfview.BaseWatchable;
  *
  * Take from net.sf.jcgm.core.CMYKColorSpace.java
  *
- * @author XOND
+ * Author XOND
  * @version $Id: CMYKColorSpace.java,v 1.2 2011-01-06 12:12:21 xond Exp $
  */
 public class CMYKColorSpace extends ColorSpace {

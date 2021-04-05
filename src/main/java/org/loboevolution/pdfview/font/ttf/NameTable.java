@@ -23,24 +23,23 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
  * <p>NameTable class.</p>
  *
- * @author  jon
- * @version $Id: $Id
+ * Author  jon
+  *
  */
 public class NameTable extends TrueTypeTable {
     /**
      * Values for platformID
      */
     public static final short PLATFORMID_UNICODE    = 0;
-    /** Constant PLATFORMID_MACINTOSH=1 */
+    /** Constant <code>PLATFORMID_MACINTOSH=1</code> */
     public static final short PLATFORMID_MACINTOSH  = 1;
-    /** Constant PLATFORMID_MICROSOFT=3 */
+    /** Constant <code>PLATFORMID_MICROSOFT=3</code> */
     public static final short PLATFORMID_MICROSOFT  = 3;
     
     /**
@@ -52,9 +51,9 @@ public class NameTable extends TrueTypeTable {
      * Values for platformSpecificID if platform is Unicode
      */
     public static final short ENCODINGID_UNICODE_DEFAULT = 0;
-    /** Constant ENCODINGID_UNICODE_V11=1 */
+    /** Constant <code>ENCODINGID_UNICODE_V11=1</code> */
     public static final short ENCODINGID_UNICODE_V11     = 1;
-    /** Constant ENCODINGID_UNICODE_V2=3 */
+    /** Constant <code>ENCODINGID_UNICODE_V2=3</code> */
     public static final short ENCODINGID_UNICODE_V2      = 3;
     
     /**
@@ -66,19 +65,19 @@ public class NameTable extends TrueTypeTable {
      * Values for nameID
      */
     public static final short NAMEID_COPYRIGHT        = 0;
-    /** Constant NAMEID_FAMILY=1 */
+    /** Constant <code>NAMEID_FAMILY=1</code> */
     public static final short NAMEID_FAMILY           = 1;
-    /** Constant NAMEID_SUBFAMILY=2 */
+    /** Constant <code>NAMEID_SUBFAMILY=2</code> */
     public static final short NAMEID_SUBFAMILY        = 2;
-    /** Constant NAMEID_SUBFAMILY_UNIQUE=3 */
+    /** Constant <code>NAMEID_SUBFAMILY_UNIQUE=3</code> */
     public static final short NAMEID_SUBFAMILY_UNIQUE = 3;
-    /** Constant NAMEID_FULL_NAME=4 */
+    /** Constant <code>NAMEID_FULL_NAME=4</code> */
     public static final short NAMEID_FULL_NAME        = 4;
-    /** Constant NAMEID_VERSION=5 */
+    /** Constant <code>NAMEID_VERSION=5</code> */
     public static final short NAMEID_VERSION          = 5;
-    /** Constant NAMEID_POSTSCRIPT_NAME=6 */
+    /** Constant <code>NAMEID_POSTSCRIPT_NAME=6</code> */
     public static final short NAMEID_POSTSCRIPT_NAME  = 6;
-    /** Constant NAMEID_TRADEMARK=7 */
+    /** Constant <code>NAMEID_TRADEMARK=7</code> */
     public static final short NAMEID_TRADEMARK        = 7;
     /**
      * The format of this table
@@ -88,7 +87,7 @@ public class NameTable extends TrueTypeTable {
     /**
      * The actual name records
      */
-    private SortedMap<NameRecord,String> records;
+    private final SortedMap<NameRecord,String> records;
     
     
     /**
@@ -97,7 +96,7 @@ public class NameTable extends TrueTypeTable {
     protected NameTable() {
         super (TrueTypeTable.NAME_TABLE);
         
-        this.records = Collections.synchronizedSortedMap(new TreeMap<NameRecord,String>());
+        this.records = Collections.synchronizedSortedMap(new TreeMap<>());
     }
     
     /**
@@ -156,9 +155,7 @@ public class NameTable extends TrueTypeTable {
      * @return a boolean.
      */
     public boolean hasRecords(short platformID) {
-        for (Iterator i = this.records.keySet().iterator(); i.hasNext(); ) {
-            NameRecord rec = (NameRecord) i.next();
-            
+        for (NameRecord rec : this.records.keySet()) {
             if (rec.platformID == platformID) {
                 return true;
             }
@@ -176,10 +173,8 @@ public class NameTable extends TrueTypeTable {
      * @return a boolean.
      */
     public boolean hasRecords(short platformID, short platformSpecificID) {
-        for (Iterator i = this.records.keySet().iterator(); i.hasNext(); ) {
-            NameRecord rec = (NameRecord) i.next();
-            
-            if (rec.platformID == platformID && 
+        for (NameRecord rec : this.records.keySet()) {
+            if (rec.platformID == platformID &&
                     rec.platformSpecificID == platformSpecificID) {
                 return true;
             }
@@ -253,39 +248,38 @@ public class NameTable extends TrueTypeTable {
         short curOffset = 0;
         
         // add the size of each record
-        for (Iterator i = this.records.keySet().iterator(); i.hasNext();) {
-            NameRecord rec = (NameRecord) i.next();
+        for (NameRecord rec : this.records.keySet()) {
             String value = this.records.get(rec);
-        
+
             // choose the charset
             String charsetName = getCharsetName(rec.platformID,
-                rec.platformSpecificID);
+                    rec.platformSpecificID);
             Charset charset = Charset.forName(charsetName);
-            
+
             // encode
             ByteBuffer strBuf = charset.encode(value);
             short strLen = (short) (strBuf.remaining() & 0xFFFF);
-            
+
             // write the IDs
             buf.putShort(rec.platformID);
             buf.putShort(rec.platformSpecificID);
             buf.putShort(rec.languageID);
             buf.putShort(rec.nameID);
-            
+
             // write the size and offset
             buf.putShort(strLen);
             buf.putShort(curOffset);
-            
+
             // remember or current position
             buf.mark();
-            
+
             // move to the current offset and write the data
             buf.position(headerLength + curOffset);
             buf.put(strBuf);
-            
+
             // reset stuff
             buf.reset();
-            
+
             // increment offset
             curOffset += strLen;
         }
@@ -309,18 +303,17 @@ public class NameTable extends TrueTypeTable {
         int length = 6 + (12 * getCount());
         
         // add the size of each record
-        for (Iterator i = this.records.keySet().iterator(); i.hasNext();) {
-            NameRecord rec = (NameRecord) i.next();
+        for (NameRecord rec : this.records.keySet()) {
             String value = this.records.get(rec);
-        
+
             // choose the charset
             String charsetName = getCharsetName(rec.platformID,
-                rec.platformSpecificID);
+                    rec.platformSpecificID);
             Charset charset = Charset.forName(charsetName);
-            
+
             // encode
             ByteBuffer buf = charset.encode(value);
-                
+
             // add the size of the coded buffer
             length += buf.remaining();
         }
@@ -363,14 +356,15 @@ public class NameTable extends TrueTypeTable {
      * @return a {@link java.lang.String} object.
      */
     public static String getCharsetName(int platformID, int encodingID) {
-        String charset = "US-ASCII";   
+        String charset = "";   
             
         switch (platformID) {
             case PLATFORMID_UNICODE:
-                charset = "UTF-16";
-                break;
             case PLATFORMID_MICROSOFT:
                 charset = "UTF-16";
+                break;
+            default:
+            	charset = "US-ASCII";
                 break;
         }
         
@@ -387,17 +381,15 @@ public class NameTable extends TrueTypeTable {
         StringBuilder buf = new StringBuilder();
         String indent = "    ";
         
-        buf.append(indent + "Format: " + getFormat() + "\n");
-        buf.append(indent + "Count : " + getCount() + "\n");
-        
-        for (Iterator i = this.records.keySet().iterator(); i.hasNext();) {
-            NameRecord rec = (NameRecord) i.next();
-            
-            buf.append(indent + " platformID: " + rec.platformID);
-            buf.append(" platformSpecificID: " + rec.platformSpecificID);
-            buf.append(" languageID: " + rec.languageID);
-            buf.append(" nameID: " + rec.nameID + "\n");
-            buf.append(indent + "  " + this.records.get(rec) + "\n");
+        buf.append(indent).append("Format: ").append(getFormat()).append("\n");
+        buf.append(indent).append("Count : ").append(getCount()).append("\n");
+
+        for (NameRecord rec : this.records.keySet()) {
+            buf.append(indent).append(" platformID: ").append(rec.platformID);
+            buf.append(" platformSpecificID: ").append(rec.platformSpecificID);
+            buf.append(" languageID: ").append(rec.languageID);
+            buf.append(" nameID: ").append(rec.nameID).append("\n");
+            buf.append(indent).append("  ").append(this.records.get(rec)).append("\n");
         }
         
         return buf.toString();
@@ -420,22 +412,22 @@ public class NameTable extends TrueTypeTable {
         /**
          * Platform ID
          */
-        short platformID;
+        final short platformID;
         
         /**
          * Platform Specific ID (Encoding)
          */
-        short platformSpecificID;
+        final short platformSpecificID;
         
         /**
          * Language ID
          */
-        short languageID;
+        final short languageID;
         
         /**
          * Name ID
          */
-        short nameID;
+        final short nameID;
         
         /**
          * Create a new record

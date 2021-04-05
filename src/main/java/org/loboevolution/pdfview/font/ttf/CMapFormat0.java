@@ -26,8 +26,8 @@ import java.nio.ByteBuffer;
 /**
  * <p>CMapFormat0 class.</p>
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class CMapFormat0 extends CMap {
     

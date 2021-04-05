@@ -24,8 +24,8 @@ import org.mozilla.javascript.Token;
  * <i>Finally</i> :
  *        <b>finally</b> Block</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class TryStatement extends AstNode {
 
@@ -67,7 +67,7 @@ public class TryStatement extends AstNode {
     }
 
     /**
-     * <p>Getter for the field tryBlock.</p>
+     * <p>Getter for the field <code>tryBlock</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.AstNode} object.
      */

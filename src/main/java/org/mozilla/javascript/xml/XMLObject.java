@@ -15,8 +15,8 @@ import org.mozilla.javascript.Scriptable;
 /**
  *  This Interface describes what all XML objects (XML, XMLList) should have in common.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class XMLObject extends IdScriptableObject
 {
@@ -143,7 +143,7 @@ public abstract class XMLObject extends IdScriptableObject
     public abstract NativeWith enterDotQuery(Scriptable scope);
 
     /**
-     * Custom <tt>+</tt> operator.
+     * Custom <code>+</code> operator.
      * Should return {@link org.mozilla.javascript.Scriptable#NOT_FOUND} if this object does not have
      * custom addition operator for the given value,
      * or the result of the addition operation.

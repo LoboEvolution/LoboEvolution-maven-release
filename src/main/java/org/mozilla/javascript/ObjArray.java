@@ -14,8 +14,8 @@ import java.io.Serializable;
 /**
  *Implementation of resizable array with focus on minimizing memory usage by storing few initial array elements in object fields. Can also be used as a stack.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ObjArray implements Serializable
 {
@@ -65,7 +65,7 @@ public class ObjArray implements Serializable
     }
 
     /**
-     * <p>Setter for the field size.</p>
+     * <p>Setter for the field <code>size</code>.</p>
      *
      * @param newSize a int.
      */

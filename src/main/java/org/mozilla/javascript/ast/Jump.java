@@ -16,8 +16,8 @@ import org.mozilla.javascript.Token;
  * If the parser is set to IDE-mode, the resulting AST will not contain
  * any instances of this class.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Jump extends AstNode {
 

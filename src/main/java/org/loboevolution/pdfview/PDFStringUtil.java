@@ -18,35 +18,63 @@
  */
 package org.loboevolution.pdfview;
 
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 
 /**
- * Utility methods for dealing with PDF Strings
+ *  Utility methods for dealing with PDF Strings, such as:
+ * <ul>
+ * <li>{@link #asTextString(String) converting to text strings}
+ * <li>{@link #asPDFDocEncoded(String) converting to PDFDocEncoded strings}
+ * <li>{@link #asUTF16BEEncoded converting to UTF-16BE strings}
+ * <li>converting basic strings between {@link #asBytes(String) byte} and
+ * {@link #asBasicString(byte[], int, int) string} representations
+ * </ul>
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * <p>We refer to basic strings as those corresponding to the PDF 'string' type.
+ * PDFRenderer represents these as {@link java.lang.String}s, though this is somewhat
+ * deceiving, as they are, effectively, just sequences of bytes, although byte
+ * values &lt;= 127 do correspond to the ASCII character set. Outside of this,
+ * the 'string' type, as repesented by basic strings do not possess any
+ * character set or encoding, and byte values &gt;= 128 are entirely acceptable.
+ * For a basic string as represented by a String, each character has a value
+ * less than 256 and is represented in the String as if the bytes represented as
+ * it were in ISO-8859-1 encoding. This, however, is merely for convenience. For
+ * strings that are user visible, and that don't merely represent some
+ * identifying token, the PDF standard employs a 'text string' type that offers
+ * the basic string as an encoding of in either UTF-16BE (with a byte order
+ * marking) or a specific 8-byte encoding, PDFDocEncoding. Using a basic string
+ * without conversion when the actual type is a 'text string' is erroneous
+ * (though without consequence if the string consists only of ASCII
+ * alphanumeric values). Care must be taken to either convert basic strings to
+ * text strings (also expressed as a String) when appropriate, using either the
+ * methods in this class, or {@link org.loboevolution.pdfview.PDFObject#getTextStringValue()}}. For
+ * strings that are 'byte strings', {@link #asBytes(String)} or {@link
+ * PDFObject#getStream()} should be used. </p>.
+ *
+ * Author Luke Kirby
+  *
  */
 public class PDFStringUtil {
 
     /**
-     * Take a basic PDF string and determine if it is in UTF-16BE encoding
+     * <p>Take a basic PDF string and determine if it is in UTF-16BE encoding
      * by looking at the lead characters for a byte order marking (BOM). If it
      * appears to be UTF-16BE, we return the string representation of the
      * UTF-16BE encoding of those bytes. If the BOM is not present, the bytes
-     * from the input string are decoded using the PDFDocEncoding charset.
+     * from the input string are decoded using the PDFDocEncoding charset.</p>
      *
      * From the PDF Reference 1.7, p158:
      *
-     * The text string type is used for character strings that are
+     * <blockquote>The text string type is used for character strings that are
      * encoded in either PDFDocEncoding or the UTF-16BE Unicode character
      * encoding scheme. PDFDocEncoding can encode all of the ISO Latin 1
      * character set and is documented in Appendix D. UTF-16BE can encode all
      * Unicode characters. UTF-16BE and Unicode character encoding are
      * described in the Unicode Standard by the Unicode Consortium (see the
      * Bibliography). Note that PDFDocEncoding does not support all Unicode
-     * characters whereas UTF-16BE does.
+     * characters whereas UTF-16BE does.</blockquote>
      *
      * @param basicString the basic PDF string, as offered by {@link
      *  PDFObject#getStringValue()}

@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Nov 19, 2005
  */
@@ -30,19 +29,26 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.EventObject;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.loboevolution.common.EventDispatch2;
+import org.loboevolution.common.WrapperLayout;
+import org.loboevolution.component.IBrowserPanel;
 import org.loboevolution.html.dom.domimpl.DocumentNotificationListener;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
-import org.loboevolution.html.dom.domimpl.NodeImpl;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
 import org.loboevolution.html.parser.DocumentBuilderImpl;
 import org.loboevolution.html.parser.InputSourceImpl;
 import org.loboevolution.html.renderer.BoundableRenderable;
@@ -52,12 +58,10 @@ import org.loboevolution.html.renderer.RenderableSpot;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
-import org.loboevolution.common.EventDispatch2;
-import org.loboevolution.common.WrapperLayout;
-import org.loboevolution.component.IBrowserPanel;
 import org.loboevolution.net.HttpNetwork;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
 import org.xml.sax.InputSource;
 
 /**
@@ -69,10 +73,14 @@ import org.xml.sax.InputSource;
  * Invoke method {@link #setDocument(Document, HtmlRendererContext)} in order to
  * schedule a document for rendering.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlPanel extends JComponent implements FrameContext {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(HtmlPanel.class.getName());
+
 	private class LocalDocumentNotificationListener implements DocumentNotificationListener {
 		@Override
 		public void allInvalidated() {
@@ -122,7 +130,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 		}
 	}
 
-	private class SelectionDispatch extends EventDispatch2 {
+	private static class SelectionDispatch extends EventDispatch2 {
 
 		@Override
 		protected void dispatchEvent(EventListener listener, EventObject event) {
@@ -146,7 +154,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 
 	private final DocumentNotificationListener notificationListener;
 	
-	private final ArrayList<DocumentNotification> notifications = new ArrayList<DocumentNotification>();
+	private final List<DocumentNotification> notifications = new ArrayList<>();
 
 	private final Timer notificationTimer;
 
@@ -167,12 +175,12 @@ public class HtmlPanel extends JComponent implements FrameContext {
 		this.notificationTimer = new Timer(NOTIF_TIMER_DELAY, new NotificationTimerAction());
 		this.notificationTimer.setRepeats(false);
 		this.notificationListener = new LocalDocumentNotificationListener();
-		this.notificationImmediateAction = () -> processNotifications();
+		this.notificationImmediateAction = this::processNotifications;
 	}
 
 	private void addNotification(DocumentNotification notification) {
 		// This can be called in a random thread.
-		final ArrayList<DocumentNotification> notifs = this.notifications;
+		final List<DocumentNotification> notifs = this.notifications;
 		synchronized (notifs) {
 			notifs.add(notification);
 		}
@@ -201,7 +209,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 		if (SwingUtilities.isEventDispatchThread()) {
 			clearDocumentImpl();
 		} else {
-			SwingUtilities.invokeLater(() -> HtmlPanel.this.clearDocumentImpl());
+			SwingUtilities.invokeLater(HtmlPanel.this::clearDocumentImpl);
 		}
 	}
 
@@ -257,7 +265,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 	 */
 	@Override
 	public void delayedRelayout(NodeImpl node) {
-		final ArrayList<DocumentNotification> notifs = this.notifications;
+		final List<DocumentNotification> notifs = this.notifications;
 		synchronized (notifs) {
 			notifs.add(new DocumentNotification(DocumentNotification.SIZE, node));
 		}
@@ -296,7 +304,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 	/**
 	 * Gets the HTML DOM node currently rendered if any.
 	 *
-	 * @return a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @return a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public NodeImpl getRootNode() {
 		return this.rootNode;
@@ -354,7 +362,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 
 	private void processNotifications() {
 		// This is called in the GUI thread.
-		final ArrayList<DocumentNotification> notifs = this.notifications;
+		final List<DocumentNotification> notifs = this.notifications;
 		DocumentNotification[] notifsArray;
 		synchronized (notifs) {
 			final int size = notifs.size();
@@ -362,7 +370,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 				return;
 			}
 			notifsArray = new DocumentNotification[size];
-			notifsArray = (DocumentNotification[]) notifs.toArray(notifsArray);
+			notifsArray = notifs.toArray(notifsArray);
 			notifs.clear();
 		}
 		
@@ -451,7 +459,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 	 *
 	 * @param node A DOM node.
 	 */
-	public void scrollTo(org.w3c.dom.Node node) {
+	public void scrollTo(Node node) {
 		final HtmlBlockPanel htmlBlock = this.htmlBlockPanel;
 		if (htmlBlock != null) {
 			htmlBlock.scrollTo(node);
@@ -498,7 +506,7 @@ public class HtmlPanel extends JComponent implements FrameContext {
 		final NodeImpl node = this.rootNode;
 		if (node instanceof HTMLDocumentImpl) {
 			final HTMLDocumentImpl doc = (HTMLDocumentImpl) node;
-			final org.w3c.dom.Element element = doc.getElementById(nameOrId);
+			final Element element = doc.getElementById(nameOrId);
 			if (element != null) {
 				this.scrollTo(element);
 			}
@@ -549,7 +557,6 @@ public class HtmlPanel extends JComponent implements FrameContext {
 	 *                 <p>
 	 * @param rcontext A renderer context.
 	 * @see org.loboevolution.html.parser.DocumentBuilderImpl#parse(org.xml.sax.InputSource)
-	 * 
 	 */
 	public void setDocument(final Document node, final HtmlRendererContext rcontext) {
 		if (SwingUtilities.isEventDispatchThread()) {
@@ -592,19 +599,15 @@ public class HtmlPanel extends JComponent implements FrameContext {
 	 * @param htmlSource The HTML source code.
 	 * @param uri        A base URI used to resolve item URIs.
 	 * @param rcontext   The {@link org.loboevolution.http.HtmlRendererContext} instance.
-	 * 
 	 * @see #setDocument(Document, HtmlRendererContext)
 	 */
 	public void setHtml(String htmlSource, String uri, HtmlRendererContext rcontext) {
 		try {
 			final DocumentBuilderImpl builder = new DocumentBuilderImpl(rcontext.getUserAgentContext(), rcontext);
-			final Reader reader = new StringReader(htmlSource);
-			try {
+			try (Reader reader = new StringReader(htmlSource)) {
 				final InputSourceImpl is = new InputSourceImpl(reader, uri);
 				final Document document = builder.parse(is);
 				setDocument(document, rcontext);
-			} finally {
-				reader.close();
 			}
 		} catch (final java.io.IOException ioe) {
 			throw new IllegalStateException("Unexpected condition.", ioe);
@@ -613,35 +616,37 @@ public class HtmlPanel extends JComponent implements FrameContext {
 		}
 	}
 	
-	
 	/**
 	 * <p>createHtmlPanel.</p>
 	 *
+	 * @param browserPanel a {@link org.loboevolution.component.IBrowserPanel} object.
 	 * @param uri a {@link java.lang.String} object.
 	 * @return a {@link org.loboevolution.html.gui.HtmlPanel} object.
 	 */
-	public static HtmlPanel createHtmlPanel(String uri) {
+	public static HtmlPanel createHtmlPanel(IBrowserPanel browserPanel, String uri) {
 		final HtmlPanel panel = new HtmlPanel();
+		panel.setBrowserPanel(browserPanel);
 		try {
 			final URL url = new URL(uri);
 			final URLConnection connection = url.openConnection();
 			connection.setRequestProperty("User-Agent", HttpNetwork.getUserAgentValue());
 
 			try (InputStream in = HttpNetwork.openConnectionCheckRedirects(connection);
-					Reader reader = new InputStreamReader(in, "utf-8");) {
+					Reader reader = new InputStreamReader(in, "utf-8")) {
 
 				final InputSource is = new InputSourceImpl(reader, uri);
-
 				final UserAgentContext ucontext = new UserAgentContext();
 				final HtmlRendererContext rendererContext = new HtmlRendererContext(panel, ucontext);
 				panel.setPreferredSize(new Dimension(800, 400));
 				final DocumentBuilderImpl builder = new DocumentBuilderImpl(rendererContext.getUserAgentContext(),rendererContext);
 				final Document document = builder.parse(is);
 				panel.setDocument(document, rendererContext);
-			}
+			} catch (SocketTimeoutException e) {
+				logger.log(Level.SEVERE, "More than " + connection.getConnectTimeout() + " elapsed.");
+		    }
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return panel;
 	}

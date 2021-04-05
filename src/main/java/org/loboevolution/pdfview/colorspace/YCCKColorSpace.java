@@ -27,8 +27,8 @@ import java.awt.color.ColorSpace;
  * CMYK color profiles to be used with YCCK images.  If no CMYK color space is
  * provided then by default it uses a CMYKColorSpace. Only toRGB is supported.
  *
- * @author Ben Day
- * @version $Id: $Id
+ * Author Ben Day
+  *
  */
 public class YCCKColorSpace extends ColorSpace
 {

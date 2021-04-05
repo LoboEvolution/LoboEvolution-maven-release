@@ -50,8 +50,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AluminiumToggleButtonUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AluminiumToggleButtonUI extends BaseToggleButtonUI {
 
@@ -80,7 +80,7 @@ public class AluminiumToggleButtonUI extends BaseToggleButtonUI {
 		Object savedRenderingHint = g2D.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-		Color colors[];
+		Color[] colors;
 		if (b.isEnabled()) {
 			Color background = b.getBackground();
 			if (background instanceof ColorUIResource) {

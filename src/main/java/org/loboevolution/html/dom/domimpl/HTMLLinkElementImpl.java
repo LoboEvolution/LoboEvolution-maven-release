@@ -1,59 +1,66 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.dom.domimpl;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 import org.loboevolution.common.Strings;
-import org.loboevolution.laf.ColorFactory;
+import org.loboevolution.common.Urls;
 import org.loboevolution.html.dom.HTMLBodyElement;
 import org.loboevolution.html.dom.HTMLDocument;
 import org.loboevolution.html.dom.HTMLLinkElement;
 import org.loboevolution.html.parser.HtmlParser;
-import org.loboevolution.html.renderstate.RenderState;
-import org.loboevolution.html.renderstate.TextDecorationRenderState;
 import org.loboevolution.html.renderstate.ColorRenderState;
 import org.loboevolution.html.renderstate.CursorRenderState;
+import org.loboevolution.html.renderstate.RenderState;
+import org.loboevolution.html.renderstate.TextDecorationRenderState;
 import org.loboevolution.html.style.CSSUtilities;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
+import org.loboevolution.laf.ColorFactory;
+import org.loboevolution.store.StyleStore;
 import org.w3c.dom.UserDataHandler;
+import org.loboevolution.html.node.DOMTokenList;
+import org.loboevolution.html.node.Element;
 
 import com.gargoylesoftware.css.dom.CSSStyleSheetImpl;
 
 /**
  * <p>HTMLLinkElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements HTMLLinkElement {
+public class HTMLLinkElementImpl extends HTMLElementImpl implements HTMLLinkElement {
 	
-	private String COLOR_VISITED = "#551A8B";
+	private final String COLOR_VISITED = "#551A8B";
 	
-	private String DEFAULT_COLOR = "Blue";
+	private final String DEFAULT_COLOR = "Blue";
 	
 	private boolean disabled;
 
@@ -126,9 +133,99 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements HTMLLi
 		return null;
 	}
 
+	/**
+	 * <p>navigate.</p>
+	 */
+	public void navigate() {
+		if (this.disabled) {
+			return;
+		}
+		final HtmlRendererContext rcontext = getHtmlRendererContext();
+		if (rcontext != null) {
+			final String href = getHref();
+			if (Strings.isNotBlank(href)) {
+				try {
+					final URL url = getFullURL(href);
+					if (url == null) {
+						this.warn("Unable to resolve URI: [" + href + "].");
+					} else {
+						rcontext.linkClicked(url, false);
+					}
+				} catch (final MalformedURLException mfu) {
+					this.warn("Malformed URI: [" + href + "].", mfu);
+				}
+			}
+		}
+	}
+
+	/**
+	 * If the LINK refers to a stylesheet document, this method loads and parses it.
+	 */
+	protected void processLink() {
+		this.styleSheet = null;
+		final String rel = getAttribute("rel");
+		if (rel != null) {
+			final HTMLDocumentImpl doc = (HTMLDocumentImpl) getOwnerDocument();
+			final String baseURI = doc.getBaseURI();
+
+			try {
+				final HtmlRendererContext rcontext = this.getHtmlRendererContext();
+				final String href = getHref();
+				final String cleanRel = rel.trim().toLowerCase();
+				final boolean isStyleSheet = cleanRel.equals("stylesheet");
+				final boolean isAltStyleSheet = cleanRel.equals("alternate stylesheet");
+				final String currentUrl = rcontext.getCurrentURL();
+
+				StyleStore style = new StyleStore();
+				List<String> styles = style.getStyles(href, currentUrl);
+				String styleEnabled = "";
+
+				if ((isStyleSheet || isAltStyleSheet)) {
+					String title = getAttribute("title");
+					URL baseURL = new URL(baseURI);
+					URL scriptURL = Urls.createURL(baseURL, href);
+					if (Strings.isBlank(title)) {
+						URI uri = scriptURL.toURI();
+						if(Urls.isLocalFile(scriptURL)){
+							title = Paths.get(uri).getFileName().toString();
+						} else {
+							title = new File(uri.getPath()).getName();
+						}
+					}
+
+					if (styles.size() == 0) {
+						style.insertStyle(title, href, currentUrl, isStyleSheet ? 1 : 0);
+					} else {
+						styleEnabled = styles.get(0);
+					}
+
+					if (styleEnabled.equals(title) || styles.size() == 0) {
+						final UserAgentContext uacontext = getUserAgentContext();
+						if (uacontext.isExternalCSSEnabled()) {
+							final String media = getMedia();
+								if (CSSUtilities.matchesMedia(media, doc.getWindow())) {
+								final CSSStyleSheetImpl sheet = CSSUtilities.parseCssExternal(href, scriptURL, baseURI);
+								if (sheet != null) {
+									this.styleSheet = sheet;
+									sheet.setDisabled(this.disabled);
+									doc.addStyleSheet(sheet);
+								}
+							}
+						}
+					}
+				}
+
+			} catch (final MalformedURLException mfe) {
+				this.warn("Will not parse CSS. URI=[" + getHref() + "] with BaseURI=[" + baseURI + "] does not appear to be a valid URI.");
+			} catch (final Throwable err) {
+				this.warn("Unable to parse CSS. URI=[" + getHref() + "].", err);
+			}
+		}
+	}
+
 	/** {@inheritDoc} */
 	@Override
-	public boolean getDisabled() {
+	public boolean isDisabled() {
 		return this.disabled;
 	}
 
@@ -136,7 +233,7 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements HTMLLi
 	@Override
 	public String getHref() {
 		final String href = getAttribute("href");
-		return href == null ? "" : href;
+		return href == null ? "" : href.trim();
 	}
 
 	/** {@inheritDoc} */
@@ -178,76 +275,6 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements HTMLLi
 	@Override
 	public String getType() {
 		return getAttribute("type");
-	}
-
-	/**
-	 * <p>navigate.</p>
-	 */
-	public void navigate() {
-		if (this.disabled) {
-			return;
-		}
-		final HtmlRendererContext rcontext = getHtmlRendererContext();
-		if (rcontext != null) {
-			final String href = getHref();
-			if (Strings.isNotBlank(href)) {
-				try {
-					final URL url = getFullURL(href);
-					if (url == null) {
-						this.warn("Unable to resolve URI: [" + href + "].");
-					} else {
-						rcontext.linkClicked(url, false);
-					}
-				} catch (final MalformedURLException mfu) {
-					this.warn("Malformed URI: [" + href + "].", mfu);
-				}
-			}
-		}
-	}
-
-	/**
-	 * If the LINK refers to a stylesheet document, this method loads and parses it.
-	 */
-	protected void processLink() {
-		this.styleSheet = null;
-		final String rel = getAttribute("rel");
-		if (rel != null) {
-			final String cleanRel = rel.trim().toLowerCase();
-			final boolean isStyleSheet = cleanRel.equals("stylesheet");
-			final boolean isAltStyleSheet = cleanRel.equals("alternate stylesheet");
-			if (isStyleSheet || isAltStyleSheet) {
-				final UserAgentContext uacontext = getUserAgentContext();
-				if (uacontext.isExternalCSSEnabled()) {
-					final String media = getMedia();
-					if (CSSUtilities.matchesMedia(media, uacontext)) {
-						final HTMLDocumentImpl doc = (HTMLDocumentImpl) getOwnerDocument();
-						try {
-							final CSSStyleSheetImpl sheet = CSSUtilities.parseCssExternal(getHref(), doc);
-							if (sheet != null) {
-								this.styleSheet = sheet;
-								if (sheet instanceof CSSStyleSheetImpl) {
-									final CSSStyleSheetImpl sheetImpl = (CSSStyleSheetImpl) sheet;
-									sheetImpl.setDisabled(this.disabled);
-								} else {
-									if (isAltStyleSheet) {
-										sheet.setDisabled(true);
-									} else {
-										sheet.setDisabled(this.disabled);
-									}
-								}
-								doc.addStyleSheet(sheet);
-							}
-
-						} catch (final MalformedURLException mfe) {
-							this.warn("Will not parse CSS. URI=[" + getHref() + "] with BaseURI=[" + doc.getBaseURI()
-									+ "] does not appear to be a valid URI.");
-						} catch (final Throwable err) {
-							this.warn("Unable to parse CSS. URI=[" + getHref() + "].", err);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	/** {@inheritDoc} */
@@ -313,9 +340,210 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements HTMLLi
 
 	/** {@inheritDoc} */
 	@Override
+	public String getAccessKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAccessKey(String accessKey) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAs(String as) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getCrossOrigin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCrossOrigin(String crossOrigin) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getImageSizes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setImageSizes(String imageSizes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getImageSrcset() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setImageSrcset(String imageSrcset) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getIntegrity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setIntegrity(String integrity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getReferrerPolicy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setReferrerPolicy(String referrerPolicy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DOMTokenList getRelList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public DOMTokenList getSizes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
-		// Javascript code often depends on this being exactly href. See js9.html.
-		// To change, perhaps add method to AbstractScriptableDelegate.
 		return getHref();
 	}
 }

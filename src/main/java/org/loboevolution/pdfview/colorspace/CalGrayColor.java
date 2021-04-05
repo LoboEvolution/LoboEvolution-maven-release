@@ -27,14 +27,14 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * A ColorSpace for calibrated gray
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class CalGrayColor extends ColorSpace {
-    float white[]= {1f, 1f, 1f};
-    float black[]= {0, 0, 0};
+	final float[] white = {1f, 1f, 1f};
+    final float[] black = {0, 0, 0};
     float gamma= 1;
-    static ColorSpace cie= ColorSpace.getInstance(ColorSpace.CS_sRGB);
+    static final ColorSpace cie= ColorSpace.getInstance(ColorSpace.CS_sRGB);
 
     /**
      * Create a new Calibrated Gray color space object, given
@@ -91,14 +91,14 @@ public class CalGrayColor extends ColorSpace {
 	 * convert from Calibrated Gray to RGB.
 	 */
     @Override
-	public float[] toRGB(float comp[]) {
+	public float[] toRGB(float[] comp) {
 	if (comp.length==1) {
 	    float mul= (float)Math.pow(comp[0], this.gamma);
-	    float xyz[] = {
+	    float[] xyz = {
 		this.white[0]*mul,
 		0,
 		0};
-	    float rgb[]= cie.fromCIEXYZ(xyz);
+	    float[] rgb = cie.fromCIEXYZ(xyz);
 	    return rgb;
 	} else {
 	    return this.black;

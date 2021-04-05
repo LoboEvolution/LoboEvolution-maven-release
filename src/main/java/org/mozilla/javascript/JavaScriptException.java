@@ -12,8 +12,8 @@ package org.mozilla.javascript;
  * Java reflection of JavaScript exceptions.
  * Instances of this class are thrown by the JavaScript 'throw' keyword.
  *
- * @author Mike McCabe
- * @version $Id: $Id
+ * Author Mike McCabe
+ *
  */
 public class JavaScriptException extends RhinoException
 {
@@ -78,7 +78,7 @@ public class JavaScriptException extends RhinoException
     }
 
     /**
-     * <p>Getter for the field value.</p>
+     * <p>Getter for the field <code>value</code>.</p>
      *
      * @return the value wrapped by this exception
      */

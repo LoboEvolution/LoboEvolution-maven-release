@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.Shape;
@@ -5,22 +25,22 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+import java.util.Iterator;
 
-import org.loboevolution.common.Nodes;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.dom.svg.Drawable;
 import org.loboevolution.html.dom.svg.SVGAnimatedEnumeration;
 import org.loboevolution.html.dom.svg.SVGClipPathElement;
 import org.loboevolution.html.dom.svg.SVGElement;
 import org.loboevolution.html.dom.svg.SVGTransformable;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
 
 /**
  * <p>SVGClipPathElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGClipPathElementImpl extends SVGGraphic implements SVGClipPathElement {
 	
@@ -50,8 +70,9 @@ public class SVGClipPathElementImpl extends SVGGraphic implements SVGClipPathEle
 		Area clipArea = null;
 		AffineTransform clipTransform = new AffineTransform();
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
+			NodeListImpl children = (NodeListImpl) getChildNodes();
+			for (Iterator<Node> i = children.iterator(); i.hasNext();) {
+				Node child = i.next();
 				if (child instanceof SVGUseElementImpl) {
 					String href = ((SVGUseElementImpl) child).getHref().getAnimVal();
 					if (href.length() > 0) {
@@ -104,7 +125,8 @@ public class SVGClipPathElementImpl extends SVGGraphic implements SVGClipPathEle
 					if (childShape != null) {
 						AffineTransform childAffineTransform = clipTransform;
 						if (child instanceof SVGTransformable) {
-							SVGAnimatedTransformListImpl childTransform = (SVGAnimatedTransformListImpl) ((SVGTransformable) child).getTransform();
+							SVGAnimatedTransformListImpl childTransform = (SVGAnimatedTransformListImpl) ((SVGTransformable) child)
+									.getTransform();
 							if (childTransform != null) {
 								childAffineTransform.concatenate(
 										((SVGTransformListImpl) childTransform.getAnimVal()).getAffineTransform());

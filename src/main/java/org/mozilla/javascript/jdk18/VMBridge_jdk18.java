@@ -22,12 +22,12 @@ import org.mozilla.javascript.VMBridge;
 /**
  * <p>VMBridge_jdk18 class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class VMBridge_jdk18 extends VMBridge
 {
-    private ThreadLocal<Object[]> contextLocal = new ThreadLocal<Object[]>();
+    private static final ThreadLocal<Object[]> contextLocal = new ThreadLocal<Object[]>();
 
     /** {@inheritDoc} */
     @Override

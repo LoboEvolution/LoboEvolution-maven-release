@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Apr 16, 2005
  */
@@ -32,13 +31,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.loboevolution.html.AlignValues;
-import org.loboevolution.html.dom.domimpl.ModelNode;
+import org.loboevolution.html.dom.nodeimpl.ModelNode;
 import org.loboevolution.html.renderstate.RenderState;
 
 /**
- * @author J. H. S.
+ * Author J. H. S.
  */
 class RLine extends BaseRCollection {
 	private boolean allowOverflow = false;
@@ -50,7 +50,7 @@ class RLine extends BaseRCollection {
 	private LineBreak lineBreak;
 	private BoundableRenderable mousePressTarget;
 
-	private final ArrayList<Renderable> renderables = new ArrayList<Renderable>(8);
+	private final List<Renderable> renderables = new ArrayList<>(8);
 
 	/**
 	 * Offset where next renderable should be placed. This can be different to
@@ -61,7 +61,7 @@ class RLine extends BaseRCollection {
 	/**
 	 * <p>Constructor for RLine.</p>
 	 *
-	 * @param modelNode a {@link org.loboevolution.html.dom.domimpl.ModelNode} object.
+	 * @param modelNode a {@link org.loboevolution.html.dom.nodeimpl.ModelNode} object.
 	 * @param container a {@link org.loboevolution.html.renderer.RenderableContainer} object.
 	 * @param x a int.
 	 * @param y a int.
@@ -87,9 +87,8 @@ class RLine extends BaseRCollection {
 	 * This method adds and positions a renderable in the line, if possible. Note
 	 * that RLine does not set sizes, but only origins.
 	 *
-	 * @throws org.loboevolution.html.renderer.OverflowException Thrown if the renderable overflows the line. All
-	 *                           overflowing renderables are added to the exception.
 	 * @param renderable a {@link org.loboevolution.html.renderer.Renderable} object.
+	 * @throws org.loboevolution.html.renderer.OverflowException if any.
 	 */
 	public final void add(Renderable renderable) throws OverflowException {
 		if (renderable instanceof RWord) {
@@ -125,7 +124,7 @@ class RLine extends BaseRCollection {
 		this.xoffset = x + width;
 	}
 
-	private final void addElement(RElement relement) throws OverflowException {
+	private void addElement(RElement relement) throws OverflowException {
 		// Check if it fits horizontally
 		final int origXOffset = this.xoffset;
 		final int desiredMaxWidth = this.desiredMaxWidth;
@@ -215,7 +214,7 @@ class RLine extends BaseRCollection {
 			this.firstAllowOverflowWord = false;
 		}
 		if ((!allowOverflow || firstAllowOverflowWord) && offset != 0 && offset + wiwidth > this.desiredMaxWidth) {
-			final ArrayList<Renderable> renderables = this.renderables;
+			final List<Renderable> renderables = this.renderables;
 			ArrayList<Renderable> overflow = null;
 			boolean cancel = false;
 			// Check if other words need to be overflown (for example,
@@ -226,10 +225,10 @@ class RLine extends BaseRCollection {
 			int newOffset = offset;
 			int newWidth = offset;
 			for (int i = renderables.size(); --i >= 0;) {
-				final Renderable renderable = (Renderable) renderables.get(i);
+				final Renderable renderable = renderables.get(i);
 				if (renderable instanceof RWord || !(renderable instanceof BoundableRenderable)) {
 					if (overflow == null) {
-						overflow = new ArrayList<Renderable>();
+						overflow = new ArrayList<>();
 					}
 					if (renderable != rword && renderable instanceof RWord && ((RWord) renderable).getX() == 0) {
 						// Can't overflow words starting at offset zero.
@@ -255,9 +254,7 @@ class RLine extends BaseRCollection {
 			if (cancel) {
 				// Oops. Need to undo overflow.
 				if (overflow != null) {
-					for (Renderable renderable : overflow) {
-						renderables.add(renderable);
-					}
+					renderables.addAll(overflow);
 				}
 			} else {
 				this.xoffset = newOffset;
@@ -296,19 +293,19 @@ class RLine extends BaseRCollection {
 	 * All line elements are expected to have bounds preset.
 	 * 
 	 * @param newHeight
-	 * @param alignmentY
+	 * @param elementHeight
+	 * @param valign
 	 */
 	private void adjustHeight(int newHeight, int elementHeight, int valign) {
 		// Set new line height
 		// int oldHeight = this.height;
 		this.height = newHeight;
-		final ArrayList<Renderable> renderables = this.renderables;
+		final List<Renderable> renderables = this.renderables;
 		// Find max baseline
 		final FontMetrics firstFm = this.modelNode.getRenderState().getFontMetrics();
 		int maxDescent = firstFm.getDescent();
 		int maxAscentPlusLeading = firstFm.getAscent() + firstFm.getLeading();
-		for (final Iterator<Renderable> i = renderables.iterator(); i.hasNext();) {
-			final Object r = i.next();
+		for (final Object r : renderables) {
 			if (r instanceof RStyleChanger) {
 				final RStyleChanger rstyleChanger = (RStyleChanger) r;
 				final FontMetrics fm = rstyleChanger.getModelNode().getRenderState().getFontMetrics();
@@ -349,8 +346,7 @@ class RLine extends BaseRCollection {
 		this.baseLineOffset = baseline;
 
 		// Change bounds of renderables accordingly
-		for (final Iterator<Renderable> i = renderables.iterator(); i.hasNext();) {
-			final Object r = i.next();
+		for (final Object r : renderables) {
 			if (r instanceof RWord) {
 				final RWord rword = (RWord) r;
 				rword.setY(baseline - rword.ascentPlusLeading);
@@ -389,7 +385,7 @@ class RLine extends BaseRCollection {
 			if (br != null) {
 				buffer.append(System.getProperty("line.separator"));
 			} else {
-				final ArrayList<Renderable> renderables = this.renderables;
+				final List<Renderable> renderables = this.renderables;
 				final int size = renderables.size();
 				if (size > 0 && !(renderables.get(size - 1) instanceof RBlank)) {
 					buffer.append(" ");
@@ -426,7 +422,7 @@ class RLine extends BaseRCollection {
 	/** {@inheritDoc} */
 	@Override
 	public RenderableSpot getLowestRenderableSpot(int x, int y) {
-		final Renderable[] rarray = (Renderable[]) this.renderables.toArray(Renderable.EMPTY_ARRAY);
+		final Renderable[] rarray = this.renderables.toArray(Renderable.EMPTY_ARRAY);
 		final BoundableRenderable br = MarkupUtilities.findRenderable(rarray, x, y, false);
 		if (br != null) {
 			final Rectangle rbounds = br.getVisualBounds();
@@ -482,7 +478,7 @@ class RLine extends BaseRCollection {
 	/** {@inheritDoc} */
 	@Override
 	public boolean onDoubleClick(MouseEvent event, int x, int y) {
-		final Renderable[] rarray = (Renderable[]) this.renderables.toArray(Renderable.EMPTY_ARRAY);
+		final Renderable[] rarray = this.renderables.toArray(Renderable.EMPTY_ARRAY);
 		final BoundableRenderable r = MarkupUtilities.findRenderable(rarray, x, y, false);
 		if (r != null) {
 			final Rectangle rbounds = r.getVisualBounds();
@@ -495,7 +491,7 @@ class RLine extends BaseRCollection {
 	/** {@inheritDoc} */
 	@Override
 	public boolean onMouseClick(MouseEvent event, int x, int y) {
-		final Renderable[] rarray = (Renderable[]) this.renderables.toArray(Renderable.EMPTY_ARRAY);
+		final Renderable[] rarray = this.renderables.toArray(Renderable.EMPTY_ARRAY);
 		final BoundableRenderable r = MarkupUtilities.findRenderable(rarray, x, y, false);
 		if (r != null) {
 			final Rectangle rbounds = r.getVisualBounds();
@@ -520,7 +516,7 @@ class RLine extends BaseRCollection {
 	/** {@inheritDoc} */
 	@Override
 	public boolean onMousePressed(MouseEvent event, int x, int y) {
-		final Renderable[] rarray = (Renderable[]) this.renderables.toArray(Renderable.EMPTY_ARRAY);
+		final Renderable[] rarray = this.renderables.toArray(Renderable.EMPTY_ARRAY);
 		final BoundableRenderable r = MarkupUtilities.findRenderable(rarray, x, y, false);
 		if (r != null) {
 			this.mousePressTarget = r;
@@ -534,7 +530,7 @@ class RLine extends BaseRCollection {
 	/** {@inheritDoc} */
 	@Override
 	public boolean onMouseReleased(MouseEvent event, int x, int y) {
-		final Renderable[] rarray = (Renderable[]) this.renderables.toArray(Renderable.EMPTY_ARRAY);
+		final Renderable[] rarray = this.renderables.toArray(Renderable.EMPTY_ARRAY);
 		final BoundableRenderable r = MarkupUtilities.findRenderable(rarray, x, y, false);
 		if (r != null) {
 			final Rectangle rbounds = r.getVisualBounds();
@@ -613,28 +609,25 @@ class RLine extends BaseRCollection {
 	/**
 	 * 
 	 * @param relement
-	 * @param x
 	 * @param elementHeight The required new line height.
 	 * @param valign
 	 */
-	private final void setElementY(RElement relement, int elementHeight, int valign) {
+	private void setElementY(RElement relement, int elementHeight, int valign) {
 		int yoffset;
 		AlignValues key = AlignValues.get(valign);
 		switch (key) {
-		case BOTTOM:
-			yoffset = this.height - elementHeight;
-			break;
-		case MIDDLE:
-			yoffset = (this.height - elementHeight) / 2;
-			break;
-		case BASELINE:
-			yoffset = this.baseLineOffset - elementHeight;
-			break;
-		case TOP:
-			yoffset = 0;
-			break;
-		default:
-			yoffset = this.baseLineOffset - elementHeight;
+			case BOTTOM:
+				yoffset = this.height - elementHeight;
+				break;
+			case MIDDLE:
+				yoffset = (this.height - elementHeight) / 2;
+				break;
+			case TOP:
+				yoffset = 0;
+				break;
+			default:
+			case BASELINE:
+				yoffset = this.baseLineOffset - elementHeight;
 		}
 		relement.setY(yoffset);
 	}

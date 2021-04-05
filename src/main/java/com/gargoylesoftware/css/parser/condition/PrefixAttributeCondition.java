@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@ import com.gargoylesoftware.css.parser.AbstractLocatable;
 /**
  * <p>PrefixAttributeCondition class.</p>
  *
- * @author Ronlad Brill
- * @version $Id: $Id
+ * Author Ronlad Brill
+ *
  */
 public class PrefixAttributeCondition extends AbstractLocatable implements Condition, Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	private final String localName_;
+
+    private final String localName_;
     private final String value_;
 
     /**

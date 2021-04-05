@@ -50,8 +50,8 @@ import com.jtattoo.plaf.LazyMenuArrowImageIcon;
 /**
  * <p>HiFiIcons class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class HiFiIcons extends BaseIcons {
 
@@ -228,7 +228,7 @@ public class HiFiIcons extends BaseIcons {
 			Graphics2D g2D = (Graphics2D) g;
 			AbstractButton button = (AbstractButton) c;
 			ButtonModel model = button.getModel();
-			Color colors[];
+			Color[] colors;
 			if (button.isEnabled()) {
 				if (button.isRolloverEnabled() && model.isRollover() || model.isPressed() && model.isArmed()) {
 					colors = AbstractLookAndFeel.getTheme().getRolloverColors();

@@ -18,20 +18,20 @@
  */
 package org.loboevolution.pdfview;
 
-import java.awt.geom.Rectangle2D;
 import java.awt.Color;
+import java.awt.geom.Rectangle2D;
 
 /**
  * <p>ImageInfo class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class ImageInfo {
 
-    int width;
-    int height;
-    Rectangle2D clip;
+    final int width;
+    final int height;
+    final Rectangle2D clip;
     Color bgColor;
 
     /**
@@ -88,10 +88,6 @@ public class ImageInfo {
             return false;
         } else if (this.clip != null && ii.clip != null) {
             return this.clip.equals(ii.clip);
-        } else if (this.clip == null && ii.clip == null) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return this.clip == null && ii.clip == null;
     }
 }

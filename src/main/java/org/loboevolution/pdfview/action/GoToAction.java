@@ -2,19 +2,19 @@ package org.loboevolution.pdfview.action;
 
 import java.io.IOException;
 
-import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFDestination;
+import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFParseException;
 
 /**
  * An action which specifies going to a particular destination
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GoToAction extends PDFAction {
     /** the destination to go to */
-    private PDFDestination dest;
+    private final PDFDestination dest;
     
     /**
      * Creates a new instance of GoToAction from an object

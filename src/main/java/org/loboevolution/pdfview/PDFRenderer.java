@@ -53,8 +53,8 @@ import java.util.Stack;
  * in the PDF Page and draws them to its buffered image.  It then updates any
  * ImageConsumers with the drawn data.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PDFRenderer extends BaseWatchable implements Runnable {
 
@@ -91,17 +91,17 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
 
     /** how long (in milliseconds) to wait between image updates */
     public static final long UPDATE_DURATION = 200;
-    /** Constant NOPHASE=-1000 */
+    /** Constant <code>NOPHASE=-1000</code> */
     public static final float NOPHASE = -1000;
-    /** Constant NOWIDTH=-1000 */
+    /** Constant <code>NOWIDTH=-1000</code> */
     public static final float NOWIDTH = -1000;
-    /** Constant NOLIMIT=-1000 */
+    /** Constant <code>NOLIMIT=-1000</code> */
     public static final float NOLIMIT = -1000;
-    /** Constant NOCAP=-1000 */
+    /** Constant <code>NOCAP=-1000</code> */
     public static final int NOCAP = -1000;
-    /** Constant NODASH */
+    /** Constant <code>NODASH</code> */
     public static final float[] NODASH = null;
-    /** Constant NOJOIN=-1000 */
+    /** Constant <code>NOJOIN=-1000</code> */
     public static final int NOJOIN = -1000;
     
 
@@ -117,10 +117,10 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
 
         this.page = page;
         this.imageinfo = imageinfo;
-        this.imageRef = new WeakReference<BufferedImage>(bi);
+        this.imageRef = new WeakReference<>(bi);
 
         // initialize the list of observers
-        this.observers = new ArrayList<ImageObserver>();
+        this.observers = new ArrayList<>();
     }
 
     /**
@@ -147,7 +147,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
         g.translate(imgbounds.x, imgbounds.y);
 
         // initialize the list of observers
-        this.observers = new ArrayList<ImageObserver>();
+        this.observers = new ArrayList<>();
     }
 
     /**
@@ -176,7 +176,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
         // set up the initial graphics state
         this.state = new GraphicsState();
         this.state.cliprgn = null;
-        this.state.stroke = new BasicStroke();
+        this.state.stroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
         this.state.strokePaint = PDFPaint.getColorPaint(Color.black);
         this.state.fillPaint = this.state.strokePaint;
         this.state.fillAlpha = AlphaComposite.getInstance(AlphaComposite.SRC);
@@ -184,7 +184,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
         this.state.xform = g.getTransform();
 
         // initialize the stack
-        this.stack = new Stack<GraphicsState>();
+        this.stack = new Stack<>();
 
         // initialize the current command
         this.currentCommand = 0;
@@ -207,7 +207,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
      * push() was called.
      */
     public void pop() {
-    	if(this.stack.isEmpty() == false) {
+    	if(!this.stack.isEmpty()) {
             this.state = this.stack.pop();
     	}
 
@@ -391,7 +391,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
         		//First resize, otherwise we risk that we get out of heapspace
         		int newHeight = (int)Math.round(maxFactor*r.getHeight());
         		int newWidth = (int)Math.round(maxFactor*r.getWidth());
-        		if (!RESIZE) {
+        		if (false) {
         			newHeight = bi.getHeight();
         			newWidth = bi.getWidth();
         		}
@@ -1024,7 +1024,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
         return dstImage;
     }
 
-    class GraphicsState implements Cloneable {
+    static class GraphicsState implements Cloneable {
 
         /** the clip region */
         Shape cliprgn;
@@ -1071,7 +1071,7 @@ public class PDFRenderer extends BaseWatchable implements Runnable {
     }
 
 	/**
-	 * <p>Getter for the field lastTransform.</p>
+	 * <p>Getter for the field <code>lastTransform</code>.</p>
 	 *
 	 * @return Returns the lastTransform.
 	 ***********************************************************************

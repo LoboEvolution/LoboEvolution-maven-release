@@ -21,47 +21,47 @@ package org.loboevolution.pdfview;
 /**
  * An interface for rendering or parsing, which can be stopped and started.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public interface Watchable {
 
     /** the possible statuses */
-    public static final int UNKNOWN = 0;
-    /** Constant NOT_STARTED=1 */
-    public static final int NOT_STARTED = 1;
-    /** Constant PAUSED=2 */
-    public static final int PAUSED = 2;
-    /** Constant NEEDS_DATA=3 */
-    public static final int NEEDS_DATA = 3;
-    /** Constant RUNNING=4 */
-    public static final int RUNNING = 4;
-    /** Constant STOPPED=5 */
-    public static final int STOPPED = 5;
-    /** Constant COMPLETED=6 */
-    public static final int COMPLETED = 6;
-    /** Constant ERROR=7 */
-    public static final int ERROR = 7;
+    int UNKNOWN = 0;
+    /** Constant <code>NOT_STARTED=1</code> */
+    int NOT_STARTED = 1;
+    /** Constant <code>PAUSED=2</code> */
+    int PAUSED = 2;
+    /** Constant <code>NEEDS_DATA=3</code> */
+    int NEEDS_DATA = 3;
+    /** Constant <code>RUNNING=4</code> */
+    int RUNNING = 4;
+    /** Constant <code>STOPPED=5</code> */
+    int STOPPED = 5;
+    /** Constant <code>COMPLETED=6</code> */
+    int COMPLETED = 6;
+    /** Constant <code>ERROR=7</code> */
+    int ERROR = 7;
 
     /**
      * Get the status of this watchable
      *
      * @return one of the well-known statuses
      */
-    public int getStatus();
+    int getStatus();
 
     /**
      * Stop this watchable.  Stop will cause all processing to cease,
      * and the watchable to be destroyed.
      */
-    public void stop();
+    void stop();
 
     /**
      * Start this watchable and run until it is finished or stopped.
      * Note the watchable may be stopped if go() with a
      * different time is called during execution.
      */
-    public void go();
+    void go();
 
     /**
      * Start this watchable and run for the given number of steps or until
@@ -69,7 +69,7 @@ public interface Watchable {
      *
      * @param steps the number of steps to run for
      */
-    public void go(int steps);
+    void go(int steps);
 
     /**
      * Start this watchable and run for the given amount of time, or until
@@ -77,5 +77,5 @@ public interface Watchable {
      *
      * @param millis the number of milliseconds to run for
      */
-    public void go(long millis);
+    void go(long millis);
 }

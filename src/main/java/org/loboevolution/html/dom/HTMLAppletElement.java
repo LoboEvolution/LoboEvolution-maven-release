@@ -1,239 +1,223 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+
+
+
+
+
+
+
 /**
- * An embedded Java applet. See the APPLET element definition in HTML 4.01. This
- * element is deprecated in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * <p>HTMLAppletElement interface.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLAppletElement extends HTMLElement {
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlign();
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlt();
+    /**
+     * <p>getAlign.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * Comma-separated archive list. See the archive attribute definition in HTML
-	 * 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getArchive();
+    
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    void setAlign(String align);
 
-	/**
-	 * Applet class file. See the code attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCode();
+    /**
+     * Sets or retrieves a text alternative to the graphic.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlt();
 
-	/**
-	 * Optional base URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC
-	 * 2396</a>] for applet. See the codebase attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCodeBase();
+    
+    /**
+     * <p>setAlt.</p>
+     *
+     * @param alt a {@link java.lang.String} object.
+     */
+    void setAlt(String alt);
 
-	/**
-	 * Override height. See the height attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHeight();
+    /**
+     * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getArchive();
 
-	/**
-	 * Horizontal space, in pixels, to the left and right of this image, applet, or
-	 * object. See the hspace attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getHspace();
+    
+    /**
+     * <p>setArchive.</p>
+     *
+     * @param archive a {@link java.lang.String} object.
+     */
+    void setArchive(String archive);
 
-	/**
-	 * The name of the applet. See the name attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    /**
+     * <p>getCode.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCode();
 
-	/**
-	 * The value of the "object" attribute. See the object attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getObject();
+    
+    /**
+     * <p>setCode.</p>
+     *
+     * @param code a {@link java.lang.String} object.
+     */
+    void setCode(String code);
 
-	/**
-	 * Vertical space, in pixels, above and below this image, applet, or object. See
-	 * the vspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @return a int.
-	 */
-	int getVspace();
+    /**
+     * Sets or retrieves the URL of the component.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCodeBase();
 
-	/**
-	 * Override width. See the width attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getWidth();
+    
+    /**
+     * <p>setCodeBase.</p>
+     *
+     * @param codeBase a {@link java.lang.String} object.
+     */
+    void setCodeBase(String codeBase);
 
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param align a {@link java.lang.String} object.
-	 */
-	void setAlign(String align);
+    
+    
+    /**
+     * <p>getForm.</p>
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
+     */
+    HTMLFormElement getForm();
 
-	/**
-	 * Alternate text for user agents not rendering the normal content of this
-	 * element. See the alt attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @param alt a {@link java.lang.String} object.
-	 */
-	void setAlt(String alt);
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getHeight();
 
-	/**
-	 * Comma-separated archive list. See the archive attribute definition in HTML
-	 * 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param archive a {@link java.lang.String} object.
-	 */
-	void setArchive(String archive);
+    
+    /**
+     * <p>setHeight.</p>
+     *
+     * @param height a {@link java.lang.String} object.
+     */
+    void setHeight(String height);
 
-	/**
-	 * Applet class file. See the code attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param code a {@link java.lang.String} object.
-	 */
-	void setCode(String code);
+    /**
+     * <p>getHspace.</p>
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getHspace();
 
-	/**
-	 * Optional base URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC
-	 * 2396</a>] for applet. See the codebase attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param codeBase a {@link java.lang.String} object.
-	 */
-	void setCodeBase(String codeBase);
+    
+    /**
+     * <p>setHspace.</p>
+     *
+     * @param hspace a double.
+     */
+    void setHspace(double hspace);
 
-	/**
-	 * Override height. See the height attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param height a {@link java.lang.String} object.
-	 */
-	void setHeight(String height);
+    /**
+     * Sets or retrieves the shape of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getName();
 
-	/**
-	 * Horizontal space, in pixels, to the left and right of this image, applet, or
-	 * object. See the hspace attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @param hspace a int.
-	 */
-	void setHspace(int hspace);
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
 
-	/**
-	 * The name of the applet. See the name attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    /**
+     * <p>getObject.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getObject();
 
-	/**
-	 * The value of the "object" attribute. See the object attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @param object a {@link java.lang.String} object.
-	 */
-	void setObject(String object);
+    
+    /**
+     * <p>setObject.</p>
+     *
+     * @param object a {@link java.lang.String} object.
+     */
+    void setObject(String object);
 
-	/**
-	 * Vertical space, in pixels, above and below this image, applet, or object. See
-	 * the vspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @version DOM Level 2
-	 * @param vspace a int.
-	 */
-	void setVspace(int vspace);
+    /**
+     * <p>getVspace.</p>
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getVspace();
 
-	/**
-	 * Override width. See the width attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param width a {@link java.lang.String} object.
-	 */
-	void setWidth(String width);
+    
+    /**
+     * <p>setVspace.</p>
+     *
+     * @param vspace a double.
+     */
+    void setVspace(double vspace);
+
+    /**
+     * <p>getWidth.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getWidth();
+
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a {@link java.lang.String} object.
+     */
+    void setWidth(String width);
 
 }

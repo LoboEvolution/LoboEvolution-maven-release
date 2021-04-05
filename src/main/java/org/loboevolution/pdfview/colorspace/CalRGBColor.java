@@ -30,8 +30,8 @@ import org.loboevolution.pdfview.function.FunctionType0;
 /**
  * A ColorSpace for calibrated RGB
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class CalRGBColor extends ColorSpace {
     private static final float[] vonKriesM = {  0.40024f, -0.22630f, 0.00000f, 
@@ -51,12 +51,11 @@ public class CalRGBColor extends ColorSpace {
     float[] scale;
     float[] max;
     
-    float white[]= {1f, 1f, 1f};
-    float black[]= {0, 0, 0};
-    float matrix[]= {1f, 0, 0, 0, 1f, 0, 0, 0, 1f};
-    float gamma[]= {1f, 1f, 1f};
-
-    static ColorSpace rgbCS= ColorSpace.getInstance(ColorSpace.CS_sRGB);
+	final float[] white = {1f, 1f, 1f};
+    final float[] black = {0, 0, 0};
+    final float[] matrix = {1f, 0, 0, 0, 1f, 0, 0, 0, 1f};
+    final float[] gamma = {1f, 1f, 1f};
+    static final ColorSpace rgbCS= ColorSpace.getInstance(ColorSpace.CS_sRGB);
     static ColorSpace cieCS= ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
     
     /**
@@ -138,7 +137,7 @@ public class CalRGBColor extends ColorSpace {
 	 * convert from Calibrated RGB to standard RGB
 	 */
     @Override
-	public float[] toRGB(float comp[]) {
+	public float[] toRGB(float[] comp) {
 	if (comp.length==3) {
             // compute r', g' and b' by raising the given values to the
             // correct gamma

@@ -29,8 +29,8 @@ import java.awt.geom.Rectangle2D;
  * line between these regions again with a 1-pixel wide line so that
  * the background doesn't show through between them.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class PDFShapeCmd extends PDFCmd {
     /** stroke the outline of the path with the stroke paint */
@@ -48,7 +48,7 @@ public class PDFShapeCmd extends PDFCmd {
     /** the bounding box of the path */
     // private Rectangle2D bounds;
     /** the stroke style for the anti-antialias stroke */
-    BasicStroke againstroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
+    final BasicStroke againstroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
     private boolean autoAdjustStroke = false;
 
     /**
@@ -107,8 +107,8 @@ public class PDFShapeCmd extends PDFCmd {
     */
     private GeneralPath checkOverlap(PDFRenderer state) {
         if (this.style == FILL && this.gp != null && state.getLastShape() != null) {
-            float mypoints[] = new float[16];
-            float prevpoints[] = new float[16];
+            float[] mypoints = new float[16];
+            float[] prevpoints = new float[16];
             int mycount = getPoints(this.gp, mypoints, state.getTransform());
             int prevcount = getPoints(state.getLastShape(), prevpoints, state.getLastTransform());
             // now check mypoints against prevpoints for opposite pairs:
@@ -178,6 +178,8 @@ public class PDFShapeCmd extends PDFCmd {
                 x = mypoints[count++] = startx;
                 y = mypoints[count++] = starty;
                 break;
+            default:
+    			break;
             }
             pi.next();
         }
@@ -193,8 +195,8 @@ public class PDFShapeCmd extends PDFCmd {
     public String getDetails() {
         StringBuilder sb = new StringBuilder();
         Rectangle2D b = this.gp.getBounds2D();
-        sb.append("ShapeCommand at: " + b.getX() + ", " + b.getY() + "\n");
-        sb.append("Size: " + b.getWidth() + " x " + b.getHeight() + "\n");
+        sb.append("ShapeCommand at: ").append(b.getX()).append(", ").append(b.getY()).append("\n");
+        sb.append("Size: ").append(b.getWidth()).append(" x ").append(b.getHeight()).append("\n");
         sb.append("Mode: ");
         if ((this.style & FILL) != 0) {
             sb.append("FILL ");

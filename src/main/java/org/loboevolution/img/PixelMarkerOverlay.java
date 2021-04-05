@@ -1,3 +1,26 @@
+/*
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
+ */
+
 package org.loboevolution.img;
 
 import java.awt.Color;
@@ -21,12 +44,12 @@ import java.util.Set;
  * {@link #addPoint(Point)}, and {@link #clear()} functions. All of these
  * mutator functions cause the overlay to be repainted.
  *
- * @author Kazo Csaba
- * @version $Id: $Id
+ * Author Kazo Csaba
+ *
  */
 public final class PixelMarkerOverlay extends Overlay {
 
-	private Set<Point> points = new HashSet<Point>();
+	private final Set<Point> points = new HashSet<>();
 	private Color color = Color.RED;
 	private int size = 5;
 
@@ -51,7 +74,7 @@ public final class PixelMarkerOverlay extends Overlay {
 	 *
 	 * @param color
 	 *            the new color
-	 * @throws java.lang.NullPointerException
+	 * @throws java.lang.NullPointerException in case of error
 	 *             if {@code color} is {@code null}
 	 */
 	public void setColor(Color color) {
@@ -66,7 +89,7 @@ public final class PixelMarkerOverlay extends Overlay {
 	 *
 	 * @param p
 	 *            a new point
-	 * @throws java.lang.NullPointerException
+	 * @throws java.lang.NullPointerException in case of error
 	 *             if {@code p} is {@code null}
 	 */
 	public void addPoint(Point p) {
@@ -96,7 +119,7 @@ public final class PixelMarkerOverlay extends Overlay {
 	 *
 	 * @param points
 	 *            an iterable of all the pixels that should be selected
-	 * @throws java.lang.NullPointerException
+	 * @throws java.lang.NullPointerException in case of error
 	 *             if {@code points} or any individual point is {@code null}
 	 */
 	public void setPoints(Iterable<Point> points) {

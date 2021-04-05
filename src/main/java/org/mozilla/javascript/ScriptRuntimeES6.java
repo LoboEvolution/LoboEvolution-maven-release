@@ -9,8 +9,8 @@ package org.mozilla.javascript;
 /**
  * <p>ScriptRuntimeES6 class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ScriptRuntimeES6 {
 
@@ -18,13 +18,13 @@ public class ScriptRuntimeES6 {
      * <p>requireObjectCoercible.</p>
      *
      * @param cx a {@link org.mozilla.javascript.Context} object.
-     * @param val a {@link org.mozilla.javascript.Scriptable} object.
+     * @param val a {@link java.lang.Object} object.
      * @param idFuncObj a {@link org.mozilla.javascript.IdFunctionObject} object.
-     * @return a {@link org.mozilla.javascript.Scriptable} object.
+     * @return a {@link java.lang.Object} object.
      */
-    public static Scriptable requireObjectCoercible(Context cx, Scriptable val, IdFunctionObject idFuncObj) {
+    public static Object requireObjectCoercible(Context cx, Object val, IdFunctionObject idFuncObj) {
         if (val == null || Undefined.isUndefined(val)) {
-            throw ScriptRuntime.typeError2("msg.called.null.or.undefined", idFuncObj.getTag(), idFuncObj.getFunctionName());
+            throw ScriptRuntime.typeErrorById("msg.called.null.or.undefined", idFuncObj.getTag(), idFuncObj.getFunctionName());
         }
         return val;
     }

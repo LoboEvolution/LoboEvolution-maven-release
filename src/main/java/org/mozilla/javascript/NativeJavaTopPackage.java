@@ -13,11 +13,11 @@ package org.mozilla.javascript;
  * in all other references to the same package (as with Packages.java.lang
  * and java.lang).
  *
- * @author Mike Shaver
+ * Author Mike Shaver
  * @see NativeJavaArray
  * @see NativeJavaObject
  * @see NativeJavaClass
- * @version $Id: $Id
+ *
  */
 public class NativeJavaTopPackage
     extends NativeJavaPackage implements Function, IdFunctionCall
@@ -65,7 +65,7 @@ public class NativeJavaTopPackage
             }
         }
         if (loader == null) {
-            Context.reportRuntimeError0("msg.not.classloader");
+            Context.reportRuntimeErrorById("msg.not.classloader");
             return null;
         }
         NativeJavaPackage pkg = new NativeJavaPackage(true, "", loader);
@@ -158,7 +158,7 @@ public class NativeJavaTopPackage
                 offset = index+1;
             }
         }
-        throw Context.reportRuntimeError0("msg.not.java.obj");
+        throw Context.reportRuntimeErrorById("msg.not.java.obj");
     }
 
     private static final Object FTAG = "JavaTopPackage";

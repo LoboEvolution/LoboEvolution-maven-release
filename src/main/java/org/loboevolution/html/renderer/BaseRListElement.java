@@ -1,28 +1,29 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.renderer;
+
+import java.awt.Image;
 
 import org.loboevolution.html.ListValues;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
-import org.loboevolution.html.dom.domimpl.NodeImpl;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
 import org.loboevolution.html.style.AbstractCSSProperties;
 import org.loboevolution.html.style.HtmlValues;
 import org.loboevolution.html.style.ListStyle;
@@ -37,7 +38,7 @@ class BaseRListElement extends RBlock {
 	/**
 	 * <p>Constructor for BaseRListElement.</p>
 	 *
-	 * @param modelNode a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param modelNode a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 * @param listNesting a int.
 	 * @param pcontext a {@link org.loboevolution.http.UserAgentContext} object.
 	 * @param rcontext a {@link org.loboevolution.http.HtmlRendererContext} object.
@@ -66,7 +67,7 @@ class BaseRListElement extends RBlock {
 		ListStyle listStyle = null;
 		final String listStyleText = props.getListStyle();
 		if (listStyleText != null) {
-			listStyle = HtmlValues.getListStyle(listStyleText);
+			listStyle = HtmlValues.getListStyle(listStyleText, rootElement.getDocumentBaseURI());
 		}
 		final String listStyleTypeText = props.getListStyleType();
 		if (listStyleTypeText != null) {
@@ -78,6 +79,17 @@ class BaseRListElement extends RBlock {
 				listStyle.setType(listType.getValue());
 			}
 		}
+	
+		final String listStyleImage = props.getListStyleImage();
+		if (listStyleImage != null && HtmlValues.isUrl(listStyleImage)) {
+			final Image img = HtmlValues.getListStyleImage(listStyleImage, rootElement.getDocumentBaseURI());
+			if (listStyle == null) {
+				listStyle = new ListStyle();
+			}
+			listStyle.setType(ListValues.TYPE_URL.getValue());
+			listStyle.setImage(img);
+		}
+		
 		if (listStyle == null || ListValues.get(listStyle.getType()) == ListValues.TYPE_UNSET) {
 			final String typeAttributeText = rootElement.getAttribute("type");
 			if (typeAttributeText != null) {

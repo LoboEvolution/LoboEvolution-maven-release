@@ -29,7 +29,7 @@ import java.util.List;
  * model, and allows for fallback heuristic expiry calculation when no server
  * specified expiry is provided.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: UrlModuleSourceProvider.java,v 1.4 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public class UrlModuleSourceProvider extends ModuleSourceProviderBase {
@@ -290,7 +290,7 @@ public class UrlModuleSourceProvider extends ModuleSourceProviderBase {
             return lastModified != urlConnection.getLastModified();
         }
 
-        private long calculateExpiry(URLConnection urlConnection,
+        private static long calculateExpiry(URLConnection urlConnection,
                 long request_time, UrlConnectionExpiryCalculator
                 urlConnectionExpiryCalculator)
         {
@@ -327,7 +327,7 @@ public class UrlModuleSourceProvider extends ModuleSourceProviderBase {
                 urlConnectionExpiryCalculator.calculateExpiry(urlConnection);
         }
 
-        private int getMaxAge(String cacheControl) {
+        private static int getMaxAge(String cacheControl) {
             final int maxAgeIndex = cacheControl.indexOf("max-age");
             if(maxAgeIndex == -1) {
                 return -1;
@@ -352,7 +352,7 @@ public class UrlModuleSourceProvider extends ModuleSourceProviderBase {
             }
         }
 
-        private String getEntityTags(URLConnection urlConnection) {
+        private static String getEntityTags(URLConnection urlConnection) {
             final List<String> etags = urlConnection.getHeaderFields().get("ETag");
             if(etags == null || etags.isEmpty()) {
                 return null;

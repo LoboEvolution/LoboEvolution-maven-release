@@ -1,19 +1,37 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.common;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.css.CSSStyleDeclaration;
+import org.loboevolution.html.node.Attr;
+import org.loboevolution.html.node.NamedNodeMap;
+import org.loboevolution.html.node.Node;
 
 /**
  * <p>Nodes class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Nodes {
 	/**
@@ -54,31 +72,6 @@ public class Nodes {
 		}
 		return isSameOrAncestorOf(node, parent);
 	}
-
-	/**
-	 * <p>iterable.</p>
-	 *
-	 * @param nodeList a {@link org.w3c.dom.NodeList} object.
-	 * @return a {@link java.lang.Iterable} object.
-	 */
-	public static Iterable<Node> iterable(final NodeList nodeList) {
-	    return () -> new Iterator<Node>() {
-
-	        private int index = 0;
-
-	        @Override
-	        public boolean hasNext() {
-	            return index < nodeList.getLength();
-	        }
-
-	        @Override
-	        public Node next() {
-	            if (!hasNext())
-	                throw new NoSuchElementException();
-	            return nodeList.item(index++); 
-	        }
-	    };
-	}
 	
 	/**
 	 * <p>iterable.</p>
@@ -89,44 +82,19 @@ public class Nodes {
 	public static Iterable<Attr> iterable(final NamedNodeMap attrList) {
 	    return () -> new Iterator<Attr>() {
 
-	        private int index = 0;
+            private int index = 0;
 
-	        @Override
-	        public boolean hasNext() {
-	            return index < attrList.getLength();
-	        }
+            @Override
+            public boolean hasNext() {
+                return index < attrList.getLength();
+            }
 
-	        @Override
-	        public Attr next() {
-	            if (!hasNext())
-	                throw new NoSuchElementException();
-	            return (Attr) attrList.item(index++); 
-	        }
-	    };
-	}
-	
-	/**
-	 * <p>iterable.</p>
-	 *
-	 * @param cssList a {@link org.w3c.dom.css.CSSStyleDeclaration} object.
-	 * @return a {@link java.lang.Iterable} object.
-	 */
-	public static Iterable<String> iterable(final CSSStyleDeclaration cssList) {
-	    return () -> new Iterator<String>() {
-
-	        private int index = 0;
-
-	        @Override
-	        public boolean hasNext() {
-	            return index < cssList.getLength();
-	        }
-
-	        @Override
-	        public String next() {
-	            if (!hasNext())
-	                throw new NoSuchElementException();
-	            return (String) cssList.item(index++); 
-	        }
-	    };
+            @Override
+            public Attr next() {
+                if (!hasNext())
+                    throw new NoSuchElementException();
+                return (Attr) attrList.item(index++);
+            }
+        };
 	}
 }

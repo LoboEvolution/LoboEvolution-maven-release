@@ -1,39 +1,39 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Feb 12, 2006
  */
 package org.loboevolution.html.dom.domimpl;
 
 import org.loboevolution.html.dom.HTMLUListElement;
+import org.loboevolution.html.node.Element;
 import org.loboevolution.html.renderstate.ListRenderState;
 import org.loboevolution.html.renderstate.RenderState;
 
 /**
  * <p>HTMLUListElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLUListElementImpl extends HTMLAbstractUIElement implements HTMLUListElement {
+public class HTMLUListElementImpl extends HTMLElementImpl implements HTMLUListElement {
 	/**
 	 * <p>Constructor for HTMLUListElementImpl.</p>
 	 *
@@ -51,7 +51,7 @@ public class HTMLUListElementImpl extends HTMLAbstractUIElement implements HTMLU
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getCompact() {
+	public boolean isCompact() {
 		final String compactText = getAttribute("compact");
 		return "compact".equalsIgnoreCase(compactText);
 	}
@@ -72,5 +72,116 @@ public class HTMLUListElementImpl extends HTMLAbstractUIElement implements HTMLU
 	@Override
 	public void setType(String type) {
 		setAttribute("type", type);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAccessKey(String accessKey) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLTableUListlement]";
 	}
 }

@@ -16,7 +16,7 @@ final class FieldOrMethodRef
   }
 
   /**
-   * <p>Getter for the field className.</p>
+   * <p>Getter for the field <code>className</code>.</p>
    *
    * @return a {@link java.lang.String} object.
    */
@@ -26,7 +26,7 @@ final class FieldOrMethodRef
   }
 
   /**
-   * <p>Getter for the field name.</p>
+   * <p>Getter for the field <code>name</code>.</p>
    *
    * @return a {@link java.lang.String} object.
    */
@@ -36,7 +36,7 @@ final class FieldOrMethodRef
   }
 
   /**
-   * <p>Getter for the field type.</p>
+   * <p>Getter for the field <code>type</code>.</p>
    *
    * @return a {@link java.lang.String} object.
    */

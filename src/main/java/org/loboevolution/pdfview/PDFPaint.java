@@ -29,12 +29,12 @@ import java.awt.geom.Rectangle2D;
  * At the moment, only a solid color is implemented, but gradients
  * and textures should be possible, too.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class PDFPaint {
 
-    private Paint mainPaint;
+    private final Paint mainPaint;
 
     /**
      * create a new PDFPaint based on a solid color

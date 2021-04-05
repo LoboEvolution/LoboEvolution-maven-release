@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 
 /**
  * <p>This class represents a string composed of two components, each of which
- * may be a java.lang.String or another ConsString.</p>
+ * may be a <code>java.lang.String</code> or another ConsString.</p>
  *
  * <p>This string representation is optimized for concatenation using the "+"
  * operator. Instead of immediately copying both components to a new character
@@ -25,8 +25,8 @@ import java.util.ArrayDeque;
  *
  * <p>Both the name and the concept are borrowed from V8.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ConsString implements CharSequence, Serializable {
 

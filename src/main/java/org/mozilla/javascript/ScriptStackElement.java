@@ -10,9 +10,9 @@ import java.io.Serializable;
  * This class represents an element on the script execution stack.
  *
  * @see RhinoException#getScriptStack()
- * @author Hannes Wallnoefer
+ * Author Hannes Wallnoefer
  * @since 1.7R3
- * @version $Id: $Id
+ *
  */
 public final class ScriptStackElement implements Serializable {
 
@@ -45,7 +45,7 @@ public final class ScriptStackElement implements Serializable {
 
     /**
      * Render stack element in Java-inspired style:
-     *     at fileName:lineNumber (functionName)
+     * <code>    at fileName:lineNumber (functionName)</code>
      *
      * @param sb the StringBuilder to append to
      */
@@ -61,7 +61,7 @@ public final class ScriptStackElement implements Serializable {
 
     /**
      * Render stack element in Mozilla/Firefox style:
-     * functionName()@fileName:lineNumber
+     * <code>functionName()@fileName:lineNumber</code>
      *
      * @param sb the StringBuilder to append to
      */
@@ -77,9 +77,9 @@ public final class ScriptStackElement implements Serializable {
 
     /**
      * Render stack element in V8 style:
-     *     at functionName (fileName:lineNumber:columnNumber)
+     * <code>    at functionName (fileName:lineNumber:columnNumber)</code>
      * or:
-     *     at fileName:lineNumber:columnNumber
+     * <code>    at fileName:lineNumber:columnNumber</code>
      *
      * @param sb the StringBuilder to append to
      */

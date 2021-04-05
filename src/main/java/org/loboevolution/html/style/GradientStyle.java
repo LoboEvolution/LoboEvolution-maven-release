@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.style;
 
 import java.awt.Color;
@@ -22,8 +42,8 @@ import org.loboevolution.store.GeneralStore;
 /**
  * <p>GradientStyle class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GradientStyle {
 	
@@ -95,7 +115,7 @@ public class GradientStyle {
 		default:
 			if (direction.contains("deg")) {
 				Collections.reverse(Arrays.asList(colors));
-				double rotation = Double.valueOf(direction.substring(0, direction.lastIndexOf('d')));
+				double rotation = Double.parseDouble(direction.substring(0, direction.lastIndexOf('d')));
 				AffineTransform tf = AffineTransform.getTranslateInstance(-width / 2, -height / 2);
 		        tf.preConcatenate(AffineTransform.getRotateInstance(Math.toRadians(rotation)));
 		        tf.preConcatenate(AffineTransform.getTranslateInstance(width / 2, height / 2));
@@ -138,7 +158,7 @@ public class GradientStyle {
 	}
 
 	private static float[] fractions(final String quote) {
-		ArrayList<Float> listFractions = new ArrayList<Float>();
+		ArrayList<Float> listFractions = new ArrayList<>();
 		String quoteTmp = quote;
 		quoteTmp = quoteTmp.replace(" ", "");
 		char[] charArray = quoteTmp.toCharArray();
@@ -188,7 +208,7 @@ public class GradientStyle {
 	}
 
 	private  Color[] colors(final String quote) {
-		ArrayList<Color> colors = new ArrayList<Color>();
+		ArrayList<Color> colors = new ArrayList<>();
 		String quoteTmp = quote;
 		quoteTmp = quote.replace(" ", "");
 		char[] charArray = quoteTmp.toCharArray();
@@ -229,14 +249,14 @@ public class GradientStyle {
 		Color[] colorArray = new Color[colors.size()];
 		int a = 0;
 		for (Color c : colors) {
-			colorArray[a++] = c != null ? c : null;
+			colorArray[a++] = c;
 		}
 		return colorArray;
 	}
 	
 	private static void setFractions(ArrayList<Float> listFractions, char[] charArray, int index, String color) {
 		final boolean isPercent = color.contains("%");
-		final float numberOnly = isPercent ? Float.valueOf(color.replaceAll("[^0-9]", "")) /100 : 0f;
+		final float numberOnly = isPercent ? Float.parseFloat(color.replaceAll("[^0-9]", "")) /100 : 0f;
 		
 		if (listFractions.size() == 0) {
 			listFractions.add(isPercent ? numberOnly : 0F);
@@ -277,18 +297,18 @@ public class GradientStyle {
 	}
 
 	private String gradientValues(String quote) {
-		String values = "";
+		StringBuilder values = new StringBuilder();
 		String[] split = quote.split(",");
 		for (int i = 0; i < split.length; i++) {
 			String qut = split[i];
 			if (!qut.contains("to") && !qut.contains("deg")) {
 				if (i == split.length - 1) {
-					values += qut;
+					values.append(qut);
 				} else {
-					values += qut + ",";
+					values.append(qut).append(",");
 				}
 			}
 		}
-		return values.trim();
+		return values.toString().trim();
 	}
 }

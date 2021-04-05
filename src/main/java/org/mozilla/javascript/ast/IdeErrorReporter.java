@@ -27,8 +27,8 @@ import org.mozilla.javascript.ErrorReporter;
  * node(s) from the start position and change the error or warning's
  * display bounds.<p>
  *
- * @author Steve Yegge
- * @version $Id: $Id
+ * Author Steve Yegge
+ *
  */
 public interface IdeErrorReporter extends ErrorReporter {
 

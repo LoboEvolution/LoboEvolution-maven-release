@@ -22,8 +22,8 @@ import java.util.WeakHashMap;
 /**
  * <p>Abstract SecureCaller class.</p>
  *
- * @author Attila Szegedi
- * @version $Id: $Id
+ * Author Attila Szegedi
+ *
  */
 public abstract class SecureCaller
 {

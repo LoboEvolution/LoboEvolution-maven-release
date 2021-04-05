@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,10 @@ import org.w3c.dom.DOMException;
 /**
  * Custom {@link org.w3c.dom.DOMException} extension.
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public class DOMExceptionImpl extends DOMException {
-	
-	private static final long serialVersionUID = 1L;
 
     /** SYNTAX_ERROR = 0. */
     public static final int SYNTAX_ERROR = 0;

@@ -35,25 +35,25 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * A representation, with parser, of an Adobe Type 1 font.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class Type1Font extends OutlineFont {
 
 	private static final Logger logger = Logger.getLogger(Type1Font.class.getName());
-    String chr2name[];
+    String[] chr2name;
     int password;
-    byte[] subrs[];
+    byte[][] subrs;
     int lenIV;
     Map<String,Object> name2outline;
     Map<String,FlPoint> name2width;
     AffineTransform at;
     /** the Type1 stack of command values */
-    float stack[] = new float[100];
+    final float[] stack = new float[100];
     /** the current position in the Type1 stack */
     int sloc = 0;
     /** the stack of postscript commands (used by callothersubr) */
-    float psStack[] = new float[3];
+    final float[] psStack = new float[3];
     /** the current position in the postscript stack */
     int psLoc = 0;
 
@@ -73,7 +73,7 @@ public class Type1Font extends OutlineFont {
             // parse that file, filling name2outline and chr2name
             int start = descriptor.getFontFile().getDictRef("Length1").getIntValue();
             int len = descriptor.getFontFile().getDictRef("Length2").getIntValue();
-            byte font[] = descriptor.getFontFile().getStream();
+            byte[] font = descriptor.getFontFile().getStream();
 
             parseFont(font, start, len);
         }
@@ -87,9 +87,9 @@ public class Type1Font extends OutlineFont {
      * @param len a int.
      */
     protected void parseFont(byte[] font, int start, int len) {
-        this.name2width = new HashMap<String,FlPoint>();
+        this.name2width = new HashMap<>();
 
-        byte data[] = null;
+        byte[] data = null;
 
         if (isASCII(font, start)) {
             byte[] bData = readASCII(font, start, start + len);
@@ -116,12 +116,12 @@ public class Type1Font extends OutlineFont {
         } else {
             PSParser psp2 = new PSParser(font, matrixloc + 11);
             // read [num num num num num num]
-            float xf[] = psp2.readArray(6);
+            float[] xf = psp2.readArray(6);
             this.at = new AffineTransform(xf);
         }
 
         this.subrs = readSubrs(data);
-        this.name2outline = new TreeMap<String,Object>(readChars(data));
+        this.name2outline = new TreeMap<>(readChars(data));
     // at this point, name2outline holds name -> byte[].
     }
 
@@ -132,7 +132,7 @@ public class Type1Font extends OutlineFont {
      */
     private String[] readEncoding(byte[] d) {
         byte[][] ary = readArray(d, "Encoding", "def");
-        String res[] = new String[256];
+        String[] res = new String[256];
         for (int i = 0; i < ary.length; i++) {
             if (ary[i] != null) {
                 if (ary[i][0] == '/') {
@@ -181,14 +181,14 @@ public class Type1Font extends OutlineFont {
         double val;
         type = psp.readThing();
         if (type.equals("StandardEncoding")) {
-            byte[] stdenc[] = new byte[FontSupport.standardEncoding.length][];
+            byte[][] stdenc = new byte[FontSupport.standardEncoding.length][];
             for (i = 0; i < stdenc.length; i++) {
                 stdenc[i] = FontSupport.getName(FontSupport.standardEncoding[i]).getBytes();
             }
             return stdenc;
         }
         int len = Integer.parseInt(type);
-        byte[] out[] = new byte[len][];
+        byte[][] out = new byte[len][];
         byte[] line;
         while (true) {
             String s = psp.readThing();
@@ -322,7 +322,7 @@ public class Type1Font extends OutlineFont {
      */
     class PSParser {
 
-        byte[] data;
+        final byte[] data;
         int loc;
 
         /**
@@ -447,9 +447,9 @@ public class Type1Font extends OutlineFont {
      * @return a HashMap that maps string glyph names to byte arrays of
      * decoded font data.
      */
-    private HashMap<String,byte[]> readChars(byte[] d) {
+    private Map<String,byte[]> readChars(byte[] d) {
         // skip thru data until we find "/"+key
-        HashMap<String,byte[]> hm = new HashMap<String,byte[]>();
+        HashMap<String,byte[]> hm = new HashMap<>();
         int i = findSlashName(d, "CharStrings");
         if (i < 0) {
             // not found
@@ -522,12 +522,9 @@ public class Type1Font extends OutlineFont {
             } else {
                 switch (v) {
                     case 0:   // x
+                    case 2:
                         throw new RuntimeException("Bad command (" + v + ")");
                     case 1:   // hstem
-                        this.sloc = 0;
-                        break;
-                    case 2:   // x
-                        throw new RuntimeException("Bad command (" + v + ")");
                     case 3:   // vstem
                         this.sloc = 0;
                         break;
@@ -602,7 +599,7 @@ public class Type1Font extends OutlineFont {
                         	}
                         }
                         if (n == 2) {
-                        	if (flexMode == false) {
+                        	if (!flexMode) {
                         	    PDFDebugger.debug("Flex mode assumed");
                         	} 
                         	else {
@@ -759,6 +756,8 @@ public class Type1Font extends OutlineFont {
                         pt.y += y2 + y3;
                         this.sloc = 0;
                         break;
+                    default:
+            			break;
                 }
             }
         }

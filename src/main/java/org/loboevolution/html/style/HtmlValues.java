@@ -1,28 +1,28 @@
 /*
- GNU LESSER GENERAL PUBLIC LICENSE
- Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution. Copyright (C) 2014 Lobo Evolution
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
- Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.style;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -30,23 +30,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.loboevolution.info.FontInfo;
-import org.loboevolution.laf.FontFactory;
-import org.loboevolution.laf.FontKey;
+import org.loboevolution.common.Strings;
 import org.loboevolution.html.CSSValues;
 import org.loboevolution.html.ListValues;
 import org.loboevolution.html.renderstate.RenderState;
+import org.loboevolution.info.FontInfo;
+import org.loboevolution.laf.FontFactory;
+import org.loboevolution.laf.FontKey;
+import org.loboevolution.net.HttpNetwork;
+
+import com.gargoylesoftware.css.dom.CSSValueImpl;
+import com.gargoylesoftware.css.dom.CSSValueImpl.CSSPrimitiveValueType;
 
 /**
  * <p>HtmlValues class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlValues {
 
 	/** Constant SYSTEM_FONTS */
-	public static final Map<String, FontInfo> SYSTEM_FONTS = new HashMap<String, FontInfo>();
+	public static final Map<String, FontInfo> SYSTEM_FONTS = new HashMap<>();
 
 	static {
 		final FontInfo systemFont = new FontInfo();
@@ -110,16 +115,18 @@ public class HtmlValues {
 				insetsArray[0] = 0;
 			}
 		}
-		if (size == 4) {
-			return new Insets(insetsArray[0], insetsArray[3], insetsArray[2], insetsArray[1]);
-		} else if (size == 1) {
+
+		switch (size) {
+		case 1:
 			final int val = insetsArray[0];
 			return new Insets(val, val, val, val);
-		} else if (size == 2) {
+		case 2:
 			return new Insets(insetsArray[0], insetsArray[1], insetsArray[0], insetsArray[1]);
-		} else if (size == 3) {
+		case 3:
 			return new Insets(insetsArray[0], insetsArray[1], insetsArray[2], insetsArray[1]);
-		} else {
+		case 4:
+			return new Insets(insetsArray[0], insetsArray[3], insetsArray[2], insetsArray[1]);
+		default:
 			return null;
 		}
 	}
@@ -129,24 +136,58 @@ public class HtmlValues {
 	 *
 	 * @param listStyleText a {@link java.lang.String} object.
 	 * @return a {@link org.loboevolution.html.style.ListStyle} object.
+	 * @param baseUri a {@link java.lang.String} object.
 	 */
-	public static ListStyle getListStyle(String listStyleText) {
+	public static ListStyle getListStyle(String listStyleText, String baseUri) {
 		final ListStyle listStyle = new ListStyle();
 		final String[] tokens = HtmlValues.splitCssValue(listStyleText);
 		for (final String token : tokens) {
 			final ListValues listStyleType = HtmlValues.getListStyleType(token);
-			if (listStyleType != ListValues.TYPE_UNSET) {
+			if (listStyleType != ListValues.TYPE_UNSET && listStyleType != ListValues.NONE && listStyle.getType() < 1) {
 				listStyle.setType(listStyleType.getValue());
 			} else if (HtmlValues.isUrl(token)) {
-				// TODO: listStyle.image
+				listStyle.setType(ListValues.TYPE_URL.getValue());
+				listStyle.setImage(getListStyleImage(token, baseUri));
 			} else {
 				final ListValues listStylePosition = HtmlValues.getListStylePosition(token);
-				if (listStylePosition != ListValues.POSITION_UNSET) {
+				if (listStylePosition != ListValues.POSITION_UNSET && listStylePosition != ListValues.NONE) {
 					listStyle.setPosition(listStylePosition.getValue());
 				}
 			}
 		}
 		return listStyle;
+	}
+	
+	
+	/**
+	 * <p>getListStyleImage.</p>
+	 *
+	 * @param token a {@link java.lang.String} object.
+	 * @return a {@link java.awt.Image} object.
+	 * @param baseUri a {@link java.lang.String} object.
+	 */
+	public static Image getListStyleImage(String token, String baseUri) {
+		Image image = null;
+		String start = "url(";
+		int startIdx = start.length();
+		int closingIdx = token.lastIndexOf(')');
+		String quotedUri = token.substring(startIdx, closingIdx);
+		String[] items = { "http", "https", "file" };
+		if (Strings.containsWords(quotedUri, items)) {
+			try {
+				image = HttpNetwork.getImage(quotedUri, null);
+			} catch (Exception e) {
+				image = null;
+			}
+		} else {
+			try {
+				image = HttpNetwork.getImage(quotedUri, baseUri);
+			} catch (Exception e) {
+				image = null;
+			}
+		}
+
+		return image;
 	}
 
 	/**
@@ -213,15 +254,20 @@ public class HtmlValues {
 	 * @param errorValue a int.
 	 * @return a int.
 	 */
-	public static final int getPixelSize(String spec, RenderState renderState, int errorValue) {
+	public static int getPixelSize(String spec, RenderState renderState, int errorValue) {
 		try {
 			final int dpi = GraphicsEnvironment.isHeadless() ? 72 : Toolkit.getDefaultToolkit().getScreenResolution();
 			final String lcSpec = spec.toLowerCase();
 			String units = "";
 			String text = "";
 			if(isUnits(spec)) {
-				units = lcSpec.substring(lcSpec.length() - 2, lcSpec.length());
-				text = lcSpec.substring(0, lcSpec.length() - 2);
+				if(spec.endsWith("q")) {
+					units = lcSpec.substring(lcSpec.length() - 1);
+					text = lcSpec.substring(0, lcSpec.length() - 1);
+				} else {
+					units = lcSpec.substring(lcSpec.length() - 2);
+					text = lcSpec.substring(0, lcSpec.length() - 2);
+				}
 			}
 					
 			switch (units) {
@@ -244,16 +290,13 @@ public class HtmlValues {
 				return inches(2.54, dpi, text);
 			case "mm":
 				return inches(25.4, dpi, text);
+			case "q":
+				return inches(1016, dpi, text);
 			case "ex":
 				final double xHeight = renderState.getFontMetrics().getAscent() * 0.47;
 				return (int) Math.round(xHeight * Double.parseDouble(text));
 			case "in":
-				final String valText = lcSpec.substring(0, lcSpec.length() - 2);
-				try {
-					return (int) Math.round(dpi * Double.parseDouble(valText));
-				} catch (final NumberFormatException nfe) {
-					return errorValue;
-				}
+				return (int) Math.round(dpi * Double.parseDouble(text));
 			default:
 				return (int) Math.round(Double.parseDouble(lcSpec));
 			}
@@ -271,7 +314,7 @@ public class HtmlValues {
 	 * @param availSize a int.
 	 * @return a int.
 	 */
-	public static final int getPixelSize(String spec, RenderState renderState, int errorValue, int availSize) {
+	public static int getPixelSize(String spec, RenderState renderState, int errorValue, int availSize) {
 		try {
 			if (spec.endsWith("%")) {
 				final String perText = spec.substring(0, spec.length() - 1);
@@ -284,6 +327,33 @@ public class HtmlValues {
 			return errorValue;
 		}
 	}
+	
+	/**
+	 * <p>resolutionValue.</p>
+	 *
+	 * @param cssValue a {@link com.gargoylesoftware.css.dom.CSSValueImpl} object.
+	 * @return a int.
+	 */
+	public static int resolutionValue(final CSSValueImpl cssValue) {
+        if (cssValue == null) {
+            return -1;
+        }
+        
+        if (cssValue.getPrimitiveType() == CSSPrimitiveValueType.CSS_DIMENSION) {
+        	String units = cssValue.getCssText().substring(cssValue.getCssText().length() - 2);
+        	switch (units) {
+        	case "dpi":
+        		return (int)cssValue.getDoubleValue();
+        	case "dpcm":
+        		return (int)( 2.54f * cssValue.getDoubleValue());
+        	case "dppx":
+        		return (int)( 96 * cssValue.getDoubleValue());
+        	default:
+        		return (int)cssValue.getDoubleValue();
+        	}
+       }
+        return -1;
+    }
 
 	/**
 	 * <p>isBackgroundPosition.</p>
@@ -416,7 +486,7 @@ public class HtmlValues {
 	 * @return an array of {@link java.lang.String} objects.
 	 */
 	public static String[] splitCssValue(String cssValue) {
-		final ArrayList<String> tokens = new ArrayList<String>(4);
+		final ArrayList<String> tokens = new ArrayList<>(4);
 		final int len = cssValue.length();
 		int parenCount = 0;
 		StringBuilder currentWord = null;
@@ -459,7 +529,7 @@ public class HtmlValues {
 		if (currentWord != null) {
 			tokens.add(currentWord.toString());
 		}
-		return tokens.toArray(new String[tokens.size()]);
+		return tokens.toArray(new String[0]);
 	}
 
 	/**
@@ -548,10 +618,14 @@ public class HtmlValues {
 	}
 	
 	private static boolean isUnits(String token) {
-		if (token.endsWith("px") || token.endsWith("pt") || token.endsWith("pc") || token.endsWith("cm")
-				|| token.endsWith("mm") || token.endsWith("ex") || token.endsWith("em")) {
-			return true;
-		}
-		return false;
+		return token.endsWith("px") ||
+				token.endsWith("pt") ||
+				token.endsWith("pc") ||
+				token.endsWith("cm") ||
+				token.endsWith("mm") ||
+				token.endsWith("ex") ||
+				token.endsWith("em") ||
+				token.endsWith("in") ||
+				token.endsWith("q");
 	}
 }

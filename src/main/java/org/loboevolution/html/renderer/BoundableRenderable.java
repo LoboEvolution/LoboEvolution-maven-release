@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.renderer;
 
 import java.awt.Dimension;
@@ -26,14 +25,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-import org.loboevolution.html.dom.domimpl.ModelNode;
+import org.loboevolution.html.dom.nodeimpl.ModelNode;
 
 /**
  * A renderer node with well-defined bounds. Most renderer nodes implement this
  * interface.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface BoundableRenderable extends Renderable {
 
@@ -118,9 +117,17 @@ public interface BoundableRenderable extends Renderable {
 	Point getOriginRelativeToNoScroll(RCollection ancestor);
 
 	/**
+	 * <p>getOriginRelativeToAbs.</p>
+	 *
+	 * @param ancestor a {@link org.loboevolution.html.renderer.RCollection} object.
+	 * @return a {@link java.awt.Point} object.
+	 */
+	public Point getOriginRelativeToAbs(RCollection ancestor);
+
+	/**
 	 * <p>getModelNode.</p>
 	 *
-	 * @return a {@link org.loboevolution.html.dom.domimpl.ModelNode} object.
+	 * @return a {@link org.loboevolution.html.dom.nodeimpl.ModelNode} object.
 	 */
 	ModelNode getModelNode();
 
@@ -243,7 +250,7 @@ public interface BoundableRenderable extends Renderable {
 	 * @param x a int.
 	 * @param y a int.
 	 * @param triggerEvent a boolean.
-	 * @param limit a {@link org.loboevolution.html.dom.domimpl.ModelNode} object.
+	 * @param limit a {@link org.loboevolution.html.dom.nodeimpl.ModelNode} object.
 	 */
 	void onMouseMoved(MouseEvent event, int x, int y, boolean triggerEvent, ModelNode limit);
 
@@ -311,7 +318,7 @@ public interface BoundableRenderable extends Renderable {
 	 * @param event a {@link java.awt.event.MouseEvent} object.
 	 * @param x a int.
 	 * @param y a int.
-	 * @param limit a {@link org.loboevolution.html.dom.domimpl.ModelNode} object.
+	 * @param limit a {@link org.loboevolution.html.dom.nodeimpl.ModelNode} object.
 	 */
 	void onMouseOut(MouseEvent event, int x, int y, ModelNode limit);
 

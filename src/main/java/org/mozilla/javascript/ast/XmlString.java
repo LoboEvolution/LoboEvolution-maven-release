@@ -11,8 +11,8 @@ package org.mozilla.javascript.ast;
  * node differs from a {@link org.mozilla.javascript.ast.StringLiteral} in that it does not have quotes for
  * delimiters.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlString extends XmlFragment {
 

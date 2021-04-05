@@ -17,8 +17,8 @@ import java.io.Serializable;
  * ObjectInputStream would not restore them correctly as it lacks support
  * for readResolve method
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class UniqueTag implements Serializable
 {

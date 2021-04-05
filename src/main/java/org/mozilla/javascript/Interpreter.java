@@ -23,8 +23,8 @@ import org.mozilla.javascript.debug.DebugFrame;
 /**
  * <p>Interpreter class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class Interpreter extends Icode implements Evaluator
 {
@@ -222,12 +222,12 @@ public final class Interpreter extends Icode implements Evaluator
                 final Context cx = Context.enter();
                 try {
                     if (ScriptRuntime.hasTopCall(cx)) {
-                        return equalsInTopScope(other);
+                        return equalsInTopScope(other).booleanValue();
                     }
                     final Scriptable top = ScriptableObject.getTopLevelScope(scope);
-                    return (Boolean)ScriptRuntime.doTopCall(
+                    return ((Boolean)ScriptRuntime.doTopCall(
                             (Callable)(c, scope, thisObj, args) -> equalsInTopScope(other),
-                            cx, top, top, ScriptRuntime.emptyArgs, isStrictTopFrame());
+                            cx, top, top, ScriptRuntime.emptyArgs, isStrictTopFrame())).booleanValue();
                 } finally {
                     Context.exit();
                 }
@@ -251,7 +251,7 @@ public final class Interpreter extends Icode implements Evaluator
             return h;
         }
 
-        private boolean equalsInTopScope(Object other) {
+        private Boolean equalsInTopScope(Object other) {
             return EqualObjectGraphs.withThreadLocal(eq -> equals(this, (CallFrame)other, eq));
         }
 
@@ -266,16 +266,16 @@ public final class Interpreter extends Icode implements Evaluator
             }
         }
 
-        private static boolean equals(CallFrame f1, CallFrame f2, EqualObjectGraphs equal) {
+        private static Boolean equals(CallFrame f1, CallFrame f2, EqualObjectGraphs equal) {
             // Iterative instead of recursive, as interpreter stack depth can
             // be larger than JVM stack depth.
             for(;;) {
                 if (f1 == f2) {
-                    return true;
+                    return Boolean.TRUE;
                 } else if (f1 == null || f2 == null) {
-                    return false;
+                    return Boolean.FALSE;
                 } else if (!f1.fieldsEqual(f2, equal)) {
-                    return false;
+                    return Boolean.FALSE;
                 } else {
                     f1 = f1.parentFrame;
                     f2 = f2.parentFrame;
@@ -565,8 +565,10 @@ public final class Interpreter extends Icode implements Evaluator
                 break;
               case Token.THROW :
               case Token.YIELD :
+              case Icode_YIELD_STAR :
               case Icode_GENERATOR :
               case Icode_GENERATOR_END :
+              case Icode_GENERATOR_RETURN :
               {
                 int line = getIndex(iCode, pc);
                 out.println(tname + " : " + line);
@@ -694,8 +696,10 @@ public final class Interpreter extends Icode implements Evaluator
         switch (bytecode) {
             case Token.THROW :
             case Token.YIELD:
+            case Icode_YIELD_STAR:
             case Icode_GENERATOR:
             case Icode_GENERATOR_END:
+            case Icode_GENERATOR_RETURN:
                 // source line
                 return 1 + 2;
 
@@ -1212,17 +1216,21 @@ switch (op) {
           frame.pc--; // we want to come back here when we resume
           CallFrame generatorFrame = captureFrameForGenerator(frame);
           generatorFrame.frozen = true;
-          NativeGenerator generator = new NativeGenerator(frame.scope,
-              generatorFrame.fnOrScript, generatorFrame);
-          frame.result = generator;
+          if (cx.getLanguageVersion() >= Context.VERSION_ES6) {
+            frame.result = new ES6Generator(frame.scope, generatorFrame.fnOrScript, generatorFrame);
+          } else {
+              frame.result = new NativeGenerator(frame.scope,
+                generatorFrame.fnOrScript, generatorFrame);
+          }
           break Loop;
         }
         // We are now resuming execution. Fall through to YIELD case.
     }
     // fall through...
-    case Token.YIELD: {
+    case Token.YIELD:
+    case Icode_YIELD_STAR: {
         if (!frame.frozen) {
-            return freezeGenerator(cx, frame, stackTop, generatorState);
+            return freezeGenerator(cx, frame, stackTop, generatorState, op == Icode_YIELD_STAR);
         }
         Object obj = thawGenerator(frame, stackTop, generatorState, op);
         if (obj != Scriptable.NOT_FOUND) {
@@ -1239,6 +1247,21 @@ switch (op) {
           NativeIterator.getStopIterationObject(frame.scope),
           frame.idata.itsSourceFile, sourceLine);
       break Loop;
+    }
+    case Icode_GENERATOR_RETURN: {
+        // throw StopIteration with the value of "return"
+        frame.frozen = true;
+        frame.result = stack[stackTop];
+        frame.resultDbl = sDbl[stackTop];
+        --stackTop;
+
+        NativeIterator.StopIteration si = new NativeIterator.StopIteration(
+           (frame.result == DOUBLE_MARK) ? Double.valueOf(frame.resultDbl) : frame.result);
+
+        int sourceLine = getIndex(iCode, frame.pc);
+        generatorState.returnedException =
+            new JavaScriptException(si, frame.idata.itsSourceFile, sourceLine);
+        break Loop;
     }
     case Token.THROW: {
         Object value = stack[stackTop];
@@ -1421,7 +1444,8 @@ switch (op) {
     case Token.SUB :
     case Token.MUL :
     case Token.DIV :
-    case Token.MOD : {
+    case Token.MOD :
+    case Token.EXP : {
         stackTop = doArithmetic(frame, op, stack, sDbl, stackTop);
         continue Loop;
     }
@@ -2535,7 +2559,7 @@ switch (op) {
                                      int[] varAttributes, int indexReg) {
         if (!frame.useActivation) {
             if ((varAttributes[indexReg] & ScriptableObject.READONLY) == 0) {
-                throw Context.reportRuntimeError1("msg.var.redecl",
+                throw Context.reportRuntimeErrorById("msg.var.redecl",
                                                   frame.idata.argNames[indexReg]);
             }
             if ((varAttributes[indexReg] & ScriptableObject.UNINITIALIZED_CONST)
@@ -2856,11 +2880,12 @@ switch (op) {
 
     private static Object freezeGenerator(Context cx, CallFrame frame,
                                           int stackTop,
-                                          GeneratorState generatorState)
+                                          GeneratorState generatorState,
+                                          boolean yieldStar)
     {
           if (generatorState.operation == NativeGenerator.GENERATOR_CLOSE) {
               // Error: no yields when generator is closing
-              throw ScriptRuntime.typeError0("msg.yield.closing");
+              throw ScriptRuntime.typeErrorById("msg.yield.closing");
           }
           // return to our caller (which should be a method of NativeGenerator)
           frame.frozen = true;
@@ -2869,9 +2894,13 @@ switch (op) {
           frame.savedStackTop = stackTop;
           frame.pc--; // we want to come back here when we resume
           ScriptRuntime.exitActivationFunction(cx);
-          return (frame.result != DOUBLE_MARK)
+          final Object result = (frame.result != DOUBLE_MARK)
               ? frame.result
               : ScriptRuntime.wrapNumber(frame.resultDbl);
+          if (yieldStar) {
+              return new ES6Generator.YieldStarResult(result);
+          }
+          return result;
     }
 
     private static Object thawGenerator(CallFrame frame, int stackTop,
@@ -2883,7 +2912,7 @@ switch (op) {
           frame.pc += 2; // skip line number data
           if (generatorState.operation == NativeGenerator.GENERATOR_THROW) {
               // processing a call to <generator>.throw(exception): must
-              // act as if exception was thrown from resumption point
+              // act as if exception was thrown from resumption point.
               return new JavaScriptException(generatorState.value,
                                                   frame.idata.itsSourceFile,
                                                   sourceLine);
@@ -2893,8 +2922,9 @@ switch (op) {
           }
           if (generatorState.operation != NativeGenerator.GENERATOR_SEND)
               throw Kit.codeBug();
-          if (op == Token.YIELD)
+          if ((op == Token.YIELD) || (op == Icode_YIELD_STAR)) {
               frame.stack[stackTop] = generatorState.value;
+          }
           return Scriptable.NOT_FOUND;
     }
 
@@ -3149,9 +3179,9 @@ switch (op) {
     private static boolean stack_boolean(CallFrame frame, int i)
     {
         Object x = frame.stack[i];
-        if (x == Boolean.TRUE) {
+        if (Boolean.TRUE.equals(x)) {
             return true;
-        } else if (x == Boolean.FALSE) {
+        } else if (Boolean.FALSE.equals(x)) {
             return false;
         } else if (x == UniqueTag.DOUBLE_MARK) {
             double d = frame.sDbl[i];
@@ -3161,8 +3191,6 @@ switch (op) {
         } else if (x instanceof Number) {
             double d = ((Number)x).doubleValue();
             return (!Double.isNaN(d) && d != 0.0);
-        } else if (x instanceof Boolean) {
-            return ((Boolean)x).booleanValue();
         } else {
             return ScriptRuntime.toBoolean(x);
         }
@@ -3191,10 +3219,19 @@ switch (op) {
         } else {
             if (lhs instanceof Scriptable || rhs instanceof Scriptable) {
                 stack[stackTop] = ScriptRuntime.add(lhs, rhs, cx);
-            } else if (lhs instanceof CharSequence || rhs instanceof CharSequence) {
-                CharSequence lstr = ScriptRuntime.toCharSequence(lhs);
-                CharSequence rstr = ScriptRuntime.toCharSequence(rhs);
-                stack[stackTop] = new ConsString(lstr, rstr);
+
+            // the next two else if branches are a bit more tricky
+            // to reduce method calls
+            } else if (lhs instanceof CharSequence) {
+                if (rhs instanceof CharSequence) {
+                    stack[stackTop] = new ConsString((CharSequence)lhs, (CharSequence)rhs);
+                }
+                else {
+                    stack[stackTop] = new ConsString((CharSequence)lhs, ScriptRuntime.toCharSequence(rhs));
+                }
+            } else if (rhs instanceof CharSequence) {
+                stack[stackTop] = new ConsString(ScriptRuntime.toCharSequence(lhs), (CharSequence)rhs);
+
             } else {
                 double lDbl = (lhs instanceof Number)
                     ? ((Number)lhs).doubleValue() : ScriptRuntime.toNumber(lhs);
@@ -3216,12 +3253,11 @@ switch (op) {
             }
             stack[stackTop] = ScriptRuntime.add(lhs, rhs, cx);
         } else if (lhs instanceof CharSequence) {
-            CharSequence lstr = (CharSequence)lhs;
-            CharSequence rstr = ScriptRuntime.toCharSequence(d);
+            CharSequence rstr = ScriptRuntime.numberToString(d, 10);
             if (leftRightOrder) {
-                stack[stackTop] = new ConsString(lstr, rstr);
+                stack[stackTop] = new ConsString((CharSequence)lhs, rstr);
             } else {
-                stack[stackTop] = new ConsString(rstr, lstr);
+                stack[stackTop] = new ConsString(rstr, (CharSequence)lhs);
             }
         } else {
             double lDbl = (lhs instanceof Number)
@@ -3233,9 +3269,9 @@ switch (op) {
 
     private static int doArithmetic(CallFrame frame, int op, Object[] stack,
                                     double[] sDbl, int stackTop) {
+        double lDbl = stack_double(frame, stackTop - 1);
         double rDbl = stack_double(frame, stackTop);
         --stackTop;
-        double lDbl = stack_double(frame, stackTop);
         stack[stackTop] = DOUBLE_MARK;
         switch (op) {
           case Token.SUB:
@@ -3249,6 +3285,9 @@ switch (op) {
             break;
           case Token.MOD:
             lDbl %= rDbl;
+            break;
+          case Token.EXP:
+            lDbl = Math.pow(lDbl, rDbl);
             break;
         }
         sDbl[stackTop] = lDbl;

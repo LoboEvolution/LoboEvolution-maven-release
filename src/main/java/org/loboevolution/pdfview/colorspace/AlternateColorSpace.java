@@ -29,15 +29,15 @@ import org.loboevolution.pdfview.function.PDFFunction;
  * function to map between values in the input and input values to the
  * alternate color space
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class AlternateColorSpace extends PDFColorSpace {
     /** The alternate color space */
-    private PDFColorSpace alternate;
+    private final PDFColorSpace alternate;
     
     /** The function */
-    private PDFFunction function;
+    private final PDFFunction function;
     
     private AltColorSpace altcolorspace;
     

@@ -35,13 +35,13 @@ import org.loboevolution.pdfview.decrypt.PDFDecrypterFactory;
  * You should use the decodeStream() method of this object rather than using
  * any of the decoders directly.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PDFDecoder {
 
-    /** Constant DCT_FILTERS */
-    public final static Set<String> DCT_FILTERS = new HashSet<String>(Arrays.asList("DCT", "DCTDecode"));
+    /** Constant <code>DCT_FILTERS</code> */
+    public final static Set<String> DCT_FILTERS = new HashSet<>(Arrays.asList("DCT", "DCTDecode"));
 
     /** Creates a new instance of PDFDecoder */
     private PDFDecoder() {
@@ -73,8 +73,8 @@ public class PDFDecoder {
      */
     private static class FilterSpec
     {
-        PDFObject ary[];
-        PDFObject params[];
+        PDFObject[] ary;
+        PDFObject[] params;
 
         private FilterSpec(PDFObject dict, PDFObject filter) throws IOException {
             if (filter.getType() == PDFObject.NAME) {
@@ -198,7 +198,7 @@ public class PDFDecoder {
      *
      * @param dict the stream dictionary
      * @return whether the stream is encrypted
-     * @throws java.io.IOException if any. if the stream dictionary can't be read
+     * @throws java.io.IOException if any.
      */
     public static boolean isEncrypted(PDFObject dict)
             throws IOException {

@@ -1,70 +1,76 @@
 /*
- GNU LESSER GENERAL PUBLIC LICENSE
- Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Lesser General Public
- License as published by the Free Software Foundation; either
- version 2.1 of the License, or (at your option) any later version.
-
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- Lesser General Public License for more details.
-
- You should have received a copy of the GNU Lesser General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
- Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 /*
  * Created on Oct 29, 2005
  */
 package org.loboevolution.html.dom.domimpl;
 
+import java.awt.Dimension;
+import java.awt.Font;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
-import org.loboevolution.common.Nodes;
 import org.loboevolution.common.Strings;
 import org.loboevolution.html.parser.HtmlParser;
+import org.loboevolution.html.style.AbstractCSSProperties;
+import org.loboevolution.html.style.HtmlValues;
+import org.loboevolution.http.HtmlRendererContext;
+import org.loboevolution.laf.FontFactory;
+import org.loboevolution.laf.FontKey;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
+import org.loboevolution.html.dom.nodeimpl.NamedNodeMapImpl;
+import org.loboevolution.html.gui.HtmlPanel;
+import org.loboevolution.html.node.Attr;
+import org.loboevolution.html.node.Code;
+import org.loboevolution.html.node.Comment;
+import org.loboevolution.html.node.DOMTokenList;
 
-import java.util.Objects;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Comment;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.NamedNodeMap;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeType;
+import org.loboevolution.html.node.Text;
+import org.loboevolution.html.node.events.Event;
+import org.loboevolution.html.node.events.EventListener;
 
 /**
  * <p>ElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class ElementImpl extends DOMFunctionImpl implements Element {
-
-	/**
-	 * <p>isTagName.</p>
-	 *
-	 * @param node a {@link org.w3c.dom.Node} object.
-	 * @param name a {@link java.lang.String} object.
-	 * @return a boolean.
-	 */
-	protected static boolean isTagName(Node node, String name) {
-		return node.getNodeName().equalsIgnoreCase(name);
-	}
+public class ElementImpl extends WindowEventHandlersImpl implements Element {
 
 	protected Map<String, String> attributes;
 
 	private String id;
 
 	private final String name;
+	
+	private String outer;
 
 	/**
 	 * <p>Constructor for ElementImpl.</p>
@@ -76,10 +82,9 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	}
 
 	/**
-	 * <p>assignAttributeField.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param normalName a {@link java.lang.String} object.
-	 * @param value a {@link java.lang.String} object.
+	 * <p>assignAttributeField.</p>
 	 */
 	protected void assignAttributeField(String normalName, String value) {
 		boolean isName = false;
@@ -129,29 +134,26 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	}
 
 	private Attr getAttr(String normalName, String value) {
-		// TODO: "specified" attributes
 		return new AttrImpl(normalName, value, true, this, "id".equals(normalName));
 	}
-
-	// private String title;
 
 	/** {@inheritDoc} */
 	@Override
 	public String getAttribute(String name) {
-		final String normalName = normalizeAttributeName(name);
+		final String normalName = Strings.normalizeAttributeName(name);
 		synchronized (this) {
 			final Map<String, String> attributes = this.attributes;
-			return attributes == null ? null : (String) attributes.get(normalName);
+			return attributes == null ? null : attributes.get(normalName);
 		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public Attr getAttributeNode(String name) {
-		final String normalName = normalizeAttributeName(name);
+		final String normalName = Strings.normalizeAttributeName(name);
 		synchronized (this) {
 			final Map<String, String> attributes = this.attributes;
-			final String value = attributes == null ? null : (String) attributes.get(normalName);
+			final String value = attributes == null ? null : attributes.get(normalName);
 			return value == null ? null : getAttr(normalName, value);
 		}
 	}
@@ -167,7 +169,7 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 		synchronized (this) {
 			Map<String, String> attrs = this.attributes;
 			if (attrs == null) {
-				attrs = new HashMap<String, String>();
+				attrs = new HashMap<>();
 				this.attributes = attrs;
 			}
 			return new NamedNodeMapImpl(this, this.attributes);
@@ -231,8 +233,8 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 */
 	/** {@inheritDoc} */
 	@Override
-	public short getNodeType() {
-		return Node.ELEMENT_NODE;
+	public NodeType getNodeType() {
+		return NodeType.ELEMENT_NODE;
 	}
 
 	/*
@@ -242,7 +244,7 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 */
 	/** {@inheritDoc} */
 	@Override
-	public String getNodeValue() throws DOMException {
+	public String getNodeValue() {
 		return null;
 	}
 
@@ -255,7 +257,8 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 */
 	protected String getRawInnerText(boolean includeComment) {
 		StringBuilder sb = null;
-		for (Node node : Nodes.iterable(nodeList)) {
+		for (Iterator<Node> i= nodeList.iterator(); i.hasNext(); ) {
+			Node node = i.next();
 			if (node instanceof Text) {
 				final Text tn = (Text) node;
 				final String txt = tn.getNodeValue();
@@ -307,10 +310,10 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	/** {@inheritDoc} */
 	@Override
 	public boolean hasAttribute(String name) {
-		final String normalName = normalizeAttributeName(name);
+		final String normalName = Strings.normalizeAttributeName(name);
 		synchronized (this) {
 			final Map<String, String> attributes = this.attributes;
-			return attributes == null ? false : attributes.containsKey(normalName);
+			return attributes != null && attributes.containsKey(normalName);
 		}
 	}
 
@@ -319,7 +322,7 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	public boolean hasAttributes() {
 		synchronized (this) {
 			final Map<String, String> attrs = this.attributes;
-			return attrs == null ? false : !attrs.isEmpty();
+			return attrs != null && !attrs.isEmpty();
 		}
 	}
 
@@ -333,20 +336,10 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 		}
 	}
 
-	/**
-	 * <p>normalizeAttributeName.</p>
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected final String normalizeAttributeName(String name) {
-		return name.toLowerCase();
-	}
-
 	/** {@inheritDoc} */
 	@Override
-	public void removeAttribute(String name) throws DOMException {
-		final String normalName = normalizeAttributeName(name);
+	public void removeAttribute(String name) {
+		final String normalName = Strings.normalizeAttributeName(name);
 		synchronized (this) {
 			final Map<String, String> attributes = this.attributes;
 			if (attributes == null) {
@@ -358,27 +351,26 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 
 	/** {@inheritDoc} */
 	@Override
-	public Attr removeAttributeNode(Attr oldAttr) throws DOMException {
-		final String normalName = normalizeAttributeName(oldAttr.getName());
+	public Attr removeAttributeNode(Attr oldAttr) {
+		final String normalName = Strings.normalizeAttributeName(oldAttr.getName());
 		synchronized (this) {
 			final Map<String, String> attributes = this.attributes;
 			if (attributes == null) {
 				return null;
 			}
-			final String oldValue = (String) attributes.remove(normalName);
-			// TODO: "specified" attributes
+			final String oldValue = attributes.remove(normalName);
 			return oldValue == null ? null : getAttr(normalName, oldValue);
 		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setAttribute(String name, String value) throws DOMException {
-		final String normalName = normalizeAttributeName(name);
+	public void setAttribute(String name, String value) {
+		final String normalName = Strings.normalizeAttributeName(name);
 		synchronized (this) {
 			Map<String, String> attribs = this.attributes;
 			if (attribs == null) {
-				attribs = new HashMap<String, String>(2);
+				attribs = new HashMap<>(2);
 				this.attributes = attribs;
 			}
 			attribs.put(normalName, value);
@@ -394,11 +386,11 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 * @param value a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	public void setAttributeImpl(String name, String value) throws DOMException {
-		final String normalName = normalizeAttributeName(name);
+	public void setAttributeImpl(String name, String value) {
+		final String normalName = Strings.normalizeAttributeName(name);
 		Map<String, String> attribs = this.attributes;
 		if (attribs == null) {
-			attribs = new HashMap<String, String>(2);
+			attribs = new HashMap<>(2);
 			this.attributes = attribs;
 		}
 		assignAttributeField(normalName, value);
@@ -407,12 +399,12 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 
 	/** {@inheritDoc} */
 	@Override
-	public Attr setAttributeNode(Attr newAttr) throws DOMException {
-		final String normalName = normalizeAttributeName(newAttr.getName());
+	public Attr setAttributeNode(Attr newAttr) {
+		final String normalName = Strings.normalizeAttributeName(newAttr.getName());
 		final String value = newAttr.getValue();
 		synchronized (this) {
 			if (this.attributes == null) {
-				this.attributes = new HashMap<String, String>();
+				this.attributes = new HashMap<>();
 			}
 			this.attributes.put(normalName, value);
 			// this.setIdAttribute(normalName, newAttr.isId());
@@ -431,9 +423,9 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	}
 
 	/**
-	 * <p>Setter for the field id.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param id a {@link java.lang.String} object.
+	 * <p>Setter for the field id.</p>
 	 */
 	public void setId(String id) {
 		setAttribute("id", id);
@@ -441,19 +433,19 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setIdAttribute(String name, boolean isId) throws DOMException {
-		final String normalName = normalizeAttributeName(name);
+	public void setIdAttribute(String name, boolean isId) {
+		final String normalName = Strings.normalizeAttributeName(name);
 		if (!"id".equals(normalName)) {
-			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "IdAttribute can't be anything other than ID");
+			throw new DOMException(Code.NOT_SUPPORTED_ERR, "IdAttribute can't be anything other than ID");
 		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setIdAttributeNode(Attr idAttr, boolean isId) throws DOMException {
-		final String normalName = normalizeAttributeName(idAttr.getName());
+	public void setIdAttributeNode(Attr idAttr, boolean isId) {
+		final String normalName = Strings.normalizeAttributeName(idAttr.getName());
 		if (!"id".equals(normalName)) {
-			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "IdAttribute can't be anything other than ID");
+			throw new DOMException(Code.NOT_SUPPORTED_ERR, "IdAttribute can't be anything other than ID");
 		}
 	}
 
@@ -489,7 +481,7 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 */
 	/** {@inheritDoc} */
 	@Override
-	public void setNodeValue(String nodeValue) throws DOMException {
+	public void setNodeValue(String nodeValue) {
 		// nop
 	}
 
@@ -501,27 +493,6 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	public void setTitle(String title) {
 		setAttribute("title", title);
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(getNodeName());
-		sb.append(" [");
-		final NamedNodeMap attribs = getAttributes();
-		final int length = attribs.getLength();
-		for (int i = 0; i < length; i++) {
-			final Attr attr = (Attr) attribs.item(i);
-			sb.append(attr.getNodeName());
-			sb.append('=');
-			sb.append(attr.getNodeValue());
-			if (i + 1 < length) {
-				sb.append(',');
-			}
-		}
-		sb.append("]");
-		return sb.toString();
-	}
 	
 	/**
 	 * <p>getFirstElementChild.</p>
@@ -529,7 +500,8 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 * @return a {@link org.w3c.dom.Element} object.
 	 */
 	public Element getFirstElementChild() {
-		for (Node n : Nodes.iterable(nodeList)) {
+		for (Iterator<Node> i = nodeList.iterator(); i.hasNext();) {
+			Node n = i.next();
 			if (n instanceof Element) {
 				return (Element) n;
 			}
@@ -561,7 +533,8 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 	 */
 	public int getChildElementCount() {
 		int count = 0;
-		for (Node n : Nodes.iterable(nodeList)) {
+		for (Iterator<Node> i= nodeList.iterator(); i.hasNext(); ) {
+			Node n = i.next();
 			if (n instanceof Element) {
 				count++;
 			}
@@ -570,4 +543,388 @@ public class ElementImpl extends DOMFunctionImpl implements Element {
 		return count;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * setInnerHTML.
+	 * </p>
+	 */
+	@Override
+	public void setInnerHTML(String newHtml) {
+		final HTMLDocumentImpl document = (HTMLDocumentImpl) this.document;
+		if (document == null) {
+			this.warn("setInnerHTML(): Element " + this + " does not belong to a document.");
+			return;
+		}
+		final HtmlParser parser = new HtmlParser(document.getUserAgentContext(), document, null, false);
+		this.nodeList.clear();
+		// Should not synchronize around parser probably.
+		try {
+			try (Reader reader = new StringReader(newHtml)) {
+				parser.parse(reader, this);
+			}
+		} catch (final Exception thrown) {
+			this.warn("setInnerHTML(): Error setting inner HTML.", thrown);
+		}
+	}
+	
+	/**
+	 * <p>Getter for the field <code>outer</code>.</p>
+	 *
+	 * @return the outer
+	 */
+	public String getOuter() {
+		return outer;
+	}
+
+	/**
+	 * <p>Setter for the field <code>outer</code>.</p>
+	 *
+	 * @param outer the outer to set
+	 */
+	public void setOuter(String outer) {
+		this.outer = outer;
+	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>getClassList.</p>
+	 */
+	@Override
+	public DOMTokenList getClassList() {
+        return new DOMTokenListImpl(this, this.getClassName());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getClassName() {
+		final String className = getAttribute("class");
+		return className == null ? "" : className;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setClassName(String className) {
+		setAttribute("class", className);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int getClientHeight() {
+		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
+		HtmlRendererContext htmlRendererContext = doc.getHtmlRendererContext();
+		HtmlPanel htmlPanel = htmlRendererContext.getHtmlPanel();
+		Dimension preferredSize = htmlPanel.getPreferredSize();
+		AbstractCSSProperties currentStyle = ((HTMLElementImpl)this).getCurrentStyle();	
+		String height = currentStyle.getHeight();
+						
+		if (Strings.isBlank(height) || "auto".equalsIgnoreCase(height)) {
+			if (this instanceof HTMLDivElementImpl && Strings.isBlank(getTextContent())) {
+				height = "0px";
+			}
+			
+			if (this instanceof HTMLDivElementImpl && Strings.isNotBlank(getTextContent())) {
+				FontFactory FONT_FACTORY = FontFactory.getInstance();
+				Font DEFAULT_FONT = FONT_FACTORY.getFont(new FontKey());
+				height = DEFAULT_FONT.getSize() + "px";
+			}
+		}
+		return HtmlValues.getPixelSize(height, null, -1, preferredSize.height);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int getClientLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int getClientTop() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int getClientWidth() {
+		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
+		HtmlRendererContext htmlRendererContext = doc.getHtmlRendererContext();
+		HtmlPanel htmlPanel = htmlRendererContext.getHtmlPanel();
+		Dimension preferredSize = htmlPanel.getPreferredSize();
+		AbstractCSSProperties currentStyle = ((HTMLElementImpl)this).getCurrentStyle();
+		String width = currentStyle.getWidth();
+		
+		if(Strings.isBlank(width) || "auto".equalsIgnoreCase(width)) {
+			width = "100%";
+		}		
+		return HtmlValues.getPixelSize(width, null, -1, preferredSize.width);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public EventListener<Event> getOnfullscreenchange() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>getOuterHTML.</p>
+	 */
+	@Override
+	public String getOuterHTML() {
+		final StringBuilder buffer = new StringBuilder();
+		synchronized (this) {
+			appendOuterHTMLImpl(buffer);
+		}
+		return buffer.toString();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>setOuterHTML.</p>
+	 */
+	@Override
+	public void setOuterHTML(String newHtml) {
+		this.outer = outerNewHtml(newHtml);
+		if (this.outer != null) {
+			final HTMLDocumentImpl document = (HTMLDocumentImpl) this.document;
+			if (document == null) {
+				this.warn("setOuterHTML(): Element " + this + " does not belong to a document.");
+				return;
+			}
+			final HtmlParser parser = new HtmlParser(document.getUserAgentContext(), document, null, false);
+			this.nodeList.clear();
+			// Should not synchronize around parser probably.
+			try {
+				try (Reader reader = new StringReader(newHtml)) {
+					parser.parse(reader, this);
+				}
+			} catch (final Exception thrown) {
+				this.warn("setOuterHTML(): Error setting inner HTML.", thrown);
+			}
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getScrollHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getScrollLeft() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setScrollLeft(double scrollLeft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getScrollTop() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setScrollTop(double scrollTop) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getScrollWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getSlot() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSlot(String slot) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public <E extends Element> E closest(String selector) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String[] getAttributeNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasPointerCapture(int pointerId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean matches(String selectors) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void releasePointerCapture(int pointerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void requestPointerLock() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scroll() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scroll(double x, double y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollBy() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollBy(double x, double y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollIntoView(boolean arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollIntoView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollTo() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void scrollTo(double x, double y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setPointerCapture(int pointerId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean toggleAttribute(String qualifiedName, boolean force) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean toggleAttribute(String qualifiedName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/**
+	 * <p>appendOuterHTMLImpl.</p>
+	 *
+	 * @param buffer a {@link java.lang.StringBuilder} object.
+	 */
+	public void appendOuterHTMLImpl(StringBuilder buffer) {
+		final String tagName = getTagName().toUpperCase();
+		buffer.append('<');
+		buffer.append(tagName);
+		final Map<String, String> attributes = this.attributes;
+		if (attributes != null) {
+			attributes.forEach((k, v) -> {
+				if (v != null) {
+					buffer.append(' ');
+					buffer.append(k);
+					buffer.append("=\"");
+					buffer.append(Strings.strictHtmlEncode(v, true));
+					buffer.append("\"");
+				}
+			});
+		}
+		if (nodeList.getLength() == 0) {
+			buffer.append("/>");
+			return;
+		}
+		buffer.append('>');
+		appendInnerHTMLImpl(buffer);
+		buffer.append("</");
+		buffer.append(tagName);
+		buffer.append('>');
+	}
+	
+	private String outerNewHtml(final String newHtml) {
+		if (newHtml != null) {
+			return newHtml.endsWith(">") || ! newHtml.startsWith("<") ? newHtml : newHtml + ">";
+		}
+		return "";
+	}
 }

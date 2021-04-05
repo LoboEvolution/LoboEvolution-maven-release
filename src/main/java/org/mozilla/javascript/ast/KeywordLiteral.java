@@ -18,8 +18,8 @@ import org.mozilla.javascript.Token;
  * {@link org.mozilla.javascript.Token#FALSE}, or
  * {@link org.mozilla.javascript.Token#DEBUGGER}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class KeywordLiteral extends AstNode {
 

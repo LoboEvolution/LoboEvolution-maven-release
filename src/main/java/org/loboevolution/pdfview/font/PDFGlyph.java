@@ -29,8 +29,8 @@ import org.loboevolution.pdfview.PDFShapeCmd;
  * A single glyph in a stream of PDF text, which knows how to write itself
  * onto a PDF command stream
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PDFGlyph {
     /** the character code of this glyph */
@@ -129,7 +129,7 @@ public class PDFGlyph {
     }
 
     /**
-     * <p>Getter for the field advance.</p>
+     * <p>Getter for the field <code>advance</code>.</p>
      *
      * @return a {@link java.awt.geom.Point2D} object.
      */

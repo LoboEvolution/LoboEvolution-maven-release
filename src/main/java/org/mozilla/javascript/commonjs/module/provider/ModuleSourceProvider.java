@@ -14,7 +14,7 @@ import org.mozilla.javascript.Scriptable;
  * Implemented by objects that can provide the source text for the script. The
  * design of the interface supports cache revalidation.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: ModuleSourceProvider.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public interface ModuleSourceProvider
@@ -79,7 +79,7 @@ public interface ModuleSourceProvider
      *
      * @param uri the absolute URI from which to load the module source, but
      * without an extension such as ".js".
-     * @param baseUri the module path base URI from which uri
+     * @param baseUri the module path base URI from which <code>uri</code>
      * was derived.
      * @param validator a validator for an existing loaded and cached module.
      * This will either be null, or an object that this source provider

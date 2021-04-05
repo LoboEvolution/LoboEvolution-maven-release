@@ -1,154 +1,219 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+
 /**
- * Script statements. See the SCRIPT element definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * HTML &lt;script&gt; elements expose the HTMLScriptElement interface, which provides special properties and methods for manipulating the behavior and execution of &lt;script&gt; elements (beyond the inherited HTMLElement interface).
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLScriptElement extends HTMLElement {
-	/**
-	 * The character encoding of the linked resource. See the charset attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCharset();
 
-	/**
-	 * Indicates that the user agent can defer processing of the script. See the
-	 * defer attribute definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getDefer();
+    /**
+     * <p>isAsync.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isAsync();
 
-	/**
-	 * Reserved for future use.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getEvent();
+    /**
+     * <p>setAsync.</p>
+     *
+     * @param async a boolean.
+     */
+    void setAsync(boolean async);
 
-	/**
-	 * Reserved for future use.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHtmlFor();
+    /**
+     * Sets or retrieves the character set used to encode the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCharset();
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating an external script. See the src attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getSrc();
+    
+    /**
+     * <p>setCharset.</p>
+     *
+     * @param charset a {@link java.lang.String} object.
+     */
+    void setCharset(String charset);
 
-	/**
-	 * The script content of the element.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getText();
+    
+    
+    /**
+     * <p>getCrossOrigin.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getCrossOrigin();
 
-	/**
-	 * The content type of the script language. See the type attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getType();
+    
+    /**
+     * <p>setCrossOrigin.</p>
+     *
+     * @param crossOrigin a {@link java.lang.String} object.
+     */
+    void setCrossOrigin(String crossOrigin);
 
-	/**
-	 * The character encoding of the linked resource. See the charset attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param charset a {@link java.lang.String} object.
-	 */
-	void setCharset(String charset);
+    /**
+     * Sets or retrieves the status of the script.
+     *
+     * @return a boolean.
+     */
+    boolean isDefer();
 
-	/**
-	 * Indicates that the user agent can defer processing of the script. See the
-	 * defer attribute definition in HTML 4.01.
-	 *
-	 * @param defer a boolean.
-	 */
-	void setDefer(boolean defer);
+    
+    /**
+     * <p>setDefer.</p>
+     *
+     * @param defer a boolean.
+     */
+    void setDefer(boolean defer);
 
-	/**
-	 * Reserved for future use.
-	 *
-	 * @param event a {@link java.lang.String} object.
-	 */
-	void setEvent(String event);
+    /**
+     * Sets or retrieves the event for which the script is written.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getEvent();
 
-	/**
-	 * Reserved for future use.
-	 *
-	 * @param htmlFor a {@link java.lang.String} object.
-	 */
-	void setHtmlFor(String htmlFor);
+    
+    /**
+     * <p>setEvent.</p>
+     *
+     * @param event a {@link java.lang.String} object.
+     */
+    void setEvent(String event);
 
-	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * designating an external script. See the src attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param src a {@link java.lang.String} object.
-	 */
-	void setSrc(String src);
+    /**
+     * Sets or retrieves the object that is bound to the event script.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getHtmlFor();
 
-	/**
-	 * The script content of the element.
-	 *
-	 * @param text a {@link java.lang.String} object.
-	 */
-	void setText(String text);
+    
+    /**
+     * <p>setHtmlFor.</p>
+     *
+     * @param htmlFor a {@link java.lang.String} object.
+     */
+    void setHtmlFor(String htmlFor);
 
-	/**
-	 * The content type of the script language. See the type attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param type a {@link java.lang.String} object.
-	 */
-	void setType(String type);
+    
+    /**
+     * <p>getIntegrity.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getIntegrity();
+
+    
+    /**
+     * <p>setIntegrity.</p>
+     *
+     * @param integrity a {@link java.lang.String} object.
+     */
+    void setIntegrity(String integrity);
+
+    
+    /**
+     * <p>isNoModule.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isNoModule();
+
+    
+    /**
+     * <p>setNoModule.</p>
+     *
+     * @param noModule a boolean.
+     */
+    void setNoModule(boolean noModule);
+
+    
+    /**
+     * <p>getReferrerPolicy.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getReferrerPolicy();
+
+    
+    /**
+     * <p>setReferrerPolicy.</p>
+     *
+     * @param referrerPolicy a {@link java.lang.String} object.
+     */
+    void setReferrerPolicy(String referrerPolicy);
+
+    /**
+     * Retrieves the URL to an external file that contains the source code or data.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSrc();
+
+    
+    /**
+     * <p>setSrc.</p>
+     *
+     * @param src a {@link java.lang.String} object.
+     */
+    void setSrc(String src);
+
+    /**
+     * Retrieves or sets the text of the object as a string.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getText();
+
+    
+    /**
+     * <p>setText.</p>
+     *
+     * @param text a {@link java.lang.String} object.
+     */
+    void setText(String text);
+
+    /**
+     * Sets or retrieves the MIME type for the associated scripting engine.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getType();
+
+    
+    /**
+     * <p>setType.</p>
+     *
+     * @param type a {@link java.lang.String} object.
+     */
+    void setType(String type);
 
 }

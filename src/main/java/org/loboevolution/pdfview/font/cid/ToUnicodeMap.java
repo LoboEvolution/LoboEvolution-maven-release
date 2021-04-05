@@ -18,10 +18,10 @@ import org.loboevolution.pdfview.PDFObject;
  * that should be able to parse some limited variants of CMAPs that are
  * used for the ToUnicode mapping found for some Type0 fonts.
  *
- * @author  Bernd Rosstauscher
+ * Author  Bernd Rosstauscher
  * @since 03.08.2011
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class ToUnicodeMap extends PDFCMap {
 	
@@ -30,8 +30,8 @@ public class ToUnicodeMap extends PDFCMap {
 	 ****************************************************************************/
 
 	private static class CodeRangeMapping {
-		char srcStart;
-		char srcEnd;
+		final char srcStart;
+		final char srcEnd;
 		
 		CodeRangeMapping(char srcStart, char srcEnd) {
 			this.srcStart = srcStart;
@@ -50,9 +50,9 @@ public class ToUnicodeMap extends PDFCMap {
 	 ****************************************************************************/
 
 	private static class CharRangeMapping {
-		char srcStart;
-		char srcEnd;
-		char destStart;
+		final char srcStart;
+		final char srcEnd;
+		final char destStart;
 		
 		CharRangeMapping(char srcStart, char srcEnd, char destStart) {
 			this.srcStart = srcStart;
@@ -81,13 +81,12 @@ public class ToUnicodeMap extends PDFCMap {
 	 *
 	 * @param map a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public ToUnicodeMap(PDFObject map) throws IOException {
 		super();
-		this.singleCharMappings = new HashMap<Character, Character>();
-		this.charRangeMappings = new ArrayList<CharRangeMapping>();
-		this.codeRangeMappings = new ArrayList<CodeRangeMapping>();
+		this.singleCharMappings = new HashMap<>();
+		this.charRangeMappings = new ArrayList<>();
+		this.codeRangeMappings = new ArrayList<>();
 		parseMappings(map);
 	}
 	
@@ -140,7 +139,7 @@ public class ToUnicodeMap extends PDFCMap {
 			int indexOf = line.indexOf("endcodespacerange");
 			line = line.substring(0, indexOf);
 			indexOf = line.indexOf("begincodespacerange");
-			line = line.substring(indexOf+"begincodespacerange".length(), line.length());
+			line = line.substring(indexOf+"begincodespacerange".length());
 			line = line.trim();
 			
 			parseCodeRangeLine(line);
@@ -185,7 +184,7 @@ public class ToUnicodeMap extends PDFCMap {
 			String substring2 = line.substring(indexOf2, indexOf3+1);
 			
 			int indexOf4 = line.indexOf("<", indexOf3);
-			String substring3 = line.substring(indexOf4, line.length());
+			String substring3 = line.substring(indexOf4);
 			
 			if(!substring1.isEmpty() && !substring2.isEmpty() && !substring3.isEmpty()) {
 				Character srcStart = parseChar(substring1);
@@ -208,7 +207,7 @@ public class ToUnicodeMap extends PDFCMap {
 			String substring1 = line.substring(0, indexOf1+1);
 			
 			int indexOf2 = line.indexOf("<", indexOf1);
-			String substring2 = line.substring(indexOf2, line.length());
+			String substring2 = line.substring(indexOf2);
 			
 			if(!substring1.isEmpty() && !substring2.isEmpty()) {
 				Character srcStart = parseChar(substring1);
@@ -268,7 +267,7 @@ public class ToUnicodeMap extends PDFCMap {
 			int result = Integer.decode("0x" + charDef);
 			return (char) result;
 		} catch (NumberFormatException e) {
-			return (char) ' ';
+			return ' ';
 		}
 	}
 

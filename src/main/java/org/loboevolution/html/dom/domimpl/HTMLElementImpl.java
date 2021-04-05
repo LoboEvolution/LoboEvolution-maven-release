@@ -1,29 +1,27 @@
-/*    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Sep 3, 2005
  */
 package org.loboevolution.html.dom.domimpl;
 
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,21 +31,21 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 
-import org.loboevolution.common.Nodes;
 import org.loboevolution.common.Strings;
-import org.loboevolution.html.dom.input.FormInput;
-import org.loboevolution.html.dom.DOMTokenList;
 import org.loboevolution.html.dom.HTMLElement;
-import org.loboevolution.html.parser.HtmlParser;
+import org.loboevolution.html.dom.input.FormInput;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
+import org.loboevolution.html.node.Code;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeList;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.html.renderstate.StyleSheetRenderState;
 import org.loboevolution.html.style.AbstractCSSProperties;
 import org.loboevolution.html.style.CSSPropertiesContext;
 import org.loboevolution.html.style.HtmlValues;
 import org.loboevolution.html.style.StyleSheetAggregator;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.gargoylesoftware.css.dom.CSSStyleDeclarationImpl;
 import com.gargoylesoftware.css.dom.CSSStyleSheetImpl;
@@ -57,8 +55,8 @@ import com.gargoylesoftware.css.parser.javacc.CSS3Parser;
 /**
  * <p>HTMLElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSPropertiesContext {
 	private Map<String, AbstractCSSProperties> computedStyles;
@@ -66,12 +64,13 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	private volatile AbstractCSSProperties currentStyleDeclarationState;
 
 	private Map<HTMLElementImpl, Boolean> hasHoverStyleByElement = null;
+	
 	private Boolean isHoverStyle = null;
 
 	private boolean isMouseOver = false;
 
 	private volatile AbstractCSSProperties localStyleDeclarationState;
-
+	
 	/**
 	 * <p>Constructor for HTMLElementImpl.</p>
 	 *
@@ -115,38 +114,6 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 			style.addStyleDeclaration(cssStyleDeclarationImpl);
 		}
 		return style;
-	}
-
-	/**
-	 * <p>appendOuterHTMLImpl.</p>
-	 *
-	 * @param buffer a {@link java.lang.StringBuilder} object.
-	 */
-	protected void appendOuterHTMLImpl(StringBuilder buffer) {
-		final String tagName = getTagName();
-		buffer.append('<');
-		buffer.append(tagName);
-		final Map<String, String> attributes = this.attributes;
-		if (attributes != null) {
-			attributes.forEach((k, v) -> {
-				if (v != null) {
-					buffer.append(' ');
-					buffer.append(k);
-					buffer.append("=\"");
-					buffer.append(Strings.strictHtmlEncode(v, true));
-					buffer.append("\"");
-				}
-			});
-		}
-		if (nodeList.getLength() == 0) {
-			buffer.append("/>");
-			return;
-		}
-		buffer.append('>');
-		appendInnerHTMLImpl(buffer);
-		buffer.append("</");
-		buffer.append(tagName);
-		buffer.append('>');
 	}
 
 	/** {@inheritDoc} */
@@ -205,7 +172,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	protected final List<CSSStyleSheetImpl.SelectorEntry> findStyleDeclarations(String elementName, String[] classes) {
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
 		if (doc == null) {
-			return new ArrayList<CSSStyleSheetImpl.SelectorEntry>();
+			return new ArrayList<>();
 		}
 		final StyleSheetAggregator ssa = doc.getStyleSheetAggregator();
 		return ssa.getActiveStyleDeclarations(this, elementName, classes);
@@ -234,11 +201,11 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 			this.isHoverStyle = null;
 			this.hasHoverStyleByElement = null;
 			if (deep) {
-				for (Node node : Nodes.iterable(nodeList)) {
+				nodeList.forEach(node -> {
 					if (node instanceof HTMLElementImpl) {
 						((HTMLElementImpl) node).forgetStyle(deep);
 					}
-				}
+				});
 			}
 		}
 	}
@@ -359,22 +326,6 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		return getAttribute("charset");
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String getClassName() {
-		final String className = getAttribute("class");
-		return className == null ? "" : className;
-	}
-	
-	/**
-	 * <p>getClassList.</p>
-	 *
-	 * @return a {@link org.loboevolution.html.dom.DOMTokenList} object.
-	 */
-	public DOMTokenList getClassList() {
-        return new DOMTokenListImpl(this, this.getClassName());
-	}
-
 	/**
 	 * <p>getComputedStyle.</p>
 	 *
@@ -388,7 +339,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		synchronized (this) {
 			final Map<String, AbstractCSSProperties> cs = this.computedStyles;
 			if (cs != null) {
-				final AbstractCSSProperties sds = (AbstractCSSProperties) cs.get(pseudoElement);
+				final AbstractCSSProperties sds = cs.get(pseudoElement);
 				if (sds != null) {
 					return sds;
 				}
@@ -411,10 +362,10 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 			// return instance already set for consistency.
 			Map<String, AbstractCSSProperties> cs = this.computedStyles;
 			if (cs == null) {
-				cs = new HashMap<String, AbstractCSSProperties>(2);
+				cs = new HashMap<>(2);
 				this.computedStyles = cs;
 			} else {
-				final AbstractCSSProperties sds2 = (AbstractCSSProperties) cs.get(pseudoElement);
+				final AbstractCSSProperties sds2 = cs.get(pseudoElement);
 				if (sds2 != null) {
 					return sds2;
 				}
@@ -488,9 +439,9 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	/**
 	 * <p>getOffsetHeight.</p>
 	 *
-	 * @return a int.
+	 * @return a double.
 	 */
-	public int getOffsetHeight() {
+	public double getOffsetHeight() {
 		final UINode uiNode = getUINode();
 		return uiNode == null ? 0 : uiNode.getBoundsRelativeToBlock().height;
 	}
@@ -500,7 +451,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	 *
 	 * @return a int.
 	 */
-	public int getOffsetLeft() {
+	public double getOffsetLeft() {
 		final UINode uiNode = getUINode();
 		return uiNode == null ? 0 : uiNode.getBoundsRelativeToBlock().x;
 	}
@@ -527,18 +478,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		return uiNode == null ? 0 : uiNode.getBoundsRelativeToBlock().width;
 	}
 
-	/**
-	 * <p>getOuterHTML.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getOuterHTML() {
-		final StringBuilder buffer = new StringBuilder();
-		synchronized (this) {
-			appendOuterHTMLImpl(buffer);
-		}
-		return buffer.toString();
-	}
+	
 
 	/**
 	 * <p>getParent.</p>
@@ -707,7 +647,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		Set<String> pnset = null;
 		if (this.isMouseOver) {
 			if (pnset == null) {
-				pnset = new HashSet<String>(1);
+				pnset = new HashSet<>(1);
 			}
 			pnset.add("hover");
 		}
@@ -753,7 +693,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		synchronized (this) {
 			ihs = this.isHoverStyle;
 			if (ihs != null) {
-				return ihs.booleanValue();
+				return ihs;
 			}
 		}
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
@@ -768,12 +708,12 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 			if (classNames != null && classNames.length() != 0) {
 				classNameArray = Strings.split(classNames);
 			}
-			ihs = Boolean.valueOf(ssa.affectedByPseudoNameInAncestor(this, this, elementName, id, classNameArray, "hover"));
+			ihs = ssa.affectedByPseudoNameInAncestor(this, this, elementName, id, classNameArray, "hover");
 		}
 		synchronized (this) {
 			this.isHoverStyle = ihs;
 		}
-		return ihs.booleanValue();
+		return ihs;
 	}
 
 	private boolean hasHoverStyle(HTMLElementImpl ancestor) {
@@ -781,13 +721,13 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		synchronized (this) {
 			ihs = this.hasHoverStyleByElement;
 			if (ihs != null) {
-				final Boolean f = (Boolean) ihs.get(ancestor);
+				final Boolean f = ihs.get(ancestor);
 				if (f != null) {
-					return f.booleanValue();
+					return f;
 				}
 			}
 		}
-		Boolean hhs;
+		boolean hhs;
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
 		if (doc == null) {
 			hhs = Boolean.FALSE;
@@ -800,17 +740,17 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 			if (classNames != null && classNames.length() != 0) {
 				classNameArray = Strings.split(classNames);
 			}
-			hhs = Boolean.valueOf(ssa.affectedByPseudoNameInAncestor(this, ancestor, elementName, id, classNameArray, "hover"));
+			hhs = ssa.affectedByPseudoNameInAncestor(this, ancestor, elementName, id, classNameArray, "hover");
 		}
 		synchronized (this) {
 			ihs = this.hasHoverStyleByElement;
 			if (ihs == null) {
-				ihs = new HashMap<HTMLElementImpl, Boolean>(2);
+				ihs = new HashMap<>(2);
 				this.hasHoverStyleByElement = ihs;
 			}
 			ihs.put(ancestor, hhs);
 		}
-		return hhs.booleanValue();
+		return hhs;
 	}
 
 	/** {@inheritDoc} */
@@ -855,7 +795,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	}
 
 	private void invalidateDescendentsForHoverImpl(HTMLElementImpl ancestor) {
-		for (Node node : Nodes.iterable(nodeList)) {
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElementImpl) {
 				final HTMLElementImpl descendent = (HTMLElementImpl) node;
 				if (descendent.hasHoverStyle(ancestor)) {
@@ -863,8 +803,9 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 				}
 				descendent.invalidateDescendentsForHoverImpl(ancestor);
 			}
-		}
+		});
 	}
+	
 
 	/**
 	 * <p>setCharset.</p>
@@ -875,19 +816,13 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 		setAttribute("charset", charset);
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void setClassName(String className) {
-		setAttribute("class", className);
-	}
-
 	/**
 	 * <p>setCurrentStyle.</p>
 	 *
 	 * @param value a {@link java.lang.Object} object.
 	 */
 	public void setCurrentStyle(Object value) {
-		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Cannot set currentStyle property");
+		throw new DOMException(Code.NOT_SUPPORTED_ERR, "Cannot set currentStyle property");
 	}
 	
 	/**
@@ -896,34 +831,9 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	 * @return a boolean.
 	 */
 	public boolean getHidden() {
-		return this.getAttribute("hidden") == null ? false : true;
+		return this.getAttribute("hidden") != null;
 	}
 
-	/**
-	 * <p>setInnerHTML.</p>
-	 *
-	 * @param newHtml a {@link java.lang.String} object.
-	 */
-	public void setInnerHTML(String newHtml) {
-		final HTMLDocumentImpl document = (HTMLDocumentImpl) this.document;
-		if (document == null) {
-			this.warn("setInnerHTML(): Element " + this + " does not belong to a document.");
-			return;
-		}
-		final HtmlParser parser = new HtmlParser(document.getUserAgentContext(), document, null, false);
-		this.nodeList.clear();
-		// Should not synchronize around parser probably.
-		try {
-			final Reader reader = new StringReader(newHtml);
-			try {
-				parser.parse(reader, this);
-			} finally {
-				reader.close();
-			}
-		} catch (final Exception thrown) {
-			this.warn("setInnerHTML(): Error setting inner HTML.", thrown);
-		}
-	}
 
 	/**
 	 * <p>setMouseOver.</p>
@@ -965,13 +875,7 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
     public void setContentEditable(String contenteditable) {
         this.setAttribute("contenteditable", contenteditable);
     }
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return super.toString() + "[currentStyle=" + getCurrentStyle() + "]";
-	}
-
+ 
 	/** {@inheritDoc} */
 	@Override
 	public void warn(String message) {
@@ -982,5 +886,116 @@ public class HTMLElementImpl extends ElementImpl implements HTMLElement, CSSProp
 	@Override
 	public void warn(String message, Throwable err) {
 		logger.log(Level.WARNING, message, err);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAccessKey(String accessKey) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLElement]";
 	}
 }

@@ -58,18 +58,16 @@ import org.jpedal.jbig2.util.BinaryOperation;
 /**
  * <p>MMRDecoder class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class MMRDecoder {
 	
 	private static final Logger logger = Logger.getLogger(MMRDecoder.class.getName());
 
-	private StreamReader reader;
+	private final StreamReader reader;
 
 	private long bufferLength = 0, buffer = 0, noOfBytesRead = 0;
-
-	private MMRDecoder() {}
 
 	/**
 	 * <p>Constructor for MMRDecoder.</p>
@@ -293,29 +291,29 @@ public class MMRDecoder {
 		return 1;
 	}
 
-	/** Constant ccittEndOfLine=-2 */
-	public static int ccittEndOfLine = -2;
+	/** Constant <code>ccittEndOfLine=-2</code> */
+	public static final int ccittEndOfLine = -2;
 
-	/** Constant twoDimensionalPass=0 */
+	/** Constant <code>twoDimensionalPass=0</code> */
 	public static final int twoDimensionalPass = 0;
-	/** Constant twoDimensionalHorizontal=1 */
+	/** Constant <code>twoDimensionalHorizontal=1</code> */
 	public static final int twoDimensionalHorizontal = 1;
-	/** Constant twoDimensionalVertical0=2 */
+	/** Constant <code>twoDimensionalVertical0=2</code> */
 	public static final int twoDimensionalVertical0 = 2;
-	/** Constant twoDimensionalVerticalR1=3 */
+	/** Constant <code>twoDimensionalVerticalR1=3</code> */
 	public static final int twoDimensionalVerticalR1 = 3;
-	/** Constant twoDimensionalVerticalL1=4 */
+	/** Constant <code>twoDimensionalVerticalL1=4</code> */
 	public static final int twoDimensionalVerticalL1 = 4;
-	/** Constant twoDimensionalVerticalR2=5 */
+	/** Constant <code>twoDimensionalVerticalR2=5</code> */
 	public static final int twoDimensionalVerticalR2 = 5;
-	/** Constant twoDimensionalVerticalL2=6 */
+	/** Constant <code>twoDimensionalVerticalL2=6</code> */
 	public static final int twoDimensionalVerticalL2 = 6;
-	/** Constant twoDimensionalVerticalR3=7 */
+	/** Constant <code>twoDimensionalVerticalR3=7</code> */
 	public static final int twoDimensionalVerticalR3 = 7;
-	/** Constant twoDimensionalVerticalL3=8 */
+	/** Constant <code>twoDimensionalVerticalL3=8</code> */
 	public static final int twoDimensionalVerticalL3 = 8;
 
-	private int twoDimensionalTable1[][] = { { -1, -1 }, { -1, -1 }, { 7, twoDimensionalVerticalL3 }, { 7, twoDimensionalVerticalR3 }, { 6, twoDimensionalVerticalL2 }, { 6, twoDimensionalVerticalL2 }, { 6, twoDimensionalVerticalR2 }, { 6, twoDimensionalVerticalR2 }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal },
+	private final int[][] twoDimensionalTable1 = { { -1, -1 }, { -1, -1 }, { 7, twoDimensionalVerticalL3 }, { 7, twoDimensionalVerticalR3 }, { 6, twoDimensionalVerticalL2 }, { 6, twoDimensionalVerticalL2 }, { 6, twoDimensionalVerticalR2 }, { 6, twoDimensionalVerticalR2 }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 4, twoDimensionalPass }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal },
 			{ 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalHorizontal }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 },
 			{ 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalL1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 },
 			{ 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 3, twoDimensionalVerticalR1 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 },
@@ -324,9 +322,9 @@ public class MMRDecoder {
 			{ 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 }, { 1, twoDimensionalVertical0 } };
 
 	/** white run lengths */
-	private int whiteTable1[][] = { { -1, -1 }, { 12, ccittEndOfLine }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 11, 1792 }, { 11, 1792 }, { 12, 1984 }, { 12, 2048 }, { 12, 2112 }, { 12, 2176 }, { 12, 2240 }, { 12, 2304 }, { 11, 1856 }, { 11, 1856 }, { 11, 1920 }, { 11, 1920 }, { 12, 2368 }, { 12, 2432 }, { 12, 2496 }, { 12, 2560 } };
+	private final int[][] whiteTable1 = { { -1, -1 }, { 12, ccittEndOfLine }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 11, 1792 }, { 11, 1792 }, { 12, 1984 }, { 12, 2048 }, { 12, 2112 }, { 12, 2176 }, { 12, 2240 }, { 12, 2304 }, { 11, 1856 }, { 11, 1856 }, { 11, 1920 }, { 11, 1920 }, { 12, 2368 }, { 12, 2432 }, { 12, 2496 }, { 12, 2560 } };
 
-	private int whiteTable2[][] = { { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 8, 29 }, { 8, 29 }, { 8, 30 }, { 8, 30 }, { 8, 45 }, { 8, 45 }, { 8, 46 }, { 8, 46 }, { 7, 22 }, { 7, 22 }, { 7, 22 }, { 7, 22 }, { 7, 23 }, { 7, 23 }, { 7, 23 }, { 7, 23 }, { 8, 47 }, { 8, 47 }, { 8, 48 }, { 8, 48 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 7, 20 }, { 7, 20 }, { 7, 20 }, { 7, 20 }, { 8, 33 }, { 8, 33 }, { 8, 34 }, { 8, 34 }, { 8, 35 }, { 8, 35 }, { 8, 36 }, { 8, 36 }, { 8, 37 }, { 8, 37 }, { 8, 38 }, { 8, 38 }, { 7, 19 }, { 7, 19 },
+	private final int[][] whiteTable2 = { { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 8, 29 }, { 8, 29 }, { 8, 30 }, { 8, 30 }, { 8, 45 }, { 8, 45 }, { 8, 46 }, { 8, 46 }, { 7, 22 }, { 7, 22 }, { 7, 22 }, { 7, 22 }, { 7, 23 }, { 7, 23 }, { 7, 23 }, { 7, 23 }, { 8, 47 }, { 8, 47 }, { 8, 48 }, { 8, 48 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 6, 13 }, { 7, 20 }, { 7, 20 }, { 7, 20 }, { 7, 20 }, { 8, 33 }, { 8, 33 }, { 8, 34 }, { 8, 34 }, { 8, 35 }, { 8, 35 }, { 8, 36 }, { 8, 36 }, { 8, 37 }, { 8, 37 }, { 8, 38 }, { 8, 38 }, { 7, 19 }, { 7, 19 },
 			{ 7, 19 }, { 7, 19 }, { 8, 31 }, { 8, 31 }, { 8, 32 }, { 8, 32 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 1 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 6, 12 }, { 8, 53 }, { 8, 53 }, { 8, 54 }, { 8, 54 }, { 7, 26 }, { 7, 26 }, { 7, 26 }, { 7, 26 }, { 8, 39 }, { 8, 39 }, { 8, 40 }, { 8, 40 }, { 8, 41 }, { 8, 41 }, { 8, 42 }, { 8, 42 }, { 8, 43 }, { 8, 43 }, { 8, 44 }, { 8, 44 }, { 7, 21 }, { 7, 21 }, { 7, 21 }, { 7, 21 }, { 7, 28 }, { 7, 28 }, { 7, 28 }, { 7, 28 }, { 8, 61 }, { 8, 61 },
 			{ 8, 62 }, { 8, 62 }, { 8, 63 }, { 8, 63 }, { 8, 0 }, { 8, 0 }, { 8, 320 }, { 8, 320 }, { 8, 384 }, { 8, 384 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 10 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 5, 11 }, { 7, 27 }, { 7, 27 }, { 7, 27 }, { 7, 27 }, { 8, 59 }, { 8, 59 }, { 8, 60 }, { 8, 60 }, { 9, 1472 },
 			{ 9, 1536 }, { 9, 1600 }, { 9, 1728 }, { 7, 18 }, { 7, 18 }, { 7, 18 }, { 7, 18 }, { 7, 24 }, { 7, 24 }, { 7, 24 }, { 7, 24 }, { 8, 49 }, { 8, 49 }, { 8, 50 }, { 8, 50 }, { 8, 51 }, { 8, 51 }, { 8, 52 }, { 8, 52 }, { 7, 25 }, { 7, 25 }, { 7, 25 }, { 7, 25 }, { 8, 55 }, { 8, 55 }, { 8, 56 }, { 8, 56 }, { 8, 57 }, { 8, 57 }, { 8, 58 }, { 8, 58 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 192 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 6, 1664 }, { 8, 448 },
@@ -338,16 +336,16 @@ public class MMRDecoder {
 			{ 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 }, { 4, 7 } };
 
 	/** black run lengths */
-	int blackTable1[][] = { { -1, -1 }, { -1, -1 }, { 12, ccittEndOfLine }, { 12, ccittEndOfLine }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 11, 1792 }, { 11, 1792 }, { 11, 1792 }, { 11, 1792 }, { 12, 1984 }, { 12, 1984 }, { 12, 2048 }, { 12, 2048 }, { 12, 2112 }, { 12, 2112 },
+    final int[][] blackTable1 = { { -1, -1 }, { -1, -1 }, { 12, ccittEndOfLine }, { 12, ccittEndOfLine }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 11, 1792 }, { 11, 1792 }, { 11, 1792 }, { 11, 1792 }, { 12, 1984 }, { 12, 1984 }, { 12, 2048 }, { 12, 2048 }, { 12, 2112 }, { 12, 2112 },
 			{ 12, 2176 }, { 12, 2176 }, { 12, 2240 }, { 12, 2240 }, { 12, 2304 }, { 12, 2304 }, { 11, 1856 }, { 11, 1856 }, { 11, 1856 }, { 11, 1856 }, { 11, 1920 }, { 11, 1920 }, { 11, 1920 }, { 11, 1920 }, { 12, 2368 }, { 12, 2368 }, { 12, 2432 }, { 12, 2432 }, { 12, 2496 }, { 12, 2496 }, { 12, 2560 }, { 12, 2560 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 10, 18 }, { 12, 52 }, { 12, 52 }, { 13, 640 }, { 13, 704 }, { 13, 768 }, { 13, 832 }, { 12, 55 }, { 12, 55 }, { 12, 56 }, { 12, 56 }, { 13, 1280 }, { 13, 1344 },
 			{ 13, 1408 }, { 13, 1472 }, { 12, 59 }, { 12, 59 }, { 12, 60 }, { 12, 60 }, { 13, 1536 }, { 13, 1600 }, { 11, 24 }, { 11, 24 }, { 11, 24 }, { 11, 24 }, { 11, 25 }, { 11, 25 }, { 11, 25 }, { 11, 25 }, { 13, 1664 }, { 13, 1728 }, { 12, 320 }, { 12, 320 }, { 12, 384 }, { 12, 384 }, { 12, 448 }, { 12, 448 }, { 13, 512 }, { 13, 576 }, { 12, 53 }, { 12, 53 }, { 12, 54 }, { 12, 54 }, { 13, 896 }, { 13, 960 }, { 13, 1024 }, { 13, 1088 }, { 13, 1152 }, { 13, 1216 }, { 10, 64 }, { 10, 64 }, { 10, 64 }, { 10, 64 }, { 10, 64 }, { 10, 64 }, { 10, 64 }, { 10, 64 } };
 
-	int blackTable2[][] = { { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 11, 23 }, { 11, 23 }, { 12, 50 }, { 12, 51 }, { 12, 44 }, { 12, 45 }, { 12, 46 }, { 12, 47 }, { 12, 57 }, { 12, 58 }, { 12, 61 }, { 12, 256 }, { 10, 16 }, { 10, 16 }, { 10, 16 }, { 10, 16 }, { 10, 17 }, { 10, 17 }, { 10, 17 }, { 10, 17 }, { 12, 48 }, { 12, 49 }, { 12, 62 }, { 12, 63 }, { 12, 30 }, { 12, 31 }, { 12, 32 }, { 12, 33 }, { 12, 40 }, { 12, 41 }, { 11, 22 },
+	final int[][] blackTable2 = { { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 8, 13 }, { 11, 23 }, { 11, 23 }, { 12, 50 }, { 12, 51 }, { 12, 44 }, { 12, 45 }, { 12, 46 }, { 12, 47 }, { 12, 57 }, { 12, 58 }, { 12, 61 }, { 12, 256 }, { 10, 16 }, { 10, 16 }, { 10, 16 }, { 10, 16 }, { 10, 17 }, { 10, 17 }, { 10, 17 }, { 10, 17 }, { 12, 48 }, { 12, 49 }, { 12, 62 }, { 12, 63 }, { 12, 30 }, { 12, 31 }, { 12, 32 }, { 12, 33 }, { 12, 40 }, { 12, 41 }, { 11, 22 },
 			{ 11, 22 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 8, 14 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 10 }, { 7, 11 }, { 7, 11 },
 			{ 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 7, 11 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 9, 15 }, { 12, 128 }, { 12, 192 }, { 12, 26 }, { 12, 27 }, { 12, 28 }, { 12, 29 }, { 11, 19 }, { 11, 19 }, { 11, 20 }, { 11, 20 }, { 12, 34 }, { 12, 35 },
 			{ 12, 36 }, { 12, 37 }, { 12, 38 }, { 12, 39 }, { 11, 21 }, { 11, 21 }, { 12, 42 }, { 12, 43 }, { 10, 0 }, { 10, 0 }, { 10, 0 }, { 10, 0 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 }, { 7, 12 } };
 
-	int blackTable3[][] = { { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 6, 9 }, { 6, 8 }, { 5, 7 }, { 5, 7 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 5 }, { 4, 5 }, { 4, 5 }, { 4, 5 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 },
+	final int[][] blackTable3 = { { -1, -1 }, { -1, -1 }, { -1, -1 }, { -1, -1 }, { 6, 9 }, { 6, 8 }, { 5, 7 }, { 5, 7 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 6 }, { 4, 5 }, { 4, 5 }, { 4, 5 }, { 4, 5 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 1 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 3, 4 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 3 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 },
 			{ 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 }, { 2, 2 } };
 
 }

@@ -1,18 +1,39 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.loboevolution.html.dom.nodeimpl.DOMException;
 import org.loboevolution.html.dom.svg.SVGException;
 import org.loboevolution.html.dom.svg.SVGNumber;
 import org.loboevolution.html.dom.svg.SVGNumberList;
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGNumberListImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGNumberListImpl implements SVGNumberList {
 
@@ -22,7 +43,7 @@ public class SVGNumberListImpl implements SVGNumberList {
 	 * <p>Constructor for SVGNumberListImpl.</p>
 	 */
 	public SVGNumberListImpl() {
-		pointList = new ArrayList<SVGNumber>();
+		pointList = new ArrayList<>();
 	}
 
 	/** {@inheritDoc} */
@@ -33,21 +54,21 @@ public class SVGNumberListImpl implements SVGNumberList {
 
 	/** {@inheritDoc} */
 	@Override
-	public void clear() throws DOMException {
+	public void clear() {
 		pointList.clear();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public SVGNumber initialize(SVGNumber newItem) throws DOMException, SVGException {
-		pointList = new ArrayList<SVGNumber>();
+		pointList = new ArrayList<>();
 		pointList.add(newItem);
 		return newItem;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGNumber getItem(int index) throws DOMException {
+	public SVGNumber getItem(int index) {
 		return pointList.get(index);
 	}
 
@@ -55,9 +76,7 @@ public class SVGNumberListImpl implements SVGNumberList {
 	@Override
 	public SVGNumber insertItemBefore(SVGNumber newItem, int index) throws DOMException, SVGException {
 
-		if (pointList.contains(newItem)) {
-			pointList.remove(newItem);
-		}
+        pointList.remove(newItem);
 
 		if (index < 0) {
 			pointList.add(0, newItem);
@@ -73,9 +92,7 @@ public class SVGNumberListImpl implements SVGNumberList {
 	@Override
 	public SVGNumber replaceItem(SVGNumber newItem, int index) throws DOMException, SVGException {
 
-		if (pointList.contains(newItem)) {
-			pointList.remove(newItem);
-		}
+        pointList.remove(newItem);
 
 		if (index < 0 || index > getNumberOfItems() - 1) {
 			return null;
@@ -88,7 +105,7 @@ public class SVGNumberListImpl implements SVGNumberList {
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGNumber removeItem(int index) throws DOMException {
+	public SVGNumber removeItem(int index) {
 		return pointList.remove(index);
 	}
 

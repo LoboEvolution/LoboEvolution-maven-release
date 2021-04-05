@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html;
 
 import java.util.Collections;
@@ -7,8 +27,8 @@ import java.util.Map;
 /**
  * <p>ListValues class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public enum ListValues {
 	
@@ -38,6 +58,8 @@ public enum ListValues {
 	
 	TYPE_DECIMAL_LEADING_ZERO(11),
 	
+	TYPE_URL(12),
+	
 	POSITION_INSIDE(253),
 	
 	POSITION_OUTSIDE(254),
@@ -46,11 +68,11 @@ public enum ListValues {
 	
 	TYPE_UNSET(256);
 
-	private int value;
+	private final int value;
 	private static final Map<Integer, ListValues> ENUM_MAP;
 	
 	static {
-		Map<Integer, ListValues> map = new HashMap<Integer, ListValues>();
+		Map<Integer, ListValues> map = new HashMap<>();
 		for (ListValues instance : ListValues.values()) {
 			map.put(instance.getValue(), instance);
 		}

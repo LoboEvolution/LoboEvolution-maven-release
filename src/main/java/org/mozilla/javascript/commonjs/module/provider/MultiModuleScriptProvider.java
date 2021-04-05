@@ -16,7 +16,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 /**
  * A multiplexer for module script providers.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: MultiModuleScriptProvider.java,v 1.4 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public class MultiModuleScriptProvider implements ModuleScriptProvider

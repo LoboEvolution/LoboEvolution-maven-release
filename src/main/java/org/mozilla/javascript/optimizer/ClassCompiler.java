@@ -21,8 +21,8 @@ import org.mozilla.javascript.ast.ScriptNode;
  *
  * since 1.5 Release 5
  *
- * @author Igor Bukanov
- * @version $Id: $Id
+ * Author Igor Bukanov
+ *
  */
 public class ClassCompiler
 {
@@ -42,10 +42,10 @@ public class ClassCompiler
     /**
      * Set the class name to use for main method implementation.
      * The class must have a method matching
-     * <tt>public static void main(Script sc, String[] args)</tt>, it will be
-     * called when <tt>main(String[] args)</tt> is called in the generated
+     * <code>public static void main(Script sc, String[] args)</code>, it will be
+     * called when <code>main(String[] args)</code> is called in the generated
      * class. The class name should be fully qulified name and include the
-     * package name like in <tt>org.foo.Bar</tt>.
+     * package name like in <code>org.foo.Bar</code>.
      *
      * @param className a {@link java.lang.String} object.
      */

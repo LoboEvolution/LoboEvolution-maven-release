@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 /**
  * <p>HexDump class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class HexDump {
 	
@@ -79,7 +79,7 @@ public class HexDump {
      *
      * @param args an array of {@link java.lang.String} objects.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length != 1) {
             logger.info("Usage: ");
             logger.info("    HexDump <filename>");

@@ -22,18 +22,18 @@ package org.loboevolution.pdfview.decode;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
+import org.loboevolution.pdfview.PDFFile;
 import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFParseException;
-import org.loboevolution.pdfview.PDFFile;
 
 /**
  * decode an array of hex nybbles into a byte array
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class ASCIIHexDecode {
-    private ByteBuffer buf;
+    private final ByteBuffer buf;
     
     /**
      * initialize the decoder with an array of bytes in ASCIIHex format

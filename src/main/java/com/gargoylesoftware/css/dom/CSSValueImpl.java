@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,16 @@ import com.gargoylesoftware.css.parser.LexicalUnitImpl;
 import com.gargoylesoftware.css.util.LangUtils;
 
 /**
- * The CSSValueImpl class can represent either a
- * CSSPrimitiveValue or a CSSValueList so that
- * the type can successfully change when using setCssText.
+ * The <code>CSSValueImpl</code> class can represent either a
+ * <code>CSSPrimitiveValue</code> or a <code>CSSValueList</code> so that
+ * the type can successfully change when using <code>setCssText</code>.
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public class CSSValueImpl extends AbstractLocatable implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	/**
+    /**
      * CSSValueType enum.
      */
     public enum CSSValueType {
@@ -70,6 +68,24 @@ public class CSSValueImpl extends AbstractLocatable implements Serializable {
 
         /** CSS_EXS. */
         CSS_EXS,
+
+        /** CSS_REM. */
+        CSS_REM,
+
+        /** CSS_CH. */
+        CSS_CH,
+
+        /** CSS_VW. */
+        CSS_VW,
+
+        /** CSS_VH. */
+        CSS_VH,
+
+        /** CSS_VMIN. */
+        CSS_VMIN,
+
+        /** CSS_VMAX. */
+        CSS_VMAX,
 
         /** CSS_PX. */
         CSS_PX,
@@ -309,9 +325,19 @@ public class CSSValueImpl extends AbstractLocatable implements Serializable {
                 case EM:
                     return CSSPrimitiveValueType.CSS_EMS;
                 case REM:
-                    return CSSPrimitiveValueType.CSS_UNKNOWN;
+                    return CSSPrimitiveValueType.CSS_REM;
                 case EX:
                     return CSSPrimitiveValueType.CSS_EXS;
+                case CH:
+                    return CSSPrimitiveValueType.CSS_CH;
+                case VW:
+                    return CSSPrimitiveValueType.CSS_VW;
+                case VH:
+                    return CSSPrimitiveValueType.CSS_VH;
+                case VMIN:
+                    return CSSPrimitiveValueType.CSS_VMIN;
+                case VMAX:
+                    return CSSPrimitiveValueType.CSS_VMAX;
                 case PIXEL:
                     return CSSPrimitiveValueType.CSS_PX;
                 case INCH:

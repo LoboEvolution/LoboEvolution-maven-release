@@ -14,9 +14,9 @@ package org.mozilla.javascript;
   *
   *@see Context#setClassShutter(ClassShutter)
   *@since 1.5 Release 4
-  *@author Norris Boyd
+  *Author Norris Boyd
   *
-  * @version $Id: $Id
+  *
   */
  public interface ClassShutter {
 
@@ -42,7 +42,7 @@ package org.mozilla.javascript;
      * visibleToScripts before attempting to look up the class name. If
      * visibleToScripts returns false, the class name lookup is not
      * performed and subsequent Rhino execution assumes the class is
-     * not present. So for "java.lang.System.out.println" the lookup
+     * not present. So for "java.lang.logger.info" the lookup
      * of "java.lang.System" is skipped and thus Rhino assumes that
      * "java.lang.System" doesn't exist. So then for "java.lang.System.out",
      * Rhino attempts to load the class "java.lang.System.out" because

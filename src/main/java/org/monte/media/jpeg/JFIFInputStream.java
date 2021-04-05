@@ -10,8 +10,15 @@
  */
 package org.monte.media.jpeg;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * JFIFInputStream.
@@ -39,10 +46,10 @@ import java.util.*;
  * <p>
  *   Pennebaker, W., Mitchell, J. (1993).<br>
  *   JPEG Still Image Data Compression Standard.<br>
- *   Chapmann  Hall, New York.<br>
+ *   Chapmann Hall, New York.<br>
  *   ISBN 0-442-01272-1<br>
  *
- * @author Werner Randelshofer, Hausmatt 10, CH-6405 Goldau
+ * Author Werner Randelshofer, Hausmatt 10, CH-6405 Goldau
  * @version $Id: JFIFInputStream.java 299 2013-01-03 07:40:18Z werner $
  */
 public class JFIFInputStream extends FilterInputStream {
@@ -51,12 +58,12 @@ public class JFIFInputStream extends FilterInputStream {
      * This hash set holds the Id's of markers which stand alone,
      * respectively do no have a data segment.
      */
-    private final HashSet<Integer> standaloneMarkers = new HashSet<Integer>();
+    private final Set<Integer> standaloneMarkers = new HashSet<>();
     /** 
      * This hash set holds the Id's of markers which have a data
      * segment followed by a entropy-coded data segment.
      */
-    private final HashSet<Integer> doubleSegMarkers = new HashSet<Integer>();
+    private final Set<Integer> doubleSegMarkers = new HashSet<>();
 
     /** Represents a segment within a JFIF File. 
      */
@@ -120,80 +127,80 @@ public class JFIFInputStream extends FilterInputStream {
     public final static int APP2_MARKER = 0xffe2;
     /** Reserved for JPEG extensions */
     public final static int JPG0_MARKER = 0xfff0;
-    /** Constant JPG1_MARKER=0xfff1 */
+    /** Constant <code>JPG1_MARKER=0xfff1</code> */
     public final static int JPG1_MARKER = 0xfff1;
-    /** Constant JPG2_MARKER=0xfff2 */
+    /** Constant <code>JPG2_MARKER=0xfff2</code> */
     public final static int JPG2_MARKER = 0xfff2;
-    /** Constant JPG3_MARKER=0xfff3 */
+    /** Constant <code>JPG3_MARKER=0xfff3</code> */
     public final static int JPG3_MARKER = 0xfff3;
-    /** Constant JPG4_MARKER=0xfff4 */
+    /** Constant <code>JPG4_MARKER=0xfff4</code> */
     public final static int JPG4_MARKER = 0xfff4;
-    /** Constant JPG5_MARKER=0xfff5 */
+    /** Constant <code>JPG5_MARKER=0xfff5</code> */
     public final static int JPG5_MARKER = 0xfff5;
-    /** Constant JPG6_MARKER=0xfff6 */
+    /** Constant <code>JPG6_MARKER=0xfff6</code> */
     public final static int JPG6_MARKER = 0xfff6;
-    /** Constant JPG7_MARKER=0xfff7 */
+    /** Constant <code>JPG7_MARKER=0xfff7</code> */
     public final static int JPG7_MARKER = 0xfff7;
-    /** Constant JPG8_MARKER=0xfff8 */
+    /** Constant <code>JPG8_MARKER=0xfff8</code> */
     public final static int JPG8_MARKER = 0xfff8;
-    /** Constant JPG9_MARKER=0xfff9 */
+    /** Constant <code>JPG9_MARKER=0xfff9</code> */
     public final static int JPG9_MARKER = 0xfff9;
-    /** Constant JPGA_MARKER=0xfffA */
+    /** Constant <code>JPGA_MARKER=0xfffA</code> */
     public final static int JPGA_MARKER = 0xfffA;
-    /** Constant JPGB_MARKER=0xfffB */
+    /** Constant <code>JPGB_MARKER=0xfffB</code> */
     public final static int JPGB_MARKER = 0xfffB;
-    /** Constant JPGC_MARKER=0xfffC */
+    /** Constant <code>JPGC_MARKER=0xfffC</code> */
     public final static int JPGC_MARKER = 0xfffC;
-    /** Constant JPGD_MARKER=0xfffD */
+    /** Constant <code>JPGD_MARKER=0xfffD</code> */
     public final static int JPGD_MARKER = 0xfffD;
     /** Start of frame markers */
     public final static int SOF0_MARKER = 0xffc0;//nondifferential Huffman-coding frames with baseline DCT.
-    /** Constant SOF1_MARKER=0xffc1 */
+    /** Constant <code>SOF1_MARKER=0xffc1</code> */
     public final static int SOF1_MARKER = 0xffc1;//nondifferential Huffman-coding frames with extended sequential DCT.
-    /** Constant SOF2_MARKER=0xffc2 */
+    /** Constant <code>SOF2_MARKER=0xffc2</code> */
     public final static int SOF2_MARKER = 0xffc2;//nondifferential Huffman-coding frames with progressive DCT.
-    /** Constant SOF3_MARKER=0xffc3 */
+    /** Constant <code>SOF3_MARKER=0xffc3</code> */
     public final static int SOF3_MARKER = 0xffc3;//nondifferential Huffman-coding frames with lossless (sequential) data.
 
     //public final static int SOF4_MARKER = 0xffc4;//
-    /** Constant SOF5_MARKER=0xffc5 */
+    /** Constant <code>SOF5_MARKER=0xffc5</code> */
     public final static int SOF5_MARKER = 0xffc5;//differential Huffman-coding frames with differential sequential DCT.
-    /** Constant SOF6_MARKER=0xffc6 */
+    /** Constant <code>SOF6_MARKER=0xffc6</code> */
     public final static int SOF6_MARKER = 0xffc6;//differential Huffman-coding frames with differential progressive DCT.
-    /** Constant SOF7_MARKER=0xffc7 */
+    /** Constant <code>SOF7_MARKER=0xffc7</code> */
     public final static int SOF7_MARKER = 0xffc7;//differential Huffman-coding frames with differential lossless data.
 
     //public final static int SOF8_MARKER = 0xffc8;//
-    /** Constant SOF9_MARKER=0xffc9 */
+    /** Constant <code>SOF9_MARKER=0xffc9</code> */
     public final static int SOF9_MARKER = 0xffc9;//nondifferential Arithmetic-coding frames with extended sequential DCT.
-    /** Constant SOFA_MARKER=0xffcA */
+    /** Constant <code>SOFA_MARKER=0xffcA</code> */
     public final static int SOFA_MARKER = 0xffcA;//nondifferential Arithmetic-coding frames with progressive DCT.
-    /** Constant SOFB_MARKER=0xffcB */
+    /** Constant <code>SOFB_MARKER=0xffcB</code> */
     public final static int SOFB_MARKER = 0xffcB;//nondifferential Arithmetic-coding frames with lossless (sequential) data.
     //public final static int SOFC_MARKER = 0xffcC;//
-    /** Constant SOFD_MARKER=0xffcD */
+    /** Constant <code>SOFD_MARKER=0xffcD</code> */
     public final static int SOFD_MARKER = 0xffcD;//differential Arithmetic-coding frames with differential sequential DCT.
-    /** Constant SOFE_MARKER=0xffcE */
+    /** Constant <code>SOFE_MARKER=0xffcE</code> */
     public final static int SOFE_MARKER = 0xffcE;//differential Arithmetic-coding frames with differential progressive DCT.
-    /** Constant SOFF_MARKER=0xffcF */
+    /** Constant <code>SOFF_MARKER=0xffcF</code> */
     public final static int SOFF_MARKER = 0xffcF;//differential Arithmetic-coding frames with differential lossless DCT.
 
     // Restart markers
-    /** Constant RST0_MARKER=0xffd0 */
+    /** Constant <code>RST0_MARKER=0xffd0</code> */
     public final static int RST0_MARKER = 0xffd0;
-    /** Constant RST1_MARKER=0xffd1 */
+    /** Constant <code>RST1_MARKER=0xffd1</code> */
     public final static int RST1_MARKER = 0xffd1;
-    /** Constant RST2_MARKER=0xffd2 */
+    /** Constant <code>RST2_MARKER=0xffd2</code> */
     public final static int RST2_MARKER = 0xffd2;
-    /** Constant RST3_MARKER=0xffd3 */
+    /** Constant <code>RST3_MARKER=0xffd3</code> */
     public final static int RST3_MARKER = 0xffd3;
-    /** Constant RST4_MARKER=0xffd4 */
+    /** Constant <code>RST4_MARKER=0xffd4</code> */
     public final static int RST4_MARKER = 0xffd4;
-    /** Constant RST5_MARKER=0xffd5 */
+    /** Constant <code>RST5_MARKER=0xffd5</code> */
     public final static int RST5_MARKER = 0xffd5;
-    /** Constant RST6_MARKER=0xffd6 */
+    /** Constant <code>RST6_MARKER=0xffd6</code> */
     public final static int RST6_MARKER = 0xffd6;
-    /** Constant RST7_MARKER=0xffd7 */
+    /** Constant <code>RST7_MARKER=0xffd7</code> */
     public final static int RST7_MARKER = 0xffd7;
 
     /**
@@ -351,15 +358,15 @@ public class JFIFInputStream extends FilterInputStream {
      * {@inheritDoc}
      *
      * Reads the next byte of data from this input stream. The value
-     * byte is returned as an int in the range
-     * 0 to 255. If no byte is available
+     * byte is returned as an <code>int</code> in the range
+     * <code>0</code> to <code>255</code>. If no byte is available
      * because the end of the stream has been reached, the value
-     * -1 is returned. This method blocks until input data
+     * <code>-1</code> is returned. This method blocks until input data
      * is available, the end of the stream is detected, or an exception
      * is thrown.
      * <p>
      * This method
-     * simply performs in.read() and returns the result.
+     * simply performs <code>in.read()</code> and returns the result.
      * @exception  IOException  if an I/O error occurs.
      * @see        java.io.FilterInputStream#in
      */
@@ -399,17 +406,17 @@ public class JFIFInputStream extends FilterInputStream {
     /**
      * {@inheritDoc}
      *
-     * Reads up to len b of data from this input stream
+     * Reads up to <code>len</code> b of data from this input stream
      * into an array of b. This method blocks until some input is
      * available.
      * <p>
-     * This method simply performs in.read(b, off, len)
+     * This method simply performs <code>in.read(b, off, len)</code>
      * and returns the result.
      * @exception  IOException  if an I/O error occurs.
      * @see        java.io.FilterInputStream#in
      */
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         if (markerFound) {
             return -1;
         }
@@ -463,14 +470,14 @@ public class JFIFInputStream extends FilterInputStream {
     /**
      * {@inheritDoc}
      *
-     * Skips over and discards n b of data from the
-     * input stream. The skip method may, for a variety of
+     * Skips over and discards <code>n</code> b of data from the
+     * input stream. The <code>skip</code> method may, for a variety of
      * reasons, end up skipping over some smaller number of b,
-     * possibly 0. The actual number of b skipped is
+     * possibly <code>0</code>. The actual number of b skipped is
      * returned.
      * <p>
      * This method
-     * simply performs in.skip(n).
+     * simply performs <code>in.skip(n)</code>.
      * @exception  IOException  if an I/O error occurs.
      */
     @Override
@@ -504,14 +511,14 @@ public class JFIFInputStream extends FilterInputStream {
      * {@inheritDoc}
      *
      * Marks the current position in this input stream. A subsequent
-     * call to the reset method repositions this stream at
+     * call to the <code>reset</code> method repositions this stream at
      * the last marked position so that subsequent reads re-read the same b.
      * <p>
-     * The readlimit argument tells this input stream to
+     * The <code>readlimit</code> argument tells this input stream to
      * allow that many b to be read before the mark position gets
      * invalidated.
      * <p>
-     * This method simply performs in.mark(readlimit).
+     * This method simply performs <code>in.mark(readlimit)</code>.
      * @see     java.io.FilterInputStream#in
      * @see     java.io.FilterInputStream#reset()
      */
@@ -524,10 +531,10 @@ public class JFIFInputStream extends FilterInputStream {
      * {@inheritDoc}
      *
      * Repositions this stream to the position at the time the
-     * mark method was last called on this input stream.
+     * <code>mark</code> method was last called on this input stream.
      * <p>
      * This method
-     * simply performs in.reset().
+     * simply performs <code>in.reset()</code>.
      * <p>
      * Stream marks are intended to be used in
      * situations where you need to read ahead a little to see what's in
@@ -550,10 +557,10 @@ public class JFIFInputStream extends FilterInputStream {
     /**
      * {@inheritDoc}
      *
-     * Tests if this input stream supports the mark
-     * and reset methods.
+     * Tests if this input stream supports the <code>mark</code>
+     * and <code>reset</code> methods.
      * This method
-     * simply performs in.markSupported().
+     * simply performs <code>in.markSupported()</code>.
      * @see     java.io.FilterInputStream#in
      * @see     java.io.InputStream#mark(int)
      * @see     java.io.InputStream#reset()

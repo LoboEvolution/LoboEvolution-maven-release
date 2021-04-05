@@ -1,33 +1,33 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Jan 15, 2006
  */
 package org.loboevolution.html.dom.domimpl;
 
 import org.loboevolution.common.Strings;
-import org.loboevolution.html.dom.input.FormInput;
 import org.loboevolution.html.control.InputControl;
+import org.loboevolution.html.dom.HTMLElement;
 import org.loboevolution.html.dom.HTMLFormElement;
 import org.loboevolution.html.dom.HTMLInputElement;
+import org.loboevolution.html.dom.input.FormInput;
 import org.loboevolution.html.dom.input.InputButton;
 import org.loboevolution.html.dom.input.InputCheckbox;
 import org.loboevolution.html.dom.input.InputColorPicker;
@@ -42,15 +42,19 @@ import org.loboevolution.html.dom.input.InputRange;
 import org.loboevolution.html.dom.input.InputText;
 import org.loboevolution.html.js.Executor;
 import org.mozilla.javascript.Function;
-import org.w3c.dom.Node;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.ValidityState;
+import org.loboevolution.jsenum.Direction;
 
 /**
  * <p>HTMLInputElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLInputElement {
+public class HTMLInputElementImpl extends HTMLElementImpl implements HTMLInputElement {
 	
 	private InputText text;
 	
@@ -63,7 +67,14 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 	private InputPassword password;
 	
 	private InputColorPicker color;
+	
+	private int selectionStart = 0;
+	
+	private int selectionEnd = 0;
+	
+	private boolean focusable = false;
 
+	
 	/**
 	 * <p>Constructor for HTMLInputElementImpl.</p>
 	 *
@@ -93,16 +104,16 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getChecked() {
+	public boolean isChecked() {
 		final String checked = getAttribute("checked");
-		return checked == null ? false : true;
+		return checked != null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getDisabled() {
+	public boolean isDisabled() {
 		final String disabled = getAttribute("disabled");
-		return disabled == null ? false : true;
+		return disabled != null;
 	}
 
 	/** {@inheritDoc} */
@@ -117,7 +128,7 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 
 	/** {@inheritDoc} */
 	@Override
-	public int getMaxLength() {
+	public double getMaxLength() {
 		try {
 			final String maxLength = getAttribute("maxLength");
 			return Integer.parseInt(maxLength.trim());
@@ -134,9 +145,9 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getReadOnly() {
+	public boolean isReadOnly() {
 		final String readonly = getAttribute("readonly");
-		return readonly == null ? false : true;
+		return readonly != null;
 	}
 
 	/** {@inheritDoc} */
@@ -201,24 +212,55 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 		}
 	}
 	
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>blur.</p>
+	 */
 	public void blur() {
 		if(text!= null) text.blur();
+		if(text!= null) {text.blur();} else {focusable = true;}
 	}
 	
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>focus.</p>
+	 */
 	public void focus() {
-		if(text!= null) text.focus();
+		if(text!= null) {text.focus();} else {focusable = true;}
 	}
 	
-	/** {@inheritDoc} */
+    /** {@inheritDoc} */
 	@Override
-	public void setSelectionRange(int start, int end) {
-		if(text!= null) text.setSelectionRange(start, end);
-	} 
+    public int getSelectionStart() {
+		final int textLenght = getTextLength();
+        return (selectionStart > textLenght || selectionStart < 0) ? textLenght : selectionStart;
+    }
+
+    /** {@inheritDoc} */
+	@Override
+    public void setSelectionStart(int start) {
+       this.selectionStart = start;
+    }
 	
+    /** {@inheritDoc} */
+	@Override
+    public int getSelectionEnd() {
+		final int textLenght = getTextLength();
+        return (selectionEnd > textLenght || selectionEnd < 0) ? textLenght : selectionEnd;
+    }
+
+    /** {@inheritDoc} */
+	@Override
+    public void setSelectionEnd(int end) {
+        this.selectionEnd = end;
+    }
+
+    /** {@inheritDoc} */
+	@Override
+    public void setSelectionRange(int start, int end) {
+        setSelectionStart(start);
+        setSelectionEnd(end);
+    }
+	
+		
 	/** {@inheritDoc} */
 	@Override
 	public void setRangeText(String select, int start, int end, String preserve) {
@@ -257,7 +299,7 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMaxLength(int maxLength) {
+	public void setMaxLength(double maxLength) {
 		setAttribute("maxLength", String.valueOf(maxLength));
 	}
 
@@ -294,13 +336,26 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 	/** {@inheritDoc} */
 	@Override
 	public void setValue(String value) {
+		if(text!= null) text.setText(value);
 		setAttribute("value", value);
+		setSelectionStart(Strings.isBlank(value) ? 0 : value.length());
+        setSelectionEnd(Strings.isBlank(value) ? 0 : value.length());
+	}
+		
+	/**
+	 * <p>getTextLength.</p>
+	 *
+	 * @return a int.
+	 */
+	public int getTextLength() {
+		return getValue().length();
 	}
 	
+	
 	/**
-	 * <p>setPlaceholder.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param placeholder a {@link java.lang.String} object.
+	 * <p>setPlaceholder.</p>
 	 */
 	public void setPlaceholder(String placeholder) {
 		this.setAttribute("placeholder", placeholder);
@@ -313,10 +368,10 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 	 * @param ic a {@link org.loboevolution.html.control.InputControl} object.
 	 */
 	public void draw(InputControl ic) {
-		final String type = getType();
+		String type = getType();
 		
 		if (Strings.isBlank(type)) {
-			text = new InputText(this, ic);
+			type = "text";
 		}
 
 		switch (type.toLowerCase()) {
@@ -327,7 +382,9 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 			new InputHidden(this, ic);
 			break;
 		case "submit":
-			new InputButton(this, ic);
+			case "reset":
+			case "button":
+				new InputButton(this, ic);
 			break;
 		case "password":
 			password = new InputPassword(this, ic);
@@ -347,16 +404,10 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 		case "checkbox":
 			checkbox = new InputCheckbox(this, ic);
 			break;
-		case "button":
-			new InputButton(this, ic);
-			break;
-		case "image":
+			case "image":
 			new InputImage(this, ic);
 			break;
-		case "reset":
-			new InputButton(this, ic);
-			break;
-		case "range":
+			case "range":
 			new InputRange(this, ic);
 			break;
 		case "date":
@@ -437,5 +488,548 @@ public class HTMLInputElementImpl extends HTMLAbstractUIElement implements HTMLI
 		if(color != null) color.reset();
 		if(number != null) number.reset();
 		if(password != null) password.reset();
+	}
+	
+	/**
+	 * <p>isFocusable.</p>
+	 *
+	 * @return the focusable
+	 */
+	public boolean isFocusable() {
+		return focusable;
+	}
+
+	/**
+	 * <p>Setter for the field <code>focusable</code>.</p>
+	 *
+	 * @param focusable the focusable to set
+	 */
+	public void setFocusable(boolean focusable) {
+		this.focusable = focusable;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAlign() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAlign(String align) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocomplete(String autocomplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isAutofocus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutofocus(boolean autofocus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDefaultChecked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDefaultChecked(boolean defaultChecked) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getDefaultValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDefaultValue(String defaultValue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getDirName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDirName(String dirName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormAction(String formAction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormEnctype() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormEnctype(String formEnctype) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormMethod() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormMethod(String formMethod) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isFormNoValidate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormNoValidate(boolean formNoValidate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormTarget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormTarget(String formTarget) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHeight(double height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isIndeterminate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setIndeterminate(boolean indeterminate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public NodeList getLabels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public HTMLElement getList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getMax() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMax(String max) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	/** {@inheritDoc} */
+	@Override
+	public String getMin() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMin(String min) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getMinLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMinLength(double minLength) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isMultiple() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setMultiple(boolean multiple) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getPattern() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setPattern(String pattern) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isRequired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setRequired(boolean required) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getSelectionDirection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSelectionDirection(String selectionDirection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getStep() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setStep(String step) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getUseMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setUseMap(String useMap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getValidationMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public ValidityState getValidity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getValueAsNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setValueAsNumber(double valueAsNumber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setWidth(double width) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isWillValidate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean checkValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean reportValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCustomValidity(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setRangeText(String replacement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setRangeText(String replacement, int start, int end) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSelectionRange(int start, int end, Direction direction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void stepDown(double n) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void stepDown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void stepUp(double n) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void stepUp() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLInputElement]";
 	}
 }

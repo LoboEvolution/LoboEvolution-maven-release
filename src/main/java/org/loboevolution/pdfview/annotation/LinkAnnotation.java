@@ -7,7 +7,6 @@ import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFParseException;
 import org.loboevolution.pdfview.action.GoToAction;
 import org.loboevolution.pdfview.action.PDFAction;
-import org.loboevolution.pdfview.annotation.PDFAnnotation.ANNOTATION_TYPE;
 
 /**
  ***************************************************************************
@@ -18,17 +17,16 @@ import org.loboevolution.pdfview.annotation.PDFAnnotation.ANNOTATION_TYPE;
  * Both ways are handled as actions internally, i.e. for getting the links
  * destination, you should get the action from this annotation object. It can be
  * one of the following actions:
- * <ul>
- * <li>GotoAction - for a file internal destination</li>
- * <li>GoToRAction - for a destination in a remote PDF file</li>
- * <li>GoToEAction - for a destination in an embedded PDF file</li>
- * <li>UriAction - for a web link</li>
- * <li>LaunchAction - for launching an application/opening a file</li>
- * </ul>
- * @author Katja Sondermann
+ * <p>GotoAction - for a file internal destination</p>
+ * <p>GoToRAction - for a destination in a remote PDF file</p>
+ * <p>GoToEAction - for a destination in an embedded PDF file</p>
+ * <p>UriAction - for a web link</p>
+ * <p>LaunchAction - for launching an application/opening a file</p>
+ *
+ * Author Katja Sondermann
  * @since 06.07.2009
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class LinkAnnotation extends PDFAnnotation {
 
@@ -40,7 +38,6 @@ public class LinkAnnotation extends PDFAnnotation {
 	 *
 	 * @param annotObject a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public LinkAnnotation(PDFObject annotObject) throws IOException {
 		super(annotObject, ANNOTATION_TYPE.LINK);

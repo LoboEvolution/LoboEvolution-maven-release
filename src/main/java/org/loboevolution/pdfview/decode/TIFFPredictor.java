@@ -27,8 +27,8 @@ import java.nio.ByteBuffer;
 /**
  * Undo prediction based on the TIFF Predictor 2 algorithm
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class TIFFPredictor extends Predictor {
 
@@ -84,7 +84,7 @@ public class TIFFPredictor extends Predictor {
             } else {
                 assert getBitsPerComponent() == 1 || getBitsPerComponent() == 2 || getBitsPerComponent() == 4 : "we don't want to grab components across pixel boundaries";
                 int bitsOnRow = pixelBits * getColumns(); // may be less than bytesOnRow * 8
-                byte prev[] = new byte[numComponents];
+                byte[] prev = new byte[numComponents];
                 final int shiftWhenAligned = 8 - getBitsPerComponent();
                 final int mask = (1 << getBitsPerComponent()) - 1;
                 for (int c = 0; c < numComponents; ++c) {

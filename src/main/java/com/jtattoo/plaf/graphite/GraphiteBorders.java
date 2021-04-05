@@ -48,8 +48,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>GraphiteBorders class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class GraphiteBorders extends BaseBorders {
 
@@ -274,7 +274,7 @@ public class GraphiteBorders extends BaseBorders {
 				int dx = getBorderInsets(c).left;
 				Color logoColorHi = AbstractLookAndFeel.getTheme().getMenuSelectionBackgroundColorDark();
 				Color logoColorLo = AbstractLookAndFeel.getTheme().getMenuSelectionBackgroundColor();
-				Color colors[] = ColorHelper.createColorArr(logoColorHi, logoColorLo, 32);
+				Color[] colors = ColorHelper.createColorArr(logoColorHi, logoColorLo, 32);
 				JTattooUtilities.fillHorGradient(g, colors, x, y, dx - 1, h - 1);
 				paintLogo(c, g, x, y, w, h);
 				// - highlight
@@ -300,7 +300,7 @@ public class GraphiteBorders extends BaseBorders {
 				int dx = getBorderInsets(c).right;
 				Color logoColorHi = AbstractLookAndFeel.getTheme().getMenuSelectionBackgroundColorDark();
 				Color logoColorLo = AbstractLookAndFeel.getTheme().getMenuSelectionBackgroundColor();
-				Color colors[] = ColorHelper.createColorArr(logoColorHi, logoColorLo, 32);
+				Color[] colors = ColorHelper.createColorArr(logoColorHi, logoColorLo, 32);
 				JTattooUtilities.fillHorGradient(g, colors, x + w - dx, y, dx, h - 1);
 				paintLogo(c, g, x, y, w, h);
 				// - highlight

@@ -29,8 +29,8 @@ import org.loboevolution.pdfview.PDFPaint;
  * supported is one where the image pixels specify where to paint, and the
  * painting itself is done in a pre-specified PDF Paint.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class MaskColorSpace extends ColorSpace {
     /** The paint to paint in.  Note this cannot be a pattern or gradient. */
@@ -47,7 +47,7 @@ public class MaskColorSpace extends ColorSpace {
         this.paint = paint;
     }
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public float[] fromCIEXYZ(float[] colorvalue) {
         float x = colorvalue[0];
@@ -65,7 +65,7 @@ public class MaskColorSpace extends ColorSpace {
         return mask;
     }
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public float[] fromRGB(float[] rgbvalue) {
         float r = rgbvalue[0];
@@ -83,11 +83,11 @@ public class MaskColorSpace extends ColorSpace {
         return mask;
     }
     
-    ColorSpace cie = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
-    float[] prev1= this.cie.fromRGB(toRGB(new float[] {1.0f}));
-    float[] prev0= this.cie.fromRGB(toRGB(new float[] {0.0f}));
+    final ColorSpace cie = ColorSpace.getInstance(ColorSpace.CS_CIEXYZ);
+    final float[] prev1= this.cie.fromRGB(toRGB(new float[] {1.0f}));
+    final float[] prev0= this.cie.fromRGB(toRGB(new float[] {0.0f}));
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public float[] toCIEXYZ(float[] colorvalue) {
 	if (colorvalue[0]==1) {
@@ -99,7 +99,7 @@ public class MaskColorSpace extends ColorSpace {
 	}
     }
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public float[] toRGB(float[] colorvalue) {
         return ((Color) this.paint.getPaint()).getRGBColorComponents(null);

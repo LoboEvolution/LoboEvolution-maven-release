@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
  * Abstract base type for components that comprise an {@link org.mozilla.javascript.ast.XmlLiteral}
  * object. Node type is {@link org.mozilla.javascript.Token#XML}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class XmlFragment extends AstNode {
 

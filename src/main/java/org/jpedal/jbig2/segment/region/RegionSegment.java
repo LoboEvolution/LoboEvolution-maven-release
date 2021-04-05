@@ -49,19 +49,19 @@
 */
 package org.jpedal.jbig2.segment.region;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.jpedal.jbig2.JBIG2Exception;
 import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 import org.jpedal.jbig2.segment.Segment;
 import org.jpedal.jbig2.util.BinaryOperation;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * <p>Abstract RegionSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class RegionSegment extends Segment {
 	
@@ -69,7 +69,7 @@ public abstract class RegionSegment extends Segment {
 	protected int regionBitmapWidth, regionBitmapHeight;
 	protected int regionBitmapXLocation, regionBitmapYLocation;
 
-	protected RegionFlags regionFlags = new RegionFlags();
+	protected final RegionFlags regionFlags = new RegionFlags();
 
 	/**
 	 * <p>Constructor for RegionSegment.</p>

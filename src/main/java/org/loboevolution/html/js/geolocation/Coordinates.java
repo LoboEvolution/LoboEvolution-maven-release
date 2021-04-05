@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.js.geolocation;
 
 import org.loboevolution.js.AbstractScriptableDelegate;
@@ -9,8 +29,8 @@ import org.loboevolution.js.AbstractScriptableDelegate;
  * Note: This class must not have any sub-classes to ensure W3C Specifications are being
  * strictly followed by the system or application that uses this geolocation package.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Coordinates extends AbstractScriptableDelegate {
 	
@@ -18,7 +38,8 @@ public class Coordinates extends AbstractScriptableDelegate {
 	 * The latitude and longitude attributes are geographic coordinates specified 
 	 * in decimal degrees.
 	 */
-    private double latitude, longitude; 
+    private final double latitude;
+    private final double longitude;
     
     /*
      * The altitude attribute denotes the height of the position, specified in meters 
@@ -31,25 +52,25 @@ public class Coordinates extends AbstractScriptableDelegate {
      * coordinates. It is specified in meters and must be supported by all 
      * implementations.
      */
-    private double accuracy; 
+    private final double accuracy;
     
     /*
      * The altitudeAccuracy attribute is specified in meters.
      */
-    private Double altitudeAccuracy; 
+    private final Double altitudeAccuracy;
     
     /*
      * The heading attribute denotes the direction of travel of the hosting device and 
      * is specified in degrees, where 0 <= heading < 360, counting clockwise relative to 
      * the true north.
      */
-    private Double heading; 
+    private final Double heading;
     
     /*
      * The speed attribute denotes the magnitude of the horizontal component of the hosting 
      * device's current velocity and is specified in meters per second.
      */
-    private Double speed;
+    private final Double speed;
     
     /**
      * Constructs a org.w3c.geolocation.Coordinates object with the specified
@@ -62,6 +83,7 @@ public class Coordinates extends AbstractScriptableDelegate {
      * @param altitudeAccuracy	the altitudeAccuracy value.
      * @param heading	the heading value.
      * @param speed	the speed value.
+     * @throws java.lang.IllegalArgumentException if any.
      * @throws java.lang.IllegalArgumentException if any.
      */
     public Coordinates(final double latitude, final double longitude, final Double altitude, 
@@ -84,7 +106,7 @@ public class Coordinates extends AbstractScriptableDelegate {
     	if (altitude != null && altitudeAccuracy == null) {
     		throw new IllegalArgumentException("Altitude Accuracy cannot be null.");
     	}
-    	if (altitude != null && altitudeAccuracy != null && altitudeAccuracy.doubleValue() < 0) {
+    	if (altitude != null && altitudeAccuracy != null && altitudeAccuracy < 0) {
     		throw new IllegalArgumentException("Altitude Accuracy cannot be negative.");
     	}
 
@@ -95,8 +117,8 @@ public class Coordinates extends AbstractScriptableDelegate {
     	if (accuracy/latitude > 0.05 || accuracy/longitude > 0.05) {
     		throw new IllegalArgumentException("Accuracy cannot be less than 95%.");
     	}
-    	if (altitude != null && altitudeAccuracy != null && 
-    			altitudeAccuracy.doubleValue()/altitude.doubleValue() > 0.05) {
+    	if (altitude != null && altitudeAccuracy != null &&
+                altitudeAccuracy / altitude > 0.05) {
     		throw new IllegalArgumentException("Altitude Accuracy cannot be less than 95%.");
     	}
     	
@@ -106,10 +128,10 @@ public class Coordinates extends AbstractScriptableDelegate {
     	 * device is stationary (i.e. the value of the speed attribute is 0), then the value of the 
     	 * heading attribute must be NaN.
     	 */
-    	if (heading != null && (heading.doubleValue() < 0 || heading.doubleValue() >= 360)) {
+    	if (heading != null && (heading < 0 || heading >= 360)) {
     		throw new IllegalArgumentException("If provided, heading must be >= 0 and < 360.");
     	}
-    	if (speed != null && speed.doubleValue() == 0 && heading != null && !heading.isNaN()) {
+    	if (speed != null && speed == 0 && heading != null && !heading.isNaN()) {
     		throw new IllegalArgumentException("heading must not have any numeric value because speed is zero.");
     	}
     	
@@ -117,7 +139,7 @@ public class Coordinates extends AbstractScriptableDelegate {
     	 * If the implementation cannot provide speed information, the value of this attribute must be 
     	 * null. Otherwise, the value of the speed attribute must be a non-negative real number.
     	 */
-    	if (speed != null && speed.doubleValue() < 0) {
+    	if (speed != null && speed < 0) {
     		throw new IllegalArgumentException("If provided, speed cannot be less than zero.");
     	}
     	

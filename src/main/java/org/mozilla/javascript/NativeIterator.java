@@ -12,20 +12,24 @@ import java.util.Iterator;
  * This class implements iterator objects. See
  * http://developer.mozilla.org/en/docs/New_in_JavaScript_1.7#Iterators
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public final class NativeIterator extends IdScriptableObject {
     private static final long serialVersionUID = -4136968203581667681L;
     private static final Object ITERATOR_TAG = "Iterator";
 
-    static void init(ScriptableObject scope, boolean sealed) {
+    static void init(Context cx, ScriptableObject scope, boolean sealed) {
         // Iterator
         NativeIterator iterator = new NativeIterator();
         iterator.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
 
         // Generator
-        NativeGenerator.init(scope, sealed);
+        if (cx.getLanguageVersion() >= Context.VERSION_ES6) {
+            ES6Generator.init(scope, sealed);
+        } else {
+            NativeGenerator.init(scope, sealed);
+        }
 
         // StopIteration
         NativeObject obj = new StopIteration();
@@ -65,11 +69,23 @@ public final class NativeIterator extends IdScriptableObject {
     }
 
     private static final String STOP_ITERATION = "StopIteration";
-    /** Constant ITERATOR_PROPERTY_NAME="__iterator__" */
+    /** Constant <code>ITERATOR_PROPERTY_NAME="__iterator__"</code> */
     public static final String ITERATOR_PROPERTY_NAME = "__iterator__";
 
-    static class StopIteration extends NativeObject {
+    public static class StopIteration extends NativeObject {
         private static final long serialVersionUID = 2485151085722377663L;
+
+        private Object value = Undefined.instance;
+
+        public StopIteration() {}
+
+        public StopIteration(Object val) {
+            this.value = val;
+        }
+
+        public Object getValue() {
+            return value;
+        }
 
         @Override
         public String getClassName() {
@@ -119,10 +135,7 @@ public final class NativeIterator extends IdScriptableObject {
             return jsConstructor(cx, scope, thisObj, args);
         }
 
-        if (!(thisObj instanceof NativeIterator))
-            throw incompatibleCallError(f);
-
-        NativeIterator iterator = (NativeIterator) thisObj;
+        NativeIterator iterator = ensureType(thisObj, NativeIterator.class, f);
 
         switch (id) {
 
@@ -146,7 +159,7 @@ public final class NativeIterator extends IdScriptableObject {
             args[0] == Undefined.instance)
         {
             Object argument = args.length == 0 ? Undefined.instance : args[0];
-            throw ScriptRuntime.typeError1("msg.no.properties",
+            throw ScriptRuntime.typeErrorById("msg.no.properties",
                                            ScriptRuntime.toString(argument));
         }
         Scriptable obj = ScriptRuntime.toObject(cx, scope, args[0]);
@@ -244,14 +257,20 @@ public final class NativeIterator extends IdScriptableObject {
     @Override
     protected int findPrototypeId(String s) {
         int id;
-// #generated# Last update: 2007-06-11 09:43:19 EDT
-        L0: { id = 0; String X = null;
-            int s_length = s.length();
-            if (s_length==4) { X="next";id=Id_next; }
-            else if (s_length==11) { X="constructor";id=Id_constructor; }
-            else if (s_length==12) { X="__iterator__";id=Id___iterator__; }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:51:20 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        case "next":
+            id = Id_next;
+            break;
+        case "__iterator__":
+            id = Id___iterator__;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;

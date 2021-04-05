@@ -49,25 +49,25 @@
 */
 package org.jpedal.jbig2.segment.pattern;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.jpedal.jbig2.JBIG2Exception;
 import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 import org.jpedal.jbig2.image.JBIG2Bitmap;
 import org.jpedal.jbig2.segment.Segment;
 import org.jpedal.jbig2.util.BinaryOperation;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * <p>PatternDictionarySegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PatternDictionarySegment extends Segment {
 	
 	private static final Logger logger = Logger.getLogger(PatternDictionarySegment.class.getName());
-	PatternDictionaryFlags patternDictionaryFlags = new PatternDictionaryFlags();
+	final PatternDictionaryFlags patternDictionaryFlags = new PatternDictionaryFlags();
 	private int width;
 	private int height;
 	private int grayMax;
@@ -131,7 +131,7 @@ public class PatternDictionarySegment extends Segment {
 		bitmap.clear(0);
 		bitmap.readBitmap(useMMR, template, false, false, null, genericBAdaptiveTemplateX, genericBAdaptiveTemplateY, segmentHeader.getSegmentDataLength() - 7);
 
-		JBIG2Bitmap bitmaps[] = new JBIG2Bitmap[size];
+		JBIG2Bitmap[] bitmaps = new JBIG2Bitmap[size];
 
 		int x = 0;
 		for (int i = 0; i < size; i++) {
@@ -144,7 +144,7 @@ public class PatternDictionarySegment extends Segment {
 
 
 	/**
-	 * <p>Getter for the field bitmaps.</p>
+	 * <p>Getter for the field <code>bitmaps</code>.</p>
 	 *
 	 * @return an array of {@link org.jpedal.jbig2.image.JBIG2Bitmap} objects.
 	 */
@@ -162,7 +162,7 @@ public class PatternDictionarySegment extends Segment {
 	}
 
 	/**
-	 * <p>Getter for the field patternDictionaryFlags.</p>
+	 * <p>Getter for the field <code>patternDictionaryFlags</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.pattern.PatternDictionaryFlags} object.
 	 */
@@ -171,7 +171,7 @@ public class PatternDictionarySegment extends Segment {
 	}
 
 	/**
-	 * <p>Getter for the field size.</p>
+	 * <p>Getter for the field <code>size</code>.</p>
 	 *
 	 * @return a int.
 	 */

@@ -6,8 +6,8 @@ import java.util.Map;
 /**
  * <p>OperationSet class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class OperationSet {
 	
@@ -27,7 +27,7 @@ public class OperationSet {
     }
     
     /**
-     * <p>Getter for the field instance.</p>
+     * <p>Getter for the field <code>instance</code>.</p>
      *
      * @return a {@link org.loboevolution.pdfview.function.postscript.operation.OperationSet} object.
      */
@@ -67,7 +67,7 @@ public class OperationSet {
          * Chapter 8 - Operator Details
          */
         if (this.operationSet == null) {
-            this.operationSet = new HashMap<String, PostScriptOperation>();
+            this.operationSet = new HashMap<>();
            
             // Arithmetic Operators
             this.operationSet.put("abs", new Abs());

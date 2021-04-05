@@ -29,20 +29,54 @@ import org.loboevolution.pdfview.PDFParseException;
 /**
  * decode an LZW-encoded array of bytes.  LZW is a patented algorithm.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ *   <p>Feb 21, 2009 Legal statement on Intellectual Property from Unisys</p><pre>
+ *   <b><u>LZW Patent Information</u></b> (http://www.unisys.com/about__unisys/lzw)
+ *   <u>License Information on GIF and Other LZW-based Technologies
+ *   </u>
+ *   <b><i>Unisys U.S. LZW Patent No. 4,558,302 expired on June 20, 2003,
+ *   the counterpart patents in the United Kingdom, France, Germany and
+ *   Italy expired on June 18, 2004, the Japanese counterpart patents
+ *   expired on June 20, 2004 and the counterpart Canadian patent
+ *   expired on July 7, 2004.
+ *   </i></b>
+ *   Unisys Corporation holds and has patents pending on a number of
+ *   improvements on the inventions claimed in the above-expired patents.
+ *   Information on these improvement patents and terms under which they
+ *   may be licensed can be obtained by contacting the following:
+ *
+ *   Unisys Corporation
+ *   Welch Patent Licensing Department
+ *   Mail Stop E8-114
+ *   Unisys Way
+ *   Blue Bell, PA  19424
+ *
+ *   Via the Internet, send email to Robert.Marley@unisys.com.
+ *
+ *   Via facsimile, send inquiries to Welch Patent Licensing Department at
+ *   215-986-3090.
+ *
+ *   The above is presented for information purposes only, and is subject
+ *   to change by Unisys.  Additionally, this information should not be
+ *   considered as legally obligating Unisys in any way with regard to license
+ *   availability, or as to the terms and conditions offered for a license,
+ *   or with regard to the interpretation of any license agreements.
+ *   You should consult with your own legal counsel regarding your
+ *   particular situation.
+ *   </pre>
+ *
+ *   Mike Wessler
  */
 public class LZWDecode {
 	
 	private static final Logger logger = Logger.getLogger(LZWDecode.class.getName());
-    ByteBuffer buf;
+    final ByteBuffer buf;
     int bytepos;
     int bitpos;
-    byte[] dict[] = new byte[4096][];
+    final byte[][] dict = new byte[4096][];
     int dictlen = 0;
     int bitspercode = 9;
-    static int STOP = 257;
-    static int CLEARDICT = 256;
+    static final int STOP = 257;
+    static final int CLEARDICT = 256;
 
     /**
      * initialize this decoder with an array of encoded bytes

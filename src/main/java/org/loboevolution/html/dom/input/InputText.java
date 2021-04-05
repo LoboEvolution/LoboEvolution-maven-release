@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.Color;
@@ -7,13 +27,20 @@ import java.awt.Insets;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -32,8 +59,8 @@ import org.loboevolution.store.InputStore;
 /**
  * <p>InputText class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputText {
 	
@@ -41,11 +68,11 @@ public class InputText {
 
 	private static final float DEFAULT_FONT_SIZE = 14.0f;
 		
-	protected JTextField iText = new JTextField();
+	protected final JTextField iText = new JTextField();
 	
 	private boolean textWrittenIn;
 	
-	private HTMLInputElementImpl modelNode;
+	private final HTMLInputElementImpl modelNode;
 
 	/**
 	 * <p>Constructor for InputText.</p>
@@ -56,8 +83,6 @@ public class InputText {
 	public InputText(HTMLInputElementImpl modelNode, InputControl ic) {
 		this.modelNode = modelNode;
 		final boolean autocomplete = modelNode.getAutocomplete();
-		final String id = modelNode.getId();
-		final String name = modelNode.getName();
 		final String type = modelNode.getType();
 		
 		final Font font = iText.getFont();
@@ -69,11 +94,12 @@ public class InputText {
 		final int size = modelNode.getSize();
 		final int width = (128/15) * size;
 		iText.setPreferredSize(new Dimension(width, ps.height));
+		final String baseUrl = modelNode.getBaseURI();
 
-		if (autocomplete && !"password".equalsIgnoreCase(type)) {
-			List<String> list = suggestionList(id, name, type);
+		if (autocomplete) {
+			List<String> list = suggestionList(type, "", baseUrl);
 			if (ArrayUtilities.isNotBlank(list)) {
-				Autocomplete.setupAutoComplete((JTextField) iText, list);
+				Autocomplete.setupAutoComplete(iText, list);
 			}
 		}
 
@@ -81,17 +107,80 @@ public class InputText {
 			placeholder(modelNode.getPlaceholder());
 		}
 		
-		iText.setEnabled(!modelNode.getDisabled());
-		iText.setEditable(!modelNode.getReadOnly());
+		iText.setEnabled(!modelNode.isDisabled());
+		iText.setEditable(!modelNode.isReadOnly());
 
 		iText.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (modelNode.getOnfocus() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnfocus(), null, new Object[] {});
+				}
+				
+				if (modelNode.getOnfocusin() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnfocusin(), null, new Object[] {});
+				}
+			};
+			
+			
 			@Override
 			public void focusLost(FocusEvent event) {
-				if (autocomplete && !"password".equalsIgnoreCase(type)) {
-					InputStore.insertLogin(id, name, type, iText.getText(), modelNode.getUserAgentContext().isNavigationEnabled());
+				
+				String selectedText = iText.getSelectedText();
+				if(Strings.isNotBlank(selectedText)) {
+					Pattern word = Pattern.compile(selectedText);
+					Matcher match = word.matcher(modelNode.getValue());
+					
+					while (match.find()) {
+					     modelNode.setSelectionRange(match.start(), match.end()-1);
+					}
+				}
+				
+				if (autocomplete) {
+					final String text = iText.getText();
+					final boolean isNavigation = modelNode.getUserAgentContext().isNavigationEnabled();
+					InputStore.deleteInput(text, baseUrl);
+					InputStore.insertLogin(type, text, baseUrl, isNavigation);
+				}
+				
+				if (modelNode.getOnblur() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnblur(), null, new Object[] {});
+				}
+				
+				if (modelNode.getOnfocusout() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnfocusout(), null, new Object[] {});
 				}
 			}
 		});
+		
+		KeyAdapter key = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (modelNode.getOnkeyup() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeyup(), null, new Object[] {});
+				}
+			}
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (modelNode.getOnkeydown() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeydown(), null, new Object[] {});
+				}
+				
+				if (modelNode.getOnkeypress() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeypress(), null, new Object[] {});
+				}
+				
+				if (modelNode.getOninput() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOninput(), null, new Object[] {});
+				}
+			}
+		};
+		
+		
+		iText.addKeyListener(key);
+		
 
 		iText.addActionListener(event -> HtmlController.getInstance().onEnterPressed(modelNode));
 
@@ -103,9 +192,39 @@ public class InputText {
 					Executor.executeFunction(modelNode, modelNode.getOnmouseover(), null, new Object[] {});
 				}
 			}
+			
+			public void mousePressed(MouseEvent e) {
+				if (modelNode.getOnkeypress() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeypress(), null, new Object[] {});
+				}
+				
+				if (modelNode.getOnkeydown() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeydown(), null, new Object[] {});
+				}
+			};
+			
+			public void mouseReleased(MouseEvent e) {
+				if (modelNode.getOnkeyup() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnkeyup(), null, new Object[] {});
+				}
+			};
+			
 		};
 		iText.addMouseListener(mouseHandler);
 		
+		
+		iText.addCaretListener(new CaretListener() {
+			@Override
+			public void caretUpdate(CaretEvent e) {
+				final int dot = e.getDot();
+				final int mark = e.getMark();
+
+				if (dot != mark && modelNode.getOnselect() != null) {
+					Executor.executeFunction(modelNode, modelNode.getOnselect(), null, new Object[] {});
+				}
+			}
+		});
+
 		RUIControl ruiControl = ic.getRUIControl();
 		final Insets borderInsets = ruiControl.getBorderInsets();
 		
@@ -115,6 +234,18 @@ public class InputText {
 		} else {
 			iText.setBorder(BorderFactory.createMatteBorder(borderInsets.top, borderInsets.left, borderInsets.bottom, borderInsets.right, Color.BLACK));
 		}
+		
+		if (modelNode.getSelectionStart() > 0 && modelNode.getSelectionEnd() > 0 && modelNode.isFocusable()) {
+			SwingUtilities.invokeLater(() -> {
+				iText.select(modelNode.getSelectionStart(), modelNode.getSelectionEnd());
+				iText.requestFocus();
+			});
+			
+			if (modelNode.getOnselect() != null) {
+				Executor.executeFunction(modelNode, modelNode.getOnselect(), null, new Object[] {});
+			}
+			
+		}
 
 		ic.add(iText);
 	}
@@ -123,6 +254,7 @@ public class InputText {
 	 * <p>selectAll.</p>
 	 */
 	public void selectAll() {
+		iText.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 		iText.selectAll();
 		iText.requestFocus();
 	}
@@ -131,6 +263,7 @@ public class InputText {
 	 * <p>focus.</p>
 	 */
 	public void focus() {
+		iText.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 		iText.setFocusable(true);
 		iText.requestFocus();
 	}
@@ -139,6 +272,7 @@ public class InputText {
 	 * <p>blur.</p>
 	 */
 	public void blur() {
+		iText.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		iText.setFocusable(false);
 	}
 	
@@ -158,6 +292,15 @@ public class InputText {
 	 */
 	public void reset() {
 		iText.setText("");
+	}
+	
+	/**
+	 * <p>setText.</p>
+	 *
+	 * @param value a {@link java.lang.String} object.
+	 */
+	public void setText(String value) {
+		iText.setText(value);
 	}
 	
 	/**
@@ -202,17 +345,11 @@ public class InputText {
 		setTextWrittenIn(false);
 	}
 
-	private List<String> suggestionList(String id, String name, String type) {
-		List<String> list = InputStore.autocomplete(id);
+	private List<String> suggestionList(String type, String text, String baseUrl) {
+		List<String> list = InputStore.autocomplete(type, text, baseUrl);
 		if (ArrayUtilities.isNotBlank(list))
 			return list;
-		list = InputStore.autocomplete(name);
-		if (ArrayUtilities.isNotBlank(list))
-			return list;
-		list = InputStore.autocomplete(type);
-		if (ArrayUtilities.isNotBlank(list))
-			return list;
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	private class LimitedDocument extends PlainDocument {
@@ -221,7 +358,7 @@ public class InputText {
 
 		@Override
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-			int max = modelNode.getMaxLength();
+			int max = (int)modelNode.getMaxLength();
 
 			final int docLength = getLength();
 			if (docLength >= max) {

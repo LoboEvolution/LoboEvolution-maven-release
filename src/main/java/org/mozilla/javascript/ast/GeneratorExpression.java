@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
 /**
  * <p>GeneratorExpression class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GeneratorExpression extends Scope {
     

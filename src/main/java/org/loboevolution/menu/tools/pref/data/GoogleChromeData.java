@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.pref.data;
 
 import java.io.File;
@@ -9,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,25 +44,28 @@ import org.loboevolution.store.SQLiteCommon;
 /**
  * <p>GoogleChromeData class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GoogleChromeData extends BrowserData {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(GoogleChromeData.class.getName());
 
-	private static String CHROME_COOKIES = "SELECT * from cookies";
+	private static final String CHROME_COOKIES = "SELECT * from cookies";
 
-	private static String CHROME_HISTORY = "SELECT DISTINCT url from urls";
+	private static final String CHROME_HISTORY = "SELECT DISTINCT url, title from urls";
 
 	private static List<BookmarkInfo> getBookmarkInfo(String path) {
-		final List<BookmarkInfo> listInfo = new ArrayList<BookmarkInfo>();
+		final List<BookmarkInfo> listInfo = new ArrayList<>();
 		final File f = new File(path);
 
 		try (Scanner scan = new Scanner(f)) {
-			String str = "";
+			StringBuilder str = new StringBuilder();
 			while (scan.hasNext()) {
-				str += scan.nextLine();
+				str.append(scan.nextLine());
 			}
-			final JSONObject jsonObject = new JSONObject(str);
+			final JSONObject jsonObject = new JSONObject(str.toString());
 			final JSONObject root = jsonObject.getJSONObject("roots");
 			final JSONObject bookmarks = root.getJSONObject("bookmark_bar");
 			final JSONArray childrens = bookmarks.getJSONArray("children");
@@ -55,13 +80,13 @@ public class GoogleChromeData extends BrowserData {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return listInfo;
 	}
 
 	private static List<CookieInfo> getCookieInfo(String path) {
-		final List<CookieInfo> cookies = new ArrayList<CookieInfo>();
+		final List<CookieInfo> cookies = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.JDBC_SQLITE + path);
 				PreparedStatement pstmt = conn.prepareStatement(CHROME_COOKIES);
 				ResultSet rs = pstmt.executeQuery()) {
@@ -72,27 +97,30 @@ public class GoogleChromeData extends BrowserData {
 				cookie.setValue(rs.getString(4));
 				cookie.setPath(rs.getString(5));
 				cookie.setExpires(rs.getString(6));
-				cookie.setSecure(rs.getInt(7) > 0 ? true : false);
-				cookie.setHttpOnly(rs.getInt(8) > 0 ? true : false);
+				cookie.setSecure(rs.getInt(7) > 0);
+				cookie.setHttpOnly(rs.getInt(8) > 0);
 				cookies.add(cookie);
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return cookies;
 	}
 
-	private static List<String> getHostEntries(String path) {
-		final List<String> hostEntries = new ArrayList<String>();
+	private static List<BookmarkInfo> getHostEntries(String path) {
+		final List<BookmarkInfo> hostEntries = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.JDBC_SQLITE + path);
 				PreparedStatement pstmt = conn.prepareStatement(CHROME_HISTORY);
 				ResultSet rs = pstmt.executeQuery()) {
 			while (rs != null && rs.next()) {
-				hostEntries.add(rs.getString(1));
+				BookmarkInfo info = new BookmarkInfo();
+				info.setUrl(rs.getString(1));
+				info.setTitle(rs.getString(2));
+				hostEntries.add(info);
 			}
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return hostEntries;
 	}
@@ -123,7 +151,7 @@ public class GoogleChromeData extends BrowserData {
 			final List<CookieInfo> cookies = getCookieInfo(path);
 			for (final CookieInfo cookie : cookies) {
 				final Date expires = new Date();
-				expires.setTime(Long.valueOf(cookie.getExpires()));
+				expires.setTime(Long.parseLong(cookie.getExpires()));
 				CookieManager.saveCookie(cookie.getDomain(), cookie.getPath(), cookie.getName(), expires,
 						cookie.getValue(), null, cookie.isSecure(), cookie.isHttpOnly());
 			}
@@ -138,14 +166,14 @@ public class GoogleChromeData extends BrowserData {
 			final String pathToCookieInfos = getChromeDirectory();
 			final List<String> files = getFiles(pathToCookieInfos, null, "History");
 			for (final String path : files) {
-				final List<String> hosts = getHostEntries(path);
-				for (final String host : hosts) {
+				final List<BookmarkInfo> hosts = getHostEntries(path);
+				for (final BookmarkInfo info : hosts) {
 					final NavigationStore nav = new NavigationStore();
-					nav.addAsRecent(host, -1);
+					nav.addAsRecent(info.getUrl(), info.getTitle(), -1);
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

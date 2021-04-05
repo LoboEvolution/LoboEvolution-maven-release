@@ -15,8 +15,8 @@ import org.mozilla.javascript.Undefined;
  * This class is the abstract parent for all views of the array. It shows a view of the underlying
  * NativeArrayBuffer. Many views may simultaneously share the same buffer, and changes to one will affect all.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class NativeArrayBufferView
     extends IdScriptableObject
@@ -37,7 +37,7 @@ public abstract class NativeArrayBufferView
      */
     public NativeArrayBufferView()
     {
-        arrayBuffer = NativeArrayBuffer.EMPTY_BUFFER;
+        arrayBuffer = new NativeArrayBuffer();
         offset = 0;
         byteLength = 0;
     }
@@ -95,7 +95,7 @@ public abstract class NativeArrayBufferView
             if (ctx == null) {
                 return false;
             }
-            useLittleEndian = ctx.hasFeature(Context.FEATURE_LITTLE_ENDIAN);
+            useLittleEndian = Boolean.valueOf(ctx.hasFeature(Context.FEATURE_LITTLE_ENDIAN));
         }
         return useLittleEndian.booleanValue();
     }
@@ -156,17 +156,20 @@ public abstract class NativeArrayBufferView
     protected int findInstanceIdInfo(String s)
     {
         int id;
-// #generated# Last update: 2014-12-08 17:32:09 PST
-        L0: { id = 0; String X = null; int c;
-            int s_length = s.length();
-            if (s_length==6) { X="buffer";id=Id_buffer; }
-            else if (s_length==10) {
-                c=s.charAt(4);
-                if (c=='L') { X="byteLength";id=Id_byteLength; }
-                else if (c=='O') { X="byteOffset";id=Id_byteOffset; }
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:47:23 MEZ
+        switch (s) {
+        case "buffer":
+            id = Id_buffer;
+            break;
+        case "byteOffset":
+            id = Id_byteOffset;
+            break;
+        case "byteLength":
+            id = Id_byteLength;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         if (id == 0) {
@@ -181,7 +184,7 @@ public abstract class NativeArrayBufferView
         Id_byteLength           = 3;
 
     // to be visible by subclasses
-    /** Constant MAX_INSTANCE_ID=Id_byteLength */
+    /** Constant <code>MAX_INSTANCE_ID=Id_byteLength</code> */
     protected static final int
         MAX_INSTANCE_ID         = Id_byteLength;
 

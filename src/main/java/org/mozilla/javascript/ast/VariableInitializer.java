@@ -16,8 +16,8 @@ import org.mozilla.javascript.Token;
  * Node type is one of {@link org.mozilla.javascript.Token#VAR}, {@link org.mozilla.javascript.Token#CONST}, or
  * {@link org.mozilla.javascript.Token#LET}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class VariableInitializer extends AstNode {
 

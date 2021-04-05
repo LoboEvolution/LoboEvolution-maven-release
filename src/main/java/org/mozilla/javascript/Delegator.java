@@ -20,8 +20,8 @@ package org.mozilla.javascript;
  *
  * @see Function
  * @see Scriptable
- * @author Matthias Radestock
- * @version $Id: $Id
+ * Author Matthias Radestock
+ *
  */
 public class Delegator
     implements Function, SymbolScriptable {
@@ -211,9 +211,9 @@ public class Delegator
      * {@inheritDoc}
      *
      * Note that this method does not get forwarded to the delegee if
-     * the hint parameter is null,
-     * ScriptRuntime.ScriptableClass or
-     * ScriptRuntime.FunctionClass. Instead the object
+     * the <code>hint</code> parameter is null,
+     * <code>ScriptRuntime.ScriptableClass</code> or
+     * <code>ScriptRuntime.FunctionClass</code>. Instead the object
      * itself is returned.
      * @see org.mozilla.javascript.Scriptable#getDefaultValue
      */
@@ -242,10 +242,10 @@ public class Delegator
     /**
      * {@inheritDoc}
      *
-     * Note that if the delegee is null,
+     * Note that if the <code>delegee</code> is <code>null</code>,
      * this method creates a new instance of the Delegator itself
      * rathert than forwarding the call to the
-     * delegee. This permits the use of Delegator
+     * <code>delegee</code>. This permits the use of Delegator
      * prototypes.
      * @see Function#construct(Context, Scriptable, Object[])
      */

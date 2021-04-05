@@ -18,16 +18,19 @@
 
 package org.loboevolution.pdfview.decrypt;
 
-import org.loboevolution.pdfview.PDFDocCharsetEncoder;
-import org.loboevolution.pdfview.Identity8BitCharsetEncoder;
-import org.loboevolution.pdfview.PDFStringUtil;
-
-import java.util.*;
-import java.nio.charset.CodingErrorAction;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetEncoder;
-import java.nio.CharBuffer;
-import java.nio.ByteBuffer;
+import java.nio.charset.CodingErrorAction;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.loboevolution.pdfview.Identity8BitCharsetEncoder;
+import org.loboevolution.pdfview.PDFDocCharsetEncoder;
+import org.loboevolution.pdfview.PDFStringUtil;
 
 /**
  * <p>Identifies a PDF Password, expressible either as a string or a
@@ -49,8 +52,8 @@ import java.nio.ByteBuffer;
  * guess at a String representation for a password for encryption versions up to
  * and including 4.</p>
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class PDFPassword {
 
@@ -139,22 +142,17 @@ public class PDFPassword {
                     // skip undefined chars
                     new PDFDocEncodingByteGenerator(null),
                     // replace undefined chars with 0
-                    new PDFDocEncodingByteGenerator(Byte.valueOf((byte) 0)),
+                    new PDFDocEncodingByteGenerator((byte) 0),
                     // replace undefined chars with ?
-                    new PDFDocEncodingByteGenerator(Byte.valueOf((byte) '?')),
+                    new PDFDocEncodingByteGenerator((byte) '?'),
                     // just strip the higher 8 bits!
-                    new PasswordByteGenerator() {
-                        @Override
-						public byte[] generateBytes(String password) {
-                            return PDFStringUtil.asBytes(password);
-                        }
-                    },
+                    PDFStringUtil::asBytes,
                     // skip 2-byte chars
                     new IdentityEncodingByteGenerator(null),
                     // replace 2-byte chars with 0
-                    new IdentityEncodingByteGenerator(Byte.valueOf((byte) 0)),
+                    new IdentityEncodingByteGenerator((byte) 0),
                     // replace 2-byte chars with ?
-                    new IdentityEncodingByteGenerator(Byte.valueOf((byte) '?'))
+                    new IdentityEncodingByteGenerator((byte) '?')
             };
 
     /**
@@ -166,7 +164,7 @@ public class PDFPassword {
     private static List<byte[]> generatePossiblePasswordBytes(
             String passwordString) {
 
-        final List<byte[]> possibilties = new ArrayList<byte[]>();
+        final List<byte[]> possibilties = new ArrayList<>();
         for (final PasswordByteGenerator generator : PASSWORD_BYTE_GENERATORS) {
             byte[] generated = generator.generateBytes(passwordString);
             // avoid duplicates
@@ -174,6 +172,7 @@ public class PDFPassword {
             for (int i = 0; !alreadyGenerated && i < possibilties.size(); ++i) {
                 if (Arrays.equals(possibilties.get(i), generated)) {
                     alreadyGenerated = true;
+                    break;
                 }
             }
             if (!alreadyGenerated) {
@@ -196,7 +195,7 @@ public class PDFPassword {
     /**
      * Converts a string password to a byte[] representation
      */
-    private static interface PasswordByteGenerator {
+    private interface PasswordByteGenerator {
         byte[] generateBytes(String password);
     }
 
@@ -208,7 +207,7 @@ public class PDFPassword {
     private static abstract class CharsetEncoderGenerator
             implements PasswordByteGenerator {
 
-        private Byte replacementByte;
+        private final Byte replacementByte;
 
         /**
          * Class constructor

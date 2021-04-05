@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.canvas;
 
 import java.awt.AlphaComposite;
@@ -18,7 +38,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.html.CSSValues;
@@ -42,16 +61,16 @@ import org.loboevolution.net.HttpNetwork;
 /**
  * <p>CanvasRenderingImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 	
 	/** The canvas. */
-	private HTMLCanvasElementImpl canvas;
+	private final HTMLCanvasElementImpl canvas;
 	
 	/** The image. */
-	private BufferedImage image;
+	private final BufferedImage image;
 	
     /** The fill style. */
     private Object fillStyle;
@@ -63,7 +82,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
     private int lineWidth;
 
     /** The global alpha. */
-    private Float globalAlpha;
+    private final Float globalAlpha;
 
     /** The translate x. */
     private int translateX;
@@ -126,7 +145,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 	 */
 	public CanvasRenderingImpl(HTMLCanvasElementImpl canvas) {
 		this.canvas = canvas;
-		image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+		image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		image.coerceData(true);
 		affineTransform = new AffineTransform(1, 0, 0, 1, 0, 0);
 		path = new GeneralPath();
@@ -345,7 +364,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 	/** {@inheritDoc} */
 	@Override
 	public int getShadowBlur() {
-		return shadowBlur == null ? 6 : shadowBlur;
+		return shadowBlur == null ? 0 : shadowBlur;
 	}
 
 	/** {@inheritDoc} */
@@ -543,7 +562,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 			Graphics2D graphics = createGraphics();
 			AffineTransform at = new AffineTransform();
 			at.setToTranslation(x, y);
-			graphics.drawImage(image, at, (ImageObserver) null);
+			graphics.drawImage(image, at, null);
 		}
 	}
 
@@ -555,7 +574,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 			Image image = HttpNetwork.getImage(hImage.getSrc(), null);
 			Graphics2D graphics = createGraphics();
 			AffineTransform at = new AffineTransform(width / image.getWidth(null), 0, 0, height / image.getHeight(null), x, y);
-			graphics.drawImage(image, at, (ImageObserver) null);
+			graphics.drawImage(image, at, null);
 		}
 	}
 
@@ -572,7 +591,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 			float x0 = dx - sx * scaleX;
 			float y0 = dy - sy * scaleY;
 			AffineTransform at = new AffineTransform(scaleX, 0, 0, scaleY, x0, y0);
-			graphics.drawImage(image, at, (ImageObserver) null);
+			graphics.drawImage(image, at, null);
 		}
 	}
 
@@ -582,7 +601,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		Graphics2D graphics = createGraphics();
 		
 		if (getShadowBlur() > 0) {
-			shadow(graphics, path.getBounds().x, path.getBounds().y, true);
+			shadow(graphics, path.getBounds().x, path.getBounds().y, path.getBounds().width, path.getBounds().height, true);
 		}
 
 		graphics.setPaint((Paint)getFillStyle());
@@ -596,7 +615,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		Graphics2D graphics = createGraphics();
 		
 		if (getShadowBlur() > 0) {
-			shadow(graphics, path.getBounds().x, path.getBounds().y, true);
+			shadow(graphics, x, y, width, height, true);
 		}
 
 		graphics.setComposite(getComosite());
@@ -631,8 +650,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 	/** {@inheritDoc} */
 	@Override
 	public ImageData getImageData(int sx, int sy, int sw, int sh) {
-		final ImageDataImpl imageData = new ImageDataImpl(image, sx, sy, sw, sh);
-        return imageData;
+		return new ImageDataImpl(image, sw, sh);
 	}
 
 	/** {@inheritDoc} */
@@ -669,14 +687,16 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 	/** {@inheritDoc} */
 	@Override
 	public void putImageData(ImageData imagedata, int dx, int dy) {
-		// TODO Auto-generated method stub
+		putImageData(imagedata, dx, dy, 0, 0, imagedata.getWidth(), imagedata.getHeight());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void putImageData(ImageData imagedata, int dx, int dy, int dirtyX, int dirtyY, int dirtyWidth, int dirtyHeight) {
-		// TODO Auto-generated method stub
-	}
+		Graphics2D graphics = createGraphics();
+		BufferedImage image = (BufferedImage)imagedata.getData();
+		graphics.drawImage(image, dx, dy, null);
+    }
 
 	/** {@inheritDoc} */
 	@Override
@@ -731,7 +751,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		Graphics2D graphics = createGraphics();
 		
 		if (getShadowBlur() > 0) {
-			shadow(graphics, path.getBounds().x, path.getBounds().y, false);
+			shadow(graphics, path.getBounds().x, path.getBounds().y, path.getBounds().width, path.getBounds().height, false);
 		}
 		
 		graphics.setStroke(new BasicStroke(lineWidth, intLineCap, intlineJoin, miterLimit));
@@ -751,7 +771,7 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		Graphics2D graphics = createGraphics();
 		
 		if (getShadowBlur() > 0) {
-			shadow(graphics, path.getBounds().x, path.getBounds().y, false);
+			shadow(graphics, x, y, width, height, false);
 		}
 
 		graphics.setComposite(getComosite());
@@ -821,8 +841,6 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		createGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		createGraphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		createGraphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-		createGraphics.setColor(Color.WHITE);
-		createGraphics.fillRect( 0, 0, image.getWidth(), image.getHeight());
 		return createGraphics;
 	}
 	
@@ -931,14 +949,14 @@ public class CanvasRenderingImpl implements CanvasRenderingContext2D {
 		return new Arc2D.Double(x - radius, y - radius, 2 * radius, 2 * radius, Math.toDegrees(startAngle), Math.toDegrees(ang), Arc2D.OPEN);
 	}
 
-	private void shadow(Graphics2D graphics, int x1, int y1, boolean isFill) {
+	private void shadow(Graphics2D graphics, int x1, int y1, int width1, int height1, boolean isFill) {
 		Color shadowColor = ColorFactory.getInstance().getColor(getShadowColor());
 		Color shadowColorA = new Color(shadowColor.getRed(), shadowColor.getGreen(), shadowColor.getBlue(), 150);
 		int x = x1 + getShadowOffsetX();
 		int y = y1 + getShadowOffsetY();
 		int strokeSize = getShadowBlur();
-		int width = path.getBounds().width + strokeSize;
-		int height = path.getBounds().height + strokeSize;
+		int width = width1 + strokeSize;
+		int height = height1 + strokeSize;
 		graphics.setColor(shadowColorA);
 		if (isFill) {
 			graphics.fillRoundRect(x, y, width, height, 0, 0);

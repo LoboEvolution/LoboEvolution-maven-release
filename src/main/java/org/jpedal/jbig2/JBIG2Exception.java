@@ -52,10 +52,13 @@ package org.jpedal.jbig2;
 /**
  * <p>JBIG2Exception class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBIG2Exception extends Exception {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * <p>Constructor for JBIG2Exception.</p>
 	 *
@@ -73,7 +76,7 @@ public class JBIG2Exception extends Exception {
 	}
 
 	/**
-	 * Constructs a JBIGException with a message.
+	 * Constructs a <code>JBIGException</code> with a message.
 	 *
 	 * @param message
 	 *            a message describing the exception

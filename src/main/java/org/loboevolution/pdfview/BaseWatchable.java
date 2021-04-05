@@ -22,8 +22,8 @@ package org.loboevolution.pdfview;
  * An abstract implementation of the watchable interface, that is extended
  * by the parser and renderer to do their thing.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class BaseWatchable implements Watchable, Runnable {
 
@@ -82,7 +82,7 @@ public abstract class BaseWatchable implements Watchable, Runnable {
         // do nothing
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public void run() {
         try {
@@ -291,13 +291,7 @@ public abstract class BaseWatchable implements Watchable, Runnable {
         	this.thread.setName(getClass().getName());
         	//Fix for NPE: Taken from http://java.net/jira/browse/PDF_RENDERER-46
         	synchronized (statusLock) {
-        	    Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
-                    @Override
-                    public void uncaughtException( Thread th, Throwable ex )
-                    {
-                        PDFDebugger.debug( "Uncaught exception: " + ex );
-                    }
-                };
+        	    Thread.UncaughtExceptionHandler h = (th, ex) -> PDFDebugger.debug( "Uncaught exception: " + ex );
                 thread.setUncaughtExceptionHandler( h );
         		thread.start();
         		try {
@@ -355,7 +349,7 @@ public abstract class BaseWatchable implements Watchable, Runnable {
     }
 
 	/**
-	 * <p>Getter for the field exception.</p>
+	 * <p>Getter for the field <code>exception</code>.</p>
 	 *
 	 * @return a {@link java.lang.Exception} object.
 	 */
@@ -408,7 +402,7 @@ public abstract class BaseWatchable implements Watchable, Runnable {
     }
     
     /**
-     * <p>Setter for the field errorHandler.</p>
+     * <p>Setter for the field <code>errorHandler</code>.</p>
      *
      * @param e a {@link org.loboevolution.pdfview.PDFErrorHandler} object.
      */
@@ -417,7 +411,7 @@ public abstract class BaseWatchable implements Watchable, Runnable {
     }
     
     /**
-     * <p>Getter for the field errorHandler.</p>
+     * <p>Getter for the field <code>errorHandler</code>.</p>
      *
      * @return a {@link org.loboevolution.pdfview.PDFErrorHandler} object.
      */

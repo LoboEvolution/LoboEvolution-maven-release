@@ -26,8 +26,8 @@ import java.util.NoSuchElementException;
  * exist, and even lets an iterator keep on iterating on a collection that was
  * empty when it was created..
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
 
@@ -58,7 +58,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
         Entry(Object k, Object value) {
             if ((k instanceof Number) && ( ! ( k instanceof Double))) {
                 // Hash comparison won't work if we don't do this
-                this.key = ((Number)k).doubleValue();
+                this.key = Double.valueOf(((Number)k).doubleValue());
             } else if (k instanceof ConsString) {
                 this.key = k.toString();
             } else {
@@ -67,7 +67,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
 
             if (key == null) {
                 hashCode = 0;
-            } else if (k.equals(ScriptRuntime.negativeZero)) {
+            } else if (k.equals(ScriptRuntime.negativeZeroObj)) {
                 hashCode = 0;
             } else {
                 hashCode = key.hashCode();
@@ -113,7 +113,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
         }
     }
 
-    private Entry makeDummy() {
+    private static Entry makeDummy() {
         final Entry d = new Entry();
         d.clear();
         return d;
@@ -240,8 +240,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
         // will drive forward right into the new list. If they are not, then
         // nothing is referencing the old list and it'll get GCed.
         if (first != null) {
-            Entry dummy = new Entry();
-            dummy.clear();
+            Entry dummy = makeDummy();
             last.next = dummy;
             first = last = dummy;
         }
@@ -261,7 +260,7 @@ public class Hashtable implements Serializable, Iterable<Hashtable.Entry> {
 
     // The iterator for this class works directly on the linked list so that it implements
     // the specified iteration behavior, which is very different from Java.
-    private final class Iter
+    private final static class Iter
         implements Iterator<Entry>
     {
         private Entry pos;

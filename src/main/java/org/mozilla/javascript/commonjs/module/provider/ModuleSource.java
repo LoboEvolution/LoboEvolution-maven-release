@@ -28,7 +28,7 @@ import java.net.URI;
  * {@link java.lang.Object#equals(Object)} as caches themselves can rely on it to compare
  * them semantically. Also, it is advisable to have them be serializable.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: ModuleSource.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public class ModuleSource implements Serializable {

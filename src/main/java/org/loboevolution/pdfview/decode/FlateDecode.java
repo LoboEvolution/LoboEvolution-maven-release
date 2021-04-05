@@ -30,8 +30,8 @@ import org.loboevolution.pdfview.PDFParseException;
 /**
  * decode a deFlated byte array
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class FlateDecode {
 

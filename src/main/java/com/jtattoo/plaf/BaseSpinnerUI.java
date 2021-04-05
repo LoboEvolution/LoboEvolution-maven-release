@@ -43,8 +43,8 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 /**
  * <p>BaseSpinnerUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseSpinnerUI extends BasicSpinnerUI {
 	// --------------------------------------------------------------------------
@@ -183,7 +183,7 @@ public class BaseSpinnerUI extends BasicSpinnerUI {
 
 		@Override
 		public void paint(Graphics g) {
-			Color colors[];
+			Color[] colors;
 			if (isEnabled()) {
 				if (getModel().isPressed() && getModel().isArmed()) {
 					colors = AbstractLookAndFeel.getTheme().getPressedColors();

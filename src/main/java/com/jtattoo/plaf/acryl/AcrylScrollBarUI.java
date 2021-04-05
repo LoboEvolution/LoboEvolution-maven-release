@@ -42,8 +42,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AcrylScrollBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AcrylScrollBarUI extends BaseScrollBarUI {
 
@@ -61,7 +61,7 @@ public class AcrylScrollBarUI extends BaseScrollBarUI {
 
 		g.translate(thumbBounds.x, thumbBounds.y);
 
-		Color colors[] = getThumbColors();
+		Color[] colors = getThumbColors();
 		Color frameColor = AbstractLookAndFeel.getFrameColor();
 		if (!JTattooUtilities.isActive(scrollbar)) {
 			frameColor = ColorHelper.brighter(frameColor, 80);

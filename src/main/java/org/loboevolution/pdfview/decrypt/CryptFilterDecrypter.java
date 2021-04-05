@@ -34,17 +34,17 @@ import org.loboevolution.pdfview.PDFParseException;
  * decrypter (typically Identity) instead of the default decrypter
  * are honoured.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class CryptFilterDecrypter implements PDFDecrypter {
 
     /** Maps from crypt filter names to their corresponding decrypters */
-    private Map<String, PDFDecrypter> decrypters;
+    private final Map<String, PDFDecrypter> decrypters;
     /** The default decrypter for stream content */
-    private PDFDecrypter defaultStreamDecrypter;
+    private final PDFDecrypter defaultStreamDecrypter;
     /** The default decrypter for string content */
-    private PDFDecrypter defaultStringDecrypter;
+    private final PDFDecrypter defaultStringDecrypter;
 
     /**
      * Class constructor
@@ -55,8 +55,7 @@ public class CryptFilterDecrypter implements PDFDecrypter {
      *  stream decrypter
      * @param defaultStringCryptName the crypt filter name of the default
      * string decrypter
-     * @throws org.loboevolution.pdfview.PDFParseException if one of the named defaults is not
-     *  present in decrypters
+     * @throws org.loboevolution.pdfview.PDFParseException if any.
      */
     public CryptFilterDecrypter(
             Map<String, PDFDecrypter> decrypters,
@@ -81,7 +80,7 @@ public class CryptFilterDecrypter implements PDFDecrypter {
         }
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public ByteBuffer decryptBuffer(
             String cryptFilterName, PDFObject streamObj, ByteBuffer streamBuf)
@@ -107,14 +106,14 @@ public class CryptFilterDecrypter implements PDFDecrypter {
                 streamBuf);
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public String decryptString(int objNum, int objGen, String inputBasicString)
             throws PDFParseException {
         return defaultStringDecrypter.decryptString(objNum, objGen, inputBasicString);
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isEncryptionPresent() {
         for (final PDFDecrypter decrypter : decrypters.values()) {
@@ -125,14 +124,14 @@ public class CryptFilterDecrypter implements PDFDecrypter {
         return false;
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isEncryptionPresent(String cryptFilterName) {
         PDFDecrypter decrypter = decrypters.get(cryptFilterName);
         return decrypter != null && decrypter.isEncryptionPresent(cryptFilterName);
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public boolean isOwnerAuthorised() {
         for (final PDFDecrypter decrypter : decrypters.values()) {

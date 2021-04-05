@@ -19,10 +19,10 @@ import org.loboevolution.pdfview.PDFParser;
  ***************************************************************************
  * PDF annotation describing a stamp
  *
- * @author Katja Sondermann
+ * Author Katja Sondermann
  * @since 26.03.2012
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class StampAnnotation extends PDFAnnotation {
 	private String iconName;
@@ -38,9 +38,8 @@ public class StampAnnotation extends PDFAnnotation {
 	 * Constructor
 	 *
 	 * @param annotObject a {@link org.loboevolution.pdfview.PDFObject} object.
-	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 * @param type a ANNOTATION_TYPE object.
+	 * @throws java.io.IOException if any.
 	 */
 	public StampAnnotation(PDFObject annotObject, ANNOTATION_TYPE type) throws IOException {
 		super(annotObject, type);
@@ -56,7 +55,6 @@ public class StampAnnotation extends PDFAnnotation {
 	 *
 	 * @param annotObject a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public StampAnnotation(PDFObject annotObject) throws IOException {
 		this(annotObject, ANNOTATION_TYPE.STAMP);
@@ -97,7 +95,7 @@ public class StampAnnotation extends PDFAnnotation {
         if (type == null) {
             type = obj.getDictRef ("S").getStringValue ();
         }
-        ArrayList<PDFCmd> result = new ArrayList<PDFCmd>();
+        ArrayList<PDFCmd> result = new ArrayList<>();
         result.add(PDFPage.createPushCmd());
         result.add(PDFPage.createPushCmd());
         if (type.equals("Image")) {
@@ -105,7 +103,7 @@ public class StampAnnotation extends PDFAnnotation {
             AffineTransform rectAt = getPositionTransformation();
             result.add(PDFPage.createXFormCmd(rectAt));
             
-        	PDFImage img = PDFImage.createImage(obj, new HashMap<String, PDFObject>() , false);        	
+        	PDFImage img = PDFImage.createImage(obj, new HashMap<>() , false);
         	result.add(PDFPage.createImageCmd(img));
         } else if (type.equals("Form")) {
         	
@@ -137,7 +135,7 @@ public class StampAnnotation extends PDFAnnotation {
             if (matrix == null) {
                 at = new AffineTransform();
             } else {
-                float elts[] = new float[6];
+                float[] elts = new float[6];
                 for (int i = 0; i < elts.length; i++) {
                     elts[i] = (matrix.getAt(i)).getFloatValue();
                 }
@@ -145,7 +143,7 @@ public class StampAnnotation extends PDFAnnotation {
             }
             formCmds.addXform(at);
             
-            HashMap<String,PDFObject> r = new HashMap<String,PDFObject>(new HashMap<String, PDFObject>());
+            HashMap<String,PDFObject> r = new HashMap<>(new HashMap<>());
             PDFObject rsrc = obj.getDictRef("Resources");
             if (rsrc != null) {
                 r.putAll(rsrc.getDictionary());
@@ -183,7 +181,7 @@ public class StampAnnotation extends PDFAnnotation {
 	}
 
 	/**
-	 * <p>Getter for the field iconName.</p>
+	 * <p>Getter for the field <code>iconName</code>.</p>
 	 *
 	 * @return the iconName
 	 */
@@ -192,7 +190,7 @@ public class StampAnnotation extends PDFAnnotation {
 	}
 
 	/**
-	 * <p>Getter for the field popupAnnotation.</p>
+	 * <p>Getter for the field <code>popupAnnotation</code>.</p>
 	 *
 	 * @return the popupAnnotation
 	 */
@@ -201,7 +199,7 @@ public class StampAnnotation extends PDFAnnotation {
 	}
 
 	/**
-	 * <p>Getter for the field onAppearance.</p>
+	 * <p>Getter for the field <code>onAppearance</code>.</p>
 	 *
 	 * @return the onAppearance
 	 */
@@ -210,7 +208,7 @@ public class StampAnnotation extends PDFAnnotation {
 	}
 
 	/**
-	 * <p>Getter for the field offAppearance.</p>
+	 * <p>Getter for the field <code>offAppearance</code>.</p>
 	 *
 	 * @return the offAppearance
 	 */

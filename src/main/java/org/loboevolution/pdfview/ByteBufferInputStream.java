@@ -25,13 +25,13 @@ import java.nio.ByteBuffer;
 /**
  * Exposes a {@link java.nio.ByteBuffer} as an {@link java.io.InputStream}.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class ByteBufferInputStream extends InputStream {
 
     /** The underlying byte buffer */
-    private ByteBuffer buffer;
+    private final ByteBuffer buffer;
 
     /**
      * Class constructor

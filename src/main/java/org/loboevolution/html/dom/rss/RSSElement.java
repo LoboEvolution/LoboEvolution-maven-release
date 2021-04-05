@@ -1,15 +1,34 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.rss;
 
-import org.loboevolution.common.Nodes;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
+import org.loboevolution.html.node.NodeType;
 
 /**
  * <p>RSSElement class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class RSSElement extends HTMLElementImpl {
 
@@ -29,25 +48,25 @@ public class RSSElement extends HTMLElementImpl {
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getText() {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
-				if (child.getNodeType() == Node.TEXT_NODE) {
+			NodeListImpl childNodes = (NodeListImpl) getChildNodes();
+			childNodes.forEach(child -> {
+				if (child.getNodeType() == NodeType.TEXT_NODE) {
 					String nodeValue = child.getNodeValue();
 					String childText = "";
 					nodeValue = nodeValue.replace('\n', ' ');
 					nodeValue = nodeValue.replace('\r', ' ');
 					nodeValue = nodeValue.replace('\t', ' ');
 					childText = nodeValue;
-					text += childText + " ";
+					text.append(childText).append(" ");
 				}
-			}
+			});
 		}
 		if (text.length() > 0) {
 			return text.substring(0, text.length() - 1);
 		} else {
-			return text;
+			return text.toString();
 		}
 	}
 

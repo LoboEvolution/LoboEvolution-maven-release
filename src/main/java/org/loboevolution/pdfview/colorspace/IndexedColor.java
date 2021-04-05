@@ -27,8 +27,8 @@ import org.loboevolution.pdfview.PDFPaint;
 /**
  * A PDFColorSpace for an IndexedColor model
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class IndexedColor extends PDFColorSpace {
 
@@ -37,9 +37,9 @@ public class IndexedColor extends PDFColorSpace {
      * Java's IndexColorModel */
     protected byte[] finalcolors;
     /** the color table */
-    Color table[];
+    Color[] table;
     /** size of the color table */
-    int count;
+    final int count;
     /** number of channels in the base Color Space (unused) */
     int nchannels = 1;
 
@@ -64,7 +64,7 @@ public class IndexedColor extends PDFColorSpace {
         boolean offSized = (data.length / this.nchannels) < count;
         this.finalcolors = new byte[3 * count];
         this.table = new Color[count];
-        float comps[] = new float[this.nchannels];
+        float[] comps = new float[this.nchannels];
         int loc = 0;
         int finalloc = 0;
         for (int i = 0; i < count; i++) {
@@ -140,7 +140,7 @@ public class IndexedColor extends PDFColorSpace {
      * get the color represented by the index.
      */
     @Override
-    public PDFPaint getPaint(float components[]) {
+    public PDFPaint getPaint(float[] components) {
         return PDFPaint.getPaint(this.table[(int) components[0]]);
     }
 }

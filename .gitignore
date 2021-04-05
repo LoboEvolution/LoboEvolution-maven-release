@@ -29,3 +29,5 @@ pom.xml.releaseBackup
 release.properties
 
 .settings/
+.idea/
+*.iml

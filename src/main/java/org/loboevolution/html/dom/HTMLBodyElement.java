@@ -1,145 +1,150 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+import org.loboevolution.html.node.js.WindowEventHandlers;
+
 /**
- * The HTML document body. This element is always present in the DOM API, even
- * if the tags are not present in the source document. See the BODY element
- * definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties (beyond those inherited from the regular
+ * HTMLElement interface) for manipulating &lt;body&gt; elements.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public interface HTMLBodyElement extends HTMLElement {
+public interface HTMLBodyElement extends HTMLElement, WindowEventHandlers {
+
 	/**
-	 * Color of active links (after mouse-button down, but before mouse-button up).
-	 * See the alink attribute definition in HTML 4.01. This attribute is deprecated
-	 * in HTML 4.01.
+	 * <p>getALink.</p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */
+	@Deprecated
 	String getALink();
 
 	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>] of the
-	 * background texture tile image. See the background attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBackground();
-
-	/**
-	 * Document background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBgColor();
-
-	/**
-	 * Color of links that are not active and unvisited. See the link attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getLink();
-
-	/**
-	 * Document text color. See the text attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getText();
-
-	/**
-	 * Color of links that have been visited by the user. See the vlink attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getVLink();
-
-	/**
-	 * Color of active links (after mouse-button down, but before mouse-button up).
-	 * See the alink attribute definition in HTML 4.01. This attribute is deprecated
-	 * in HTML 4.01.
+	 * <p>setALink.</p>
 	 *
 	 * @param aLink a {@link java.lang.String} object.
 	 */
 	void setALink(String aLink);
 
 	/**
-	 * URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>] of the
-	 * background texture tile image. See the background attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
+	 * <p>getBackground.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getBackground();
+
+	/**
+	 * <p>setBackground.</p>
 	 *
 	 * @param background a {@link java.lang.String} object.
 	 */
 	void setBackground(String background);
 
 	/**
-	 * Document background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
+	 * <p>getBgColor.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getBgColor();
+
+	/**
+	 * <p>setBgColor.</p>
 	 *
 	 * @param bgColor a {@link java.lang.String} object.
 	 */
 	void setBgColor(String bgColor);
 
 	/**
-	 * Color of links that are not active and unvisited. See the link attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01.
+	 * <p>getBgProperties.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getBgProperties();
+
+	/**
+	 * <p>setBgProperties.</p>
+	 *
+	 * @param bgProperties a {@link java.lang.String} object.
+	 */
+	void setBgProperties(String bgProperties);
+
+	/**
+	 * <p>getLink.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getLink();
+
+	/**
+	 * <p>setLink.</p>
 	 *
 	 * @param link a {@link java.lang.String} object.
 	 */
 	void setLink(String link);
 
 	/**
-	 * Document text color. See the text attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
+	 * <p>isNoWrap.</p>
+	 *
+	 * @return a boolean.
+	 */
+	@Deprecated
+	boolean isNoWrap();
+
+	/**
+	 * <p>setNoWrap.</p>
+	 *
+	 * @param noWrap a boolean.
+	 */
+	void setNoWrap(boolean noWrap);
+
+	/**
+	 * <p>getText.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getText();
+
+	/**
+	 * <p>setText.</p>
 	 *
 	 * @param text a {@link java.lang.String} object.
 	 */
 	void setText(String text);
 
 	/**
-	 * Color of links that have been visited by the user. See the vlink attribute
-	 * definition in HTML 4.01. This attribute is deprecated in HTML 4.01.
+	 * <p>getVLink.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getVLink();
+
+	/**
+	 * <p>setVLink.</p>
 	 *
 	 * @param vLink a {@link java.lang.String} object.
 	 */

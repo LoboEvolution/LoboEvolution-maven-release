@@ -14,8 +14,8 @@ import org.mozilla.javascript.TopLevel;
  * module's source and base URIs in order to resolve relative module IDs
  * and check sandbox constraints.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ModuleScope extends TopLevel {
     private static final long serialVersionUID = 1L;
@@ -33,11 +33,11 @@ public class ModuleScope extends TopLevel {
         this.uri = uri;
         this.base = base;
         setPrototype(prototype);
-        cacheBuiltins();
+        cacheBuiltins(prototype, false);
     }
 
     /**
-     * <p>Getter for the field uri.</p>
+     * <p>Getter for the field <code>uri</code>.</p>
      *
      * @return a {@link java.net.URI} object.
      */
@@ -46,7 +46,7 @@ public class ModuleScope extends TopLevel {
     }
 
     /**
-     * <p>Getter for the field base.</p>
+     * <p>Getter for the field <code>base</code>.</p>
      *
      * @return a {@link java.net.URI} object.
      */

@@ -24,8 +24,8 @@ package org.loboevolution.pdfview.font;
  * for "open" to indicate that the path this point is a member of has
  * or hasn't been closed.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class FlPoint {
     /** x coordinate of the point */

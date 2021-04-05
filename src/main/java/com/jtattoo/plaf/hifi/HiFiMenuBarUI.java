@@ -34,8 +34,8 @@ import com.jtattoo.plaf.BaseBorders;
 /**
  * <p>HiFiMenuBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class HiFiMenuBarUI extends BasicMenuBarUI {
 
@@ -49,7 +49,7 @@ public class HiFiMenuBarUI extends BasicMenuBarUI {
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		if (c != null && c instanceof JMenuBar) {
-			((JMenuBar) c).setBorder(BaseBorders.getMenuBarBorder());
+			c.setBorder(BaseBorders.getMenuBarBorder());
 		}
 	}
 

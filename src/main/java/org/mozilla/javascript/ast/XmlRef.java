@@ -30,8 +30,8 @@ package org.mozilla.javascript.ast;
  * is an {@code XmlRef} that is part of an infix '&lt;' expression
  * whose parent is an {@code XmlDotQuery} node.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class XmlRef extends AstNode {
 

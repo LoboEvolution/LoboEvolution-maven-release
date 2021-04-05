@@ -9,8 +9,8 @@ import java.util.Iterator;
 /**
  * <p>NativeCollectionIterator class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeCollectionIterator extends ES6Iterator {
     private static final long serialVersionUID = 7094840979404373443L;

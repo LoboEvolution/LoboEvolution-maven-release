@@ -11,8 +11,8 @@ import java.awt.image.DataBufferInt;
  *
  * @since 25.03.2011
  ***************************************************************************
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class ImageDataDecoder {
 	

@@ -49,6 +49,9 @@
 */
 package org.jpedal.jbig2.segment.region.generic;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.jpedal.jbig2.JBIG2Exception;
 import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 import org.jpedal.jbig2.image.JBIG2Bitmap;
@@ -57,21 +60,18 @@ import org.jpedal.jbig2.segment.pageinformation.PageInformationSegment;
 import org.jpedal.jbig2.segment.region.RegionFlags;
 import org.jpedal.jbig2.segment.region.RegionSegment;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * <p>GenericRegionSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GenericRegionSegment extends RegionSegment {
 	
 	private static final Logger logger = Logger.getLogger(GenericRegionSegment.class.getName());
-    private GenericRegionFlags genericRegionFlags = new GenericRegionFlags();
+    private final GenericRegionFlags genericRegionFlags = new GenericRegionFlags();
 
-    private boolean inlineImage;
+    private final boolean inlineImage;
 
     private boolean unknownLength = false;
     
@@ -130,6 +130,7 @@ public class GenericRegionSegment extends RegionSegment {
         
         boolean typicalPredictionGenericDecodingOn = genericRegionFlags.getFlagValue(GenericRegionFlags.TPGDON) != 0;
         int length = segmentHeader.getSegmentDataLength();
+        int bytesRead = 0;
 
         if(length == -1) { 
         	/** 
@@ -154,7 +155,7 @@ public class GenericRegionSegment extends RegionSegment {
         		match2 = 172;
         	}
         	
-        	int bytesRead = 0;
+        	
     		while(true) {
     			short bite1 = decoder.readByte();
     			bytesRead++;
@@ -175,8 +176,7 @@ public class GenericRegionSegment extends RegionSegment {
         
         JBIG2Bitmap bitmap = new JBIG2Bitmap(regionBitmapWidth, regionBitmapHeight, arithmeticDecoder, huffmanDecoder, mmrDecoder);
         bitmap.clear(0);
-        bitmap.readBitmap(useMMR, template, typicalPredictionGenericDecodingOn, false, null, genericBAdaptiveTemplateX, genericBAdaptiveTemplateY, useMMR ? 0 : length - 18);
-        
+        bitmap.readBitmap(useMMR, template, typicalPredictionGenericDecodingOn, false, null, genericBAdaptiveTemplateX, genericBAdaptiveTemplateY, useMMR ? bytesRead : length - 18);
         
         
         if (inlineImage) {
@@ -214,7 +214,7 @@ public class GenericRegionSegment extends RegionSegment {
     }
 
     /**
-     * <p>Getter for the field genericRegionFlags.</p>
+     * <p>Getter for the field <code>genericRegionFlags</code>.</p>
      *
      * @return a {@link org.jpedal.jbig2.segment.region.generic.GenericRegionFlags} object.
      */

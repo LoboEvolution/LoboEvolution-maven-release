@@ -19,8 +19,8 @@ import org.mozilla.javascript.Token;
  * closing right-bracket.  In the presence of a syntax error, the right bracket
  * position is -1, and the node ends at the end of the element expression.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ElementGet extends AstNode {
 

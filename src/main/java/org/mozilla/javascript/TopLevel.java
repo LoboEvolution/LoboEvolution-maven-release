@@ -32,11 +32,11 @@ import java.util.EnumMap;
  * built-in classes after initialization. For other setups involving
  * top-level scopes that inherit global properties from their proptotypes
  * (e.g. with dynamic scopes) embeddings should explicitly call
- * {@link #cacheBuiltins()} to initialize the class cache for each top-level
+ * {@link #cacheBuiltins(Scriptable, boolean)} to initialize the class cache for each top-level
  * scope.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class TopLevel extends IdScriptableObject {
 
@@ -63,7 +63,9 @@ public class TopLevel extends IdScriptableObject {
         /** The built-in Error type. */
         Error,
         /** The built-in Symbol type. */
-        Symbol
+        Symbol,
+        /** The built-in GeneratorFunction type. */
+        GeneratorFunction
     }
 
     /**
@@ -105,14 +107,21 @@ public class TopLevel extends IdScriptableObject {
      * {@link org.mozilla.javascript.ScriptRuntime#initStandardObjects ScriptRuntime.initStandardObjects}
      * if the scope argument is an instance of this class. It only has to be
      * called by the embedding if a top-level scope is not initialized through
-     * initStandardObjects().
+     * <code>initStandardObjects()</code>.
+     *
+     * @param scope a {@link org.mozilla.javascript.Scriptable} object.
+     * @param sealed a boolean.
      */
-    public void cacheBuiltins() {
+    public void cacheBuiltins(Scriptable scope, boolean sealed) {
         ctors = new EnumMap<Builtins, BaseFunction>(Builtins.class);
         for (Builtins builtin : Builtins.values()) {
             Object value = ScriptableObject.getProperty(this, builtin.name());
             if (value instanceof BaseFunction) {
                 ctors.put(builtin, (BaseFunction)value);
+            } else if (builtin == Builtins.GeneratorFunction) {
+                // Handle weird situation of "GeneratorFunction" being a real constructor
+                // which is never registered in the top-level scope
+                ctors.put(builtin, (BaseFunction)BaseFunction.initAsGeneratorFunction(scope, sealed));
             }
         }
         errors = new EnumMap<NativeErrors, BaseFunction>(NativeErrors.class);
@@ -126,7 +135,7 @@ public class TopLevel extends IdScriptableObject {
 
     /**
      * Static helper method to get a built-in object constructor with the given
-     * type from the given scope. If the scope is not
+     * <code>type</code> from the given <code>scope</code>. If the scope is not
      * an instance of this class or does have a cache of built-ins,
      * the constructor is looked up via normal property lookup.
      *
@@ -147,12 +156,21 @@ public class TopLevel extends IdScriptableObject {
             }
         }
         // fall back to normal constructor lookup
-        return ScriptRuntime.getExistingCtor(cx, scope, type.name());
+        String typeName;
+        if (type == Builtins.GeneratorFunction) {
+            // GeneratorFunction isn't stored in scope with that name, but in case
+            // we end up falling back to this value then we have to
+            // look this up using a hidden name.
+            typeName = BaseFunction.GENERATOR_FUNCTION_CLASS;
+        } else {
+            typeName = type.name();
+        }
+        return ScriptRuntime.getExistingCtor(cx, scope, typeName);
     }
 
     /**
      * Static helper method to get a native error constructor with the given
-     * type from the given scope. If the scope is not
+     * <code>type</code> from the given <code>scope</code>. If the scope is not
      * an instance of this class or does have a cache of native errors,
      * the constructor is looked up via normal property lookup.
      *
@@ -177,7 +195,7 @@ public class TopLevel extends IdScriptableObject {
 
     /**
      * Static helper method to get a built-in object prototype with the given
-     * type from the given scope. If the scope is not
+     * <code>type</code> from the given <code>scope</code>. If the scope is not
      * an instance of this class or does have a cache of built-ins,
      * the prototype is looked up via normal property lookup.
      *
@@ -197,12 +215,21 @@ public class TopLevel extends IdScriptableObject {
             }
         }
         // fall back to normal prototype lookup
-        return ScriptableObject.getClassPrototype(scope, type.name());
+        String typeName;
+        if (type == Builtins.GeneratorFunction) {
+            // GeneratorFunction isn't stored in scope with that name, but in case
+            // we end up falling back to this value then we have to
+            // look this up using a hidden name.
+            typeName = BaseFunction.GENERATOR_FUNCTION_CLASS;
+        } else {
+            typeName = type.name();
+        }
+        return ScriptableObject.getClassPrototype(scope, typeName);
     }
 
     /**
      * Get the cached built-in object constructor from this scope with the
-     * given type. Returns null if {@link #cacheBuiltins()} has not
+     * given <code>type</code>. Returns null if {@link #cacheBuiltins(Scriptable, boolean)} has not
      * been called on this object.
      *
      * @param type the built-in type
@@ -214,7 +241,7 @@ public class TopLevel extends IdScriptableObject {
 
     /**
      * Get the cached native error constructor from this scope with the
-     * given type. Returns null if {@link #cacheBuiltins()} has not
+     * given <code>type</code>. Returns null if {@link #cacheBuiltins()} has not
      * been called on this object.
      * @param type the native error type
      * @return the native error constructor
@@ -225,7 +252,7 @@ public class TopLevel extends IdScriptableObject {
 
     /**
      * Get the cached built-in object prototype from this scope with the
-     * given type. Returns null if {@link #cacheBuiltins()} has not
+     * given <code>type</code>. Returns null if {@link #cacheBuiltins(Scriptable, boolean)} has not
      * been called on this object.
      *
      * @param type the built-in type

@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>DoLoop</i>:
  * <b>do</b> Statement <b>while</b> <b>(</b> Expression <b>)</b> <b>;</b></pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class DoLoop extends Loop {
 

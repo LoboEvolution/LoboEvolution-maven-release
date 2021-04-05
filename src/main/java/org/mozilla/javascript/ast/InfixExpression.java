@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
  * AST node representing an infix (binary operator) expression.
  * The operator is the node's {@link org.mozilla.javascript.Token} type.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InfixExpression extends AstNode {
 

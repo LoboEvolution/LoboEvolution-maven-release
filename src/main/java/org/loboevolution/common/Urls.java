@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.common;
 
 import java.net.URI;
@@ -9,14 +29,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>Urls class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Urls {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(Urls.class.getName());
 	
 	/** The Constant PATTERN_RFC1123. */
 	public static final DateFormat PATTERN_RFC1123 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
@@ -33,7 +58,8 @@ public class Urls {
 		if (relativeUrl.contains("javascript:void")) {
 			return null;
 		}
-		return new URL(baseUrl, relativeUrl);
+		
+		return new URL(baseUrl, encodeIllegalCharacters(relativeUrl));
 	}
 
 	/**
@@ -119,7 +145,7 @@ public class Urls {
 			final URI uri = new URI(url);
 			result = uri.isAbsolute();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return result;
 	}
@@ -166,15 +192,15 @@ public class Urls {
 			while (tok.hasMoreTokens()) {
 				String token = tok.nextToken().trim().toLowerCase();
 				if ("must-revalidate".equals(token)) {
-					return Long.valueOf(0);
+					return 0L;
 				} else if (token.startsWith("max-age")) {
 					int eqIdx = token.indexOf('=');
 					if (eqIdx != -1) {
 						String value = token.substring(eqIdx + 1).trim();
 						try {
-							return Long.valueOf(baseTime + Integer.parseInt(value));
-						} catch (NumberFormatException nfe) {
-							nfe.printStackTrace();
+							return baseTime + Integer.parseInt(value);
+						} catch (NumberFormatException e) {
+							logger.log(Level.SEVERE, e.getMessage(), e);
 						}
 					}
 				}
@@ -185,13 +211,13 @@ public class Urls {
 			try {
 				synchronized (PATTERN_RFC1123) {
 					Date expDate = PATTERN_RFC1123.parse(expires);
-					return Long.valueOf(expDate.getTime());
+					return expDate.getTime();
 				}
 			} catch (ParseException pe) {
 				try {
-					return Long.valueOf(baseTime + Integer.parseInt(expires));
-				} catch (NumberFormatException nfe) {
-					nfe.printStackTrace();
+					return baseTime + Integer.parseInt(expires);
+				} catch (NumberFormatException e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 			}
 		}

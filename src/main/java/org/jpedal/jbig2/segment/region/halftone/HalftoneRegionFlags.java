@@ -57,41 +57,41 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>HalftoneRegionFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class HalftoneRegionFlags extends Flags {
 
 	private static final Logger logger = Logger.getLogger(HalftoneRegionFlags.class.getName());
-    /** Constant H_MMR="H_MMR" */
-    public static String H_MMR = "H_MMR";
-    /** Constant H_TEMPLATE="H_TEMPLATE" */
-    public static String H_TEMPLATE = "H_TEMPLATE";
-    /** Constant H_ENABLE_SKIP="H_ENABLE_SKIP" */
-    public static String H_ENABLE_SKIP = "H_ENABLE_SKIP";
-    /** Constant H_COMB_OP="H_COMB_OP" */
-    public static String H_COMB_OP = "H_COMB_OP";
-    /** Constant H_DEF_PIXEL="H_DEF_PIXEL" */
-    public static String H_DEF_PIXEL = "H_DEF_PIXEL";
+    /** Constant <code>H_MMR="H_MMR"</code> */
+    public static final String H_MMR = "H_MMR";
+    /** Constant <code>H_TEMPLATE="H_TEMPLATE"</code> */
+    public static final String H_TEMPLATE = "H_TEMPLATE";
+    /** Constant <code>H_ENABLE_SKIP="H_ENABLE_SKIP"</code> */
+    public static final String H_ENABLE_SKIP = "H_ENABLE_SKIP";
+    /** Constant <code>H_COMB_OP="H_COMB_OP"</code> */
+    public static final String H_COMB_OP = "H_COMB_OP";
+    /** Constant <code>H_DEF_PIXEL="H_DEF_PIXEL"</code> */
+    public static final String H_DEF_PIXEL = "H_DEF_PIXEL";
 
     /** {@inheritDoc} */
     public void setFlags(int flagsAsInt) {
         this.flagsAsInt = flagsAsInt;
 
         /** extract H_MMR */
-		flags.put(H_MMR, new Integer(flagsAsInt & 1));
+		flags.put(H_MMR, flagsAsInt & 1);
 		
 		/** extract H_TEMPLATE */
-		flags.put(H_TEMPLATE, new Integer((flagsAsInt >> 1) & 3));
+		flags.put(H_TEMPLATE, (flagsAsInt >> 1) & 3);
 		
 		/** extract H_ENABLE_SKIP */
-		flags.put(H_ENABLE_SKIP, new Integer((flagsAsInt >> 3) & 1));
+		flags.put(H_ENABLE_SKIP, (flagsAsInt >> 3) & 1);
 		
 		/** extract H_COMB_OP */
-		flags.put(H_COMB_OP, new Integer((flagsAsInt >> 4) & 7));
+		flags.put(H_COMB_OP, (flagsAsInt >> 4) & 7);
 		
 		/** extract H_DEF_PIXEL */
-		flags.put(H_DEF_PIXEL, new Integer((flagsAsInt >> 7) & 1));
+		flags.put(H_DEF_PIXEL, (flagsAsInt >> 7) & 1);
 
 		
 		if(JBIG2StreamDecoder.debug)

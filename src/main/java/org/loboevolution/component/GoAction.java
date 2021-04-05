@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.component;
 
 import java.awt.event.ActionEvent;
@@ -12,20 +32,20 @@ import javax.swing.JTextField;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.component.input.Autocomplete;
+import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
+import org.loboevolution.html.gui.HtmlPanel;
 import org.loboevolution.http.NavigationManager;
 import org.loboevolution.img.ImageViewer;
-import org.loboevolution.pdf.PdfDialog;
+import org.loboevolution.pdf.PDFViewer;
 import org.loboevolution.store.TabStore;
 import org.loboevolution.tab.DnDTabbedPane;
 import org.loboevolution.tab.TabbedPanePopupMenu;
-import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
-import org.loboevolution.html.gui.HtmlPanel;
 
 /**
  * <p>GoAction class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GoAction extends AbstractAction {
 
@@ -56,29 +76,27 @@ public class GoAction extends AbstractAction {
 				goUrlImage(image, url);
 			} else {
 				if (url.endsWith(".pdf")) {
-					PdfDialog viewer = new PdfDialog(true);
+					PDFViewer viewer = new PDFViewer(true);
 					viewer.doOpen(url);
 				} else {
-					goURl(url);
+					goURL(url);
 				}
 			}
 		} catch (IOException e) {
 			if (url.endsWith(".pdf")) {
-				PdfDialog viewer = new PdfDialog(true);
+				PDFViewer viewer = new PDFViewer(true);
 				viewer.doOpen(url);
 			} else {
-				goURl(url);
+				goURL(url);
 			}
 		}
 	}
 
-	private void goURl(String text) {
+	private void goURL(String text) {
 		final DnDTabbedPane tabbedPane = this.panel.getTabbedPane();
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(this.panel));
 		final int indexPanel = tabbedPane.getSelectedIndex();
-		final HtmlPanel htmlPanel = NavigationManager.getHtmlPanel(text, indexPanel);
-		htmlPanel.setBrowserPanel(panel);
-
+		final HtmlPanel htmlPanel = HtmlPanel.createHtmlPanel(panel, text);
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) htmlPanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 		tabbedPane.remove(indexPanel);
@@ -88,6 +106,7 @@ public class GoAction extends AbstractAction {
 
 		TabStore.deleteTab(indexPanel);
 		TabStore.insertTab(indexPanel, text, title);
+		NavigationManager.insertHistory(text, title, indexPanel);
 		addressBar.removeAll();
 		Autocomplete.setupAutoComplete(addressBar, TabStore.getUrls());
 

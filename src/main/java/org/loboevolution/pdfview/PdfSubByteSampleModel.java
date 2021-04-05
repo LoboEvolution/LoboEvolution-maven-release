@@ -32,8 +32,8 @@ import java.awt.image.SampleModel;
  * components, does not allow for such byte spanning, while the PDF
  * specification does permit it -- hence the existence of this class.
  *
- * @author Luke Kirby, Pirion Systems
- * @version $Id: $Id
+ * Author Luke Kirby, Pirion Systems
+  *
  */
 public class PdfSubByteSampleModel extends SampleModel
 {

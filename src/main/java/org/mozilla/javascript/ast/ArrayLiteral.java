@@ -30,8 +30,8 @@ import org.mozilla.javascript.Token;
  *        <b>,</b>
  *        Elision <b>,</b></pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ArrayLiteral extends AstNode implements DestructuringForm {
 

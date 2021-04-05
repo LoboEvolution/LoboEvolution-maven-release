@@ -41,8 +41,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * <p>About class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 
 // TODO:
@@ -57,7 +57,7 @@ public class About extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	/** Constant JTATTOO_VERSION="Version: 1.6.12" */
-	public static String JTATTOO_VERSION = "Version: 1.6.12";
+	public static final String JTATTOO_VERSION = "Version: 1.6.12";
 
 	private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 	private static final Dimension DLG_SIZE = new Dimension(440, 240);

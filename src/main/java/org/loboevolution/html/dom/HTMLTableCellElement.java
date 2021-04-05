@@ -1,279 +1,257 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
 /**
- * The object used to represent the TH and TD
- * elements. See the TD element definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of table cells, either header or data cells, in an HTML document.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLTableCellElement extends HTMLElement {
-	/**
-	 * Abbreviation for header cells. See the abbr attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAbbr();
+    
+    /**
+     * Sets or retrieves abbreviated text for the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAbbr();
 
-	/**
-	 * Horizontal alignment of data in cell. See the align attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlign();
+    
+    /**
+     * <p>setAbbr.</p>
+     *
+     * @param abbr a {@link java.lang.String} object.
+     */
+    void setAbbr(String abbr);
 
-	/**
-	 * Names group of related headers. See the axis attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAxis();
+    /**
+     * Sets or retrieves how the object is aligned with adjacent text.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * Cell background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBgColor();
+    
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    void setAlign(String align);
 
-	/**
-	 * The index of this cell in the row, starting from 0. This index is in document
-	 * tree order and not display order.
-	 *
-	 * @return a int.
-	 */
-	int getCellIndex();
+    /**
+     * Sets or retrieves a comma-delimited list of conceptual categories associated with the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAxis();
 
-	/**
-	 * Alignment character for cells in a column. See the char attribute definition
-	 * in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCh();
+    
+    /**
+     * <p>setAxis.</p>
+     *
+     * @param axis a {@link java.lang.String} object.
+     */
+    void setAxis(String axis);
 
-	/**
-	 * Offset of alignment character. See the charoff attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getChOff();
+    /**
+     * <p>getBgColor.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getBgColor();
 
-	/**
-	 * Number of columns spanned by cell. See the colspan attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getColSpan();
+    
+    /**
+     * <p>setBgColor.</p>
+     *
+     * @param bgColor a {@link java.lang.String} object.
+     */
+    void setBgColor(String bgColor);
 
-	/**
-	 * List of id attribute values for header cells. See the headers
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHeaders();
+    /**
+     * Retrieves the position of the object in the cells collection of a row.
+     *
+     * @return a int.
+     */
+    int getCellIndex();
 
-	/**
-	 * Cell height. See the height attribute definition in HTML 4.01. This attribute
-	 * is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHeight();
+    /**
+     * <p>getCh.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCh();
 
-	/**
-	 * Suppress word wrapping. See the nowrap attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getNoWrap();
+    
+    /**
+     * <p>setCh.</p>
+     *
+     * @param ch a {@link java.lang.String} object.
+     */
+    void setCh(String ch);
 
-	/**
-	 * Number of rows spanned by cell. See the rowspan attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getRowSpan();
+    /**
+     * <p>getChOff.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getChOff();
 
-	/**
-	 * Scope covered by header cells. See the scope attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getScope();
+    
+    /**
+     * <p>setChOff.</p>
+     *
+     * @param chOff a {@link java.lang.String} object.
+     */
+    void setChOff(String chOff);
 
-	/**
-	 * Vertical alignment of data in cell. See the valign attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getVAlign();
+    /**
+     * Sets or retrieves the number columns in the table that the object should span.
+     *
+     * @return a int.
+     */
+    int getColSpan();
 
-	/**
-	 * Cell width. See the width attribute definition in HTML 4.01. This attribute
-	 * is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getWidth();
+    
+    /**
+     * <p>setColSpan.</p>
+     *
+     * @param colSpan a {@link java.lang.Object} object.
+     */
+    void setColSpan(Object colSpan);
 
-	/**
-	 * Abbreviation for header cells. See the abbr attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param abbr a {@link java.lang.String} object.
-	 */
-	void setAbbr(String abbr);
+    /**
+     * Sets or retrieves a list of header cells that provide information for the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getHeaders();
 
-	/**
-	 * Horizontal alignment of data in cell. See the align attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param align a {@link java.lang.String} object.
-	 */
-	void setAlign(String align);
+    
+    /**
+     * <p>setHeaders.</p>
+     *
+     * @param headers a {@link java.lang.String} object.
+     */
+    void setHeaders(String headers);
 
-	/**
-	 * Names group of related headers. See the axis attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param axis a {@link java.lang.String} object.
-	 */
-	void setAxis(String axis);
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getHeight();
 
-	/**
-	 * Cell background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param bgColor a {@link java.lang.String} object.
-	 */
-	void setBgColor(String bgColor);
+    
+    /**
+     * <p>setHeight.</p>
+     *
+     * @param height a {@link java.lang.String} object.
+     */
+    void setHeight(String height);
 
-	/**
-	 * Alignment character for cells in a column. See the char attribute definition
-	 * in HTML 4.01.
-	 *
-	 * @param ch a {@link java.lang.String} object.
-	 */
-	void setCh(String ch);
+    /**
+     * Sets or retrieves whether the browser automatically performs wordwrap.
+     *
+     * @return a boolean.
+     */
+    @Deprecated
+    boolean isNoWrap();
 
-	/**
-	 * Offset of alignment character. See the charoff attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param chOff a {@link java.lang.String} object.
-	 */
-	void setChOff(String chOff);
+    
+    /**
+     * <p>setNoWrap.</p>
+     *
+     * @param noWrap a boolean.
+     */
+    void setNoWrap(boolean noWrap);
 
-	/**
-	 * Number of columns spanned by cell. See the colspan attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param colSpan a int.
-	 */
-	void setColSpan(int colSpan);
+    /**
+     * Sets or retrieves how many rows in a table the cell should span.
+     *
+     * @return a int.
+     */
+    int getRowSpan();
 
-	/**
-	 * List of id attribute values for header cells. See the headers
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param headers a {@link java.lang.String} object.
-	 */
-	void setHeaders(String headers);
+    
+    /**
+     * <p>setRowSpan.</p>
+     *
+     * @param rowSpan a {@link java.lang.Object} object.
+     */
+    void setRowSpan(Object rowSpan);
 
-	/**
-	 * Cell height. See the height attribute definition in HTML 4.01. This attribute
-	 * is deprecated in HTML 4.01.
-	 *
-	 * @param height a {@link java.lang.String} object.
-	 */
-	void setHeight(String height);
+    /**
+     * Sets or retrieves the group of cells in a table to which the object's information applies.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getScope();
 
-	/**
-	 * Suppress word wrapping. See the nowrap attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param noWrap a boolean.
-	 */
-	void setNoWrap(boolean noWrap);
+    
+    /**
+     * <p>setScope.</p>
+     *
+     * @param scope a {@link java.lang.String} object.
+     */
+    void setScope(String scope);
 
-	/**
-	 * Number of rows spanned by cell. See the rowspan attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param rowSpan a int.
-	 */
-	void setRowSpan(int rowSpan);
+    /**
+     * <p>getvAlign.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getvAlign();
 
-	/**
-	 * Scope covered by header cells. See the scope attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param scope a {@link java.lang.String} object.
-	 */
-	void setScope(String scope);
+    
+    /**
+     * <p>setvAlign.</p>
+     *
+     * @param vAlign a {@link java.lang.String} object.
+     */
+    void setvAlign(String vAlign);
 
-	/**
-	 * Vertical alignment of data in cell. See the valign attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param vAlign a {@link java.lang.String} object.
-	 */
-	void setVAlign(String vAlign);
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getWidth();
 
-	/**
-	 * Cell width. See the width attribute definition in HTML 4.01. This attribute
-	 * is deprecated in HTML 4.01.
-	 *
-	 * @param width a {@link java.lang.String} object.
-	 */
-	void setWidth(String width);
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a {@link java.lang.String} object.
+     */
+    void setWidth(String width);
 
 }

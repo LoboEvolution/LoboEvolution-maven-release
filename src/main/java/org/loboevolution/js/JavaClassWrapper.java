@@ -1,22 +1,21 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.js;
 
@@ -30,15 +29,15 @@ import org.mozilla.javascript.Function;
 /**
  * <p>JavaClassWrapper class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class JavaClassWrapper {
-	private final Map<String, JavaFunctionObject> functions = new HashMap<String, JavaFunctionObject>();
+	private final Map<String, JavaFunctionObject> functions = new HashMap<>();
 	private PropertyInfo integerIndexer;
 	private final Class javaClass;
 	private PropertyInfo nameIndexer;
-	private final Map<String, PropertyInfo> properties = new HashMap<String, PropertyInfo>();
+	private final Map<String, PropertyInfo> properties = new HashMap<>();
 
 	/**
 	 * <p>Constructor for JavaClassWrapper.</p>
@@ -180,9 +179,7 @@ public class JavaClassWrapper {
 
 	private void scanMethods() {
 		final Method[] methods = this.javaClass.getMethods();
-		final int len = methods.length;
-		for (int i = 0; i < len; i++) {
-			final Method method = methods[i];
+		for (final Method method : methods) {
 			final String name = method.getName();
 			if (isPropertyMethod(name, method)) {
 				ensurePropertyKnown(name, method);

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.laf;
 
 import java.awt.Color;
@@ -7,6 +27,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.store.SQLiteCommon;
@@ -14,10 +36,13 @@ import org.loboevolution.store.SQLiteCommon;
 /**
  * A factory for creating Color objects.
  *
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
 public class ColorFactory {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(ColorFactory.class.getName());
 
 	/** The instance. */
 	private static ColorFactory instance;
@@ -26,7 +51,7 @@ public class ColorFactory {
 	public static final Color TRANSPARENT = new Color(0, 0, 0, 0);
 	
 	/** The color map. */
-	private Map<String, Color> colorMap = new HashMap<String, Color>(510);
+	private Map<String, Color> colorMap = new HashMap<>(510);
 
 	private final String COLORS = "SELECT DISTINCT name, value FROM COLOR";
 
@@ -47,7 +72,7 @@ public class ColorFactory {
 	 *
 	 * @return the instance
 	 */
-	public static synchronized final ColorFactory getInstance() {
+	public static synchronized ColorFactory getInstance() {
 		if (instance == null) {
 			instance = new ColorFactory();
 		}
@@ -61,6 +86,17 @@ public class ColorFactory {
 		synchronized (this) {
 			this.colorMap = mapColor();
 		}
+	}
+
+	/**
+	 * Gets the color.
+	 *
+	 * @param colorSpec the color spec
+	 * @return the color
+	 */
+	public Color getColor(LAFColorType colorSpec) {
+		return getColor(colorSpec.getValue());
+
 	}
 
 	/**
@@ -178,9 +214,9 @@ public class ColorFactory {
 			}
 
 			final String[] strs = Strings.splitUsingTokenizer(commaValues, ",");
-			final int red = Integer.parseInt(strs[0].trim());
-			final int green = Integer.parseInt(strs[1].trim());
-			final int blue = Integer.parseInt(strs[2].trim());
+			final int red = (int) parseValue(strs[0].trim(), 255);
+			final int green =  (int) parseValue(strs[1].trim(), 255);
+			final int blue =  (int) parseValue(strs[2].trim(), 255);
 			color = new Color(normalize(red), normalize(green), normalize(blue));
 			this.colorMap.put(normalSpec, color);
 		} else {
@@ -209,9 +245,9 @@ public class ColorFactory {
 			}
 
 			final String[] strs = Strings.splitUsingTokenizer(commaValues, ",");
-			final int red = Integer.parseInt(strs[0].trim());
-			final int green = Integer.parseInt(strs[1].trim());
-			final int blue = Integer.parseInt(strs[2].trim());
+			final int red = (int) parseValue(strs[0].trim(), 255);
+			final int green =  (int) parseValue(strs[1].trim(), 255);
+			final int blue =  (int) parseValue(strs[2].trim(), 255);
 			final int alpha = Float.valueOf(255 * Float.parseFloat(strs[3].trim())).intValue();
 			color = new Color(normalize(red), normalize(green), normalize(blue), alpha);
 			this.colorMap.put(normalSpec, color);
@@ -285,16 +321,24 @@ public class ColorFactory {
 			return true;
 		} else if (normalSpec.startsWith(this.HSLA_START)) {
 			return true;
-		} else if (normalSpec.startsWith(this.HSL_START)) {
-			return true;
-		}
-		return false;
+		} else return normalSpec.startsWith(this.HSL_START);
 	}
 	
-	
+	/**
+	 * <p>getAdjustedColor.</p>
+	 *
+	 * @param c a {@link java.awt.Color} object.
+	 * @param factor a double.
+	 * @return a {@link java.awt.Color} object.
+	 */
+	public static Color getAdjustedColor(Color c, double factor) {
+		double f = 1 - Math.min(Math.abs(factor), 1);
+		double inc = (factor > 0 ? 255 * (1 - f) : 0);
+		return new Color((int) (c.getRed() * f + inc), (int) (c.getGreen() * f + inc), (int) (c.getBlue() * f + inc));
+	}
 
 	private Map<String, Color> mapColor() {
-		final Map<String, Color> colorMap = new HashMap<String, Color>();
+		final Map<String, Color> colorMap = new HashMap<>();
 		colorMap.put("transparent", new Color(0, 0, 0, 0));
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				Statement stmt = conn.createStatement()) {
@@ -305,7 +349,7 @@ public class ColorFactory {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return colorMap;
 	}
@@ -353,10 +397,10 @@ public class ColorFactory {
 	}
 
 	private Color HexToColor(String hex) {
-		Integer red = -1;
-		Integer green = -1;
-		Integer blue = -1;
-		Integer alpha = -1;
+		int red = -1;
+		int green = -1;
+		int blue = -1;
+		int alpha = -1;
 		hex = hex.replace("#", "");
 		switch (hex.length()) {
 		case 6:
@@ -370,8 +414,9 @@ public class ColorFactory {
 			blue = Integer.valueOf(hex.substring(4, 6), 16);
 			alpha = Integer.valueOf(hex.substring(6, 8), 16);
 			return new Color(red, green, blue, alpha);
+		default:
+			return null;
 		}
-		return null;
 	}
 	
 	/**

@@ -1,16 +1,36 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.pref.data;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import org.loboevolution.gui.CheckBoxPanel;
+import com.jtattoo.plaf.lobo.LoboCheckBox;
 
 /**
  * <p>ImportDataAction class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ImportDataAction extends AbstractAction {
 
@@ -19,21 +39,21 @@ public class ImportDataAction extends AbstractAction {
 	private final String action;
 
 	/** The chrome panel. */
-	private final CheckBoxPanel chromePanel;
+	private final LoboCheckBox chrome;
 
 	/** The mozilla panel. */
-	private final CheckBoxPanel mozillaPanel;
+	private final LoboCheckBox mozilla;
 
 	/**
 	 * <p>Constructor for ImportDataAction.</p>
 	 *
-	 * @param mozillaPanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
-	 * @param chromePanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
+	 * @param chrome a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
+	 * @param mozilla a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
 	 * @param action a {@link java.lang.String} object.
 	 */
-	public ImportDataAction(CheckBoxPanel mozillaPanel, CheckBoxPanel chromePanel, String action) {
-		this.mozillaPanel = mozillaPanel;
-		this.chromePanel = chromePanel;
+	public ImportDataAction(LoboCheckBox chrome, LoboCheckBox mozilla, String action) {
+		this.chrome = chrome;
+		this.mozilla = mozilla;
 		this.action = action;
 	}
 
@@ -57,31 +77,31 @@ public class ImportDataAction extends AbstractAction {
 	}
 
 	private void importBookmarks() {
-		if (this.mozillaPanel.isSelected()) {
+		if (this.mozilla.isSelected()) {
 			MozilaFirefoxData.importBookmark();
 		}
 
-		if (this.chromePanel.isSelected()) {
+		if (this.chrome.isSelected()) {
 			GoogleChromeData.importBookmark();
 		}
 	}
 
 	private void importCookie() {
-		if (this.mozillaPanel.isSelected()) {
+		if (this.mozilla.isSelected()) {
 			MozilaFirefoxData.importCookie();
 		}
 
-		if (this.chromePanel.isSelected()) {
+		if (this.chrome.isSelected()) {
 			GoogleChromeData.importCookie();
 		}
 	}
 
 	private void importHistory() {
-		if (this.mozillaPanel.isSelected()) {
+		if (this.mozilla.isSelected()) {
 			MozilaFirefoxData.importHistory();
 		}
 
-		if (this.chromePanel.isSelected()) {
+		if (this.chrome.isSelected()) {
 			GoogleChromeData.importHistory();
 		}
 	}

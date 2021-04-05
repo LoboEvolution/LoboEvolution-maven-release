@@ -20,10 +20,10 @@ import org.loboevolution.pdfview.PDFParseException;
  * Use the createAnnotation() method for getting an annotation of the correct
  * type (if implemented).
  *
- * @author  Katja Sondermann
+ * Author  Katja Sondermann
  * @since 03.07.2009
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class PDFAnnotation{
 	public enum ANNOTATION_TYPE{
@@ -36,10 +36,10 @@ public class PDFAnnotation{
 		// TODO 28.03.2012: add more annotation types
 		;
 		
-		private String definition; 
-		private int internalId;
-		private Class<?> className;
-		private ANNOTATION_TYPE(String definition, int typeId, Class<?> className) {
+		private final String definition;
+		private final int internalId;
+		private final Class<?> className;
+		ANNOTATION_TYPE(String definition, int typeId, Class<?> className) {
 			this.definition = definition;
 			this.internalId = typeId;
 			this.className = className;
@@ -66,8 +66,8 @@ public class PDFAnnotation{
 		
 		/**
 		 * Get annotation type by it's type 
-		 * @param definition definition
-		 * @return type
+		 * @param definition a {@link java.lang.String} object.
+		 * @return a {@link org.loboevolution.pdfview.annotation.PDFAnnotation.ANNOTATION_TYPE} object.
 		 */
 		public static ANNOTATION_TYPE getByDefinition(String definition) {
 			for (ANNOTATION_TYPE type : values()) {
@@ -81,11 +81,11 @@ public class PDFAnnotation{
 	
 	/** Definition of some annotation sub-types*/
 	public static final String GOTO = "GoTo";
-	/** Constant GOTOE="GoToE" */
+	/** Constant <code>GOTOE="GoToE"</code> */
 	public static final String GOTOE = "GoToE";
-	/** Constant GOTOR="GoToR" */
+	/** Constant <code>GOTOR="GoToR"</code> */
 	public static final String GOTOR = "GoToR";
-	/** Constant URI="URI" */
+	/** Constant <code>URI="URI"</code> */
 	public static final String URI = "URI";
 	
 	private final PDFObject pdfObj;
@@ -98,7 +98,6 @@ public class PDFAnnotation{
 	 *
 	 * @param annotObject - the PDFObject which contains the annotation description
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public PDFAnnotation(PDFObject annotObject) throws IOException{
 		this(annotObject, ANNOTATION_TYPE.UNKNOWN);
@@ -109,9 +108,8 @@ public class PDFAnnotation{
 	 * Constructor
 	 *
 	 * @param annotObject - the PDFObject which contains the annotation description
-	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 * @param type a {@link org.loboevolution.pdfview.annotation.PDFAnnotation.ANNOTATION_TYPE} object.
+	 * @throws java.io.IOException if any.
 	 */
 	protected PDFAnnotation(PDFObject annotObject, ANNOTATION_TYPE type) throws IOException{
 		this.pdfObj = annotObject;
@@ -128,9 +126,8 @@ public class PDFAnnotation{
 	 * Link annotation
 	 *
 	 * @param parent a {@link org.loboevolution.pdfview.PDFObject} object.
-	 * @return PDFAnnotation
+	 * @return PDFAnnotation a {@link org.loboevolution.pdfview.annotation.PDFAnnotation} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public static PDFAnnotation createAnnotation(PDFObject parent) throws IOException{
 		PDFObject subtypeValue = parent.getDictRef("Subtype");
@@ -188,7 +185,7 @@ public class PDFAnnotation{
      */
     public Rectangle2D.Float parseRect(PDFObject obj) throws IOException {
         if (obj.getType() == PDFObject.ARRAY) {
-            PDFObject bounds[] = obj.getArray();
+            PDFObject[] bounds = obj.getArray();
             if (bounds.length == 4) {
                 return new Rectangle2D.Float(bounds[0].getFloatValue(),
                         bounds[1].getFloatValue(),
@@ -247,7 +244,7 @@ public class PDFAnnotation{
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<PDFCmd> getPageCommandsForAnnotation() {
-		return new ArrayList<PDFCmd>();
+		return new ArrayList<>();
 	}
 	
 

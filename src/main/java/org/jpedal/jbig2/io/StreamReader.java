@@ -51,16 +51,16 @@ package org.jpedal.jbig2.io;
 
 import java.io.IOException;
 
-import org.jpedal.jbig2.examples.pdf.PDFSegment;
+import org.jpedal.jbig2.pdf.PDFSegment;
 
 /**
  * <p>StreamReader class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class StreamReader {
-	private byte[] data;
+	private final byte[] data;
 
 	private int bitPointer = 7;
 
@@ -78,7 +78,7 @@ public class StreamReader {
 	/**
 	 * <p>readByte.</p>
 	 *
-	 * @param pdfSeg a {@link org.jpedal.jbig2.examples.pdf.PDFSegment} object.
+	 * @param pdfSeg a {@link org.jpedal.jbig2.pdf.PDFSegment} object.
 	 * @return a short.
 	 */
 	public short readByte(PDFSegment pdfSeg) {
@@ -94,7 +94,7 @@ public class StreamReader {
 	 * <p>readByte.</p>
 	 *
 	 * @param buf an array of {@link short} objects.
-	 * @param pdfSeg a {@link org.jpedal.jbig2.examples.pdf.PDFSegment} object.
+	 * @param pdfSeg a {@link org.jpedal.jbig2.pdf.PDFSegment} object.
 	 * @throws java.io.IOException if any.
 	 */
 	public void readByte(short[] buf, PDFSegment pdfSeg) throws IOException {

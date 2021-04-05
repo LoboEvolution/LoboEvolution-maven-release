@@ -29,8 +29,8 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * a font object derived from a CID font.
  *
- * @author Jonathan Kaplan
- * @version $Id: $Id
+ * Author Jonathan Kaplan
+  *
  */
 public class CIDFontType2 extends TTFFont {
 
@@ -46,7 +46,7 @@ public class CIDFontType2 extends TTFFont {
     /*
      * the default width
      */
-    private int defaultWidth = 1000;
+    private final int defaultWidth = 1000;
     /*
      * the default vertical width
      */
@@ -104,7 +104,7 @@ public class CIDFontType2 extends TTFFont {
         if (widthObj != null) {
 
             // initialize the widths array
-            this.widths = new HashMap<Character, Float>();
+            this.widths = new HashMap<>();
 
             // parse the width array
             widthArray = widthObj.getArray();
@@ -114,34 +114,34 @@ public class CIDFontType2 extends TTFFont {
              *   <startIndex> [ array of values ]
              * we use the entryIdx to differentitate between them
              */
-            for (int i = 0; i < widthArray.length; i++) {
+            for (PDFObject pdfObject : widthArray) {
                 if (entryIdx == 0) {
                     // first value in an entry.  Just store it
-                    first = widthArray[i].getIntValue();
+                    first = pdfObject.getIntValue();
                 } else if (entryIdx == 1) {
                     // second value -- is it an int or array?
-                    if (widthArray[i].getType() == PDFObject.ARRAY) {
+                    if (pdfObject.getType() == PDFObject.ARRAY) {
                         // add all the entries in the array to the width array
-                        PDFObject[] entries = widthArray[i].getArray();
+                        PDFObject[] entries = pdfObject.getArray();
                         for (int c = 0; c < entries.length; c++) {
-                            Character key = Character.valueOf((char) (c + first));
+                            Character key = (char) (c + first);
 
                             // value is width / default width
                             float value = entries[c].getIntValue();
-                            this.widths.put(key, new Float(value));
+                            this.widths.put(key, value);
                         }
                         // all done
                         entryIdx = -1;
                     } else {
-                        last = widthArray[i].getIntValue();
+                        last = pdfObject.getIntValue();
                     }
                 } else {
                     // third value.  Set a range
-                    int value = widthArray[i].getIntValue();
+                    int value = pdfObject.getIntValue();
 
                     // set the range
                     for (int c = first; c <= last; c++) {
-                        this.widths.put(Character.valueOf((char) c), new Float(value));
+                        this.widths.put((char) c, (float) value);
                     }
 
                     // all done
@@ -163,7 +163,7 @@ public class CIDFontType2 extends TTFFont {
         if (widthObj != null) {
 
             // initialize the widths array
-            this.widthsVertical = new HashMap<Character, Float>();
+            this.widthsVertical = new HashMap<>();
 
             // parse the width2 array
             widthArray = widthObj.getArray();
@@ -177,34 +177,34 @@ public class CIDFontType2 extends TTFFont {
             first = 0;
             last = 0;
 
-            for (int i = 0; i < widthArray.length; i++) {
+            for (PDFObject pdfObject : widthArray) {
                 if (entryIdx == 0) {
                     // first value in an entry.  Just store it
-                    first = widthArray[i].getIntValue();
+                    first = pdfObject.getIntValue();
                 } else if (entryIdx == 1) {
                     // second value -- is it an int or array?
-                    if (widthArray[i].getType() == PDFObject.ARRAY) {
+                    if (pdfObject.getType() == PDFObject.ARRAY) {
                         // add all the entries in the array to the width array
-                        PDFObject[] entries = widthArray[i].getArray();
+                        PDFObject[] entries = pdfObject.getArray();
                         for (int c = 0; c < entries.length; c++) {
-                            Character key = Character.valueOf((char) (c + first));
+                            Character key = (char) (c + first);
 
                             // value is width / default width
                             float value = entries[c].getIntValue();
-                            this.widthsVertical.put(key, new Float(value));
+                            this.widthsVertical.put(key, value);
                         }
                         // all done
                         entryIdx = -1;
                     } else {
-                        last = widthArray[i].getIntValue();
+                        last = pdfObject.getIntValue();
                     }
                 } else {
                     // third value.  Set a range
-                    int value = widthArray[i].getIntValue();
+                    int value = pdfObject.getIntValue();
 
                     // set the range
                     for (int c = first; c <= last; c++) {
-                        this.widthsVertical.put(Character.valueOf((char) c), new Float(value));
+                        this.widthsVertical.put((char) c, (float) value);
                     }
 
                     // all done
@@ -236,12 +236,12 @@ public class CIDFontType2 extends TTFFont {
         if (this.widths == null) {
             return 1f;
         }
-        Float w = this.widths.get(Character.valueOf(code));
+        Float w = this.widths.get(code);
         if (w == null) {
             return 1f;
         }
 
-        return w.floatValue() / getDefaultWidth();
+        return w / getDefaultWidth();
     }
 
     /**
@@ -264,12 +264,12 @@ public class CIDFontType2 extends TTFFont {
         if (this.widthsVertical == null) {
             return 1f;
         }
-        Float w = this.widthsVertical.get(Character.valueOf(code));
+        Float w = this.widthsVertical.get(code);
         if (w == null) {
             return 1f;
         }
 
-        return w.floatValue() / getDefaultWidthVertical();
+        return w / getDefaultWidthVertical();
     }
 
     /**

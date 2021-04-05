@@ -35,8 +35,8 @@ import com.jtattoo.plaf.XPScrollBarUI;
 /**
  * <p>HiFiScrollBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class HiFiScrollBarUI extends XPScrollBarUI {
 
@@ -82,7 +82,7 @@ public class HiFiScrollBarUI extends XPScrollBarUI {
 	@Override
 	protected void installDefaults() {
 		super.installDefaults();
-		Color colors[] = AbstractLookAndFeel.getTheme().getThumbColors();
+		Color[] colors = AbstractLookAndFeel.getTheme().getThumbColors();
 		rolloverColors = new Color[colors.length];
 		dragColors = new Color[colors.length];
 		for (int i = 0; i < colors.length; i++) {

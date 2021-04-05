@@ -12,8 +12,8 @@ import java.io.Serializable;
  * Generic notion of reference object that know how to query/modify the
  * target objects based on some property/index.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class Ref implements Serializable
 {

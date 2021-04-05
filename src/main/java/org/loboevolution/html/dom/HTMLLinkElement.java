@@ -1,186 +1,261 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+import org.loboevolution.html.node.DOMTokenList;
+
 /**
- * The LINK element specifies a link to an external resource, and
- * defines this document's relationship to that resource (or vice versa). See
- * the LINK element definition in HTML 4.01 (see also the LinkStyle
- * interface in the StyleSheet module
- * [<a href='http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113'>DOM Level
- * 2 Style Sheets and CSS</a>]).
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Reference information for external resources and the relationship of those
+ * resources to a document and vice-versa. This object inherits all of the
+ * properties and methods of the HTMLElement interface.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLLinkElement extends HTMLElement {
+
 	/**
-	 * The character encoding of the resource being linked to. See the charset
-	 * attribute definition in HTML 4.01.
+	 * <p>getAs.</p>
 	 *
 	 * @return a {@link java.lang.String} object.
 	 */
+	String getAs();
+
+	/**
+	 * <p>setAs.</p>
+	 *
+	 * @param as a {@link java.lang.String} object.
+	 */
+	void setAs(String as);
+
+	/**
+	 * Sets or retrieves the character set used to encode the object.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
 	String getCharset();
 
 	/**
-	 * Enables/disables the link. This is currently only used for style sheet links,
-	 * and may be used to activate or deactivate style sheets.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getDisabled();
-
-	/**
-	 * The URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>] of
-	 * the linked resource. See the href attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHref();
-
-	/**
-	 * Language code of the linked resource. See the hreflang attribute definition
-	 * in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHreflang();
-
-	/**
-	 * Designed for use with one or more target media. See the media attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getMedia();
-
-	/**
-	 * Forward link type. See the rel attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getRel();
-
-	/**
-	 * Reverse link type. See the rev attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getRev();
-
-	/**
-	 * Frame to render the resource in. See the target attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getTarget();
-
-	/**
-	 * Advisory content type. See the type attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getType();
-
-	/**
-	 * The character encoding of the resource being linked to. See the charset
-	 * attribute definition in HTML 4.01.
+	 * <p>setCharset.</p>
 	 *
 	 * @param charset a {@link java.lang.String} object.
 	 */
 	void setCharset(String charset);
 
 	/**
-	 * Enables/disables the link. This is currently only used for style sheet links,
-	 * and may be used to activate or deactivate style sheets.
+	 * <p>getCrossOrigin.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getCrossOrigin();
+
+	/**
+	 * <p>setCrossOrigin.</p>
+	 *
+	 * @param crossOrigin a {@link java.lang.String} object.
+	 */
+	void setCrossOrigin(String crossOrigin);
+
+	/**
+	 * <p>isDisabled.</p>
+	 *
+	 * @return a boolean.
+	 */
+	boolean isDisabled();
+
+	/**
+	 * <p>setDisabled.</p>
 	 *
 	 * @param disabled a boolean.
 	 */
 	void setDisabled(boolean disabled);
 
 	/**
-	 * The URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>] of
-	 * the linked resource. See the href attribute definition in HTML 4.01.
+	 * Sets or retrieves a destination URL or an anchor point.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getHref();
+
+	/**
+	 * <p>setHref.</p>
 	 *
 	 * @param href a {@link java.lang.String} object.
 	 */
 	void setHref(String href);
 
 	/**
-	 * Language code of the linked resource. See the hreflang attribute definition
-	 * in HTML 4.01.
+	 * Sets or retrieves the language code of the object.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getHreflang();
+
+	/**
+	 * <p>setHreflang.</p>
 	 *
 	 * @param hreflang a {@link java.lang.String} object.
 	 */
 	void setHreflang(String hreflang);
 
 	/**
-	 * Designed for use with one or more target media. See the media attribute
-	 * definition in HTML 4.01.
+	 * <p>getImageSizes.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getImageSizes();
+
+	/**
+	 * <p>setImageSizes.</p>
+	 *
+	 * @param imageSizes a {@link java.lang.String} object.
+	 */
+	void setImageSizes(String imageSizes);
+
+	/**
+	 * <p>getImageSrcset.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getImageSrcset();
+
+	/**
+	 * <p>setImageSrcset.</p>
+	 *
+	 * @param imageSrcset a {@link java.lang.String} object.
+	 */
+	void setImageSrcset(String imageSrcset);
+
+	/**
+	 * <p>getIntegrity.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getIntegrity();
+
+	/**
+	 * <p>setIntegrity.</p>
+	 *
+	 * @param integrity a {@link java.lang.String} object.
+	 */
+	void setIntegrity(String integrity);
+
+	/**
+	 * Sets or retrieves the media type.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getMedia();
+
+	/**
+	 * <p>setMedia.</p>
 	 *
 	 * @param media a {@link java.lang.String} object.
 	 */
 	void setMedia(String media);
 
 	/**
-	 * Forward link type. See the rel attribute definition in HTML 4.01.
+	 * <p>getReferrerPolicy.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getReferrerPolicy();
+
+	/**
+	 * <p>setReferrerPolicy.</p>
+	 *
+	 * @param referrerPolicy a {@link java.lang.String} object.
+	 */
+	void setReferrerPolicy(String referrerPolicy);
+
+	/**
+	 * Sets or retrieves the relationship between the object and the destination of
+	 * the link.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getRel();
+
+	/**
+	 * <p>setRel.</p>
 	 *
 	 * @param rel a {@link java.lang.String} object.
 	 */
 	void setRel(String rel);
 
 	/**
-	 * Reverse link type. See the rev attribute definition in HTML 4.01.
+	 * <p>getRelList.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.node.DOMTokenList} object.
+	 */
+	DOMTokenList getRelList();
+
+	/**
+	 * Sets or retrieves the relationship between the object and the destination of
+	 * the link.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getRev();
+
+	/**
+	 * <p>setRev.</p>
 	 *
 	 * @param rev a {@link java.lang.String} object.
 	 */
 	void setRev(String rev);
 
 	/**
-	 * Frame to render the resource in. See the target attribute definition in HTML
-	 * 4.01.
+	 * <p>getSizes.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.node.DOMTokenList} object.
+	 */
+	DOMTokenList getSizes();
+
+	/**
+	 * Sets or retrieves the window or frame at which to target content.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	@Deprecated
+	String getTarget();
+
+	/**
+	 * <p>setTarget.</p>
 	 *
 	 * @param target a {@link java.lang.String} object.
 	 */
 	void setTarget(String target);
 
 	/**
-	 * Advisory content type. See the type attribute definition in HTML 4.01.
+	 * Sets or retrieves the MIME type of the object.
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
+	String getType();
+
+	/**
+	 * <p>setType.</p>
 	 *
 	 * @param type a {@link java.lang.String} object.
 	 */

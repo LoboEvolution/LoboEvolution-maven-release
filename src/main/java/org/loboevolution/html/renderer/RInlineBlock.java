@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.renderer;
 
 import java.awt.Color;
@@ -8,7 +28,8 @@ import java.util.Iterator;
 
 import org.loboevolution.common.ArrayUtilities;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
-import org.loboevolution.html.dom.domimpl.ModelNode;
+import org.loboevolution.html.dom.nodeimpl.ModelNode;
+import org.loboevolution.html.renderer.table.RTable;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
@@ -16,8 +37,8 @@ import org.loboevolution.http.UserAgentContext;
 /**
  * <p>RInlineBlock class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class RInlineBlock extends BaseElementRenderable {
 	private final BaseElementRenderable child;
@@ -58,7 +79,7 @@ public class RInlineBlock extends BaseElementRenderable {
 	 * @return a {@link java.util.Iterator} object.
 	 */
 	public Iterator<Renderable> getRenderables() {
-		return ArrayUtilities.singletonIterator((Renderable) this.child);
+		return ArrayUtilities.singletonIterator(this.child);
 	}
 
 	/** {@inheritDoc} */

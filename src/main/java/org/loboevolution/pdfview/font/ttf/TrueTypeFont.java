@@ -25,7 +25,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -37,8 +36,8 @@ import org.loboevolution.pdfview.PDFDebugger;
 /**
  * <p>TrueTypeFont class.</p>
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class TrueTypeFont {
 
@@ -57,7 +56,7 @@ public class TrueTypeFont {
         this.type = type;
 
         this.tables = Collections.synchronizedSortedMap (
-                new TreeMap<String, Object> ());
+                new TreeMap<>());
     }
 
     /**
@@ -226,39 +225,38 @@ public class TrueTypeFont {
         int curOffset = 12 + (getNumTables () * 16);
 
         // write the tables
-        for (Iterator<String> i = this.tables.keySet ().iterator (); i.hasNext ();) {
-            String tagString = i.next ();
-            int tag = TrueTypeTable.stringToTag (tagString);
+        for (String tagString : this.tables.keySet()) {
+            int tag = TrueTypeTable.stringToTag(tagString);
 
             ByteBuffer data = null;
 
-            Object tableObj = this.tables.get (tagString);
+            Object tableObj = this.tables.get(tagString);
             if (tableObj instanceof TrueTypeTable) {
-                data = ((TrueTypeTable) tableObj).getData ();
+                data = ((TrueTypeTable) tableObj).getData();
             } else {
                 data = (ByteBuffer) tableObj;
             }
 
-            int dataLen = data.remaining ();
+            int dataLen = data.remaining();
 
             // write the table directory entry
-            buf.putInt (tag);
-            buf.putInt (calculateChecksum (tagString, data));
-            buf.putInt (curOffset);
-            buf.putInt (dataLen);
+            buf.putInt(tag);
+            buf.putInt(calculateChecksum(tagString, data));
+            buf.putInt(curOffset);
+            buf.putInt(dataLen);
 
             // save the current position
-            buf.mark ();
+            buf.mark();
 
             // move to the current offset and write the data
-            buf.position (curOffset);
-            buf.put (data);
+            buf.position(curOffset);
+            buf.put(data);
 
             // reset the data start pointer
-            data.flip ();
+            data.flip();
 
             // return to the table directory entry
-            buf.reset ();
+            buf.reset();
 
             // udate the offset
             curOffset += dataLen;
@@ -369,14 +367,12 @@ public class TrueTypeFont {
 
         // for each directory entry, get the size,
         // and don't forget the padding!
-        for (Iterator<Object> i = this.tables.values ().iterator (); i.hasNext ();) {
-            Object tableObj = i.next ();
-
+        for (Object tableObj : this.tables.values()) {
             // add the length of the entry
             if (tableObj instanceof TrueTypeTable) {
-                length += ((TrueTypeTable) tableObj).getLength ();
+                length += ((TrueTypeTable) tableObj).getLength();
             } else {
-                length += ((ByteBuffer) tableObj).remaining ();
+                length += ((ByteBuffer) tableObj).remaining();
             }
 
             // pad
@@ -399,21 +395,19 @@ public class TrueTypeFont {
         int offset = 12 + (getNumTables () * 16);
 
         // find the head table
-        for (Iterator<String> i = this.tables.keySet ().iterator (); i.hasNext ();) {
-            String tagString = i.next ();
-
+        for (String tagString : this.tables.keySet()) {
             // adjust the checksum
-            if (tagString.equals ("head")) {
-                fontData.putInt (offset + 8, checksumAdj);
+            if (tagString.equals("head")) {
+                fontData.putInt(offset + 8, checksumAdj);
                 return;
             }
 
             // add the length of the entry 
-            Object tableObj = this.tables.get (tagString);
+            Object tableObj = this.tables.get(tagString);
             if (tableObj instanceof TrueTypeTable) {
-                offset += ((TrueTypeTable) tableObj).getLength ();
+                offset += ((TrueTypeTable) tableObj).getLength();
             } else {
-                offset += ((ByteBuffer) tableObj).remaining ();
+                offset += ((ByteBuffer) tableObj).remaining();
             }
 
             // pad
@@ -438,14 +432,12 @@ public class TrueTypeFont {
         logger.info ("EntrySelector: " + getEntrySelector ());
         logger.info ("RangeShift   : " + getRangeShift ());
 
-        for (Iterator<Map.Entry<String, Object>> i = this.tables.entrySet ().iterator (); i.hasNext ();) {
-            Map.Entry<String, Object> e = i.next ();
-
+        for (Map.Entry<String, Object> e : this.tables.entrySet()) {
             TrueTypeTable table = null;
-            if (e.getValue () instanceof ByteBuffer) {
-                table = getTable (e.getKey ());
+            if (e.getValue() instanceof ByteBuffer) {
+                table = getTable(e.getKey());
             } else {
-                table = (TrueTypeTable) e.getValue ();
+                table = (TrueTypeTable) e.getValue();
             }
 
             logger.info("table: " + table);

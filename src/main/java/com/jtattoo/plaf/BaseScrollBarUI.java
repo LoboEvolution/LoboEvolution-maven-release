@@ -44,8 +44,8 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 /**
  * <p>BaseScrollBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseScrollBarUI extends BasicScrollBarUI {
 
@@ -198,20 +198,24 @@ public class BaseScrollBarUI extends BasicScrollBarUI {
 		// key "JComponent.sizeVariant" scales for large/small/mini
 		// components are based on Apples LAF
 		String scaleKey = (String) scrollbar.getClientProperty("JComponent.sizeVariant");
-		if (scaleKey != null) {
-			if ("large".equals(scaleKey)) {
+		switch (scaleKey != null ? scaleKey : "") {
+			case "large":
 				scrollBarWidth *= 1.15;
 				incrGap *= 1.15;
 				decrGap *= 1.15;
-			} else if ("small".equals(scaleKey)) {
+				break;
+			case "small":
 				scrollBarWidth *= 0.857;
 				incrGap *= 0.857;
 				decrGap *= 0.857;
-			} else if ("mini".equals(scaleKey)) {
+				break;
+			case "mini":
 				scrollBarWidth *= 0.714;
 				incrGap *= 0.714;
 				decrGap *= 0.714;
-			}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -364,7 +368,7 @@ public class BaseScrollBarUI extends BasicScrollBarUI {
 
 		g.translate(thumbBounds.x, thumbBounds.y);
 
-		Color colors[] = getThumbColors();
+		Color[] colors = getThumbColors();
 
 		Color frameColorHi = ColorHelper.brighter(colors[1], 20);
 		Color frameColorLo = ColorHelper.darker(colors[colors.length - 1], 10);

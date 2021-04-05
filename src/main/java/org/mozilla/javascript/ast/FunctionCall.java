@@ -15,12 +15,12 @@ import org.mozilla.javascript.Token;
 /**
  * AST node for a function call.  Node type is {@link org.mozilla.javascript.Token#CALL}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FunctionCall extends AstNode {
 
-    /** Constant NO_ARGS */
+    /** Constant <code>NO_ARGS</code> */
     protected static final List<AstNode> NO_ARGS =
         Collections.unmodifiableList(new ArrayList<AstNode>());
 

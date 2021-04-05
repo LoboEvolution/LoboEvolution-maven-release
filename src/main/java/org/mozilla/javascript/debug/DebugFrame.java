@@ -15,8 +15,8 @@ import org.mozilla.javascript.Scriptable;
  *Interface to implement if the application is interested in receiving debug
  *information during execution of a particular script or function.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface DebugFrame {
 
@@ -25,7 +25,7 @@ public interface DebugFrame {
      *
      *@param cx current Context for this thread
      *@param activation the activation scope for the function or script.
-     *@param thisObj value of the JavaScript this object
+     *@param thisObj value of the JavaScript <code>this</code> object
      *@param args the array of arguments
      */
     public void onEnter(Context cx, Scriptable activation,

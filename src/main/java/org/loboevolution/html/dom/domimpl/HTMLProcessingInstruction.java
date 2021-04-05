@@ -1,35 +1,55 @@
 /*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
+/*
  * HtmlProcessingInstruction.java
  * Selima Prague FBI Project
  * 5th-March-2008
  */
 package org.loboevolution.html.dom.domimpl;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.ProcessingInstruction;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeType;
+import org.loboevolution.html.node.ProcessingInstruction;
 
 /**
  * HTML DOM object representing processing instruction as per HTML 4.0
  * specification.
  *
- * @author vitek
- * @version $Id: $Id
+ * Author vitek
+ *
  */
-public class HTMLProcessingInstruction extends NodeImpl implements ProcessingInstruction, Cloneable {
-	String data;
-	String target;
+public class HTMLProcessingInstruction extends HTMLElementImpl implements ProcessingInstruction, Cloneable {
+	
+	private String data;
+	private String target;
 
 	/**
-	 * <p>Constructor for HTMLProcessingInstruction.</p>
+	 * <p>Constructor for HTMLButtonElementImpl.</p>
 	 *
-	 * @param target a {@link java.lang.String} object.
-	 * @param data a {@link java.lang.String} object.
+	 * @param name a {@link java.lang.String} object.
 	 */
-	public HTMLProcessingInstruction(String target, String data) {
-		this.target = target;
-		this.data = data;
+	public HTMLProcessingInstruction(String name) {
+		super(name);
 	}
+	
 
 	/** {@inheritDoc} */
 	@Override
@@ -67,13 +87,13 @@ public class HTMLProcessingInstruction extends NodeImpl implements ProcessingIns
 
 	/** {@inheritDoc} */
 	@Override
-	public short getNodeType() {
-		return Node.PROCESSING_INSTRUCTION_NODE;
+	public NodeType getNodeType() {
+		return NodeType.PROCESSING_INSTRUCTION_NODE;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public String getNodeValue() throws DOMException {
+	public String getNodeValue() {
 		return this.data;
 	}
 
@@ -85,19 +105,70 @@ public class HTMLProcessingInstruction extends NodeImpl implements ProcessingIns
 
 	/** {@inheritDoc} */
 	@Override
-	public void setData(String data) throws DOMException {
+	public void setData(String data) {
 		this.data = data;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setNodeValue(String nodeValue) throws DOMException {
+	public void setNodeValue(String nodeValue) {
 		this.data = nodeValue;
+	}
+	
+	/**
+	 * <p>Setter for the field <code>target</code>.</p>
+	 *
+	 * @param target a {@link java.lang.String} object.
+	 */
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public int getLength() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void appendData(String data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void deleteData(int offset, int count) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void insertData(int offset, String data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void replaceData(int offset, int count, String data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String substringData(int offset, int count) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "<?" + this.target + " " + this.data + ">";
+		return "[object HTMLProcessingElement]";
 	}
 }

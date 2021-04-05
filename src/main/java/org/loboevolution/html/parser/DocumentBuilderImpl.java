@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Oct 15, 2005
  */
@@ -29,16 +28,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-
 import org.loboevolution.common.Urls;
 import org.loboevolution.html.dom.domimpl.DOMImplementationImpl;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
 import org.loboevolution.html.io.WritableLineReader;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
+import org.loboevolution.html.node.DOMImplementation;
+import org.loboevolution.html.node.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
@@ -48,10 +45,10 @@ import org.xml.sax.SAXException;
  * The DocumentBuilderImpl class is an HTML DOM parser that
  * implements the standard W3C DocumentBuilder interface.
  *
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
-public class DocumentBuilderImpl extends DocumentBuilder {
+public class DocumentBuilderImpl {
 	private static final Logger logger = Logger.getLogger(DocumentBuilderImpl.class.getName());
 	private final UserAgentContext bcontext;
 	private DOMImplementation domImplementation;
@@ -90,7 +87,7 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 	 *                 which may be an instance of
 	 *                 {@link org.loboevolution.http.UserAgentContext}.
 	 * @param rcontext An instance of
-	 *                 {@link  org.loboevolution.http.HtmlRendererContext}
+	 *                 {@link org.loboevolution.http.HtmlRendererContext}
 	 */
 	public DocumentBuilderImpl(UserAgentContext ucontext, HtmlRendererContext rcontext) {
 		this.rcontext = rcontext;
@@ -145,8 +142,11 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 		return document;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>getDOMImplementation.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.node.DOMImplementation} object.
+	 */
 	public DOMImplementation getDOMImplementation() {
 		synchronized (this) {
 			if (this.domImplementation == null) {
@@ -174,20 +174,30 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 		return this.resolver;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>isNamespaceAware.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isNamespaceAware() {
 		return false;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>isValidating.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isValidating() {
 		return false;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+
+	/**
+	 * <p>newDocument.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.node.Document} object.
+	 */
 	public Document newDocument() {
 		return new HTMLDocumentImpl(this.bcontext);
 	}
@@ -197,23 +207,32 @@ public class DocumentBuilderImpl extends DocumentBuilder {
 	 *
 	 * Parses an HTML document. Note that this method will read the entire input
 	 * source before returning a Document instance.
-	 * @see #createDocument(InputSource)
+	 *
+	 * @param is a {@link org.xml.sax.InputSource} object.
+	 * @return a {@link org.loboevolution.html.node.Document} object.
+	 * @throws org.xml.sax.SAXException if any.
+	 * @throws java.io.IOException if any.
 	 */
-	@Override
-	public Document parse(InputSource is) throws org.xml.sax.SAXException, IOException {
+	public Document parse(InputSource is) throws SAXException, IOException {
 		final HTMLDocumentImpl document = (HTMLDocumentImpl) createDocument(is);
 		document.load();
 		return document;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>setEntityResolver.</p>
+	 *
+	 * @param er a {@link org.xml.sax.EntityResolver} object.
+	 */
 	public void setEntityResolver(EntityResolver er) {
 		this.resolver = er;
 	}
 
-	/** {@inheritDoc} */
-	@Override
+	/**
+	 * <p>Setter for the field <code>errorHandler</code>.</p>
+	 *
+	 * @param eh a {@link org.xml.sax.ErrorHandler} object.
+	 */
 	public void setErrorHandler(ErrorHandler eh) {
 		this.errorHandler = eh;
 	}

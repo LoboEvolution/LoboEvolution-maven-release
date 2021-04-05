@@ -26,29 +26,29 @@ package com.jtattoo.plaf;
 /**
  * <p>TitlePane interface.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public interface TitlePane {
 
-	/**
-	 * <p>close.</p>
-	 */
-	public void close();
+    /**
+     * <p>close.</p>
+     */
+    void close();
 
-	/**
-	 * <p>iconify.</p>
-	 */
-	public void iconify();
+    /**
+     * <p>iconify.</p>
+     */
+    void iconify();
 
-	/**
-	 * <p>maximize.</p>
-	 */
-	public void maximize();
+    /**
+     * <p>maximize.</p>
+     */
+    void maximize();
 
-	/**
-	 * <p>restore.</p>
-	 */
-	public void restore();
+    /**
+     * <p>restore.</p>
+     */
+    void restore();
 
 } // end of interface TitlePane

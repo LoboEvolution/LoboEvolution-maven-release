@@ -34,13 +34,13 @@ import java.io.IOException;
  * </ul>
  * A PDF name tree is sorted in accordance with the String.compareTo() method.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class NameTree {
 
     /** the root object */
-    private PDFObject root;
+    private final PDFObject root;
 
     /**
      * Creates a new instance of NameTree
@@ -77,23 +77,19 @@ public class NameTree {
         PDFObject kidsObj = root.getDictRef("Kids");
         if (kidsObj != null) {
             PDFObject[] kids = kidsObj.getArray();
-
-            for (int i = 0; i < kids.length; i++) {
-                // find the limits of this kid
-                PDFObject limitsObj = kids[i].getDictRef("Limits");
-                if (limitsObj != null) {
-                    String lowerLimit = limitsObj.getAt(0).getStringValue();
-                    String upperLimit = limitsObj.getAt(1).getStringValue();
-
-                    // are we in range?
-                    if ((key.compareTo(lowerLimit) >= 0) &&
-                            (key.compareTo(upperLimit) <= 0)) {
-
-                        // we are, so find in this child
-                        return find(kids[i], key);
-                    }
-                }
-            }
+			for (PDFObject pdfObject : kids) {
+				// find the limits of this kid
+				PDFObject limitsObj = pdfObject.getDictRef("Limits");
+				if (limitsObj != null) {
+					String lowerLimit = limitsObj.getAt(0).getStringValue();
+					String upperLimit = limitsObj.getAt(1).getStringValue();
+					// are we in range?
+					if ((key.compareTo(lowerLimit) >= 0) && (key.compareTo(upperLimit) <= 0)) {
+						// we are, so find in this child
+						return find(pdfObject, key);
+					}
+				}
+			}
         }
 
         // no luck

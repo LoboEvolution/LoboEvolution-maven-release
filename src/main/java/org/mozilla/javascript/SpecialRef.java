@@ -90,8 +90,7 @@ class SpecialRef extends Ref
                     Scriptable search = obj;
                     do {
                         if (search == target) {
-                            throw Context.reportRuntimeError1(
-                                "msg.cyclic.value", name);
+                            throw Context.reportRuntimeErrorById("msg.cyclic.value", name);
                         }
                         if (type == SPECIAL_PROTO) {
                             search = search.getPrototype();
@@ -101,7 +100,30 @@ class SpecialRef extends Ref
                     } while (search != null);
                 }
                 if (type == SPECIAL_PROTO) {
-                    target.setPrototype(obj);
+                    if (target instanceof ScriptableObject
+                            && !((ScriptableObject)target).isExtensible()
+                            && cx.getLanguageVersion() >= Context.VERSION_1_8) {
+                        throw ScriptRuntime.typeErrorById("msg.not.extensible");
+                    }
+
+                    if (cx.getLanguageVersion() >= Context.VERSION_ES6) {
+                        final String typeOfTarget = ScriptRuntime.typeof(target);
+                        if ("object".equals(typeOfTarget) || "function".equals(typeOfTarget)) {
+
+                            if (value == null) {
+                                target.setPrototype(Undefined.SCRIPTABLE_UNDEFINED);
+                                return value;
+                            }
+
+                            final String typeOfValue = ScriptRuntime.typeof(value);
+                            if ("object".equals(typeOfValue) || "function".equals(typeOfValue)) {
+                                target.setPrototype(obj);
+                            }
+                        }
+                        return value;
+                    } else {
+                        target.setPrototype(obj);
+                    }
                 } else {
                     target.setParentScope(obj);
                 }
@@ -132,4 +154,3 @@ class SpecialRef extends Ref
         return false;
     }
 }
-

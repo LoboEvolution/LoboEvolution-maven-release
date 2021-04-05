@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Nov 19, 2005
  */
@@ -41,18 +40,18 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.loboevolution.common.Urls;
-import org.loboevolution.net.HttpNetwork;
-import org.loboevolution.html.ReadyStateChangeListener;
 import org.loboevolution.common.EventDispatch;
 import org.loboevolution.common.IORoutines;
-import org.w3c.dom.Document;
+import org.loboevolution.common.Urls;
+import org.loboevolution.html.ReadyStateChangeListener;
+import org.loboevolution.net.HttpNetwork;
+import org.loboevolution.html.node.Document;
 
 /**
  * <p>HttpRequest class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HttpRequest {
 
@@ -136,8 +135,8 @@ public class HttpRequest {
 		} else if (c != null) {
 			try {
 				c.getInputStream().close();
-			} catch (final IOException ioe) {
-				ioe.printStackTrace();
+			} catch (final IOException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 	}
@@ -279,7 +278,9 @@ public class HttpRequest {
 		}
 		final InputStream in = new ByteArrayInputStream(bytes);
 		try {
-			return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+			return null;
+	        // TODO Broken with new interfaces
+			//return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 		} catch (final Exception err) {
 			logger.log(Level.WARNING, "Unable to parse response as XML.", err);
 			return null;
@@ -425,7 +426,7 @@ public class HttpRequest {
 	 * functionality. It may be overridden to change the behavior of the class.
 	 *
 	 * @param content POST content if any. It may be null.
-	 * @throws java.lang.Exception if any
+	 * @throws java.lang.Exception if any.
 	 */
 	protected void sendSync(String content) throws Exception {
 		try {

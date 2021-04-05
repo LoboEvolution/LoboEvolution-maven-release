@@ -33,31 +33,31 @@ import java.io.IOException;
  *
  * All three of these cases are handled by the getDestination() method.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PDFDestination {
 
 	/** The known types of destination */
 	public static final int XYZ = 0;
-	/** Constant FIT=1 */
+	/** Constant <code>FIT=1</code> */
 	public static final int FIT = 1;
-	/** Constant FITH=2 */
+	/** Constant <code>FITH=2</code> */
 	public static final int FITH = 2;
-	/** Constant FITV=3 */
+	/** Constant <code>FITV=3</code> */
 	public static final int FITV = 3;
-	/** Constant FITR=4 */
+	/** Constant <code>FITR=4</code> */
 	public static final int FITR = 4;
-	/** Constant FITB=5 */
+	/** Constant <code>FITB=5</code> */
 	public static final int FITB = 5;
-	/** Constant FITBH=6 */
+	/** Constant <code>FITBH=6</code> */
 	public static final int FITBH = 6;
-	/** Constant FITBV=7 */
+	/** Constant <code>FITBV=7</code> */
 	public static final int FITBV = 7;
 	/** the type of this destination (from the list above) */
-	private int type;
+	private final int type;
 	/** the page we refer to */
-	private PDFObject pageObj;
+	private final PDFObject pageObj;
 	/** the left coordinate of the fit area, if applicable */
 	private float left;
 	/** the right coordinate of the fit area, if applicable */
@@ -112,23 +112,32 @@ public class PDFDestination {
 		// create the destination based on the type
 		PDFDestination dest = null;
 		String type = destArray[1].getStringValue();
-		if (type.equals("XYZ")) {
+		switch (type) {
+		case "XYZ":
 			dest = new PDFDestination(destArray[0], XYZ);
-		} else if (type.equals("Fit")) {
+			break;
+		case "Fit":
 			dest = new PDFDestination(destArray[0], FIT);
-		} else if (type.equals("FitH")) {
+			break;
+		case "FitH":
 			dest = new PDFDestination(destArray[0], FITH);
-		} else if (type.equals("FitV")) {
+			break;
+		case "FitV":
 			dest = new PDFDestination(destArray[0], FITV);
-		} else if (type.equals("FitR")) {
+			break;
+		case "FitR":
 			dest = new PDFDestination(destArray[0], FITR);
-		} else if (type.equals("FitB")) {
+			break;
+		case "FitB":
 			dest = new PDFDestination(destArray[0], FITB);
-		} else if (type.equals("FitBH")) {
+			break;
+		case "FitBH":
 			dest = new PDFDestination(destArray[0], FITBH);
-		} else if (type.equals("FitBV")) {
+			break;
+		case "FitBV":
 			dest = new PDFDestination(destArray[0], FITBV);
-		} else {
+			break;
+		default:
 			throw new PDFParseException("Unknown destination type: " + type);
 		}
 
@@ -140,38 +149,22 @@ public class PDFDestination {
 			dest.setZoom(destArray[4].getFloatValue());
 			break;
 		case FITH:
-			if (destArray.length > 2) {
+            case FITBV:
+            case FITBH:
+            case FITV:
+                if (destArray.length > 2) {
 				dest.setTop(destArray[2].getFloatValue());
 			} else {
 				dest.setTop(0.0F);
 			}
 			break;
-		case FITV:
-			if (destArray.length > 2) {
-				dest.setTop(destArray[2].getFloatValue());
-			} else {
-				dest.setTop(0.0F);
-			}
-			break;
-		case FITR:
+            case FITR:
 			dest.setLeft(destArray[2].getFloatValue());
 			dest.setBottom(destArray[3].getFloatValue());
 			dest.setRight(destArray[4].getFloatValue());
 			dest.setTop(destArray[5].getFloatValue());
 			break;
-		case FITBH:
-			if (destArray.length > 2) {
-				dest.setTop(destArray[2].getFloatValue());
-			} else {
-				dest.setTop(0.0F);
-			}
-			break;
-		case FITBV:
-			if (destArray.length > 2) {
-				dest.setTop(destArray[2].getFloatValue());
-			} else {
-				dest.setTop(0.0F);
-			}
+            default:
 			break;
 		}
 

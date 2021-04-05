@@ -36,7 +36,7 @@ import org.mozilla.javascript.ScriptableObject;
  * program, you need to invoke either {@link #install(Scriptable)} or
  * {@link #requireMain(Context, String)}.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: Require.java,v 1.4 2011/04/07 20:26:11 hannes%helma.at Exp $
  */
 public class Require extends BaseFunction {

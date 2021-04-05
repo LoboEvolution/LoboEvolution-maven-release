@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Apr 16, 2005
  */
@@ -37,21 +36,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.html.CSSValues;
-import org.loboevolution.info.BackgroundInfo;
-import org.loboevolution.info.BorderInfo;
-import org.loboevolution.info.WordInfo;
-import org.loboevolution.laf.ColorFactory;
-import org.loboevolution.laf.FontFactory;
-import org.loboevolution.laf.FontKey;
 import org.loboevolution.html.dom.HTMLElement;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
+import org.loboevolution.html.dom.domimpl.HTMLLinkElementImpl;
+import org.loboevolution.html.node.css.CSS3Properties;
 import org.loboevolution.html.renderer.LineBreak;
+import org.loboevolution.html.renderer.RFlex;
 import org.loboevolution.html.style.AbstractCSSProperties;
 import org.loboevolution.html.style.BorderInsets;
 import org.loboevolution.html.style.FontValues;
@@ -59,15 +57,23 @@ import org.loboevolution.html.style.GradientStyle;
 import org.loboevolution.html.style.HtmlInsets;
 import org.loboevolution.html.style.HtmlValues;
 import org.loboevolution.html.style.MarginInsets;
-import org.w3c.dom.css.CSS3Properties;
+import org.loboevolution.info.BackgroundInfo;
+import org.loboevolution.info.BorderInfo;
+import org.loboevolution.info.WordInfo;
+import org.loboevolution.laf.ColorFactory;
+import org.loboevolution.laf.FontFactory;
+import org.loboevolution.laf.FontKey;
 
 /**
  * <p>StyleSheetRenderState class.</p>
  *
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
 public class StyleSheetRenderState implements RenderState {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(StyleSheetRenderState.class.getName());
 	
 	private static final FontFactory FONT_FACTORY = FontFactory.getInstance();
 	
@@ -219,7 +225,21 @@ public class StyleSheetRenderState implements RenderState {
 		// TODO: Does it work with display: table-cell?
 		return 0;
 	}
-
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getAlignItems() {
+		AbstractCSSProperties props = this.getCssProperties();
+		return props == null ? null : props.getAlignItems();
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getAlignContent() {
+		AbstractCSSProperties props = this.getCssProperties();
+		return props == null ? null : props.getAlignContent();
+	}
+	
 	/** {@inheritDoc} */
 	@Override
 	public Color getBackgroundColor() {
@@ -247,16 +267,17 @@ public class StyleSheetRenderState implements RenderState {
 	/** {@inheritDoc} */
 	@Override
 	public BackgroundInfo getBackgroundInfo() {
+
 		BackgroundInfo binfo = this.iBackgroundInfo;
 		final AbstractCSSProperties props = getCssProperties();
 		if (binfo != INVALID_BACKGROUND_INFO) {
 			return binfo;
 		}
-		
+
 		if (element != null && !"BODY".equals(element.getNodeName())) {
 			binfo = null;
 		}
-		
+
 		if (props != null) {
 			final String backgroundColorText = props.getBackgroundColor();
 			final String backgroundImageText = props.getBackgroundImage();
@@ -269,7 +290,7 @@ public class StyleSheetRenderState implements RenderState {
 				Strings.isNotBlank(backgroundPositionText)) {
 				binfo = new BackgroundInfo();
 			}
-			
+
 			if (Strings.isNotBlank(backgroundColorText)) {
 				CSSValues bc = CSSValues.get(backgroundColorText);
 				if(bc.equals(CSSValues.INHERIT)) {
@@ -286,7 +307,7 @@ public class StyleSheetRenderState implements RenderState {
 			if (Strings.isNotBlank(backgroundPositionText)) {
 				applyBackgroundPosition(binfo, backgroundPositionText);
 			}
-			
+
 			if (Strings.isNotBlank(backgroundImageText)) {
 				applyBackgroundImage(binfo, backgroundImageText, this.document, props);
 			}
@@ -382,7 +403,7 @@ public class StyleSheetRenderState implements RenderState {
 			return 0;
 		}
 		final Integer integer = counterArray.get(nesting);
-		return integer == null ? 0 : integer.intValue();
+		return integer == null ? 0 : integer;
 	}
 
 	/**
@@ -409,13 +430,23 @@ public class StyleSheetRenderState implements RenderState {
 	public int getDisplay() {
 		final Integer d = this.iDisplay;
 		if (d != null) {
-			return d.intValue();
+			return d;
 		}
-		final CSS3Properties props = this.getCssProperties();
-		final String displayText = props == null ? null : props.getDisplay();
-		int displayInt;
-		final String displayTextTL = Strings.isNotBlank(displayText) ? displayText : "";
-		final CSSValues display = CSSValues.get(displayTextTL);
+		CSSValues display = null;
+		int displayInt = -1;
+		final RenderState previous = this.getPreviousRenderState();
+		if (previous != null && previous.getDisplay() == DISPLAY_FLEX_BOX) {
+			final RFlex flex = new RFlex(previous);
+			displayInt = flex.isFlexTable() ? DISPLAY_TABLE_CELL : DISPLAY_FLEX_CHILD;
+			this.iDisplay = displayInt;
+			return displayInt;
+		} else {
+			final CSS3Properties props = this.getCssProperties();
+			final String displayText = props == null ? null : props.getDisplay();
+			final String displayTextTL = Strings.isNotBlank(displayText) ? displayText : "";
+			display = CSSValues.get(displayTextTL);
+		}
+		
 		switch (display) {
 		case BLOCK:
 			displayInt = DISPLAY_BLOCK;
@@ -444,6 +475,9 @@ public class StyleSheetRenderState implements RenderState {
 		case INLINE_TABLE:
 			displayInt = DISPLAY_INLINE_TABLE;
 			break;
+		case FLEX:
+			displayInt = DISPLAY_FLEX_BOX;
+			break;	
 		case INHERIT:
 			displayInt = this.getPreviousRenderState().getDisplay();
 			break;
@@ -452,7 +486,7 @@ public class StyleSheetRenderState implements RenderState {
 			displayInt = this.getDefaultDisplay();
 			break;
 		}
-		this.iDisplay = Integer.valueOf(displayInt);
+		this.iDisplay = displayInt;
 		return displayInt;
 	}
 
@@ -461,7 +495,7 @@ public class StyleSheetRenderState implements RenderState {
 	public int getFloat() {
 		Integer p = this.cachedFloat;
 		if (p != null) {
-			return p.intValue();
+			return p;
 		}
 		AbstractCSSProperties props = this.getCssProperties();
 		int floatValue = 0;
@@ -486,8 +520,47 @@ public class StyleSheetRenderState implements RenderState {
 			floatValue = FLOAT_NONE;
 			break;
 		}
-		this.cachedFloat = Integer.valueOf(floatValue);
+		this.cachedFloat = floatValue;
 		return floatValue;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexDirection() {
+		AbstractCSSProperties props = this.getCssProperties();
+		String flexDir = props == null ? null : props.getFlexDirection();
+		final String flexDirText = Strings.isBlank(flexDir) ? "" : flexDir;
+		CSSValues flt = CSSValues.get(flexDirText);
+		switch (flt) {
+		case COLUMN:
+		case COLUMN_REVERSE:
+		case ROW_REVERSE:
+		case ROW:
+			return flexDirText;
+		default:
+			return CSSValues.ROW.getValue();
+		}
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexWrap() {
+		AbstractCSSProperties props = this.getCssProperties();
+		return props == null ? null : props.getFlexWrap();
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexFlow() {
+		AbstractCSSProperties props = this.getCssProperties();
+		return props == null ? null : props.getFlexFlow();
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getJustifyContent() {
+		AbstractCSSProperties props = this.getCssProperties();
+		return props == null ? null : props.getJustifyContent();
 	}
 
 	/** {@inheritDoc} */
@@ -516,7 +589,7 @@ public class StyleSheetRenderState implements RenderState {
 		key.setFontStyle(FontValues.getFontStyle(style.getFontStyle()));
 		key.setFontVariant(style.getFontVariant());
 		key.setFontWeight(FontValues.getFontWeight(style.getFontWeight()));
-		key.setFontSize(Float.valueOf(FontValues.getFontSize(style.getFontSize(), prs)));
+		key.setFontSize(FontValues.getFontSize(style.getFontSize(), prs));
 		key.setLocales(document == null ? null : document.getLocales());
 		key.setSuperscript(FontValues.getFontSuperScript(style.getVerticalAlign(), prs));
 		key.setLetterSpacing(HtmlValues.getPixelSize(style.getLetterSpacing(), prs, 0));
@@ -706,7 +779,7 @@ public class StyleSheetRenderState implements RenderState {
 	public int getPosition() {
 		Integer p = this.cachedPosition;
 		if (p != null) {
-			return p.intValue();
+			return p;
 		}
 		AbstractCSSProperties props = this.getCssProperties();
 		int position = 0;
@@ -733,7 +806,7 @@ public class StyleSheetRenderState implements RenderState {
 			break;
 		}
 
-		this.cachedPosition = Integer.valueOf(position);
+		this.cachedPosition = position;
 		return position;
 	}
 
@@ -904,7 +977,7 @@ public class StyleSheetRenderState implements RenderState {
 	public int getVisibility() {
 		Integer v = this.cachedVisibility;
 		if (v != null) {
-			return v.intValue();
+			return v;
 		}
 		AbstractCSSProperties props = this.getCssProperties();
 		int visibility;
@@ -929,7 +1002,7 @@ public class StyleSheetRenderState implements RenderState {
 			visibility = VISIBILITY_VISIBLE;
 			break;
 		}
-		this.cachedVisibility = Integer.valueOf(visibility);
+		this.cachedVisibility = visibility;
 		return visibility;
 	}
 	
@@ -941,7 +1014,7 @@ public class StyleSheetRenderState implements RenderState {
 		}
 		final Integer ws = this.iWhiteSpace;
 		if (ws != null) {
-			return ws.intValue();
+			return ws;
 		}
 		final AbstractCSSProperties props = getCssProperties();
 		final String whiteSpaceText = props == null ? null : props.getWhiteSpace();
@@ -969,7 +1042,7 @@ public class StyleSheetRenderState implements RenderState {
 			}
 			break;
 		}
-		this.iWhiteSpace = Integer.valueOf(wsValue);
+		this.iWhiteSpace = wsValue;
 		return wsValue;
 	}
 
@@ -980,10 +1053,10 @@ public class StyleSheetRenderState implements RenderState {
 		// No synchronization necessary.
 		Map<String, WordInfo> map = this.iWordInfoMap;
 		if (map == null) {
-			map = new HashMap<String, WordInfo>(1);
+			map = new HashMap<>(1);
 			this.iWordInfoMap = map;
 		}
-		WordInfo wi = (WordInfo) map.get(word);
+		WordInfo wi = map.get(word);
 		if (wi != null) {
 			return wi;
 		}
@@ -1008,17 +1081,17 @@ public class StyleSheetRenderState implements RenderState {
 		}
 		Map<String, ArrayList<Integer>> counters = this.counters;
 		if (counters == null) {
-			counters = new HashMap<String, ArrayList<Integer>>();
+			counters = new HashMap<>();
 			this.counters = counters;
-			counters.put(counter, new ArrayList<Integer>());
+			counters.put(counter, new ArrayList<>());
 		}
 		final ArrayList<Integer> counterArray = counters.get(counter);
 		while (counterArray.size() <= nesting) {
 			counterArray.add(null);
 		}
-		final Integer integer = (Integer) counterArray.get(nesting);
-		final int prevValue = integer == null ? 0 : integer.intValue();
-		counterArray.set(nesting, Integer.valueOf(prevValue + 1));
+		final Integer integer = counterArray.get(nesting);
+		final int prevValue = (integer == null || integer == 0) ? 1 : integer;
+		counterArray.set(nesting, prevValue + 1);
 		return prevValue;
 	}
 
@@ -1073,15 +1146,15 @@ public class StyleSheetRenderState implements RenderState {
 		} else {
 			Map<String, ArrayList<Integer>> counters = this.counters;
 			if (counters == null) {
-				counters = new HashMap<String, ArrayList<Integer>>();
+				counters = new HashMap<>();
 				this.counters = counters;
-				counters.put(counter, new ArrayList<Integer>());
+				counters.put(counter, new ArrayList<>());
 			}
-			final ArrayList<Integer> counterArray = (ArrayList<Integer>) counters.get(counter);
+			final ArrayList<Integer> counterArray = counters.get(counter);
 			while (counterArray.size() <= nesting) {
 				counterArray.add(null);
 			}
-			counterArray.set(nesting, Integer.valueOf(value));
+			counterArray.set(nesting, value);
 		}
 	}
 
@@ -1106,13 +1179,13 @@ public class StyleSheetRenderState implements RenderState {
 			CSSValues clear = CSSValues.get(clearStr);
 			switch (clear) {
 			case RIGHT:
-				cachedClear = Integer.valueOf(LineBreak.RIGHT);
+				cachedClear = LineBreak.RIGHT;
 				break;
 			case LEFT:
-				cachedClear = Integer.valueOf(LineBreak.LEFT);
+				cachedClear = LineBreak.LEFT;
 				break;
 			default:
-				cachedClear = Integer.valueOf(LineBreak.NONE);
+				cachedClear = LineBreak.NONE;
 				break;
 			}
 		}
@@ -1317,22 +1390,16 @@ public class StyleSheetRenderState implements RenderState {
 				binfo.setBackgroundYPosition(50);
 				break;
 			case RIGHT:
-				binfo.setBackgroundYPositionAbsolute(false);
+				case BOTTOM:
+					binfo.setBackgroundYPositionAbsolute(false);
 				binfo.setBackgroundYPosition(100);
 				break;
 			case LEFT:
-				binfo.setBackgroundYPositionAbsolute(false);
+				case TOP:
+					binfo.setBackgroundYPositionAbsolute(false);
 				binfo.setBackgroundYPosition(0);
 				break;
-			case BOTTOM:
-				binfo.setBackgroundYPositionAbsolute(false);
-				binfo.setBackgroundYPosition(100);
-				break;
-			case TOP:
-				binfo.setBackgroundYPositionAbsolute(false);
-				binfo.setBackgroundYPosition(0);
-				break;
-			case INHERIT:
+				case INHERIT:
 				BackgroundInfo bi = prevRenderState.getPreviousRenderState().getBackgroundInfo();
 				if (bi != null) {
 					binfo.setBackgroundYPositionAbsolute(bi.isBackgroundYPositionAbsolute());
@@ -1365,22 +1432,16 @@ public class StyleSheetRenderState implements RenderState {
 				binfo.setBackgroundXPosition(50);
 				break;
 			case RIGHT:
-				binfo.setBackgroundXPositionAbsolute(false);
+				case BOTTOM:
+					binfo.setBackgroundXPositionAbsolute(false);
 				binfo.setBackgroundXPosition(100);
 				break;
 			case LEFT:
-				binfo.setBackgroundXPositionAbsolute(false);
+				case TOP:
+					binfo.setBackgroundXPositionAbsolute(false);
 				binfo.setBackgroundXPosition(0);
 				break;
-			case BOTTOM:
-				binfo.setBackgroundYPositionAbsolute(false);
-				binfo.setBackgroundYPosition(100);
-				break;
-			case TOP:
-				binfo.setBackgroundYPositionAbsolute(false);
-				binfo.setBackgroundYPosition(0);
-				break;
-			case INHERIT:
+				case INHERIT:
 				BackgroundInfo bi = prevRenderState.getPreviousRenderState().getBackgroundInfo();
 				if (bi != null) {
 					binfo.setBackgroundXPositionAbsolute(bi.isBackgroundXPositionAbsolute());
@@ -1395,29 +1456,28 @@ public class StyleSheetRenderState implements RenderState {
 			}
 		}
 	}
-	
-	private void applyBackgroundImage(BackgroundInfo binfo, String backgroundImageText, HTMLDocumentImpl document, AbstractCSSProperties props) {
 
-   	if (HtmlValues.isUrl(backgroundImageText)) {
-           String start = "url(";
-           int startIdx = start.length() +1;
-           int closingIdx = backgroundImageText.lastIndexOf(')') -1;
-           String quotedUri = backgroundImageText.substring(startIdx, closingIdx);
-           String[] items = {"http", "https", "file"};            
-           if(Strings.containsWords(quotedUri, items)) {
-               try {
-                   binfo.setBackgroundImage(new URL(quotedUri));
-               } catch (Exception e) {
-                   binfo.setBackgroundImage(null);
-               }
-           } else {
-           	if (quotedUri.contains(";base64,")) {
-   				final String base64 = backgroundImageText.split(";base64,")[1];
-   				final byte[] decodedBytes = Base64.getDecoder().decode(Strings.linearize(base64));
-   				quotedUri = String.valueOf(decodedBytes);
-           	}
-               binfo.setBackgroundImage(document.getFullURL(quotedUri));
-           }
+	private void applyBackgroundImage(BackgroundInfo binfo, String backgroundImageText, HTMLDocumentImpl document, AbstractCSSProperties props) {
+		if (HtmlValues.isUrl(backgroundImageText)) {
+			String start = "url(";
+			int startIdx = start.length() + 1;
+			int closingIdx = backgroundImageText.lastIndexOf(')') - 1;
+			String quotedUri = backgroundImageText.substring(startIdx, closingIdx);
+			String[] items = {"http", "https", "file"};
+			if (Strings.containsWords(quotedUri, items)) {
+				try {
+					binfo.setBackgroundImage(linkUri(document, quotedUri));
+				} catch (Exception e) {
+					binfo.setBackgroundImage(null);
+				}
+			} else {
+				if (quotedUri.contains(";base64,")) {
+					final String base64 = backgroundImageText.split(";base64,")[1];
+					final byte[] decodedBytes = Base64.getDecoder().decode(Strings.linearize(base64));
+					quotedUri = String.valueOf(decodedBytes);
+				}
+				binfo.setBackgroundImage(linkUri(document, quotedUri));
+			}
 		} else if (HtmlValues.isGradient(backgroundImageText)) {
 			try {
 				GradientStyle style = new GradientStyle();
@@ -1428,8 +1488,27 @@ public class StyleSheetRenderState implements RenderState {
 					binfo.setBackgroundImage(f.toURI().toURL());
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
-   }  
+	}
+
+	private URL linkUri(HTMLDocumentImpl document, String quotedUri) {
+		if (element instanceof HTMLLinkElementImpl) {
+			HTMLLinkElementImpl elm = (HTMLLinkElementImpl) element;
+			final String rel = elm.getAttribute("rel");
+			if (rel != null) {
+				final String href = elm.getHref();
+				final String cleanRel = rel.trim().toLowerCase();
+				final boolean isStyleSheet = cleanRel.equals("stylesheet");
+				final boolean isAltStyleSheet = cleanRel.equals("alternate stylesheet");
+
+				if ((isStyleSheet || isAltStyleSheet)) {
+					return document.getFullURL(quotedUri, elm.getHref());
+
+				}
+			}
+		}
+		return null;
+	}
 }

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.js;
 
 import java.io.ByteArrayOutputStream;
@@ -14,17 +34,18 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.loboevolution.js.AbstractScriptableDelegate;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.html.HTMLDocument;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.DocumentFragment;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.dom.HTMLDocument;
+import org.loboevolution.html.dom.HTMLHeadElement;
 
 /**
  * <p>XMLSerializer class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XMLSerializer extends AbstractScriptableDelegate {
 
@@ -40,7 +61,8 @@ public class XMLSerializer extends AbstractScriptableDelegate {
 	 * @return the serialized string
 	 */
 	public String serializeToString(Node root) {
-		TransformerFactory tf = TransformerFactory.newInstance();
+		// TODO Broken with new interfaces
+		/*TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer;
 		try {
 			if (root instanceof Document) {
@@ -59,7 +81,7 @@ public class XMLSerializer extends AbstractScriptableDelegate {
 			return writer.getBuffer().toString().replaceAll("\n|\r", "");
 		} catch (TransformerException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
-		}
+		}*/
 		return "";
 	}
 
@@ -70,14 +92,15 @@ public class XMLSerializer extends AbstractScriptableDelegate {
 	}
 
 	private void elementToStream(Element element, OutputStream out) {
-		try {
+		// TODO Broken with new interfaces
+		/*try {
 			DOMSource source = new DOMSource(element);
 			StreamResult result = new StreamResult(out);
 			TransformerFactory transFactory = TransformerFactory.newInstance();
 			Transformer transformer = transFactory.newTransformer();
 			transformer.transform(source, result);
 		} catch (Exception ex) {
-		}
+		}*/
 	}
 
 }

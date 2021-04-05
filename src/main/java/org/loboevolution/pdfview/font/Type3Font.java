@@ -37,13 +37,13 @@ import org.loboevolution.pdfview.PDFParser;
  * A Type 3 Font, in which each glyph consists of a sequence of PDF
  * commands.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class Type3Font extends PDFFont {
 
     /** resources for the character definitions */
-    HashMap<String,PDFObject> rsrc;
+    final HashMap<String,PDFObject> rsrc;
     /** the character processes, mapped by name */
     Map charProcs;
     /** bounding box for the font characters */
@@ -71,7 +71,7 @@ public class Type3Font extends PDFFont {
             HashMap<String,PDFObject> resources, PDFFontDescriptor descriptor) throws IOException {
         super(baseFont, descriptor);
 
-        this.rsrc = new HashMap<String,PDFObject>();
+        this.rsrc = new HashMap<>();
 
         if (resources != null) {
             this.rsrc.putAll(resources);
@@ -79,7 +79,7 @@ public class Type3Font extends PDFFont {
 
         // get the transform matrix
         PDFObject matrix = fontObj.getDictRef("FontMatrix");
-        float matrixAry[] = new float[6];
+        float[] matrixAry = new float[6];
         for (int i = 0; i < 6; i++) {
             matrixAry[i] = matrix.getAt(i).getFloatValue();
         }

@@ -11,8 +11,8 @@ import java.util.Arrays;
 /**
  * <p>FastDtoaBuilder class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FastDtoaBuilder {
 

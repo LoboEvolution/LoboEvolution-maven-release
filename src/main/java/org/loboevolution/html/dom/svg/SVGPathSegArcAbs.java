@@ -1,32 +1,31 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.html.dom.svg;
 
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGPathSegArcAbs interface.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SVGPathSegArcAbs extends SVGPathSeg {
 
@@ -43,7 +42,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param x a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setX(float x) throws DOMException;
+	void setX(float x);
 
 	/**
 	 * <p>getY.</p>
@@ -58,7 +57,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param y a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setY(float y) throws DOMException;
+	void setY(float y);;
 
 	/**
 	 * <p>getR1.</p>
@@ -73,7 +72,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param r1 a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setR1(float r1) throws DOMException;
+	void setR1(float r1);
 
 	/**
 	 * <p>getR2.</p>
@@ -88,7 +87,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param r2 a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setR2(float r2) throws DOMException;
+	void setR2(float r2);
 
 	/**
 	 * <p>getAngle.</p>
@@ -103,7 +102,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param angle a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setAngle(float angle) throws DOMException;
+	void setAngle(float angle);
 
 	/**
 	 * <p>getLargeArcFlag.</p>
@@ -118,7 +117,7 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param largeArcFlag a boolean.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setLargeArcFlag(boolean largeArcFlag) throws DOMException;
+	void setLargeArcFlag(boolean largeArcFlag);
 
 	/**
 	 * <p>getSweepFlag.</p>
@@ -133,5 +132,5 @@ public interface SVGPathSegArcAbs extends SVGPathSeg {
 	 * @param sweepFlag a boolean.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setSweepFlag(boolean sweepFlag) throws DOMException;
+	void setSweepFlag(boolean sweepFlag);
 }

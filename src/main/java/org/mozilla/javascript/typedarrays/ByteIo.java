@@ -9,8 +9,8 @@ package org.mozilla.javascript.typedarrays;
 /**
  * <p>ByteIo class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ByteIo
 {
@@ -19,11 +19,11 @@ public class ByteIo
      *
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Byte} object.
      */
-    public static Object readInt8(byte[] buf, int offset)
+    public static Byte readInt8(byte[] buf, int offset)
     {
-        return buf[offset];
+        return Byte.valueOf(buf[offset]);
     }
 
     /**
@@ -43,11 +43,11 @@ public class ByteIo
      *
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Integer} object.
      */
-    public static Object readUint8(byte[] buf, int offset)
+    public static Integer readUint8(byte[] buf, int offset)
     {
-        return buf[offset] & 0xff;
+        return Integer.valueOf(buf[offset] & 0xff);
     }
 
     /**
@@ -92,11 +92,11 @@ public class ByteIo
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
      * @param littleEndian a boolean.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Short} object.
      */
-    public static Object readInt16(byte[] buf, int offset, boolean littleEndian)
+    public static Short readInt16(byte[] buf, int offset, boolean littleEndian)
     {
-        return doReadInt16(buf, offset, littleEndian);
+        return Short.valueOf(doReadInt16(buf, offset, littleEndian));
     }
 
     /**
@@ -118,11 +118,11 @@ public class ByteIo
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
      * @param littleEndian a boolean.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Integer} object.
      */
-    public static Object readUint16(byte[] buf, int offset, boolean littleEndian)
+    public static Integer readUint16(byte[] buf, int offset, boolean littleEndian)
     {
-        return doReadInt16(buf, offset, littleEndian) & 0xffff;
+        return Integer.valueOf(doReadInt16(buf, offset, littleEndian) & 0xffff);
     }
 
     /**
@@ -144,22 +144,22 @@ public class ByteIo
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
      * @param littleEndian a boolean.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Integer} object.
      */
-    public static Object readInt32(byte[] buf, int offset, boolean littleEndian)
+    public static Integer readInt32(byte[] buf, int offset, boolean littleEndian)
     {
         if (littleEndian) {
-            return
+            return Integer.valueOf(
                 (buf[offset]      & 0xff) |
                 ((buf[offset + 1] & 0xff) << 8) |
                 ((buf[offset + 2] & 0xff) << 16) |
-                ((buf[offset + 3] & 0xff) << 24);
+                ((buf[offset + 3] & 0xff) << 24));
         }
-        return
+        return Integer.valueOf(
             ((buf[offset]     & 0xff) << 24) |
             ((buf[offset + 1] & 0xff) << 16) |
             ((buf[offset + 2] & 0xff) << 8) |
-            (buf[offset + 3]  & 0xff);
+            (buf[offset + 3]  & 0xff));
     }
 
     /**
@@ -244,7 +244,7 @@ public class ByteIo
      */
     public static Object readUint32(byte[] buf, int offset, boolean littleEndian)
     {
-        return readUint32Primitive(buf, offset, littleEndian);
+        return Long.valueOf(readUint32Primitive(buf, offset, littleEndian));
     }
 
     /**
@@ -316,12 +316,12 @@ public class ByteIo
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
      * @param littleEndian a boolean.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Float} object.
      */
-    public static Object readFloat32(byte[] buf, int offset, boolean littleEndian)
+    public static Float readFloat32(byte[] buf, int offset, boolean littleEndian)
     {
         long base = readUint32Primitive(buf, offset, littleEndian);
-        return Float.intBitsToFloat((int)base);
+        return Float.valueOf(Float.intBitsToFloat((int)base));
     }
 
     /**
@@ -344,12 +344,12 @@ public class ByteIo
      * @param buf an array of {@link byte} objects.
      * @param offset a int.
      * @param littleEndian a boolean.
-     * @return a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Double} object.
      */
-    public static Object readFloat64(byte[] buf, int offset, boolean littleEndian)
+    public static Double readFloat64(byte[] buf, int offset, boolean littleEndian)
     {
         long base = readUint64Primitive(buf, offset, littleEndian);
-        return Double.longBitsToDouble(base);
+        return Double.valueOf(Double.longBitsToDouble(base));
     }
 
     /**

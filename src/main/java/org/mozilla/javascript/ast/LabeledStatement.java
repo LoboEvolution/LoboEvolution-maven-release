@@ -18,8 +18,8 @@ import org.mozilla.javascript.Token;
  *
  * <p>Node type is {@link org.mozilla.javascript.Token#EXPR_VOID}.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class LabeledStatement extends AstNode {
 

@@ -33,25 +33,18 @@ import org.loboevolution.pdfview.BaseWatchable;
 import org.loboevolution.pdfview.PDFDebugger;
 import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFParseException;
-import org.loboevolution.pdfview.PDFRenderer;
 import org.loboevolution.pdfview.font.cid.PDFCMap;
-import org.loboevolution.pdfview.font.cid.ToUnicodeMap;
 import org.loboevolution.pdfview.font.ttf.TrueTypeFont;
 
 /**
  * a Font definition for PDF files
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public abstract class PDFFont {
 
-    private static final FilenameFilter TTF_FILTER = new FilenameFilter() {
-        @Override
-		public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".ttf");
-        }
-    };
+    private static final FilenameFilter TTF_FILTER = (dir, name) -> name.toLowerCase().endsWith(".ttf");
 
     private static Map<String,File> namedFontsToLocalTtfFiles = null;
 
@@ -166,74 +159,76 @@ public abstract class PDFFont {
             descriptor = new PDFFontDescriptor(baseFont);
         }
 
-        if (subType.equals("Type0")) {
-            font = new Type0Font(baseFont, obj, descriptor);
-        } else if (subType.equals("Type1")) {
-            // load a type1 font
-			if (descriptor.getFontFile() != null) {
-                // it's a Type1 font, included.
-                font = new Type1Font(baseFont, obj, descriptor);
-                if(!((Type1Font)font).isName2OutlineFilled()){
-                	PDFDebugger.debug("Type1Font can't be parsed completelly, character mapping missing. Use a basefont instead.");
-                	font = new BuiltinFont(baseFont, obj, descriptor);
-                }
-            } else if (descriptor.getFontFile3() != null) {
-                // it's a CFF (Type1C) font
-                font = new Type1CFont(baseFont, obj, descriptor);
-            } else {
-                // no font info. Fake it based on the FontDescriptor
-                font = new BuiltinFont(baseFont, obj, descriptor);
-            }
-        } else if (subType.equals("TrueType")) {
-            if (descriptor.getFontFile2() != null) {
-                // load a TrueType font
-                try {
-                    font = new TTFFont(baseFont, obj, descriptor);
-                }catch (Exception e) {
-//            		PDFRenderer.getErrorHandler().publishException(e);
-                	PDFDebugger.debug("Error parsing font : " + baseFont);
-                    // fake it with a built-in font
+        switch (subType) {
+            case "Type0":
+                font = new Type0Font(baseFont, obj, descriptor);
+                break;
+            case "Type1":
+                // load a type1 font
+                if (descriptor.getFontFile() != null) {
+                    // it's a Type1 font, included.
+                    font = new Type1Font(baseFont, obj, descriptor);
+                    if (!((Type1Font) font).isName2OutlineFilled()) {
+                        PDFDebugger.debug("Type1Font can't be parsed completelly, character mapping missing. Use a basefont instead.");
+                        font = new BuiltinFont(baseFont, obj, descriptor);
+                    }
+                } else if (descriptor.getFontFile3() != null) {
+                    // it's a CFF (Type1C) font
+                    font = new Type1CFont(baseFont, obj, descriptor);
+                } else {
+                    // no font info. Fake it based on the FontDescriptor
                     font = new BuiltinFont(baseFont, obj, descriptor);
                 }
-            } else {
-                final File extFontFile = findExternalTtf(baseFont);
-                if (extFontFile != null) {
-                	try {
-                        font = new TTFFont(baseFont, obj, descriptor, extFontFile);
-                	}catch (Exception e) {
+                break;
+            case "TrueType":
+                if (descriptor.getFontFile2() != null) {
+                    // load a TrueType font
+                    try {
+                        font = new TTFFont(baseFont, obj, descriptor);
+                    } catch (Exception e) {
+//            		PDFRenderer.getErrorHandler().publishException(e);
+                        PDFDebugger.debug("Error parsing font : " + baseFont);
+                        // fake it with a built-in font
+                        font = new BuiltinFont(baseFont, obj, descriptor);
+                    }
+                } else {
+                    final File extFontFile = findExternalTtf(baseFont);
+                    if (extFontFile != null) {
+                        try {
+                            font = new TTFFont(baseFont, obj, descriptor, extFontFile);
+                        } catch (Exception e) {
 //                		PDFRenderer.getErrorHandler().publishException(e);
-                		PDFDebugger.debug("Error parsing font : " + baseFont);
-                		// fake it with a built-in font
-                		font = new BuiltinFont(baseFont, obj, descriptor);
-					}
+                            PDFDebugger.debug("Error parsing font : " + baseFont);
+                            // fake it with a built-in font
+                            font = new BuiltinFont(baseFont, obj, descriptor);
+                        }
+                    } else {
+                        // fake it with a built-in font
+                        font = new BuiltinFont(baseFont, obj, descriptor);
+                    }
+                }
+                break;
+            case "Type3":
+                // load a type 3 font
+                font = new Type3Font(baseFont, obj, resources, descriptor);
+                break;
+            case "CIDFontType2":
+            case "CIDFontType0":
+                if (descriptor.getFontFile2() != null) {
+                    font = new CIDFontType2(baseFont, obj, descriptor);
                 } else {
                     // fake it with a built-in font
-                    font = new BuiltinFont(baseFont, obj, descriptor);
+                    //but it prefer to use the CIDFontType0 that have the extra handling of ToUnicode, if found in the fontObj
+                    font = new CIDFontType0(baseFont, obj, descriptor);
                 }
-            }
-        } else if (subType.equals("Type3")) {
-            // load a type 3 font
-            font = new Type3Font(baseFont, obj, resources, descriptor);
-        } else if (subType.equals("CIDFontType2")) {
-        	if(descriptor.getFontFile2() != null) {
-                font = new CIDFontType2(baseFont, obj, descriptor);
-        	}else {
-                // fake it with a built-in font
-       		//but it prefer to use the CIDFontType0 that have the extra handling of ToUnicode, if found in the fontObj
-	                font = new CIDFontType0(baseFont, obj, descriptor);
-        	}
-        } else if (subType.equals("CIDFontType0")) {
-        	if(descriptor.getFontFile2() !=null){
-                font = new CIDFontType2(baseFont, obj, descriptor);
-        	}else {
-                font = new CIDFontType0(baseFont, obj, descriptor);
-        	}
-		} else if (subType.equals("MMType1")) {
-			// not yet implemented, fake it with a built-in font
-			font = new BuiltinFont(baseFont, obj, descriptor);
-        } else {
-            throw new PDFParseException("Don't know how to handle a '" +
-                    subType + "' font");
+                break;
+            case "MMType1":
+                // not yet implemented, fake it with a built-in font
+                font = new BuiltinFont(baseFont, obj, descriptor);
+                break;
+            default:
+                throw new PDFParseException("Don't know how to handle a '" +
+                        subType + "' font");
         }
 
         font.setSubtype(subType);
@@ -250,7 +245,7 @@ public abstract class PDFFont {
 
     private synchronized static void ensureNamedTtfFontFiles() {
         if (namedFontsToLocalTtfFiles == null) {
-            namedFontsToLocalTtfFiles = new HashMap<String, File>();
+            namedFontsToLocalTtfFiles = new HashMap<>();
 
             if (Boolean.getBoolean("PDFRenderer.avoidExternalTtf")) {
                 return;
@@ -264,16 +259,10 @@ public abstract class PDFFont {
                         if (ttfFile.canRead()) {
                             try {
                                 byte[] fontBytes;
-                                RandomAccessFile fontRa = null;
-                                try {
-                                    fontRa = new RandomAccessFile (ttfFile, "r");
-                                    int size = (int) fontRa.length ();
+                                try (RandomAccessFile fontRa = new RandomAccessFile(ttfFile, "r")) {
+                                    int size = (int) fontRa.length();
                                     fontBytes = new byte[size];
                                     fontRa.readFully(fontBytes);
-                                } finally {
-                                    if (fontRa != null) {
-                                        fontRa.close();
-                                    }
                                 }
 
                                 TrueTypeFont ttf = TrueTypeFont.parseFont(fontBytes);
@@ -335,7 +324,7 @@ public abstract class PDFFont {
             }
             return new String[] { path };
         } else if (osName != null && osName.startsWith("mac")) {
-            List<String> paths = new ArrayList<String>(Arrays.asList(
+            List<String> paths = new ArrayList<>(Arrays.asList(
                     "/Library/Fonts",
                     "/Network/Library/Fonts",
                     "/System/Library/Fonts",
@@ -346,7 +335,7 @@ public abstract class PDFFont {
             } catch (SecurityException e) {
                 // I suppose we just won't use the user fonts
             }
-            return paths.toArray(new String[paths.size()]);
+            return paths.toArray(new String[0]);
         } else {
             // Feel free to insert some reasonable defaults for other
             // (UNIX, most likely) platforms here
@@ -460,11 +449,10 @@ public abstract class PDFFont {
         } else {
             // use the default mapping
             char[] arry = text.toCharArray();
-            outList = new ArrayList<PDFGlyph>(arry.length);
-
-            for (int i = 0; i < arry.length; i++) {
+            outList = new ArrayList<>(arry.length);
+            for (char c : arry) {
                 // only look at 2 bytes when there is no encoding
-                char src = (char) (arry[i] & 0xff);
+                char src = (char) (c & 0xff);
                 outList.add(getCachedGlyph(src, null));
             }
         }
@@ -482,16 +470,16 @@ public abstract class PDFFont {
      */
     public PDFGlyph getCachedGlyph(char src, String name) {
         if (this.charCache == null) {
-            this.charCache = new HashMap<Character,PDFGlyph>();
+            this.charCache = new HashMap<>();
         }
 
         // try the cache
-        PDFGlyph glyph = this.charCache.get(Character.valueOf(src));
+        PDFGlyph glyph = this.charCache.get(src);
 
         // if it's not there, add it to the cache
         if (glyph == null) {
             glyph = getGlyph(src, name);
-            this.charCache.put(Character.valueOf(src), glyph);
+            this.charCache.put(src, glyph);
         }
 
         return glyph;

@@ -33,8 +33,8 @@ package org.mozilla.javascript.v8dtoa;
 /**
  * <p>DoubleConversion class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class DoubleConversion {
     private static final long kSignMask = 0x8000000000000000L;

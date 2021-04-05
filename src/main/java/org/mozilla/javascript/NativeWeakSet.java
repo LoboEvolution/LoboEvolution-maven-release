@@ -17,18 +17,18 @@ import java.util.WeakHashMap;
  * than the weak reference. That means that it is important that the "value"
  * that we put in the WeakHashMap here is not one that contains the key.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeWeakSet extends IdScriptableObject {
     private static final long serialVersionUID = 2065753364224029534L;
-    
+
     private static final Object MAP_TAG = "WeakSet";
-    
+
     private boolean instanceOfWeakSet = false;
-    
+
     private transient WeakHashMap<Scriptable, Boolean> map = new WeakHashMap<>();
-    
+
     static void init(Scriptable scope, boolean sealed) {
         NativeWeakSet m = new NativeWeakSet();
         m.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
@@ -59,7 +59,7 @@ public class NativeWeakSet extends IdScriptableObject {
                     }
                     return ns;
                 }
-                throw ScriptRuntime.typeError1("msg.no.new", "WeakSet");
+                throw ScriptRuntime.typeErrorById("msg.no.new", "WeakSet");
             case Id_add:
                 return realThis(thisObj, f).js_add(args.length > 0 ? args[0] : Undefined.instance);
             case Id_delete:
@@ -76,7 +76,7 @@ public class NativeWeakSet extends IdScriptableObject {
         // equals or hashCode, which means that in effect we are only keying on object identity.
         // This is all correct according to the ECMAscript spec.
         if (!ScriptRuntime.isObject(key)) {
-            throw ScriptRuntime.typeError1("msg.arg.not.object", ScriptRuntime.typeof(key));
+            throw ScriptRuntime.typeErrorById("msg.arg.not.object", ScriptRuntime.typeof(key));
         }
         // Add a value to the map, but don't make it the key -- otherwise the WeakHashMap
         // will never GC anything.
@@ -86,33 +86,26 @@ public class NativeWeakSet extends IdScriptableObject {
 
     private Object js_delete(Object key) {
         if (!ScriptRuntime.isObject(key)) {
-            return false;
+            return Boolean.FALSE;
         }
-        final Object oldVal = map.remove(key);
-        return (oldVal != null);
+        return Boolean.valueOf(map.remove(key) != null);
     }
 
     private Object js_has(Object key) {
         if (!ScriptRuntime.isObject(key)) {
-            return false;
+            return Boolean.FALSE;
         }
-        return map.containsKey(key);
+        return Boolean.valueOf(map.containsKey(key));
     }
 
-    private NativeWeakSet realThis(Scriptable thisObj, IdFunctionObject f) {
-        if (thisObj == null) {
-            throw incompatibleCallError(f);
+    private static NativeWeakSet realThis(Scriptable thisObj, IdFunctionObject f) {
+        final NativeWeakSet ns = ensureType(thisObj, NativeWeakSet.class, f);
+        if (!ns.instanceOfWeakSet) {
+            // Check for "Set internal data tag"
+            throw ScriptRuntime.typeErrorById("msg.incompat.call", f.getFunctionName());
         }
-        try {
-            final NativeWeakSet ns = (NativeWeakSet)thisObj;
-            if (!ns.instanceOfWeakSet) {
-                // Check for "Set internal data tag"
-                throw incompatibleCallError(f);
-            }
-            return ns;
-        } catch (ClassCastException cce) {
-            throw incompatibleCallError(f);
-        }
+
+        return ns;
     }
 
     /** {@inheritDoc} */
@@ -152,18 +145,23 @@ public class NativeWeakSet extends IdScriptableObject {
     @Override
     protected int findPrototypeId(String s) {
         int id;
-// #generated# Last update: 2018-08-27 10:45:54 PDT
-        L0: { id = 0; String X = null; int c;
-            int s_length = s.length();
-            if (s_length==3) {
-                c=s.charAt(0);
-                if (c=='a') { if (s.charAt(2)=='d' && s.charAt(1)=='d') {id=Id_add; break L0;} }
-                else if (c=='h') { if (s.charAt(2)=='s' && s.charAt(1)=='a') {id=Id_has; break L0;} }
-            }
-            else if (s_length==6) { X="delete";id=Id_delete; }
-            else if (s_length==11) { X="constructor";id=Id_constructor; }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:49:08 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        case "add":
+            id = Id_add;
+            break;
+        case "delete":
+            id = Id_delete;
+            break;
+        case "has":
+            id = Id_has;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;

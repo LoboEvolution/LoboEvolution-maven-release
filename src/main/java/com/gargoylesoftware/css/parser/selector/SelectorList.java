@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import java.util.List;
  * of selectors, without defining or constraining how this collection is
  * implemented.
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public interface SelectorList extends List<Selector> {
 }

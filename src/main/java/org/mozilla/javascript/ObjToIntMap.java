@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * Map to associate objects to integers.
@@ -18,14 +17,13 @@ import java.util.logging.Logger;
  * it from a single thread or do own synchronization or perform all mutation
  * operations on one thread before passing the map to others
  *
- * @author Igor Bukanov
- * @version $Id: $Id
+ * Author Igor Bukanov
+ *
  */
+@SuppressWarnings("unused")
 public class ObjToIntMap implements Serializable
 {
     private static final long serialVersionUID = -1542220580748809402L;
-    
-    private static final Logger logger = Logger.getLogger(ObjToIntMap.class.getName());
 
 // Map implementation via hashtable,
 // follows "The Art of Computer Programming" by Donald E. Knuth
@@ -261,7 +259,7 @@ public class ObjToIntMap implements Serializable
     }
 
     /**
-     * <p>Getter for the field keys.</p>
+     * <p>Getter for the field <code>keys</code>.</p>
      *
      * @param array an array of {@link java.lang.Object} objects.
      * @param offset a int.
@@ -657,7 +655,7 @@ public class ObjToIntMap implements Serializable
         System.out.print("."); System.out.flush();
         checkSameMaps(copy, map);
 
-        logger.info(); System.out.flush();
+        System.out.println(); System.out.flush();
     }
 
     private static void checkSameMaps(ObjToIntMap map1, ObjToIntMap map2) {

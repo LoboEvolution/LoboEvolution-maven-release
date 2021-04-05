@@ -19,18 +19,18 @@
 
 package org.loboevolution.pdfview;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
-import java.nio.CharBuffer;
-import java.nio.ByteBuffer;
 
 /**
  * A {@link java.nio.charset.CharsetEncoder} that attempts to write out the lower 8 bits
  * of any character. Characters &gt;= 256 in value are regarded
  * as unmappable.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class Identity8BitCharsetEncoder extends CharsetEncoder {
 
@@ -41,7 +41,7 @@ public class Identity8BitCharsetEncoder extends CharsetEncoder {
         super(null, 1, 1);
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         while (in.remaining() > 0) {

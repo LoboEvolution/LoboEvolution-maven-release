@@ -27,8 +27,8 @@ import org.mozilla.javascript.Token;
  * <i>DefaultClause</i> :
  *        <b>default</b> : [StatementList]</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SwitchCase extends AstNode {
 

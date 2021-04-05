@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.ComponentOrientation;
@@ -21,12 +41,12 @@ import org.loboevolution.html.renderer.HtmlController;
 /**
  * <p>SelectOption class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SelectOption {
 
-	private SelectControl control;
+	private final SelectControl control;
 
 	/** The combo box. */
 	private final JComboBox<OptionItem> comboBox;
@@ -60,7 +80,7 @@ public class SelectOption {
 	 */
 	public SelectOption(HTMLSelectElementImpl modelNode, SelectControl control) {
 		this.control = control;
-		final JComboBox<OptionItem> comboBox = new JComboBox<OptionItem>();
+		final JComboBox<OptionItem> comboBox = new JComboBox<>();
 		comboBox.addItemListener(e -> {
 			OptionItem item = (OptionItem) e.getItem();
 			if (item != null) {
@@ -80,8 +100,8 @@ public class SelectOption {
 				}
 			}
 		});
-		final DefaultListModel<OptionItem> listModel = new DefaultListModel<OptionItem>();
-		final JList<OptionItem> list = new JList<OptionItem>(listModel);
+		final DefaultListModel<OptionItem> listModel = new DefaultListModel<>();
+		final JList<OptionItem> list = new JList<>(listModel);
 		this.listModel = listModel;
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.addListSelectionListener(e -> {
@@ -114,8 +134,8 @@ public class SelectOption {
 		}
 		comboBox.setVisible(!modelNode.getHidden());
 		comboBox.applyComponentOrientation(direction(modelNode.getDir()));
-		comboBox.setEditable(Boolean.valueOf(modelNode.getContentEditable() == null ? "true" : modelNode.getContentEditable()));
-		comboBox.setEnabled(!modelNode.getDisabled());
+		comboBox.setEditable(Boolean.parseBoolean(modelNode.getContentEditable() == null ? "true" : modelNode.getContentEditable()));
+		comboBox.setEnabled(!modelNode.isDisabled());
 		this.list = list;
 		this.resetItemList(modelNode);
 		control.add(comboBox);
@@ -123,11 +143,11 @@ public class SelectOption {
 
 	/**
 	 * Reset item list.
-	 * 
-	 * @param modelNode
+	 *
+	 * @param selectElement a {@link org.loboevolution.html.dom.domimpl.HTMLSelectElementImpl} object.
 	 */
-	private void resetItemList(HTMLSelectElementImpl selectElement) {
-		boolean isMultiple = selectElement.getMultiple();
+	public void resetItemList(HTMLSelectElementImpl selectElement) {
+		boolean isMultiple = selectElement.isMultiple();
 		if (isMultiple && this.state != STATE_LIST) {
 			this.state = STATE_LIST;
 			control.removeAll();
@@ -178,10 +198,10 @@ public class SelectOption {
 						} else {
 							comboBox.addItem(item);
 						}
-						if (option.getSelected()) {
+						if (option.isSelected()) {
 							selectedItem = item;
 						}
-						if (option.getDefaultSelected()) {
+						if (option.isDefaultSelected()) {
 							defaultItem = item;
 						}
 					}
@@ -212,26 +232,26 @@ public class SelectOption {
 					} else {
 						listModel.addElement(item);
 					}
-					if (option.getSelected()) {
+					if (option.isSelected()) {
 						if (selectedIndexes == null) {
-							selectedIndexes = new LinkedList<Integer>();
+							selectedIndexes = new LinkedList<>();
 						}
-						selectedIndexes.add(Integer.valueOf(index));
+						selectedIndexes.add(index);
 					}
-					if (option.getDefaultSelected()) {
+					if (option.isDefaultSelected()) {
 						if (defaultSelectedIndexes == null) {
-							defaultSelectedIndexes = new LinkedList<Integer>();
+							defaultSelectedIndexes = new LinkedList<>();
 						}
-						defaultSelectedIndexes.add(Integer.valueOf(index));
+						defaultSelectedIndexes.add(index);
 					}
 				}
 				if (ArrayUtilities.isNotBlank(selectedIndexes)) {
 					for (Integer si : selectedIndexes) {
-						list.addSelectionInterval(si.intValue(), si.intValue());
+						list.addSelectionInterval(si, si);
 					}
 				} else if (ArrayUtilities.isNotBlank(defaultSelectedIndexes)) {
 					for (Integer si : defaultSelectedIndexes) {
-						list.addSelectionInterval(si.intValue(), si.intValue());
+						list.addSelectionInterval(si, si);
 					}
 				}
 			}
@@ -307,7 +327,7 @@ public class SelectOption {
 		 * @return true, if is selected
 		 */
 		public boolean isSelected() {
-			return this.option.getSelected();
+			return this.option.isSelected();
 		}
 
 		/*

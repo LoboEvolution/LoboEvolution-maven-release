@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.welcome;
 
 import java.awt.Color;
@@ -11,38 +31,40 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-
 import javax.swing.JLabel;
 
 import org.loboevolution.common.Strings;
 import org.loboevolution.component.IBrowserPanel;
+import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
+import org.loboevolution.html.gui.HtmlPanel;
 import org.loboevolution.http.NavigationManager;
 import org.loboevolution.store.TabStore;
 import org.loboevolution.tab.DnDTabbedPane;
 import org.loboevolution.tab.TabbedPanePopupMenu;
-import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
-import org.loboevolution.html.gui.HtmlPanel;
+
+import com.jtattoo.plaf.lobo.LoboLookAndFeel;
 
 /**
  * <p>LoginButton class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class LoginButton extends JLabel {
+public class LoginButton extends JLabel implements LoboLookAndFeel {
+
 	private static final long serialVersionUID = 1L;
 
 	private final String BUTTON_TEXT_LOGIN = "Surf!";
 
-	private final Color COLOR_BACKGROUND = new Color(37, 51, 61);
+	private final Color COLOR_BACKGROUND = background();
 
-	private final Color COLOR_INTERACTIVE = new Color(108, 216, 158);
+	private final Color COLOR_INTERACTIVE = background();
 
-	private final Color COLOR_INTERACTIVE_DARKER = new Color(87, 171, 127);
+	private final Color COLOR_INTERACTIVE_DARKER = interactive();
 
 	private final Font FONT_GENERAL_UI = new Font("Segoe UI", Font.PLAIN, 20);
 
-	private final Color[] loginButtonColors = { this.COLOR_INTERACTIVE, Color.white };
+	private final Color[] loginButtonColors = { this.COLOR_INTERACTIVE, foreground() };
 
 	private final Color OFFWHITE = new Color(229, 229, 229);
 
@@ -71,7 +93,7 @@ public class LoginButton extends JLabel {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				LoginButton.this.loginButtonColors[0] = LoginButton.this.COLOR_INTERACTIVE;
-				LoginButton.this.loginButtonColors[1] = Color.white;
+				LoginButton.this.loginButtonColors[1] = LoginButton.this.foreground();
 				repaint();
 			}
 
@@ -81,7 +103,7 @@ public class LoginButton extends JLabel {
 				panel.getTabbedPane().remove(indexPanel);
 				final DnDTabbedPane tabbedPane = panel.getTabbedPane();
 				tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(panel));
-				HtmlPanel hpanel = NavigationManager.getHtmlPanelSearch(text.getText(), indexPanel);
+				HtmlPanel hpanel = NavigationManager.getHtmlPanelSearch(panel, text.getText());
 				final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 				final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";	
 				tabbedPane.insertTab(title, null, hpanel, title, indexPanel);
@@ -90,6 +112,7 @@ public class LoginButton extends JLabel {
 				bpanel.getScroll().getViewport().add(tabbedPane);
 				TabStore.deleteTab(indexPanel);
 				TabStore.insertTab(indexPanel, text.getText(), title);
+				NavigationManager.insertHistory(text.getText(), title, indexPanel);
 			}
 		});
 	}
@@ -104,6 +127,14 @@ public class LoginButton extends JLabel {
 			}
 		});
 		return g2;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	protected void paintBorder(Graphics g) {
+		final Graphics2D g2 = get2dGraphics(g);
+		g2.setColor(foreground());
+		g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, ROUNDNESS, ROUNDNESS);
 	}
 
 	/** {@inheritDoc} */

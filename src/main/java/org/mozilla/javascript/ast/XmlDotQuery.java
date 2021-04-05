@@ -20,8 +20,8 @@ import org.mozilla.javascript.Token;
  * bounds of the node.  If the right paren is missing, the node ends at the end
  * of the filter expression.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlDotQuery extends InfixExpression {
 

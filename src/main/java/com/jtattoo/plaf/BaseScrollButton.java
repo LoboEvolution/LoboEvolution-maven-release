@@ -36,8 +36,8 @@ import javax.swing.plaf.basic.BasicArrowButton;
 /**
  * <p>BaseScrollButton class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseScrollButton extends BasicArrowButton {
 
@@ -84,14 +84,12 @@ public class BaseScrollButton extends BasicArrowButton {
 	public Dimension getPreferredSize() {
 		switch (getDirection()) {
 		case NORTH:
-			return new Dimension(buttonWidth, buttonWidth + 1);
-		case SOUTH:
-			return new Dimension(buttonWidth, buttonWidth + 1);
-		case EAST:
-			return new Dimension(buttonWidth + 1, buttonWidth);
-		case WEST:
-			return new Dimension(buttonWidth + 1, buttonWidth);
-		default:
+            case SOUTH:
+                return new Dimension(buttonWidth, buttonWidth + 1);
+            case EAST:
+            case WEST:
+                return new Dimension(buttonWidth + 1, buttonWidth);
+            default:
 			return new Dimension(0, 0);
 		}
 	}
@@ -105,7 +103,7 @@ public class BaseScrollButton extends BasicArrowButton {
 		int width = getWidth();
 		int height = getHeight();
 
-		Color colors[];
+		Color[] colors;
 		if (isPressed) {
 			colors = AbstractLookAndFeel.getTheme().getPressedColors();
 		} else if (isRollover) {

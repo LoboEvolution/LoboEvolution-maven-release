@@ -13,8 +13,8 @@ import org.mozilla.javascript.ast.ErrorCollector;
 /**
  * <p>CompilerEnvirons class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class CompilerEnvirons
 {
@@ -68,7 +68,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field errorReporter.</p>
+     * <p>Getter for the field <code>errorReporter</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ErrorReporter} object.
      */
@@ -78,7 +78,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field errorReporter.</p>
+     * <p>Setter for the field <code>errorReporter</code>.</p>
      *
      * @param errorReporter a {@link org.mozilla.javascript.ErrorReporter} object.
      */
@@ -89,7 +89,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field languageVersion.</p>
+     * <p>Getter for the field <code>languageVersion</code>.</p>
      *
      * @return a int.
      */
@@ -99,7 +99,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field languageVersion.</p>
+     * <p>Setter for the field <code>languageVersion</code>.</p>
      *
      * @param languageVersion a int.
      */
@@ -120,7 +120,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field generateDebugInfo.</p>
+     * <p>Setter for the field <code>generateDebugInfo</code>.</p>
      *
      * @param flag a boolean.
      */
@@ -140,7 +140,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field reservedKeywordAsIdentifier.</p>
+     * <p>Setter for the field <code>reservedKeywordAsIdentifier</code>.</p>
      *
      * @param flag a boolean.
      */
@@ -161,7 +161,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field allowMemberExprAsFunctionName.</p>
+     * <p>Setter for the field <code>allowMemberExprAsFunctionName</code>.</p>
      *
      * @param flag a boolean.
      */
@@ -181,7 +181,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field xmlAvailable.</p>
+     * <p>Setter for the field <code>xmlAvailable</code>.</p>
      *
      * @param flag a boolean.
      */
@@ -191,7 +191,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field optimizationLevel.</p>
+     * <p>Getter for the field <code>optimizationLevel</code>.</p>
      *
      * @return a int.
      */
@@ -201,7 +201,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field optimizationLevel.</p>
+     * <p>Setter for the field <code>optimizationLevel</code>.</p>
      *
      * @param level a int.
      */
@@ -222,7 +222,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field warnTrailingComma.</p>
+     * <p>Getter for the field <code>warnTrailingComma</code>.</p>
      *
      * @return a boolean.
      */
@@ -231,7 +231,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field warnTrailingComma.</p>
+     * <p>Setter for the field <code>warnTrailingComma</code>.</p>
      *
      * @param warn a boolean.
      */
@@ -250,7 +250,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field strictMode.</p>
+     * <p>Setter for the field <code>strictMode</code>.</p>
      *
      * @param strict a boolean.
      */
@@ -321,7 +321,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field recordingComments.</p>
+     * <p>Setter for the field <code>recordingComments</code>.</p>
      *
      * @param record a boolean.
      */
@@ -339,7 +339,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field recordingLocalJsDocComments.</p>
+     * <p>Setter for the field <code>recordingLocalJsDocComments</code>.</p>
      *
      * @param record a boolean.
      */
@@ -387,7 +387,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field activationNames.</p>
+     * <p>Getter for the field <code>activationNames</code>.</p>
      *
      * @return a {@link java.util.Set} object.
      */
@@ -396,7 +396,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Setter for the field activationNames.</p>
+     * <p>Setter for the field <code>activationNames</code>.</p>
      *
      * @param activationNames a {@link java.util.Set} object.
      */
@@ -414,7 +414,7 @@ public class CompilerEnvirons
     }
 
     /**
-     * <p>Getter for the field allowSharpComments.</p>
+     * <p>Getter for the field <code>allowSharpComments</code>.</p>
      *
      * @return a boolean.
      */

@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
 /**
  * Represents a symbol-table entry.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Symbol {
 

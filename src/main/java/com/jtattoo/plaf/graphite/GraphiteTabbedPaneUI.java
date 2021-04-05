@@ -42,8 +42,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>GraphiteTabbedPaneUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class GraphiteTabbedPaneUI extends BaseTabbedPaneUI {
 
@@ -52,7 +52,7 @@ public class GraphiteTabbedPaneUI extends BaseTabbedPaneUI {
 		return new GraphiteTabbedPaneUI();
 	}
 
-	private Color sepColors[] = null;
+	private Color[] sepColors = null;
 
 	/** {@inheritDoc} */
 	@Override

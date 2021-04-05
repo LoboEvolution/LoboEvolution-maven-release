@@ -17,8 +17,8 @@ import org.mozilla.javascript.EvaluatorException;
  * {@link org.mozilla.javascript.CompilerEnvirons} is set to
  * ide-mode (for IDEs).
  *
- * @author Steve Yegge
- * @version $Id: $Id
+ * Author Steve Yegge
+ *
  */
 public class ErrorCollector implements IdeErrorReporter {
 

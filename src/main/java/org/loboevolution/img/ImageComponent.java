@@ -1,22 +1,24 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
  */
 package org.loboevolution.img;
 
@@ -38,8 +40,6 @@ import java.util.List;
 
 import javax.swing.CellRendererPane;
 import javax.swing.JComponent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.loboevolution.common.Objects;
 
@@ -47,7 +47,7 @@ import org.loboevolution.common.Objects;
 /**
  * The component that displays the image itself.
  * 
- * @author Kaz Csaba
+ * Author Kaz Csaba
  */
 class ImageComponent extends JComponent {
 	
@@ -57,11 +57,11 @@ class ImageComponent extends JComponent {
 	private boolean pixelatedZoom = false;
 	private transient Object interpolationType = RenderingHints.VALUE_INTERPOLATION_BICUBIC;
 	private double zoomFactor = 1;
-	private final transient List<ImageMouseMotionListener> moveListeners = new ArrayList<ImageMouseMotionListener>(4);
-	private final transient List<ImageMouseClickListener> clickListeners = new ArrayList<ImageMouseClickListener>(4);
+	private final transient List<ImageMouseMotionListener> moveListeners = new ArrayList<>(4);
+	private final transient List<ImageMouseClickListener> clickListeners = new ArrayList<>(4);
 	private final transient MouseEventTranslator mouseEventTranslator = new MouseEventTranslator(this);
 	private final transient PaintManager paintManager = new PaintManager(this);
-	private transient Rescroller rescroller = new Rescroller();
+	private final transient Rescroller rescroller = new Rescroller();
 	private final PropertyChangeSupport propertyChangeSupport;
 	private final transient ImageViewer viewer;
 
@@ -109,18 +109,14 @@ class ImageComponent extends JComponent {
 		this.propertyChangeSupport = propertyChangeSupport;
 		mouseEventTranslator.register(this);
 		setOpaque(true);
-		viewer.getScrollPane().getViewport().addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				/*
-				 * Here the viewer might not have a size yet, because we might be before the
-				 * first layout. But that's alright. As soon as we get our size, the viewport
-				 * will send another state change.
-				 */
-				if (hasSize())
-					mouseEventTranslator.correctionalFire();
-			}
+		viewer.getScrollPane().getViewport().addChangeListener(e -> {
+			/*
+			 * Here the viewer might not have a size yet, because we might be before the
+			 * first layout. But that's alright. As soon as we get our size, the viewport
+			 * will send another state change.
+			 */
+			if (hasSize())
+				mouseEventTranslator.correctionalFire();
 		});
 	}
 

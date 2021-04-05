@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>WithStatement</i> :
  *      <b>with</b> ( Expression ) Statement ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class WithStatement extends AstNode {
 

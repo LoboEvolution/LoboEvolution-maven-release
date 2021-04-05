@@ -22,8 +22,8 @@ import org.mozilla.javascript.Token;
  * {@link org.mozilla.javascript.Parser} via the
  * {@link org.mozilla.javascript.CompilerEnvirons}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class AstRoot extends ScriptNode {
 

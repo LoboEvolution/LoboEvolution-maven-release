@@ -33,6 +33,7 @@ import java.awt.event.ContainerListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -49,8 +50,8 @@ import javax.swing.plaf.basic.BasicToolBarUI;
 /**
  * <p>Abstract AbstractToolBarUI class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class AbstractToolBarUI extends BasicToolBarUI {
 
@@ -116,9 +117,9 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
 
 	private MyContainerListener containerListener = null;
 
-	private final HashMap<AbstractButton, Border> orgBorders = new HashMap<AbstractButton, Border>();
+	private final Map<AbstractButton, Border> orgBorders = new HashMap<>();
 
-	private final HashMap<AbstractButton, Insets> orgMargins = new HashMap<AbstractButton, Insets>();
+	private final Map<AbstractButton, Insets> orgMargins = new HashMap<>();
 
 	/**
 	 * <p>changeBorders.</p>
@@ -163,15 +164,13 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
 				b.setBorder(BorderFactory.createCompoundBorder(getRolloverBorder(), INNER_BORDER));
 				b.setMargin(BUTTON_MARGIN);
 				b.setRolloverEnabled(true);
-				b.setOpaque(isButtonOpaque());
-				b.setContentAreaFilled(isButtonOpaque());
 			} else {
 				b.setBorder(BorderFactory.createCompoundBorder(getNonRolloverBorder(), INNER_BORDER));
 				b.setMargin(BUTTON_MARGIN);
 				b.setRolloverEnabled(false);
-				b.setOpaque(isButtonOpaque());
-				b.setContentAreaFilled(isButtonOpaque());
 			}
+			b.setOpaque(isButtonOpaque());
+			b.setContentAreaFilled(isButtonOpaque());
 		}
 	}
 
@@ -211,7 +210,7 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
 		if (isRollover != null) {
 			rolloverEnabled = isRollover;
 		}
-		SwingUtilities.invokeLater(() -> changeBorders());
+		SwingUtilities.invokeLater(this::changeBorders);
 	}
 
 	/**
@@ -286,7 +285,7 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
 				return;
 			}
 		}
-		Border border = (Border) orgBorders.get(b);
+		Border border = orgBorders.get(b);
 		if (border != null) {
 			if (border instanceof NullBorder) {
 				b.setBorder(null);
@@ -294,7 +293,7 @@ public abstract class AbstractToolBarUI extends BasicToolBarUI {
 				b.setBorder(border);
 			}
 		}
-		b.setMargin((Insets) orgMargins.get(b));
+		b.setMargin(orgMargins.get(b));
 	}
 
 	/** {@inheritDoc} */

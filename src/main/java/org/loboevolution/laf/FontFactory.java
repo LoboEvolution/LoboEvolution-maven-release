@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Apr 17, 2005
  */
@@ -43,8 +42,8 @@ import org.loboevolution.common.Strings;
 /**
  * A factory for creating Font objects.
  *
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
 public class FontFactory {
 	
@@ -53,13 +52,13 @@ public class FontFactory {
 	private String defaultFontName = new LAFSettings().getInstance().getFont();
 
 	/** The font families. */
-	private final Set<String> fontFamilies = new HashSet<String>();
+	private final Set<String> fontFamilies = new HashSet<>();
 
 	/** The font map. */
-	private final Map<FontKey, Font> fontMap = new HashMap<FontKey, Font>();
+	private final Map<FontKey, Font> fontMap = new HashMap<>();
 
 	/** The registered fonts. */
-	private final Map<String, Font> registeredFonts = new HashMap<String, Font>();
+	private final Map<String, Font> registeredFonts = new HashMap<>();
 
 	/** The Constant instance. */
 	private static final FontFactory instance = new FontFactory();
@@ -69,7 +68,7 @@ public class FontFactory {
 	 *
 	 * @return the Constant instance
 	 */
-	public static final FontFactory getInstance() {
+	public static FontFactory getInstance() {
 		return instance;
 	}
 
@@ -82,7 +81,7 @@ public class FontFactory {
 	 */
 	public static Font scriptFont(Font baseFont, FontKey key) {
 
-		final Map<TextAttribute, Object> additionalAttributes = new HashMap<TextAttribute, Object>();
+		final Map<TextAttribute, Object> additionalAttributes = new HashMap<>();
 
 		Integer fontSuperScript = (Integer) baseFont.getAttributes().get(TextAttribute.SUPERSCRIPT);
 		if (fontSuperScript == null) {
@@ -124,7 +123,7 @@ public class FontFactory {
 	 * @param key the key
 	 * @return the font
 	 */
-	private final Font createFont(FontKey key) {
+	private Font createFont(FontKey key) {
 		final Font font = createFontImpl(key);
 		return scriptFont(font, key);
 	}
@@ -147,7 +146,7 @@ public class FontFactory {
 	 * @param key the key
 	 * @return the font
 	 */
-	private final Font createFontImpl(FontKey key) {
+	private Font createFontImpl(FontKey key) {
 		final String fontNames = key.getFontFamily();
 		final int letterSpacing = key.getLetterSpacing();
 		String matchingFace = null;
@@ -180,7 +179,7 @@ public class FontFactory {
 			fontStyle |= Font.BOLD;
 		}
 
-		final Map<TextAttribute, Object> attributes = new HashMap<TextAttribute, Object>();
+		final Map<TextAttribute, Object> attributes = new HashMap<>();
 		attributes.put(TextAttribute.TRACKING, (double) letterSpacing / 10 / 2);
 
 		if (baseFont != null) {
@@ -247,8 +246,8 @@ public class FontFactory {
 	 *                   specification.
 	 * @param fontFormat Should be {@link java.awt.Font#TRUETYPE_FONT}.
 	 * @param fontStream the font stream
-	 * @throws java.awt.FontFormatException the font format exception
-	 * @throws java.io.IOException if any.         Signals that an I/O exception has occurred.
+	 * @throws java.awt.FontFormatException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public void registerFont(String fontName, int fontFormat, InputStream fontStream)
 			throws FontFormatException, IOException {

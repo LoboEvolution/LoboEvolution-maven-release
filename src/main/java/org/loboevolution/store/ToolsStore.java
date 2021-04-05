@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.store;
 
 import java.io.Serializable;
@@ -8,14 +28,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Class ToolsStore.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ToolsStore implements Serializable {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(ToolsStore.class.getName());
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +62,7 @@ public class ToolsStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(this.DELETE_SEARCH)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -47,7 +72,7 @@ public class ToolsStore implements Serializable {
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<SearchEngineStore> getSearchEngines() {
-		final List<SearchEngineStore> searchEngineStores = new ArrayList<SearchEngineStore>();
+		final List<SearchEngineStore> searchEngineStores = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(this.SEARCH2)) {
@@ -58,11 +83,11 @@ public class ToolsStore implements Serializable {
 				se.setBaseUrl(rs.getString(3));
 				se.setQueryParameter(rs.getString(4));
 				se.setType(rs.getString(5));
-				se.setSelected(rs.getInt(6) == 1 ? true : false);
+				se.setSelected(rs.getInt(6) == 1);
 				searchEngineStores.add(se);
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return searchEngineStores;
 	}
@@ -102,7 +127,7 @@ public class ToolsStore implements Serializable {
 			pstmt.setInt(6, selected ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -125,7 +150,7 @@ public class ToolsStore implements Serializable {
 			pstmt.setString(1, name);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -137,7 +162,7 @@ public class ToolsStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(this.UPDATE_SEARCH)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

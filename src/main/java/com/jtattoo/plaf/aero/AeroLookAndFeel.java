@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.UIDefaults;
@@ -69,8 +70,8 @@ import com.jtattoo.plaf.BaseTreeUI;
 /**
  * <p>AeroLookAndFeel class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AeroLookAndFeel extends AbstractLookAndFeel {
 
@@ -78,8 +79,8 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
 
 	private static AeroDefaultTheme myTheme = null;
 
-	private static final ArrayList<String> themesList = new ArrayList<String>();
-	private static final HashMap<String, Properties> themesMap = new HashMap<String, Properties>();
+	private static final List<String> themesList = new ArrayList<>();
+	private static final Map<String, Properties> themesMap = new HashMap<>();
 	private static final Properties defaultProps = new Properties();
 	private static final Properties smallFontProps = new Properties();
 	private static final Properties largeFontProps = new Properties();
@@ -267,9 +268,9 @@ public class AeroLookAndFeel extends AbstractLookAndFeel {
 	}
 
 	/**
-	 * <p>setTheme.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param name a {@link java.lang.String} object.
+	 * <p>setTheme.</p>
 	 */
 	public static void setTheme(String name) {
 		setTheme(themesMap.get(name));

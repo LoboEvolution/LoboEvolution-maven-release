@@ -60,65 +60,65 @@ import org.jpedal.jbig2.decoders.MMRDecoder;
 /**
  * <p>Abstract Segment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class Segment {
 
-	/** Constant SYMBOL_DICTIONARY=0 */
+	/** Constant <code>SYMBOL_DICTIONARY=0</code> */
 	public static final int SYMBOL_DICTIONARY = 0;
-	/** Constant INTERMEDIATE_TEXT_REGION=4 */
+	/** Constant <code>INTERMEDIATE_TEXT_REGION=4</code> */
 	public static final int INTERMEDIATE_TEXT_REGION = 4;
-	/** Constant IMMEDIATE_TEXT_REGION=6 */
+	/** Constant <code>IMMEDIATE_TEXT_REGION=6</code> */
 	public static final int IMMEDIATE_TEXT_REGION = 6;
-	/** Constant IMMEDIATE_LOSSLESS_TEXT_REGION=7 */
+	/** Constant <code>IMMEDIATE_LOSSLESS_TEXT_REGION=7</code> */
 	public static final int IMMEDIATE_LOSSLESS_TEXT_REGION = 7;
-	/** Constant PATTERN_DICTIONARY=16 */
+	/** Constant <code>PATTERN_DICTIONARY=16</code> */
 	public static final int PATTERN_DICTIONARY = 16;
-	/** Constant INTERMEDIATE_HALFTONE_REGION=20 */
+	/** Constant <code>INTERMEDIATE_HALFTONE_REGION=20</code> */
 	public static final int INTERMEDIATE_HALFTONE_REGION = 20;
-	/** Constant IMMEDIATE_HALFTONE_REGION=22 */
+	/** Constant <code>IMMEDIATE_HALFTONE_REGION=22</code> */
 	public static final int IMMEDIATE_HALFTONE_REGION = 22;
-	/** Constant IMMEDIATE_LOSSLESS_HALFTONE_REGION=23 */
+	/** Constant <code>IMMEDIATE_LOSSLESS_HALFTONE_REGION=23</code> */
 	public static final int IMMEDIATE_LOSSLESS_HALFTONE_REGION = 23;
-	/** Constant INTERMEDIATE_GENERIC_REGION=36 */
+	/** Constant <code>INTERMEDIATE_GENERIC_REGION=36</code> */
 	public static final int INTERMEDIATE_GENERIC_REGION = 36;
-	/** Constant IMMEDIATE_GENERIC_REGION=38 */
+	/** Constant <code>IMMEDIATE_GENERIC_REGION=38</code> */
 	public static final int IMMEDIATE_GENERIC_REGION = 38;
-	/** Constant IMMEDIATE_LOSSLESS_GENERIC_REGION=39 */
+	/** Constant <code>IMMEDIATE_LOSSLESS_GENERIC_REGION=39</code> */
 	public static final int IMMEDIATE_LOSSLESS_GENERIC_REGION = 39;
-	/** Constant INTERMEDIATE_GENERIC_REFINEMENT_REGION=40 */
+	/** Constant <code>INTERMEDIATE_GENERIC_REFINEMENT_REGION=40</code> */
 	public static final int INTERMEDIATE_GENERIC_REFINEMENT_REGION = 40;
-	/** Constant IMMEDIATE_GENERIC_REFINEMENT_REGION=42 */
+	/** Constant <code>IMMEDIATE_GENERIC_REFINEMENT_REGION=42</code> */
 	public static final int IMMEDIATE_GENERIC_REFINEMENT_REGION = 42;
-	/** Constant IMMEDIATE_LOSSLESS_GENERIC_REFINEMENT_REGION=43 */
+	/** Constant <code>IMMEDIATE_LOSSLESS_GENERIC_REFINEMENT_REGION=43</code> */
 	public static final int IMMEDIATE_LOSSLESS_GENERIC_REFINEMENT_REGION = 43;
-	/** Constant PAGE_INFORMATION=48 */
+	/** Constant <code>PAGE_INFORMATION=48</code> */
 	public static final int PAGE_INFORMATION = 48;
-	/** Constant END_OF_PAGE=49 */
+	/** Constant <code>END_OF_PAGE=49</code> */
 	public static final int END_OF_PAGE = 49;
-	/** Constant END_OF_STRIPE=50 */
+	/** Constant <code>END_OF_STRIPE=50</code> */
 	public static final int END_OF_STRIPE = 50;
-	/** Constant END_OF_FILE=51 */
+	/** Constant <code>END_OF_FILE=51</code> */
 	public static final int END_OF_FILE = 51;
-	/** Constant PROFILES=52 */
+	/** Constant <code>PROFILES=52</code> */
 	public static final int PROFILES = 52;
-	/** Constant TABLES=53 */
+	/** Constant <code>TABLES=53</code> */
 	public static final int TABLES = 53;
-	/** Constant EXTENSION=62 */
+	/** Constant <code>EXTENSION=62</code> */
 	public static final int EXTENSION = 62;
-	/** Constant BITMAP=70 */
+	/** Constant <code>BITMAP=70</code> */
 	public static final int BITMAP = 70;
 
 	protected SegmentHeader segmentHeader;
 
-	protected HuffmanDecoder huffmanDecoder;
+	protected final HuffmanDecoder huffmanDecoder;
 
-	protected ArithmeticDecoder arithmeticDecoder;
+	protected final ArithmeticDecoder arithmeticDecoder;
 
-	protected MMRDecoder mmrDecoder;
+	protected final MMRDecoder mmrDecoder;
 
-	protected JBIG2StreamDecoder decoder;
+	protected final JBIG2StreamDecoder decoder;
 
 	/**
 	 * <p>Constructor for Segment.</p>
@@ -137,7 +137,7 @@ public abstract class Segment {
 			mmrDecoder = decoder.getMMRDecoder();
 			
 //		} catch (JBIG2Exception e) {
-//			e.printStackTrace();
+//			logger.log(Level.SEVERE, e.getMessage(), e);
 //		}
 	}
 
@@ -159,7 +159,7 @@ public abstract class Segment {
 	}
 
 	/**
-	 * <p>Getter for the field segmentHeader.</p>
+	 * <p>Getter for the field <code>segmentHeader</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.SegmentHeader} object.
 	 */
@@ -168,7 +168,7 @@ public abstract class Segment {
 	}
 
 	/**
-	 * <p>Setter for the field segmentHeader.</p>
+	 * <p>Setter for the field <code>segmentHeader</code>.</p>
 	 *
 	 * @param segmentHeader a {@link org.jpedal.jbig2.segment.SegmentHeader} object.
 	 */

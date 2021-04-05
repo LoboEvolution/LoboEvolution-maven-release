@@ -26,8 +26,8 @@ import java.util.List;
 /**
  * A single simple glyph in a pdf font.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GlyfCompound extends Glyf {
     /** flags */
@@ -67,7 +67,7 @@ public class GlyfCompound extends Glyf {
         // data.position(pos);
               
         // read the contour end points
-        List<GlyfComponent> comps = new ArrayList<GlyfComponent>();
+        List<GlyfComponent> comps = new ArrayList<>();
         GlyfComponent cur = null;
         boolean hasInstructions = false;
         
@@ -81,12 +81,12 @@ public class GlyfCompound extends Glyf {
                 ((cur.flags & ARGS_ARE_XY_VALUES) != 0)) {
                 cur.e = data.getShort();
                 cur.f = data.getShort();
-            } else if (!((cur.flags & ARG_1_AND_2_ARE_WORDS) != 0) &&
+            } else if ((cur.flags & ARG_1_AND_2_ARE_WORDS) == 0 &&
                         ((cur.flags & ARGS_ARE_XY_VALUES) != 0)) {
                 cur.e = data.get();
                 cur.f = data.get();
             } else if ( ((cur.flags & ARG_1_AND_2_ARE_WORDS) != 0) &&
-                       !((cur.flags & ARGS_ARE_XY_VALUES) != 0)) {
+                    (cur.flags & ARGS_ARE_XY_VALUES) == 0) {
                 cur.compoundPoint = data.getShort();
                 cur.componentPoint = data.getShort();
             } else {

@@ -11,27 +11,27 @@ import java.util.Iterator;
 /**
  * <p>NativeMap class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeMap extends IdScriptableObject {
     private static final long serialVersionUID = 1171922614280016891L;
     private static final Object MAP_TAG = "Map";
     static final String ITERATOR_TAG = "Map Iterator";
-    
+
     private static final Object NULL_VALUE = new Object();
-    
+
     private final Hashtable entries = new Hashtable();
-    
+
     private boolean instanceOfMap = false;
 
     static void init(Context cx, Scriptable scope, boolean sealed) {
         NativeMap obj = new NativeMap();
         obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, false);
-        
+
         ScriptableObject desc = (ScriptableObject) cx.newObject(scope);
-        desc.put("enumerable", desc, false);
-        desc.put("configurable", desc, true);
+        desc.put("enumerable", desc, Boolean.FALSE);
+        desc.put("configurable", desc, Boolean.TRUE);
         desc.put("get", desc, obj.get(NativeSet.GETSIZE, obj));
         obj.defineOwnProperty(cx, "size", desc);
 
@@ -65,7 +65,7 @@ public class NativeMap extends IdScriptableObject {
                     }
                     return nm;
                 }
-                throw ScriptRuntime.typeError1("msg.no.new", "Map");
+                throw ScriptRuntime.typeErrorById("msg.no.new", "Map");
             case Id_set:
                 return realThis(thisObj, f).js_set(
                     args.length > 0 ? args[0] : Undefined.instance,
@@ -103,7 +103,7 @@ public class NativeMap extends IdScriptableObject {
         Object key = k;
         if ((key instanceof Number) &&
             ((Number)key).doubleValue() == ScriptRuntime.negativeZero) {
-            key = 0.0;
+            key = ScriptRuntime.zeroObj;
         }
         entries.put(key, value);
         return this;
@@ -112,7 +112,7 @@ public class NativeMap extends IdScriptableObject {
     private Object js_delete(Object arg)
     {
         final Object e = entries.delete(arg);
-        return (e != null);
+        return Boolean.valueOf(e != null);
     }
 
     private Object js_get(Object arg)
@@ -129,12 +129,12 @@ public class NativeMap extends IdScriptableObject {
 
     private Object js_has(Object arg)
     {
-        return entries.has(arg);
+        return Boolean.valueOf(entries.has(arg));
     }
 
     private Object js_getSize()
     {
-        return entries.size();
+        return Integer.valueOf(entries.size());
     }
 
     private Object js_iterator(Scriptable scope, NativeCollectionIterator.Type type)
@@ -151,7 +151,7 @@ public class NativeMap extends IdScriptableObject {
     private Object js_forEach(Context cx, Scriptable scope, Object arg1, Object arg2)
     {
         if (!(arg1 instanceof Callable)) {
-            throw ScriptRuntime.typeError2("msg.isnt.function", arg1, ScriptRuntime.typeof(arg1));
+            throw ScriptRuntime.typeErrorById("msg.isnt.function", arg1, ScriptRuntime.typeof(arg1));
         }
         final Callable f = (Callable)arg1;
 
@@ -209,7 +209,7 @@ public class NativeMap extends IdScriptableObject {
             for (Object val : it) {
                 Scriptable sVal = ScriptableObject.ensureScriptable(val);
                 if (sVal instanceof Symbol) {
-                    throw ScriptRuntime.typeError1("msg.arg.not.object", ScriptRuntime.typeof(sVal));
+                    throw ScriptRuntime.typeErrorById("msg.arg.not.object", ScriptRuntime.typeof(sVal));
                 }
                 Object finalKey = sVal.get(0, sVal);
                 if (finalKey == NOT_FOUND) {
@@ -224,21 +224,15 @@ public class NativeMap extends IdScriptableObject {
         }
     }
 
-    private NativeMap realThis(Scriptable thisObj, IdFunctionObject f)
+    private static NativeMap realThis(Scriptable thisObj, IdFunctionObject f)
     {
-        if (thisObj == null) {
-            throw incompatibleCallError(f);
+        final NativeMap nm = ensureType(thisObj, NativeMap.class, f);
+        if (!nm.instanceOfMap) {
+            // Check for "Map internal data tag"
+            throw ScriptRuntime.typeErrorById("msg.incompat.call", f.getFunctionName());
         }
-        try {
-            final NativeMap nm = (NativeMap)thisObj;
-            if (!nm.instanceOfMap) {
-                // Check for "Map internal data tag"
-                throw incompatibleCallError(f);
-            }
-            return nm;
-        } catch (ClassCastException cce) {
-            throw incompatibleCallError(f);
-        }
+
+        return nm;
     }
 
     /** {@inheritDoc} */
@@ -300,28 +294,41 @@ public class NativeMap extends IdScriptableObject {
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2018-03-22 02:20:25 MDT
-        L0: { id = 0; String X = null; int c;
-            L: switch (s.length()) {
-            case 3: c=s.charAt(0);
-                if (c=='g') { if (s.charAt(2)=='t' && s.charAt(1)=='e') {id=Id_get; break L0;} }
-                else if (c=='h') { if (s.charAt(2)=='s' && s.charAt(1)=='a') {id=Id_has; break L0;} }
-                else if (c=='s') { if (s.charAt(2)=='t' && s.charAt(1)=='e') {id=Id_set; break L0;} }
-                break L;
-            case 4: X="keys";id=Id_keys; break L;
-            case 5: X="clear";id=Id_clear; break L;
-            case 6: c=s.charAt(0);
-                if (c=='d') { X="delete";id=Id_delete; }
-                else if (c=='v') { X="values";id=Id_values; }
-                break L;
-            case 7: c=s.charAt(0);
-                if (c=='e') { X="entries";id=Id_entries; }
-                else if (c=='f') { X="forEach";id=Id_forEach; }
-                break L;
-            case 11: X="constructor";id=Id_constructor; break L;
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:51:14 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        case "set":
+            id = Id_set;
+            break;
+        case "get":
+            id = Id_get;
+            break;
+        case "delete":
+            id = Id_delete;
+            break;
+        case "has":
+            id = Id_has;
+            break;
+        case "clear":
+            id = Id_clear;
+            break;
+        case "keys":
+            id = Id_keys;
+            break;
+        case "values":
+            id = Id_values;
+            break;
+        case "entries":
+            id = Id_entries;
+            break;
+        case "forEach":
+            id = Id_forEach;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;

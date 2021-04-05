@@ -57,31 +57,31 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>GenericRegionFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GenericRegionFlags extends Flags {
 
 	private static final Logger logger = Logger.getLogger(GenericRegionFlags.class.getName());
-	/** Constant MMR="MMR" */
-	public static String MMR = "MMR";
-	/** Constant GB_TEMPLATE="GB_TEMPLATE" */
-	public static String GB_TEMPLATE = "GB_TEMPLATE";
-	/** Constant TPGDON="TPGDON" */
-	public static String TPGDON = "TPGDON";
+	/** Constant <code>MMR="MMR"</code> */
+	public static final String MMR = "MMR";
+	/** Constant <code>GB_TEMPLATE="GB_TEMPLATE"</code> */
+	public static final String GB_TEMPLATE = "GB_TEMPLATE";
+	/** Constant <code>TPGDON="TPGDON"</code> */
+	public static final String TPGDON = "TPGDON";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 		
 		/** extract MMR */
-		flags.put(MMR, new Integer(flagsAsInt & 1));
+		flags.put(MMR, flagsAsInt & 1);
 		
 		/** extract GB_TEMPLATE */
-		flags.put(GB_TEMPLATE, new Integer((flagsAsInt >> 1) & 3));
+		flags.put(GB_TEMPLATE, (flagsAsInt >> 1) & 3);
 		
 		/** extract TPGDON */
-		flags.put(TPGDON, new Integer((flagsAsInt >> 3) & 1));
+		flags.put(TPGDON, (flagsAsInt >> 3) & 1);
 		
 		
 		if(JBIG2StreamDecoder.debug)

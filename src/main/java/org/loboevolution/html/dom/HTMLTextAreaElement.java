@@ -1,228 +1,420 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
+
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.ValidityState;
+import org.loboevolution.jsenum.Direction;
+
 /**
- * Multi-line text field. See the TEXTAREA element definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods for manipulating the layout and presentation of &lt;textarea&gt; elements.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLTextAreaElement extends HTMLElement {
-	/**
-	 * Removes keyboard focus from this element.
-	 */
-	void blur();
 
-	/**
-	 * Gives keyboard focus to this element.
-	 */
-	void focus();
+    /**
+     * <p>getAutocomplete.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAutocomplete();
 
-	/**
-	 * A single character access key to give access to the form control. See the
-	 * accesskey attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAccessKey();
+    
+    /**
+     * <p>setAutocomplete.</p>
+     *
+     * @param autocomplete a {@link java.lang.String} object.
+     */
+    void setAutocomplete(String autocomplete);
 
-	/**
-	 * Width of control (in characters). See the cols attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getCols();
+    /**
+     * Provides a way to direct a user to a specific field when a document loads. This can provide both direction and convenience for a user, reducing the need to click or tab to a field when a page opens. This attribute is true when present on an element, and false when missing.
+     *
+     * @return a boolean.
+     */
+    boolean isAutofocus();
 
-	/**
-	 * Represents the contents of the element. The value of this attribute does not
-	 * change if the contents of the corresponding form control, in an interactive
-	 * user agent, changes.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getDefaultValue();
+    
+    /**
+     * <p>setAutofocus.</p>
+     *
+     * @param autofocus a boolean.
+     */
+    void setAutofocus(boolean autofocus);
 
-	/**
-	 * The control is unavailable in this context. See the disabled attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getDisabled();
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a int.
+     */
+    int getCols();
 
-	/**
-	 * Returns the FORM element containing this control. Returns
-	 * null if this control is not within the context of a form.
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
-	 */
-	HTMLFormElement getForm();
+    
+    /**
+     * <p>setCols.</p>
+     *
+     * @param cols a int.
+     */
+    void setCols(int cols);
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    /**
+     * Sets or retrieves the initial contents of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getDefaultValue();
 
-	/**
-	 * This control is read-only. See the readonly attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getReadOnly();
+    
+    /**
+     * <p>setDefaultValue.</p>
+     *
+     * @param defaultValue a {@link java.lang.String} object.
+     */
+    void setDefaultValue(String defaultValue);
 
-	/**
-	 * Number of text rows. See the rows attribute definition in HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getRows();
+    
+    /**
+     * <p>getDirName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getDirName();
 
-	/**
-	 * Index that represents the element's position in the tabbing order. See the
-	 * tabindex attribute definition in HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getTabIndex();
+    
+    /**
+     * <p>setDirName.</p>
+     *
+     * @param dirName a {@link java.lang.String} object.
+     */
+    void setDirName(String dirName);
 
-	/**
-	 * The type of this form control. This the string "textarea".
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getType();
+    
+    /**
+     * <p>isDisabled.</p>
+     *
+     * @return a boolean.
+     */
+    boolean isDisabled();
 
-	/**
-	 * Represents the current contents of the corresponding form control, in an
-	 * interactive user agent. Changing this attribute changes the contents of the
-	 * form control, but does not change the contents of the element. If the
-	 * entirety of the data can not fit into a single DOMString, the
-	 * implementation may truncate the data.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getValue();
+    
+    /**
+     * <p>setDisabled.</p>
+     *
+     * @param disabled a boolean.
+     */
+    void setDisabled(boolean disabled);
 
-	/**
-	 * Select the contents of the TEXTAREA.
-	 */
-	void select();
+    /**
+     * Retrieves a reference to the form that the object is embedded in.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
+     */
+    HTMLFormElement getForm();
 
-	/**
-	 * A single character access key to give access to the form control. See the
-	 * accesskey attribute definition in HTML 4.01.
-	 *
-	 * @param accessKey a {@link java.lang.String} object.
-	 */
-	void setAccessKey(String accessKey);
+    
+    /**
+     * <p>getLabels.</p>
+     *
+     * @return a {@link org.loboevolution.html.node.NodeList} object.
+     */
+    NodeList getLabels();
 
-	/**
-	 * Width of control (in characters). See the cols attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param cols a int.
-	 */
-	void setCols(int cols);
+    /**
+     * Sets or retrieves the maximum number of characters that the user can enter in a text control.
+     *
+     * @return a int.
+     */
+    int getMaxLength();
 
-	/**
-	 * Represents the contents of the element. The value of this attribute does not
-	 * change if the contents of the corresponding form control, in an interactive
-	 * user agent, changes.
-	 *
-	 * @version DOM Level 2
-	 * @param defaultValue a {@link java.lang.String} object.
-	 */
-	void setDefaultValue(String defaultValue);
+    
+    /**
+     * <p>setMaxLength.</p>
+     *
+     * @param maxLength a int.
+     */
+    void setMaxLength(int maxLength);
 
-	/**
-	 * The control is unavailable in this context. See the disabled attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param disabled a boolean.
-	 */
-	void setDisabled(boolean disabled);
+    
+    /**
+     * <p>getMinLength.</p>
+     *
+     * @return a int.
+     */
+    int getMinLength();
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    
+    /**
+     * <p>setMinLength.</p>
+     *
+     * @param minLength a int.
+     */
+    void setMinLength(int minLength);
 
-	/**
-	 * This control is read-only. See the readonly attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param readOnly a boolean.
-	 */
-	void setReadOnly(boolean readOnly);
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getName();
 
-	/**
-	 * Number of text rows. See the rows attribute definition in HTML 4.01.
-	 *
-	 * @param rows a int.
-	 */
-	void setRows(int rows);
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
 
-	/**
-	 * Index that represents the element's position in the tabbing order. See the
-	 * tabindex attribute definition in HTML 4.01.
-	 *
-	 * @param tabIndex a int.
-	 */
-	void setTabIndex(int tabIndex);
+    /**
+     * Gets or sets a text string that is displayed in an input field as a hint or prompt to users as the format or type of information they need to enter.The text appears in an input field until the user puts focus on the field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getPlaceholder();
 
-	/**
-	 * Represents the current contents of the corresponding form control, in an
-	 * interactive user agent. Changing this attribute changes the contents of the
-	 * form control, but does not change the contents of the element. If the
-	 * entirety of the data can not fit into a single DOMString, the
-	 * implementation may truncate the data.
-	 *
-	 * @param value a {@link java.lang.String} object.
-	 */
-	void setValue(String value);
+    
+    /**
+     * <p>setPlaceholder.</p>
+     *
+     * @param placeholder a {@link java.lang.String} object.
+     */
+    void setPlaceholder(String placeholder);
+
+    /**
+     * Sets or retrieves the value indicated whether the content of the object is read-only.
+     *
+     * @return a boolean.
+     */
+    boolean isReadOnly();
+
+    
+    /**
+     * <p>setReadOnly.</p>
+     *
+     * @param readOnly a boolean.
+     */
+    void setReadOnly(boolean readOnly);
+
+    /**
+     * When present, marks an element that can't be submitted without a value.
+     *
+     * @return a boolean.
+     */
+    boolean isRequired();
+
+    
+    /**
+     * <p>setRequired.</p>
+     *
+     * @param required a boolean.
+     */
+    void setRequired(boolean required);
+
+    /**
+     * Sets or retrieves the number of horizontal rows contained in the object.
+     *
+     * @return a int.
+     */
+    int getRows();
+
+    
+    /**
+     * <p>setRows.</p>
+     *
+     * @param rows a int.
+     */
+    void setRows(int rows);
+
+    
+    /**
+     * <p>getSelectionDirection.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getSelectionDirection();
+
+    
+    /**
+     * <p>setSelectionDirection.</p>
+     *
+     * @param selectionDirection a {@link java.lang.String} object.
+     */
+    void setSelectionDirection(String selectionDirection);
+
+    /**
+     * Gets or sets the end position or offset of a text selection.
+     *
+     * @return a int.
+     */
+    int getSelectionEnd();
+
+    
+    /**
+     * <p>setSelectionEnd.</p>
+     *
+     * @param selectionEnd a int.
+     */
+    void setSelectionEnd(int selectionEnd);
+
+    /**
+     * Gets or sets the starting position or offset of a text selection.
+     *
+     * @return a int.
+     */
+    int getSelectionStart();
+
+    
+    /**
+     * <p>setSelectionStart.</p>
+     *
+     * @param selectionStart a int.
+     */
+    void setSelectionStart(int selectionStart);
+
+    
+    /**
+     * <p>getTextLength.</p>
+     *
+     * @return a int.
+     */
+    int getTextLength();
+
+    /**
+     * Retrieves the type of control.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getType();
+
+    /**
+     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getValidationMessage();
+
+    /**
+     * Returns a  ValidityState object that represents the validity states of an element.
+     *
+     * @return a {@link org.loboevolution.html.node.ValidityState} object.
+     */
+    ValidityState getValidity();
+
+    /**
+     * Retrieves or sets the text in the entry field of the textArea element.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getValue();
+
+    
+    /**
+     * <p>setValue.</p>
+     *
+     * @param value a {@link java.lang.String} object.
+     */
+    void setValue(String value);
+
+    /**
+     * Returns whether an element will successfully validate based on forms validation rules and constraints.
+     *
+     * @return a boolean.
+     */
+    boolean isWillValidate();
+
+    /**
+     * Sets or retrieves how to handle wordwrapping in the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getWrap();
+
+    
+    /**
+     * <p>setWrap.</p>
+     *
+     * @param wrap a {@link java.lang.String} object.
+     */
+    void setWrap(String wrap);
+
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * @return a boolean.
+     */
+    boolean checkValidity();
+
+    /**
+     * <p>reportValidity.</p>
+     *
+     * @return a boolean.
+     */
+    boolean reportValidity();
+
+    /**
+     * Highlights the input area of a form element.
+     */
+    void select();
+
+    /**
+     * Sets a custom error message that is displayed when a form is submitted.
+     *
+     * @param error Sets a custom error message that is displayed when a form is submitted.
+     */
+    void setCustomValidity(String error);
+
+    /**
+     * <p>setRangeText.</p>
+     *
+     * @param replacement a {@link java.lang.String} object.
+     */
+    void setRangeText(String replacement);
+
+    /**
+     * <p>setRangeText.</p>
+     *
+     * @param replacement a {@link java.lang.String} object.
+     * @param start a int.
+     * @param end a int.
+     */
+    void setRangeText(String replacement, int start, int end);
+
+    /**
+     * Sets the start and end positions of a selection in a text field.
+     *
+     * @param start     The offset into the text field for the start of the selection.
+     * @param end       The offset into the text field for the end of the selection.
+     * @param direction The direction in which the selection is performed.
+     */
+    void setSelectionRange(int start, int end, Direction direction);
+
+    /**
+     * <p>setSelectionRange.</p>
+     *
+     * @param start a int.
+     * @param end a int.
+     */
+    void setSelectionRange(int start, int end);
 
 }

@@ -13,7 +13,7 @@ import org.loboevolution.pdfview.font.ttf.AdobeGlyphList;
  * toUnicode map to translate the characters if available.
  *
  * @version $Id: CIDFontType0.java,v 1.1 2011-08-03 15:48:56 bros Exp $
- * @author  Bernd Rosstauscher
+ * Author  Bernd Rosstauscher
  * @since 03.08.2011
  ***************************************************************************
  */
@@ -29,7 +29,6 @@ public class CIDFontType0 extends BuiltinFont {
 	 * @param fontObj a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param descriptor a {@link org.loboevolution.pdfview.font.PDFFontDescriptor} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public CIDFontType0(String baseFont, PDFObject fontObj,
 			PDFFontDescriptor descriptor) throws IOException {
@@ -41,7 +40,6 @@ public class CIDFontType0 extends BuiltinFont {
 	 *
 	 * @param fontObj a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 */
 	public void parseToUnicodeMap(PDFObject fontObj) throws IOException {
 		PDFObject toUnicode = fontObj.getDictRef("ToUnicode");

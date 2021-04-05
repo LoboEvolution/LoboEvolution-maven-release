@@ -1,47 +1,67 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.clear;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import org.loboevolution.gui.CheckBoxPanel;
+import com.jtattoo.plaf.lobo.LoboCheckBox;
 
 /**
  * <p>ClearDataAction class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ClearDataAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
 
-	/** The bookmark panel. */
-	private final CheckBoxPanel bookmarkPanel;
+	/** The bookmark . */
+	private final LoboCheckBox bookmark;
 
-	/** The cache panel. */
-	private final CheckBoxPanel cachePanel;
+	/** The cache . */
+	private final LoboCheckBox cache;
 
-	/** The cookie panel. */
-	private final CheckBoxPanel cookiePanel;
+	/** The cookie . */
+	private final LoboCheckBox cookie;
 
-	/** The navigation panel. */
-	private final CheckBoxPanel navigationPanel;
+	/** The navigation . */
+	private final LoboCheckBox navigation;
 
 	/**
 	 * <p>Constructor for ClearDataAction.</p>
 	 *
-	 * @param cachePanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
-	 * @param cookiePanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
-	 * @param navigationPanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
-	 * @param bookmarkPanel a {@link org.loboevolution.gui.CheckBoxPanel} object.
+	 * @param cache a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
+	 * @param cookie a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
+	 * @param navigation a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
+	 * @param bookmark a {@link com.jtattoo.plaf.lobo.LoboCheckBox} object.
 	 */
-	public ClearDataAction(CheckBoxPanel cachePanel, CheckBoxPanel cookiePanel, CheckBoxPanel navigationPanel,
-			CheckBoxPanel bookmarkPanel) {
-		this.cachePanel = cachePanel;
-		this.cookiePanel = cookiePanel;
-		this.navigationPanel = navigationPanel;
-		this.bookmarkPanel = bookmarkPanel;
+	public ClearDataAction(LoboCheckBox cache, LoboCheckBox cookie, LoboCheckBox navigation,
+			LoboCheckBox bookmark) {
+		this.cache = cache;
+		this.cookie = cookie;
+		this.navigation = navigation;
+		this.bookmark = bookmark;
 	}
 
 	/** {@inheritDoc} */
@@ -50,19 +70,19 @@ public class ClearDataAction extends AbstractAction {
 
 		final ClearHistory ch = new ClearHistory();
 
-		if (this.cachePanel.isSelected()) {
+		if (this.cache.isSelected()) {
 			ch.clearCache();
 		}
 
-		if (this.cookiePanel.isSelected()) {
+		if (this.cookie.isSelected()) {
 			ch.clearCookies();
 		}
 
-		if (this.navigationPanel.isSelected()) {
+		if (this.navigation.isSelected()) {
 			ch.clearNavigation();
 		}
 
-		if (this.bookmarkPanel.isSelected()) {
+		if (this.bookmark.isSelected()) {
 			ch.clearBookmarks();
 		}
 	}

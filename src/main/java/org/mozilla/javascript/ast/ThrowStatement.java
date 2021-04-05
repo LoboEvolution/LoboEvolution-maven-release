@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>ThrowStatement</i> :
  *      <b>throw</b> [<i>no LineTerminator here</i>] Expression ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ThrowStatement extends AstNode {
 

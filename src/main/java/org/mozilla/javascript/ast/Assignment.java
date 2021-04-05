@@ -10,8 +10,8 @@ package org.mozilla.javascript.ast;
  * AST node representing the set of assignment operators such as {@code =},
  * {@code *=} and {@code +=}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Assignment extends InfixExpression {
 

@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
  * The base class for TrueType tables.  Specific tables can extend this
  * to add more functionality
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class TrueTypeTable {
 
@@ -32,26 +32,26 @@ public class TrueTypeTable {
      * Well known tables
      */
     public static final int CMAP_TABLE = 0x636d6170;
-    /** Constant GLYF_TABLE=0x676c7966 */
+    /** Constant <code>GLYF_TABLE=0x676c7966</code> */
     public static final int GLYF_TABLE = 0x676c7966;
-    /** Constant HEAD_TABLE=0x68656164 */
+    /** Constant <code>HEAD_TABLE=0x68656164</code> */
     public static final int HEAD_TABLE = 0x68656164;
-    /** Constant HHEA_TABLE=0x68686561 */
+    /** Constant <code>HHEA_TABLE=0x68686561</code> */
     public static final int HHEA_TABLE = 0x68686561;
-    /** Constant HMTX_TABLE=0x686d7478 */
+    /** Constant <code>HMTX_TABLE=0x686d7478</code> */
     public static final int HMTX_TABLE = 0x686d7478;
-    /** Constant MAXP_TABLE=0x6d617870 */
+    /** Constant <code>MAXP_TABLE=0x6d617870</code> */
     public static final int MAXP_TABLE = 0x6d617870;
-    /** Constant NAME_TABLE=0x6e616d65 */
+    /** Constant <code>NAME_TABLE=0x6e616d65</code> */
     public static final int NAME_TABLE = 0x6e616d65;
-    /** Constant POST_TABLE=0x706f7374 */
+    /** Constant <code>POST_TABLE=0x706f7374</code> */
     public static final int POST_TABLE = 0x706f7374;
-    /** Constant LOCA_TABLE=0x6c6f6361 */
+    /** Constant <code>LOCA_TABLE=0x6c6f6361</code> */
     public static final int LOCA_TABLE = 0x6c6f6361;
     /**
      * This table's tag
      */
-    private int tag;
+    private final int tag;
     /**
      * The data in this table, in ByteBuffer form
      */
@@ -60,7 +60,7 @@ public class TrueTypeTable {
     /**
      * Creates a new instance of TrueTypeTable.
      *
-     * This method is protected.  Use the getTable() methods
+     * This method is protected.  Use the <code>getTable()</code> methods
      * to get new instances.
      *
      * @param tag the tag for this table

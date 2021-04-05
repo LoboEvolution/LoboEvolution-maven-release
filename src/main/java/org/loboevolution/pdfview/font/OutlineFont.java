@@ -27,8 +27,8 @@ import org.loboevolution.pdfview.PDFObject;
 /**
  * Supports width operations for Type1, Type1C, TrueType and Type3 fonts
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class OutlineFont extends PDFFont {
 

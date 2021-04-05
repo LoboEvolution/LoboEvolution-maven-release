@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.dom.domimpl;
 
 import java.util.HashMap;
@@ -26,11 +25,11 @@ import java.util.Map;
 
 import org.loboevolution.html.HTMLTag;
 import org.loboevolution.html.dom.HTMLElement;
-import org.w3c.dom.DOMException;
+
 
 class ElementFactory {
 	
-	private final Map<HTMLTag, HTMLElementBuilder> builders = new HashMap<HTMLTag, HTMLElementBuilder>();
+	private final Map<HTMLTag, HTMLElementBuilder> builders = new HashMap<>();
 
 	/**
 	 * <p>Constructor for ElementFactory.</p>
@@ -68,6 +67,11 @@ class ElementFactory {
 		builders.put(HTMLTag.TD, new HTMLElementBuilder.Td());
 		builders.put(HTMLTag.TH, new HTMLElementBuilder.Th());
 		builders.put(HTMLTag.TR, new HTMLElementBuilder.Tr());
+		builders.put(HTMLTag.TFOOT, new HTMLElementBuilder.TFoot());
+		builders.put(HTMLTag.THEAD, new HTMLElementBuilder.THead());
+		builders.put(HTMLTag.TBODY, new HTMLElementBuilder.TBody());
+		builders.put(HTMLTag.COL, new HTMLElementBuilder.Col());
+		
 		builders.put(HTMLTag.FORM, new HTMLElementBuilder.Form());
 		builders.put(HTMLTag.INPUT, new HTMLElementBuilder.Input());
 		builders.put(HTMLTag.BUTTON, new HTMLElementBuilder.Button());
@@ -147,9 +151,9 @@ class ElementFactory {
 	 * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	public final HTMLElement createElement(HTMLDocumentImpl document, String name) throws DOMException {
+	public final HTMLElement createElement(HTMLDocumentImpl document, String name) {
 	    final String normalName = name.toUpperCase(Locale.ENGLISH);
-		final HTMLElementBuilder builder = (HTMLElementBuilder) this.builders.get(HTMLTag.get(normalName));
+		final HTMLElementBuilder builder = this.builders.get(HTMLTag.get(normalName));
 		if (builder == null) {
 			final HTMLElementImpl element = new HTMLElementImpl(name);
 			element.setOwnerDocument(document);

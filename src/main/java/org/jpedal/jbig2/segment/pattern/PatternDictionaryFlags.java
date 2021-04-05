@@ -57,26 +57,26 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>PatternDictionaryFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PatternDictionaryFlags extends Flags {
 	
 	private static final Logger logger = Logger.getLogger(PatternDictionaryFlags.class.getName());
-	/** Constant HD_MMR="HD_MMR" */
-	public static String HD_MMR = "HD_MMR";
-	/** Constant HD_TEMPLATE="HD_TEMPLATE" */
-	public static String HD_TEMPLATE = "HD_TEMPLATE";
+	/** Constant <code>HD_MMR="HD_MMR"</code> */
+	public static final String HD_MMR = "HD_MMR";
+	/** Constant <code>HD_TEMPLATE="HD_TEMPLATE"</code> */
+	public static final String HD_TEMPLATE = "HD_TEMPLATE";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 
 		/** extract HD_MMR */
-		flags.put(HD_MMR, new Integer(flagsAsInt & 1));
+		flags.put(HD_MMR, flagsAsInt & 1);
 
 		/** extract HD_TEMPLATE */
-		flags.put(HD_TEMPLATE, new Integer((flagsAsInt >> 1) & 3));
+		flags.put(HD_TEMPLATE, (flagsAsInt >> 1) & 3);
 
 		if (JBIG2StreamDecoder.debug)
 			logger.info("flags: " + flags);

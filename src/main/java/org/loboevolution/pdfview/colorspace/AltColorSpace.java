@@ -9,15 +9,15 @@ import org.loboevolution.pdfview.function.PDFFunction;
  * Color Space implementation for handling the PDF AlternateColorSpace.
  * A PDF function is applied to colorvalues before converting.
  *
- * @author  Katja Sondermann
+ * Author  Katja Sondermann
  * @since 06.01.2011
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class AltColorSpace extends ColorSpace {
 
-	private PDFFunction fkt;
-	private ColorSpace origCs;
+	private final PDFFunction fkt;
+	private final ColorSpace origCs;
 	/**
 	 * Create a new CMYKColorSpace Instance.
 	 *

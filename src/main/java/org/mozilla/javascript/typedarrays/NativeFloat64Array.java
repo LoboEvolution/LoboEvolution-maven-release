@@ -16,8 +16,8 @@ import org.mozilla.javascript.Undefined;
  * An array view that stores 64-bit quantities and implements the JavaScript "Float64Array" interface.
  * It also implements List&lt;Double&gt; for direct manipulation in Java.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeFloat64Array
     extends NativeTypedArrayView<Double>
@@ -53,7 +53,7 @@ public class NativeFloat64Array
      */
     public NativeFloat64Array(int len)
     {
-        this(new NativeArrayBuffer(len * BYTES_PER_ELEMENT), 0, len);
+        this(new NativeArrayBuffer((double)len * BYTES_PER_ELEMENT), 0, len);
     }
 
     /** {@inheritDoc} */
@@ -94,10 +94,7 @@ public class NativeFloat64Array
     @Override
     protected NativeFloat64Array realThis(Scriptable thisObj, IdFunctionObject f)
     {
-        if (!(thisObj instanceof NativeFloat64Array)) {
-            throw incompatibleCallError(f);
-        }
-        return (NativeFloat64Array)thisObj;
+        return ensureType(thisObj, NativeFloat64Array.class, f);
     }
 
     /** {@inheritDoc} */
@@ -108,7 +105,7 @@ public class NativeFloat64Array
             return Undefined.instance;
         }
         long base = ByteIo.readUint64Primitive(arrayBuffer.buffer, (index * BYTES_PER_ELEMENT) + offset, useLittleEndian());
-        return Double.longBitsToDouble(base);
+        return Double.valueOf(Double.longBitsToDouble(base));
     }
 
     /** {@inheritDoc} */

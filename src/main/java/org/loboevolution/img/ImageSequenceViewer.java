@@ -1,9 +1,31 @@
+/*
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
+ */
+
 package org.loboevolution.img;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -16,8 +38,8 @@ import javax.swing.JPanel;
  * called. Subclasses should override this method to update the image according
  * to the new position.
  *
- * @author Kaz Csaba
- * @version $Id: $Id
+ * Author Kaz Csaba
+ *
  */
 public class ImageSequenceViewer {
 
@@ -26,11 +48,11 @@ public class ImageSequenceViewer {
 	private JButton forwardButton, backwardButton;
 	private JLabel locationLabel;
 
-	private JPanel panel = new JPanel(new BorderLayout()) {
+	private final JPanel panel = new JPanel(new BorderLayout()) {
 		private static final long serialVersionUID = 1L;
 
 		/**
-		 * Overridden to call {@link #positionChanged()}.
+		 * Overridden to call .
 		 */
 		@Override
 		public void addNotify() {
@@ -82,23 +104,9 @@ public class ImageSequenceViewer {
 		locationPanel.add(createLocationDefinition());
 		locationPanel.add(forwardButton);
 
-		forwardButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setPosition(position + 1);
-			}
-		});
-		backwardButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setPosition(position - 1);
-			}
-		});
-
+		forwardButton.addActionListener(e -> setPosition(position + 1));
+		backwardButton.addActionListener(e -> setPosition(position - 1));
 		panel.add(locationPanel, BorderLayout.NORTH);
-
 		setPosition(position);
 	}
 

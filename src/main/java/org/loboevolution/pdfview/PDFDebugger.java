@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -15,50 +15,50 @@ import javax.imageio.ImageIO;
 /**
  * <p>PDFDebugger class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PDFDebugger {
 	
 	private static final Logger logger = Logger.getLogger(PDFDebugger.class.getName());
-    /** Constant DEBUG_DCTDECODE_DATA="debugdctdecode" */
+    /** Constant <code>DEBUG_DCTDECODE_DATA="debugdctdecode"</code> */
     public final static String DEBUG_DCTDECODE_DATA = "debugdctdecode";
-    /** Constant DEBUG_TEXT=false */
+    /** Constant <code>DEBUG_TEXT=false</code> */
     public static final boolean DEBUG_TEXT = false;
-    /** Constant DEBUG_IMAGES=false */
+    /** Constant <code>DEBUG_IMAGES=false</code> */
     public static final boolean DEBUG_IMAGES = false;
-    /** Constant DEBUG_OPERATORS=false */
+    /** Constant <code>DEBUG_OPERATORS=false</code> */
     public static final boolean DEBUG_OPERATORS = false;
-    /** Constant DEBUG_PATH=false */
+    /** Constant <code>DEBUG_PATH=false</code> */
     public static final boolean DEBUG_PATH = false;
-    /** Constant DEBUG_STOP_AT_INDEX=0 */
+    /** Constant <code>DEBUG_STOP_AT_INDEX=0</code> */
     public static final int DEBUG_STOP_AT_INDEX = 0;
-    /** Constant DISABLE_TEXT=false */
+    /** Constant <code>DISABLE_TEXT=false</code> */
     public static final boolean DISABLE_TEXT = false;
-    /** Constant DISABLE_IMAGES=false */
+    /** Constant <code>DISABLE_IMAGES=false</code> */
     public static final boolean DISABLE_IMAGES = false;
-    /** Constant DISABLE_PATH_STROKE=false */
+    /** Constant <code>DISABLE_PATH_STROKE=false</code> */
     public static final boolean DISABLE_PATH_STROKE = false;
-    /** Constant DISABLE_PATH_FILL=false */
+    /** Constant <code>DISABLE_PATH_FILL=false</code> */
     public static final boolean DISABLE_PATH_FILL = false;
-    /** Constant DISABLE_PATH_STROKE_FILL=false */
+    /** Constant <code>DISABLE_PATH_STROKE_FILL=false</code> */
     public static final boolean DISABLE_PATH_STROKE_FILL = false;
-    /** Constant DISABLE_CLIP=false */
+    /** Constant <code>DISABLE_CLIP=false</code> */
     public static final boolean DISABLE_CLIP = false;
-    /** Constant DISABLE_FORMS=false */
+    /** Constant <code>DISABLE_FORMS=false</code> */
     public static final boolean DISABLE_FORMS = false;
-    /** Constant DISABLE_SHADER=false */
+    /** Constant <code>DISABLE_SHADER=false</code> */
     public static final boolean DISABLE_SHADER = false;
-    /** Constant SHOW_TEXT_REGIONS=false */
+    /** Constant <code>SHOW_TEXT_REGIONS=false</code> */
     public static final boolean SHOW_TEXT_REGIONS = false;
-    /** Constant SHOW_TEXT_ANCHOR=false */
+    /** Constant <code>SHOW_TEXT_ANCHOR=false</code> */
     public static final boolean SHOW_TEXT_ANCHOR = false;
-    /** Constant DISABLE_THUMBNAILS=false */
+    /** Constant <code>DISABLE_THUMBNAILS=false</code> */
     public static final boolean DISABLE_THUMBNAILS = false;
-    /** Constant DRAW_DELAY=0 */
+    /** Constant <code>DRAW_DELAY=0</code> */
     public static final long DRAW_DELAY = 0;
 
-    /** Constant debuglevel=4000 */
+    /** Constant <code>debuglevel=4000</code> */
     public static int debuglevel = 4000;
 
     @SuppressWarnings("serial")
@@ -200,7 +200,7 @@ public class PDFDebugger {
         if (obj == null) {
             return;
         }
-        HashMap<String, PDFObject> dict = obj.getDictionary();
+        Map<String, PDFObject> dict = obj.getDictionary();
         PDFDebugger.debug("   dict = " + dict);
         for (Object key : dict.keySet()) {
             PDFDebugger.debug("key = " + key + " value = " + dict.get(key));

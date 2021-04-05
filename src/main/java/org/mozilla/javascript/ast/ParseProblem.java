@@ -9,8 +9,8 @@ package org.mozilla.javascript.ast;
 /**
  * Encapsulates information for a JavaScript parse error or warning.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ParseProblem {
 
@@ -41,7 +41,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Getter for the field type.</p>
+     * <p>Getter for the field <code>type</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.ParseProblem.Type} object.
      */
@@ -50,7 +50,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Setter for the field type.</p>
+     * <p>Setter for the field <code>type</code>.</p>
      *
      * @param type a {@link org.mozilla.javascript.ast.ParseProblem.Type} object.
      */
@@ -59,7 +59,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Getter for the field message.</p>
+     * <p>Getter for the field <code>message</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
@@ -68,7 +68,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Setter for the field message.</p>
+     * <p>Setter for the field <code>message</code>.</p>
      *
      * @param msg a {@link java.lang.String} object.
      */
@@ -77,7 +77,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Getter for the field sourceName.</p>
+     * <p>Getter for the field <code>sourceName</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
@@ -86,7 +86,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Setter for the field sourceName.</p>
+     * <p>Setter for the field <code>sourceName</code>.</p>
      *
      * @param name a {@link java.lang.String} object.
      */
@@ -113,7 +113,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Getter for the field length.</p>
+     * <p>Getter for the field <code>length</code>.</p>
      *
      * @return a int.
      */
@@ -122,7 +122,7 @@ public class ParseProblem {
     }
 
     /**
-     * <p>Setter for the field length.</p>
+     * <p>Setter for the field <code>length</code>.</p>
      *
      * @param length a int.
      */

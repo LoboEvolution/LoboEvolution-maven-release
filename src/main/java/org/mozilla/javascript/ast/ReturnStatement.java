@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>ReturnStatement</i> :
  *      <b>return</b> [<i>no LineTerminator here</i>] [Expression] ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ReturnStatement extends AstNode {
 

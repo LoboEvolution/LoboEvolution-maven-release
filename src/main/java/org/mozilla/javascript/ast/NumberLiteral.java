@@ -11,8 +11,8 @@ import org.mozilla.javascript.Token;
 /**
  * AST node for a Number literal. Node type is {@link org.mozilla.javascript.Token#NUMBER}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NumberLiteral extends AstNode {
 

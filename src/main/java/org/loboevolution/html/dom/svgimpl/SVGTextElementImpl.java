@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.Font;
@@ -11,8 +31,8 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Path2D;
 import java.util.StringTokenizer;
 
-import org.loboevolution.common.Nodes;
 import org.loboevolution.common.Strings;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.dom.svg.SVGAnimatedEnumeration;
 import org.loboevolution.html.dom.svg.SVGAnimatedLength;
 import org.loboevolution.html.dom.svg.SVGAnimatedNumberList;
@@ -20,15 +40,14 @@ import org.loboevolution.html.dom.svg.SVGMatrix;
 import org.loboevolution.html.dom.svg.SVGPoint;
 import org.loboevolution.html.dom.svg.SVGRect;
 import org.loboevolution.html.dom.svg.SVGTextElement;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+import org.loboevolution.html.node.NodeType;
 
 /**
  * <p>SVGTextElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 
@@ -102,7 +121,7 @@ public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 
 	/** {@inheritDoc} */
 	@Override
-	public float getSubStringLength(int charnum, int nchars) throws DOMException {
+	public float getSubStringLength(int charnum, int nchars) {
 		String text = getText();
 		text = text.substring(charnum, nchars);
 		return text.length();
@@ -110,28 +129,28 @@ public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGPoint getStartPositionOfChar(int charnum) throws DOMException {
+	public SVGPoint getStartPositionOfChar(int charnum) {
 		// TODO Auto-generated method stub
 		return new SVGPointImpl();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGPoint getEndPositionOfChar(int charnum) throws DOMException {
+	public SVGPoint getEndPositionOfChar(int charnum) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGRect getExtentOfChar(int charnum) throws DOMException {
+	public SVGRect getExtentOfChar(int charnum) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public float getRotationOfChar(int charnum) throws DOMException {
+	public float getRotationOfChar(int charnum) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -145,7 +164,7 @@ public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 
 	/** {@inheritDoc} */
 	@Override
-	public void selectSubString(int charnum, int nchars) throws DOMException {
+	public void selectSubString(int charnum, int nchars) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -199,18 +218,18 @@ public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 	}
 	
 	private String getText() {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		String xmlSpace = getXMLspace();
 		if (Strings.isNotBlank(xmlSpace)) {
-			xmlSpace = "default";
+			setXMLspace("default");
 		}
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
-				if (child.getNodeType() == Node.TEXT_NODE) {
+			NodeListImpl children = (NodeListImpl)getChildNodes();
+			children.forEach(child -> {
+				if (child.getNodeType() == NodeType.TEXT_NODE) {
 					String nodeValue = child.getNodeValue();
-					String childText = "";
-					if ("default".equals(xmlSpace)) {
+					StringBuilder childText = new StringBuilder();
+					if ("default".equals(getXMLspace())) {
 						int newLineIndex = nodeValue.indexOf('\n');
 						while (newLineIndex != -1) {
 							nodeValue = nodeValue.substring(0, newLineIndex) + nodeValue.substring(newLineIndex + 1);
@@ -225,23 +244,23 @@ public class SVGTextElementImpl extends SVGGraphic implements SVGTextElement {
 						nodeValue = nodeValue.replace('\t', ' ');
 						StringTokenizer st = new StringTokenizer(nodeValue);
 						while (st.hasMoreTokens()) {
-							childText += st.nextToken() + " ";
+							childText.append(st.nextToken()).append(" ");
 						}
-						childText = childText.trim();
+						childText = new StringBuilder(childText.toString().trim());
 					} else {
 						nodeValue = nodeValue.replace('\n', ' ');
 						nodeValue = nodeValue.replace('\r', ' ');
 						nodeValue = nodeValue.replace('\t', ' ');
-						childText = nodeValue;
+						childText = new StringBuilder(nodeValue);
 					}
-					text += childText + " ";
+					text.append(childText).append(" ");
 				}
-			}
+			});
 		}
 		if (text.length() > 0) {
 			return text.substring(0, text.length() - 1);
 		} else {
-			return text;
+			return text.toString();
 		}
 	}
 }

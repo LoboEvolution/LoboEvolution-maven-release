@@ -39,13 +39,13 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AeroInternalFrameTitlePane class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AeroInternalFrameTitlePane extends BaseInternalFrameTitlePane {
 
 	// ------------------------------------------------------------------------------
-	private class TitleButton extends BaseTitleButton {
+	private static class TitleButton extends BaseTitleButton {
 
 		private static final long serialVersionUID = 1L;
 
@@ -60,7 +60,7 @@ public class AeroInternalFrameTitlePane extends BaseInternalFrameTitlePane {
 			boolean isRollover = getModel().isRollover();
 			int width = getWidth();
 			int height = getHeight();
-			Color colors[] = AbstractLookAndFeel.getTheme().getButtonColors();
+			Color[] colors = AbstractLookAndFeel.getTheme().getButtonColors();
 			if (isRollover) {
 				colors = AbstractLookAndFeel.getTheme().getRolloverColors();
 			}

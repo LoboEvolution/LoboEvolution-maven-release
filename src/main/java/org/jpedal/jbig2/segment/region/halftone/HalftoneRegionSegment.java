@@ -49,6 +49,9 @@
 */
 package org.jpedal.jbig2.segment.region.halftone;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.jpedal.jbig2.JBIG2Exception;
 import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 import org.jpedal.jbig2.image.JBIG2Bitmap;
@@ -59,21 +62,18 @@ import org.jpedal.jbig2.segment.region.RegionFlags;
 import org.jpedal.jbig2.segment.region.RegionSegment;
 import org.jpedal.jbig2.util.BinaryOperation;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * <p>HalftoneRegionSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class HalftoneRegionSegment extends RegionSegment {
 	
 	private static final Logger logger = Logger.getLogger(HalftoneRegionSegment.class.getName());
-	private HalftoneRegionFlags halftoneRegionFlags = new HalftoneRegionFlags();
+	private final HalftoneRegionFlags halftoneRegionFlags = new HalftoneRegionFlags();
 
-	private boolean inlineImage;
+	private final boolean inlineImage;
 
 	/**
 	 * <p>Constructor for HalftoneRegionSegment.</p>
@@ -258,7 +258,7 @@ public class HalftoneRegionSegment extends RegionSegment {
 	}
 
 	/**
-	 * <p>Getter for the field halftoneRegionFlags.</p>
+	 * <p>Getter for the field <code>halftoneRegionFlags</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.region.halftone.HalftoneRegionFlags} object.
 	 */

@@ -1,8 +1,16 @@
 package org.loboevolution.pdfview.font.ttf;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Build an object which provides access to all the Adobe glyph names, using
@@ -50,15 +58,20 @@ import java.util.*;
  *#            (1) glyph name
  *#            (2) Unicode scalar value
  *
- * @author tomoke
- * @version $Id: $Id
+ * Author tomoke
+  *
  */
 public class AdobeGlyphList {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(AdobeGlyphList.class.getName());
 
     /** provide a translation from a glyph name to the possible unicode values. */
-    static private HashMap<String, int[]> glyphToUnicodes;
+    static private Map<String, int[]> glyphToUnicodes;
+
     /** provide a translation from a unicode value to a glyph name. */
-    static private HashMap<Integer, String> unicodeToGlyph;
+    static private Map<Integer, String> unicodeToGlyph;
+
     /** the loader thread we are reading through. */
     static Thread glyphLoaderThread = null;
 
@@ -74,8 +87,8 @@ public class AdobeGlyphList {
      * into the tables.</p>
      */
 	private AdobeGlyphList() {
-		glyphToUnicodes = new HashMap<String, int[]>(4500);
-		unicodeToGlyph = new HashMap<Integer, String>(4500);
+		glyphToUnicodes = new HashMap<>(4500);
+		unicodeToGlyph = new HashMap<>(4500);
 		glyphLoaderThread = new Thread(new Runnable() {
 
 			@Override
@@ -84,7 +97,7 @@ public class AdobeGlyphList {
 				StringTokenizer codeTokens;
 				String glyphName;
 				StringTokenizer tokens;
-				ArrayList<String> unicodes = new ArrayList<String>();
+				ArrayList<String> unicodes = new ArrayList<>();
 				URL resource = getClass().getResource("/org/loboevolution/pdfview/font/ttf/resource/glyphlist.txt");
 				try (InputStream istr = resource.openStream()) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(istr));
@@ -108,7 +121,7 @@ public class AdobeGlyphList {
 								codes = new int[unicodes.size()];
 								for (int i = 0; i < unicodes.size(); i++) {
 									codes[i] = Integer.parseInt(unicodes.get(i), 16);
-									unicodeToGlyph.put(Integer.valueOf(codes[i]), glyphName);
+									unicodeToGlyph.put(codes[i], glyphName);
 								}
 								glyphToUnicodes.put(glyphName, codes);
 							}
@@ -118,7 +131,7 @@ public class AdobeGlyphList {
 						}
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 			}
 		}, "Adobe Glyph Loader Thread");
@@ -159,7 +172,7 @@ public class AdobeGlyphList {
         if (unicodes == null) {
             return null;
         } else {
-            return Integer.valueOf(unicodes[0]);
+            return unicodes[0];
         }
     }
 
@@ -180,6 +193,6 @@ public class AdobeGlyphList {
                 }
             }
         }
-        return unicodeToGlyph.get(Integer.valueOf(unicode));
+        return unicodeToGlyph.get(unicode);
     }
 }

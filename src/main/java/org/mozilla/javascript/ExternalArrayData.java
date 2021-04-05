@@ -9,8 +9,8 @@ package org.mozilla.javascript;
 /**
  * Implement this interface in order to allow external data to be attached to a ScriptableObject.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface ExternalArrayData
 {

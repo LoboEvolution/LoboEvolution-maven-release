@@ -22,26 +22,23 @@ import java.awt.Font;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Map;
 import java.util.Properties;
 
 import org.loboevolution.pdfview.PDFObject;
-import org.loboevolution.pdfview.colorspace.PDFColorSpace;
 
 /**
  * This class represents the 14 built-in fonts.  It reads these fonts
  * from files in the "res" directory, as specified in
  * BaseNames.properties.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class BuiltinFont extends Type1Font {
 
     /** the properties file */
     private static Properties props;
-    /** the fonts themselves */
-    private static Map fonts;
+    
     /** the names of the 14 base fonts */
     private static final String[] baseFonts = {
         "Courier", "Courier-Bold", "Courier-BoldOblique", "Courier-Oblique",
@@ -49,6 +46,7 @@ public class BuiltinFont extends Type1Font {
         "Helvetica-Oblique", "Times-Roman", "Times-Bold", "Times-BoldItalic",
         "Times-Italic", "Symbol", "ZapfDingbats"
     };
+   
     /** fonts others (e.g. Acrobad PDFWriter 3.02 for Windows) assume
      *  are there, even though they're not in the spec.  Grrr...
      *
@@ -119,8 +117,8 @@ public class BuiltinFont extends Type1Font {
         String fontName = descriptor.getFontName();
 
         // check if it's one of the 14 base fonts
-        for (int i = 0; i < baseFonts.length; i++) {
-            if (fontName.equalsIgnoreCase(baseFonts[i])) {
+        for (String bsFont : baseFonts) {
+            if (fontName.equalsIgnoreCase(bsFont)) {
                 parseFont(fontName);
                 return;
             }

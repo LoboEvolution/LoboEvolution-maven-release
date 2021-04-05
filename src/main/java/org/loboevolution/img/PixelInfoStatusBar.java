@@ -1,16 +1,37 @@
+/*
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
+ */
+
 package org.loboevolution.img;
 
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.loboevolution.common.Objects;
@@ -23,8 +44,8 @@ import org.loboevolution.common.Objects;
  * {@link #updateLabel(java.awt.image.BufferedImage, int, int, int)} to
  * customize this information.
  *
- * @author Kazo Csaba
- * @version $Id: $Id
+ * Author Kazo Csaba
+ *
  */
 public class PixelInfoStatusBar extends StatusBar {
 
@@ -36,21 +57,9 @@ public class PixelInfoStatusBar extends StatusBar {
 
 	private PixelModel model;
 
-	private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+	private final PropertyChangeListener propertyChangeListener = evt -> update();
 
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			update();
-		}
-	};
-
-	private final ChangeListener modelListener = new ChangeListener() {
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			update();
-		}
-	};
+	private final ChangeListener modelListener = e -> update();
 
 	/**
 	 * Creates a new instance.
@@ -70,7 +79,7 @@ public class PixelInfoStatusBar extends StatusBar {
 	 *
 	 * @param newModel
 	 *            the new model
-	 * @throws java.lang.NullPointerException
+	 * @throws java.lang.NullPointerException in case of error
 	 *             if {@code newModel} is {@code null}
 	 */
 	public final void setModel(PixelModel newModel) {

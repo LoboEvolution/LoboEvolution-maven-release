@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 
 package org.loboevolution.html.parser;
 
@@ -38,14 +37,17 @@ import org.loboevolution.common.ArrayUtilities;
 import org.loboevolution.html.Entities;
 import org.loboevolution.html.HTMLEntities;
 import org.loboevolution.html.HTMLTag;
-import org.loboevolution.info.ElementInfo;
 import org.loboevolution.html.dom.domimpl.DocumentTypeImpl;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
 import org.loboevolution.http.UserAgentContext;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.loboevolution.info.ElementInfo;
+import org.loboevolution.html.node.Code;
+
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeType;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
@@ -55,8 +57,8 @@ import org.xml.sax.SAXException;
  * {@link org.loboevolution.html.parser.DocumentBuilderImpl}. This parser class
  * may be used directly when a different DOM implementation is preferred.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlParser {
 	private static final Logger logger = Logger.getLogger(HtmlParser.class.getName());
@@ -135,8 +137,8 @@ public class HtmlParser {
 	 * @return a boolean.
 	 */
 	public static boolean isDecodeEntities(String elementName) {
-		final ElementInfo einfo = (ElementInfo) HTMLEntities.ELEMENT_INFOS.get(HTMLTag.get(elementName.toUpperCase()));
-		return einfo == null ? true : einfo.decodeEntities;
+		final ElementInfo einfo = HTMLEntities.ELEMENT_INFOS.get(HTMLTag.get(elementName.toUpperCase()));
+		return einfo == null || einfo.decodeEntities;
 	}
 
 	/**
@@ -154,7 +156,7 @@ public class HtmlParser {
 		try {
 			parent.setUserData(MODIFYING_KEY, Boolean.TRUE, null);
 			try {
-				while (this.parseToken(parent, reader, null, new LinkedList<String>()) != TOKEN_EOD) {
+				while (this.parseToken(parent, reader, null, new LinkedList<>()) != TOKEN_EOD) {
 				}
 			} catch (final StopException se) {
 				throw new SAXException("Unexpected flow exception", se);
@@ -174,8 +176,8 @@ public class HtmlParser {
 	 * document provided to the parser.
 	 *
 	 * @param reader An instance of Reader.
-	 * @throws java.io.IOException if any.  Thrown if there are errors reading the input stream.
-	 * @throws org.xml.sax.SAXException Thrown if there are parse errors.
+	 * @throws java.io.IOException if any.
+	 * @throws org.xml.sax.SAXException if any.
 	 */
 	public void parse(final Reader reader) throws IOException, SAXException {
 		this.parse(new LineNumberReader(reader));
@@ -211,8 +213,6 @@ public class HtmlParser {
 	 *
 	 * @param parent
 	 * @param reader
-	 * @param stopAtTagUC If this tag is encountered, the method throws
-	 *                    StopException.
 	 * @param stopTags    If tags in this set are encountered, the method throws
 	 *                    StopException.
 	 * @return
@@ -220,8 +220,8 @@ public class HtmlParser {
 	 * @throws StopException
 	 * @throws SAXException
 	 */
-	private final int parseToken(final Node parent, final LineNumberReader reader, final Set<HTMLTag> stopTags,
-			final LinkedList<String> ancestors) throws IOException, StopException, SAXException {
+	private int parseToken(final Node parent, final LineNumberReader reader, final Set<HTMLTag> stopTags,
+						   final LinkedList<String> ancestors) throws IOException, StopException, SAXException {
 		final Document doc = this.document;
 		final HTMLDocumentImpl htmlDoc = (HTMLDocumentImpl) doc;
 		final StringBuilder textSb = this.readUpToTagBegin(reader);
@@ -235,7 +235,7 @@ public class HtmlParser {
 			try {
 				safeAppendChild(parent, textNode);
 			} catch (final DOMException de) {
-				if ((parent.getNodeType() != Node.DOCUMENT_NODE) || (de.code != DOMException.HIERARCHY_REQUEST_ERR)) {
+				if ((parent.getNodeType() != NodeType.DOCUMENT_NODE) || (de.getCode() != Code.HIERARCHY_REQUEST_ERR)) {
 					logger.log(Level.WARNING, "parseToken(): Unable to append child to " + parent + ".", de);
 				}
 			}
@@ -305,7 +305,7 @@ public class HtmlParser {
 							ElementInfo einfo = HTMLEntities.ELEMENT_INFOS.get(HTMLTag.get(localName.toUpperCase()));
 							int endTagType = einfo == null ? ElementInfo.END_ELEMENT_REQUIRED : einfo.endElementType;
 							if (endTagType != ElementInfo.END_ELEMENT_FORBIDDEN) {
-								boolean childrenOk = einfo == null ? true : einfo.childElementOk;
+								boolean childrenOk = einfo == null || einfo.childElementOk;
 								Set<HTMLTag> newStopSet = einfo == null ? null : einfo.stopTags;
 								if (newStopSet == null) {
 									if (endTagType == ElementInfo.END_ELEMENT_OPTIONAL) {
@@ -314,7 +314,7 @@ public class HtmlParser {
 								}
 								if (stopTags != null) {
 									if (newStopSet != null) {
-										final Set<HTMLTag> newStopSet2 = new HashSet<HTMLTag>();
+										final Set<HTMLTag> newStopSet2 = new HashSet<>();
 										newStopSet2.addAll(stopTags);
 										newStopSet2.addAll(newStopSet);
 										newStopSet = newStopSet2;
@@ -379,7 +379,7 @@ public class HtmlParser {
 											einfo = HTMLEntities.ELEMENT_INFOS.get(HTMLTag.get(normalTag.toUpperCase()));
 											endTagType = einfo == null ? ElementInfo.END_ELEMENT_REQUIRED
 													: einfo.endElementType;
-											childrenOk = einfo == null ? true : einfo.childElementOk;
+											childrenOk = einfo == null || einfo.childElementOk;
 											newStopSet = einfo == null ? null : einfo.stopTags;
 											if (newStopSet == null) {
 												if (endTagType == ElementInfo.END_ELEMENT_OPTIONAL) {
@@ -387,7 +387,7 @@ public class HtmlParser {
 												}
 											}
 											if (stopTags != null && newStopSet != null) {
-												final Set<HTMLTag> newStopSet2 = new HashSet<HTMLTag>();
+												final Set<HTMLTag> newStopSet2 = new HashSet<>();
 												newStopSet2.addAll(stopTags);
 												newStopSet2.addAll(newStopSet);
 												newStopSet = newStopSet2;
@@ -431,7 +431,7 @@ public class HtmlParser {
 	 * Reads text until the beginning of the next tag. Leaves the reader offset past
 	 * the opening angle bracket. Returns null only on EOF.
 	 */
-	private final StringBuilder readUpToTagBegin(final LineNumberReader reader) throws IOException, SAXException {
+	private StringBuilder readUpToTagBegin(final LineNumberReader reader) throws IOException, SAXException {
 		StringBuilder sb = null;
 		int intCh;
 		while ((intCh = reader.read()) != -1) {
@@ -466,8 +466,8 @@ public class HtmlParser {
 	 * @return
 	 * @throws IOException
 	 */
-	private final int parseForEndTag(Node parent, final LineNumberReader reader, final String tagName,
-			final boolean addTextNode, final boolean decodeEntities) throws IOException, SAXException {
+	private int parseForEndTag(Node parent, final LineNumberReader reader, final String tagName,
+							   final boolean addTextNode, final boolean decodeEntities) throws IOException, SAXException {
 		final Document doc = this.document;
 		int intCh;
 		StringBuilder sb = new StringBuilder();
@@ -603,7 +603,7 @@ public class HtmlParser {
 	 * @param reader
 	 * @return
 	 */
-	private final String readTag(final Node parent, final LineNumberReader reader) throws IOException {
+	private String readTag(final Node parent, final LineNumberReader reader) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		int chInt;
 		chInt = reader.read();
@@ -655,15 +655,15 @@ public class HtmlParser {
 					try {
 						parent.appendChild(textNode);
 					} catch (final DOMException de) {
-						if ((parent.getNodeType() != Node.DOCUMENT_NODE)
-								|| (de.code != DOMException.HIERARCHY_REQUEST_ERR)) {
+						if ((parent.getNodeType() != NodeType.DOCUMENT_NODE)
+								|| (de.getCode() != Code.HIERARCHY_REQUEST_ERR)) {
 							logger.log(Level.WARNING, "parseToken(): Unable to append child to " + parent + ".", de);
 						}
 					}
 					if (chInt == -1) {
 						cont = false;
 					} else {
-						continue LOOP;
+						continue;
 					}
 				} else if (Character.isWhitespace(ch)) {
 					final StringBuilder ltText = new StringBuilder();
@@ -682,15 +682,15 @@ public class HtmlParser {
 					try {
 						parent.appendChild(textNode);
 					} catch (final DOMException de) {
-						if ((parent.getNodeType() != Node.DOCUMENT_NODE)
-								|| (de.code != DOMException.HIERARCHY_REQUEST_ERR)) {
+						if ((parent.getNodeType() != NodeType.DOCUMENT_NODE)
+								|| (de.getCode() != Code.HIERARCHY_REQUEST_ERR)) {
 							logger.log(Level.WARNING, "parseToken(): Unable to append child to " + parent + ".", de);
 						}
 					}
 					if (chInt == -1) {
 						cont = false;
 					} else {
-						continue LOOP;
+						continue;
 					}
 				}
 				break LOOP;
@@ -732,7 +732,7 @@ public class HtmlParser {
 		return tag;
 	}
 
-	private final StringBuilder passEndOfComment(final LineNumberReader reader) throws IOException {
+	private StringBuilder passEndOfComment(final LineNumberReader reader) throws IOException {
 		if (this.justReadTagEnd) {
 			return new StringBuilder(0);
 		}
@@ -801,7 +801,7 @@ public class HtmlParser {
 		return sb;
 	}
 
-	private final String parseEndOfTag(final Reader reader) throws IOException {
+	private String parseEndOfTag(final Reader reader) throws IOException {
 		if (this.justReadTagEnd) {
 			return "";
 		}
@@ -828,7 +828,7 @@ public class HtmlParser {
 		return result.toString();
 	}
 
-	private final void passEndOfTag(final Reader reader) throws IOException {
+	private void passEndOfTag(final Reader reader) throws IOException {
 		if (this.justReadTagEnd) {
 			return;
 		}
@@ -852,7 +852,7 @@ public class HtmlParser {
 		}
 	}
 
-	private final StringBuilder readProcessingInstruction(final LineNumberReader reader) throws IOException {
+	private StringBuilder readProcessingInstruction(final LineNumberReader reader) throws IOException {
 		final StringBuilder pidata = new StringBuilder();
 		if (this.justReadTagEnd) {
 			return pidata;
@@ -866,7 +866,7 @@ public class HtmlParser {
 		return pidata;
 	}
 
-	private final boolean readAttribute(final LineNumberReader reader, final Element element)
+	private boolean readAttribute(final LineNumberReader reader, final Element element)
 			throws IOException, SAXException {
 		if (this.justReadTagEnd) {
 			return false;
@@ -1083,7 +1083,7 @@ public class HtmlParser {
 			return false;
 		} else {
 			final Node parent = n.getParentNode();
-			return parent == null ? true : depthAtMost(parent, maxDepth - 1);
+			return parent == null || depthAtMost(parent, maxDepth - 1);
 		}
 	}
 
@@ -1128,10 +1128,10 @@ public class HtmlParser {
 	}
 
 	private boolean shouldDecodeEntities(final ElementInfo einfo) {
-		return (einfo == null ? true : einfo.decodeEntities);
+		return (einfo == null || einfo.decodeEntities);
 	}
 
-	private final static StringBuilder entityDecode(final StringBuilder rawText) throws org.xml.sax.SAXException {
+	private static StringBuilder entityDecode(final StringBuilder rawText) throws org.xml.sax.SAXException {
 		int startIdx = 0;
 		StringBuilder sb = null;
 		for (;;) {
@@ -1183,15 +1183,15 @@ public class HtmlParser {
 		}
 	}
 
-	private final static int getEntityChar(final String spec) {
+	private static int getEntityChar(final String spec) {
 		Character c = (Character) HTMLEntities.ENTITIES.get(Entities.get(spec));
 		if (c == null) {
 			final String specTL = spec.toLowerCase();
-			c = (Character) HTMLEntities.ENTITIES.get(Entities.get(specTL));
+			c = HTMLEntities.ENTITIES.get(Entities.get(specTL));
 			if (c == null) {
 				return -1;
 			}
 		}
-		return c.charValue();
+		return c;
 	}
 }

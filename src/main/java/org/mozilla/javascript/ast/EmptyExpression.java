@@ -13,8 +13,8 @@ import org.mozilla.javascript.Token;
  *
  * To create an empty statement, wrap it with an {@link org.mozilla.javascript.ast.ExpressionStatement}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class EmptyExpression extends AstNode {
 

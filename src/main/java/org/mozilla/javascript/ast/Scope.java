@@ -19,8 +19,8 @@ import org.mozilla.javascript.Token;
  * Represents a scope in the lexical scope chain.  Base type for
  * all {@link org.mozilla.javascript.ast.AstNode} implementations that can introduce a new scope.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Scope extends Jump {
 
@@ -62,7 +62,7 @@ public class Scope extends Jump {
     }
 
     /**
-     * <p>Getter for the field parentScope.</p>
+     * <p>Getter for the field <code>parentScope</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.Scope} object.
      */

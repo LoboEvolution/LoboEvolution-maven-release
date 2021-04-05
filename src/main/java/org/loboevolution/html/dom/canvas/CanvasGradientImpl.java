@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.html.dom.canvas;
 
@@ -28,15 +27,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.loboevolution.laf.ColorFactory;
 import org.loboevolution.html.dom.CanvasGradient;
+import org.loboevolution.laf.ColorFactory;
 
 
 /**
  * The Class CanvasGradientImpl.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class CanvasGradientImpl implements CanvasGradient {
 
@@ -73,8 +72,8 @@ public class CanvasGradientImpl implements CanvasGradient {
 	 * @param y1 a {@link java.lang.Object} object.
 	 */
 	public CanvasGradientImpl(Object x0, Object y0, Object x1, Object y1) {
-		fractions = new ArrayList<Float>();
-		colors = new ArrayList<Color>();
+		fractions = new ArrayList<>();
+		colors = new ArrayList<>();
 		this.linearX = Double.valueOf(x0.toString());
 		this.linearX1 = Double.valueOf(y0.toString());
 		this.linearY = Double.valueOf(x1.toString());
@@ -92,8 +91,8 @@ public class CanvasGradientImpl implements CanvasGradient {
 	 * @param r2 a {@link java.lang.Object} object.
 	 */
 	public CanvasGradientImpl(Object x0, Object y0, Object x1, Object y1, Object r1, Object r2) {
-		fractions = new ArrayList<Float>();
-		colors = new ArrayList<Color>();
+		fractions = new ArrayList<>();
+		colors = new ArrayList<>();
 		this.linearX = Double.valueOf(x0.toString());
 		this.linearX1 = Double.valueOf(y0.toString());
 		this.linearY = Double.valueOf(x1.toString());

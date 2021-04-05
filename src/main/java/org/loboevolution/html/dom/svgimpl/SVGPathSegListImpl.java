@@ -1,18 +1,39 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.loboevolution.html.dom.nodeimpl.DOMException;
 import org.loboevolution.html.dom.svg.SVGException;
 import org.loboevolution.html.dom.svg.SVGPathSeg;
 import org.loboevolution.html.dom.svg.SVGPathSegList;
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGPathSegListImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGPathSegListImpl implements SVGPathSegList {
 
@@ -22,7 +43,7 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 	 * <p>Constructor for SVGPathSegListImpl.</p>
 	 */
 	public SVGPathSegListImpl() {
-		pointList = new ArrayList<SVGPathSeg>();
+		pointList = new ArrayList<>();
 	}
 
 	/**
@@ -31,7 +52,7 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 	 * @param pathSegList a {@link org.loboevolution.html.dom.svg.SVGPathSegList} object.
 	 */
 	public SVGPathSegListImpl(SVGPathSegList pathSegList) {
-		pointList = new ArrayList<SVGPathSeg>();
+		pointList = new ArrayList<>();
 		for (SVGPathSeg seg : pointList) {
 			switch (seg.getPathSegType()) {
 			case SVGPathSeg.PATHSEG_CLOSEPATH: {
@@ -205,6 +226,8 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 				appendItem(newSeg);
 				break;
 			}
+			default:
+				break;
 			}
 		}
 	}
@@ -217,21 +240,21 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 
 	/** {@inheritDoc} */
 	@Override
-	public void clear() throws DOMException {
+	public void clear() {
 		pointList.clear();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public SVGPathSeg initialize(SVGPathSeg newItem) throws DOMException, SVGException {
-		pointList = new ArrayList<SVGPathSeg>();
+		pointList = new ArrayList<>();
 		pointList.add(newItem);
 		return newItem;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGPathSeg getItem(int index) throws DOMException {
+	public SVGPathSeg getItem(int index) {
 		return pointList.get(index);
 	}
 
@@ -239,9 +262,7 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 	@Override
 	public SVGPathSeg insertItemBefore(SVGPathSeg newItem, int index) throws DOMException, SVGException {
 
-		if (pointList.contains(newItem)) {
-			pointList.remove(newItem);
-		}
+        pointList.remove(newItem);
 
 		if (index < 0) {
 			pointList.add(0, newItem);
@@ -257,9 +278,7 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 	@Override
 	public SVGPathSeg replaceItem(SVGPathSeg newItem, int index) throws DOMException, SVGException {
 
-		if (pointList.contains(newItem)) {
-			pointList.remove(newItem);
-		}
+        pointList.remove(newItem);
 
 		if (index < 0 || index > getNumberOfItems() - 1) {
 			return null;
@@ -272,7 +291,7 @@ public class SVGPathSegListImpl implements SVGPathSegList {
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGPathSeg removeItem(int index) throws DOMException {
+	public SVGPathSeg removeItem(int index) {
 		return pointList.remove(index);
 	}
 

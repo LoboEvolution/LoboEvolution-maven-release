@@ -1,8 +1,32 @@
+/*
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
+ */
+
 package org.loboevolution.img;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
+
 import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -44,10 +68,10 @@ import org.loboevolution.common.Objects;
  * synchronizer adjusts the scroll panes of the other viewers to match the
  * originator.
  * 
- * @author Kazo Csaba
+ * Author Kazo Csaba
  */
 class Synchronizer {
-	private final WeakHashMap<ImageViewer, Void> viewers = new WeakHashMap<ImageViewer, Void>(4);
+	private final WeakHashMap<ImageViewer, Void> viewers = new WeakHashMap<>(4);
 
 	/*
 	 * If there is currently a synchronization update taking place, the viewer which
@@ -121,7 +145,7 @@ class Synchronizer {
 			return;
 		ImageViewer referenceViewer = viewers.keySet().iterator().next();
 
-		List<ImageViewer> otherViewers = new ArrayList<ImageViewer>(viewer.getSynchronizer().viewers.keySet());
+		List<ImageViewer> otherViewers = new ArrayList<>(viewer.getSynchronizer().viewers.keySet());
 		for (ImageViewer otherViewer : otherViewers) {
 			otherViewer.getSynchronizer().remove(otherViewer);
 			otherViewer.setSynchronizer(this);

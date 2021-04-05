@@ -7,16 +7,16 @@
 package org.mozilla.javascript.regexp;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Function;
 import org.mozilla.javascript.IdFunctionObject;
 import org.mozilla.javascript.IdScriptableObject;
 import org.mozilla.javascript.Kit;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.Symbol;
+import org.mozilla.javascript.SymbolKey;
 import org.mozilla.javascript.TopLevel;
 import org.mozilla.javascript.Undefined;
 
@@ -30,31 +30,29 @@ import org.mozilla.javascript.Undefined;
  * Merged bug fixes in version 1.39.
  * Merged JSFUN13_BRANCH changes up to 1.32.2.13
  *
- * @author Brendan Eich
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Brendan Eich
+ * Author Norris Boyd
+ *
  */
-public class NativeRegExp extends IdScriptableObject implements Function
+public class NativeRegExp extends IdScriptableObject
 {
     private static final long serialVersionUID = 4965263491464903264L;
-    
-    private static final Logger logger = Logger.getLogger(NativeRegExp.class.getName());
-    
+
     private static final Object REGEXP_TAG = new Object();
 
-    /** Constant JSREG_GLOB=0x1 */
+    /** Constant <code>JSREG_GLOB=0x1</code> */
     public static final int JSREG_GLOB = 0x1;       // 'g' flag: global
-    /** Constant JSREG_FOLD=0x2 */
+    /** Constant <code>JSREG_FOLD=0x2</code> */
     public static final int JSREG_FOLD = 0x2;       // 'i' flag: fold
-    /** Constant JSREG_MULTILINE=0x4 */
+    /** Constant <code>JSREG_MULTILINE=0x4</code> */
     public static final int JSREG_MULTILINE = 0x4;  // 'm' flag: multiline
 
     //type of match to perform
-    /** Constant TEST=0 */
+    /** Constant <code>TEST=0</code> */
     public static final int TEST = 0;
-    /** Constant MATCH=1 */
+    /** Constant <code>MATCH=1</code> */
     public static final int MATCH = 1;
-    /** Constant PREFIX=2 */
+    /** Constant <code>PREFIX=2</code> */
     public static final int PREFIX = 2;
 
     private static final boolean debug = false;
@@ -127,7 +125,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
     public static void init(Context cx, Scriptable scope, boolean sealed)
     {
 
-        NativeRegExp proto = new NativeRegExp();
+        NativeRegExp proto = NativeRegExpInstantiator.withLanguageVersion(cx.getLanguageVersion());
         proto.re = compileRE(cx, "", null, false);
         proto.activatePrototypeMap(MAX_PROTOTYPE_ID);
         proto.setParentScope(scope);
@@ -153,7 +151,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
     NativeRegExp(Scriptable scope, RECompiled regexpCompiled)
     {
         this.re = regexpCompiled;
-        this.lastIndex = 0d;
+        setLastIndex(ScriptRuntime.zeroObj);
         ScriptRuntime.setBuiltinProtoAndParent(this, scope, TopLevel.Builtins.RegExp);
     }
 
@@ -176,31 +174,16 @@ public class NativeRegExp extends IdScriptableObject implements Function
         return "object";
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Object call(Context cx, Scriptable scope, Scriptable thisObj,
-                       Object[] args)
-    {
-        return execSub(cx, scope, args, MATCH);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Scriptable construct(Context cx, Scriptable scope, Object[] args)
-    {
-        return (Scriptable)execSub(cx, scope, args, MATCH);
-    }
-
     Scriptable compile(Context cx, Scriptable scope, Object[] args)
     {
         if (args.length > 0 && args[0] instanceof NativeRegExp) {
             if (args.length > 1 && args[1] != Undefined.instance) {
                 // report error
-                throw ScriptRuntime.typeError0("msg.bad.regexp.compile");
+                throw ScriptRuntime.typeErrorById("msg.bad.regexp.compile");
             }
             NativeRegExp thatObj = (NativeRegExp) args[0];
             this.re = thatObj.re;
-            this.lastIndex = thatObj.lastIndex;
+            setLastIndex(thatObj.lastIndex);
             return this;
         }
         String s = args.length == 0 || args[0] instanceof Undefined ? "" : escapeRegExp(args[0]);
@@ -208,7 +191,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
             ? ScriptRuntime.toString(args[1])
             : null;
         this.re = compileRE(cx, s, global, false);
-        this.lastIndex = 0d;
+        setLastIndex(ScriptRuntime.zeroObj);
         return this;
     }
 
@@ -265,8 +248,8 @@ public class NativeRegExp extends IdScriptableObject implements Function
         return s;
     }
 
-    private Object execSub(Context cx, Scriptable scopeObj,
-                           Object[] args, int matchType)
+    Object execSub(Context cx, Scriptable scopeObj,
+                   Object[] args, int matchType)
     {
         RegExpImpl reImpl = getImpl(cx);
         String str;
@@ -285,15 +268,18 @@ public class NativeRegExp extends IdScriptableObject implements Function
 
         Object rval;
         if (d < 0 || str.length() < d) {
-            lastIndex = 0d;
+            setLastIndex(ScriptRuntime.zeroObj);
             rval = null;
         }
         else {
             int indexp[] = { (int)d };
             rval = executeRegExp(cx, scopeObj, reImpl, str, indexp, matchType);
             if ((re.flags & JSREG_GLOB) != 0) {
-                lastIndex = (rval == null || rval == Undefined.instance)
-                            ? 0d : (double)indexp[0];
+                if (rval == null || rval == Undefined.instance) {
+                    setLastIndex(ScriptRuntime.zeroObj);
+                } else {
+                    setLastIndex(Double.valueOf(indexp[0]));
+                }
             }
         }
         return rval;
@@ -328,7 +314,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
         CompilerState state = new CompilerState(cx, regexp.source, length, flags);
         if (flat && length > 0) {
             if (debug) {
-               logger.info("flat = \"" + str + "\"");
+                System.out.println("flat = \"" + str + "\"");
             }
             state.result = new RENode(REOP_FLAT);
             state.result.chr = state.cpbegin[0];
@@ -358,11 +344,12 @@ public class NativeRegExp extends IdScriptableObject implements Function
         regexp.program[endPC++] = REOP_END;
 
         if (debug) {
-           logger.info("Prog. length = " + endPC);
+            System.out.println("Prog. length = " + endPC);
             for (int i = 0; i < endPC; i++) {
                 System.out.print(regexp.program[i]);
                 if (i < (endPC - 1)) System.out.print(", ");
             }
+            System.out.println();
         }
         regexp.parenCount = state.parenCount;
 
@@ -394,7 +381,7 @@ public class NativeRegExp extends IdScriptableObject implements Function
 
         if (debug) {
             if (regexp.anchorCh >= 0) {
-               logger.info("Anchor ch = '" + (char)regexp.anchorCh + "'");
+                System.out.println("Anchor ch = '" + (char)regexp.anchorCh + "'");
             }
         }
         return regexp;
@@ -644,22 +631,19 @@ public class NativeRegExp extends IdScriptableObject implements Function
                     break;
                 case 'd':
                     if (inRange) {
-                        reportError("msg.bad.range", "");
-                        return false;
+                        target.bmsize = 65536;
+                        return true;
                     }
                     localMax = '9';
                     break;
                 case 'D':
-                case 's':
-                case 'S':
                 case 'w':
                 case 'W':
-                    if (inRange) {
-                        reportError("msg.bad.range", "");
-                        return false;
-                    }
+                case 'S':
+                case 's':
                     target.bmsize = 65536;
                     return true;
+
                 case '0':
                 case '1':
                 case '2':
@@ -1669,29 +1653,34 @@ public class NativeRegExp extends IdScriptableObject implements Function
                     break;
 
                 case 'd':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     addCharacterRangeToCharSet(charSet, '0', '9');
                     continue;   /* don't need range processing */
                 case 'D':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     addCharacterRangeToCharSet(charSet, (char)0, (char)('0' - 1));
-                    addCharacterRangeToCharSet(charSet, (char)('9' + 1),
-                                                (char)(charSet.length - 1));
+                    addCharacterRangeToCharSet(charSet, (char)('9' + 1), (char)(charSet.length - 1));
                     continue;
                 case 's':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     for (i = (charSet.length - 1); i >= 0; i--)
                         if (isREWhiteSpace(i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'S':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     for (i = (charSet.length - 1); i >= 0; i--)
                         if (!isREWhiteSpace(i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'w':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     for (i = (charSet.length - 1); i >= 0; i--)
                         if (isWord((char)i))
                             addCharacterToCharSet(charSet, (char)(i));
                     continue;
                 case 'W':
+                    if (inRange) { addCharacterToCharSet(charSet, '-'); inRange = false; }
                     for (i = (charSet.length - 1); i >= 0; i--)
                         if (!isWord((char)i))
                             addCharacterToCharSet(charSet, (char)(i));
@@ -1699,7 +1688,6 @@ public class NativeRegExp extends IdScriptableObject implements Function
                 default:
                     thisCh = c;
                     break;
-
                 }
                 break;
 
@@ -2568,14 +2556,14 @@ public class NativeRegExp extends IdScriptableObject implements Function
     private static void reportWarning(Context cx, String messageId, String arg)
     {
         if (cx.hasFeature(Context.FEATURE_STRICT_MODE)) {
-            String msg = ScriptRuntime.getMessage1(messageId, arg);
+            String msg = ScriptRuntime.getMessageById(messageId, arg);
             Context.reportWarning(msg);
         }
     }
 
     private static void reportError(String messageId, String arg)
     {
-        String msg = ScriptRuntime.getMessage1(messageId, arg);
+        String msg = ScriptRuntime.getMessageById(messageId, arg);
         throw ScriptRuntime.constructError("SyntaxError", msg);
     }
 
@@ -2602,22 +2590,26 @@ public class NativeRegExp extends IdScriptableObject implements Function
     protected int findInstanceIdInfo(String s)
     {
         int id;
-// #generated# Last update: 2007-05-09 08:16:24 EDT
-        L0: { id = 0; String X = null; int c;
-            int s_length = s.length();
-            if (s_length==6) {
-                c=s.charAt(0);
-                if (c=='g') { X="global";id=Id_global; }
-                else if (c=='s') { X="source";id=Id_source; }
-            }
-            else if (s_length==9) {
-                c=s.charAt(0);
-                if (c=='l') { X="lastIndex";id=Id_lastIndex; }
-                else if (c=='m') { X="multiline";id=Id_multiline; }
-            }
-            else if (s_length==10) { X="ignoreCase";id=Id_ignoreCase; }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:45:14 MEZ
+        switch (s) {
+        case "lastIndex":
+            id = Id_lastIndex;
+            break;
+        case "source":
+            id = Id_source;
+            break;
+        case "global":
+            id = Id_global;
+            break;
+        case "ignoreCase":
+            id = Id_ignoreCase;
+            break;
+        case "multiline":
+            id = Id_multiline;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
 // #/string_id_map#
@@ -2674,13 +2666,20 @@ public class NativeRegExp extends IdScriptableObject implements Function
         return super.getInstanceIdValue(id);
     }
 
+    private void setLastIndex(Object value) {
+        if ((lastIndexAttr & READONLY) != 0) {
+            throw ScriptRuntime.typeErrorById("msg.modify.readonly", "lastIndex");
+        }
+        lastIndex = value;
+    }
+
+
     /** {@inheritDoc} */
     @Override
-    protected void setInstanceIdValue(int id, Object value)
-    {
+    protected void setInstanceIdValue(int id, Object value) {
         switch (id) {
           case Id_lastIndex:
-            lastIndex = value;
+            setLastIndex(value);
             return;
           case Id_source:
           case Id_global:
@@ -2706,6 +2705,15 @@ public class NativeRegExp extends IdScriptableObject implements Function
     @Override
     protected void initPrototypeId(int id)
     {
+        if (id == SymbolId_match) {
+            initPrototypeMethod(REGEXP_TAG, id, SymbolKey.MATCH, "[Symbol.match]", 1);
+            return;
+        }
+        if (id == SymbolId_search) {
+            initPrototypeMethod(REGEXP_TAG, id, SymbolKey.SEARCH, "[Symbol.search]", 1);
+            return;
+        }
+
         String s;
         int arity;
         switch (id) {
@@ -2747,15 +2755,33 @@ public class NativeRegExp extends IdScriptableObject implements Function
 
           case Id_prefix:
             return realThis(thisObj, f).execSub(cx, scope, args, PREFIX);
+
+          case SymbolId_match:
+              return realThis(thisObj, f).execSub(cx, scope, args, MATCH);
+
+          case SymbolId_search:
+              Scriptable scriptable = (Scriptable) realThis(thisObj, f).execSub(cx, scope, args, MATCH);
+              return scriptable.get("index", scriptable);
         }
         throw new IllegalArgumentException(String.valueOf(id));
     }
 
     private static NativeRegExp realThis(Scriptable thisObj, IdFunctionObject f)
     {
-        if (!(thisObj instanceof NativeRegExp))
-            throw incompatibleCallError(f);
-        return (NativeRegExp)thisObj;
+        return ensureType(thisObj, NativeRegExp.class, f);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected int findPrototypeId(Symbol k)
+    {
+        if (SymbolKey.MATCH.equals(k)) {
+            return SymbolId_match;
+        }
+        if (SymbolKey.SEARCH.equals(k)) {
+            return SymbolId_search;
+        }
+        return 0;
     }
 
 // #string_id_map#
@@ -2764,22 +2790,29 @@ public class NativeRegExp extends IdScriptableObject implements Function
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2007-05-09 08:16:24 EDT
-        L0: { id = 0; String X = null; int c;
-            L: switch (s.length()) {
-            case 4: c=s.charAt(0);
-                if (c=='e') { X="exec";id=Id_exec; }
-                else if (c=='t') { X="test";id=Id_test; }
-                break L;
-            case 6: X="prefix";id=Id_prefix; break L;
-            case 7: X="compile";id=Id_compile; break L;
-            case 8: c=s.charAt(3);
-                if (c=='o') { X="toSource";id=Id_toSource; }
-                else if (c=='t') { X="toString";id=Id_toString; }
-                break L;
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:45:14 MEZ
+        switch (s) {
+        case "compile":
+            id = Id_compile;
+            break;
+        case "toString":
+            id = Id_toString;
+            break;
+        case "toSource":
+            id = Id_toSource;
+            break;
+        case "exec":
+            id = Id_exec;
+            break;
+        case "test":
+            id = Id_test;
+            break;
+        case "prefix":
+            id = Id_prefix;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;
@@ -2792,13 +2825,15 @@ public class NativeRegExp extends IdScriptableObject implements Function
         Id_exec          = 4,
         Id_test          = 5,
         Id_prefix        = 6,
+        SymbolId_match   = 7,
+        SymbolId_search  = 8,
 
-        MAX_PROTOTYPE_ID = 6;
+        MAX_PROTOTYPE_ID = SymbolId_search;
 
 // #/string_id_map#
 
     private RECompiled re;
-    Object lastIndex = 0d;     /* index after last match, for //g iterator */
+    Object lastIndex = ScriptRuntime.zeroObj;     /* index after last match, for //g iterator */
     private int lastIndexAttr = DONTENUM | PERMANENT;
 
 }       // class NativeRegExp

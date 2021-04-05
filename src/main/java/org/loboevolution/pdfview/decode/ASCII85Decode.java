@@ -27,12 +27,12 @@ import org.loboevolution.pdfview.PDFParseException;
 /**
  * decode ASCII85 text into a byte array.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class ASCII85Decode {
 
-    private ByteBuffer buf;
+    private final ByteBuffer buf;
 
     /**
      * initialize the decoder with byte buffer in ASCII85 format

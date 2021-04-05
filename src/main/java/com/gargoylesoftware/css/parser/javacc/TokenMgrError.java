@@ -5,10 +5,10 @@ package com.gargoylesoftware.css.parser.javacc;
 /**
  * Token Manager Error.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-@SuppressWarnings("all") public class TokenMgrError extends Error
+public class TokenMgrError extends Error
 {
 
   /**

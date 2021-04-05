@@ -78,8 +78,8 @@ import javax.swing.plaf.UIResource;
  * style, and that if the style changes, a new one will be created.
  *
  * @version 1.12 01/23/03
- * @author Terry Kellerman
- * @author Michael Hagen
+ * Author Terry Kellerman
+ * Author Michael Hagen
  * @since 1.4
  */
 public class BaseTitlePane extends JComponent implements TitlePane {
@@ -446,7 +446,7 @@ public class BaseTitlePane extends JComponent implements TitlePane {
 		public void windowDeiconified(WindowEvent e) {
 			// Workarround to avoid a bug within OSX and Java 1.7
 			if (JTattooUtilities.isMac() && JTattooUtilities.getJavaVersion() >= 1.7 && wasMaximized) {
-				SwingUtilities.invokeLater(() -> maximize());
+				SwingUtilities.invokeLater(BaseTitlePane.this::maximize);
 			}
 		}
 	}
@@ -488,18 +488,18 @@ public class BaseTitlePane extends JComponent implements TitlePane {
 	protected JButton iconifyButton;
 	protected JButton maxButton;
 	protected JButton closeButton;
-	protected Icon iconifyIcon;
-	protected Icon maximizeIcon;
-	protected Icon minimizeIcon;
+	protected final Icon iconifyIcon;
+	protected final Icon maximizeIcon;
+	protected final Icon minimizeIcon;
 
-	protected Icon closeIcon;
+	protected final Icon closeIcon;
 	protected WindowListener windowListener;
 
 	protected Window window;
 
-	protected JRootPane rootPane;
+	protected final JRootPane rootPane;
 
-	protected BaseRootPaneUI rootPaneUI;
+	protected final BaseRootPaneUI rootPaneUI;
 
 	protected int buttonsWidth;
 
@@ -720,12 +720,12 @@ public class BaseTitlePane extends JComponent implements TitlePane {
 					icons = owner.getIconImages();
 					// found ? return the icon
 					if (icons != null && !icons.isEmpty()) {
-						return (Image) icons.get(0);
+						return icons.get(0);
 					}
 					owner = owner.getOwner();
 				}
 			} else {
-				return (Image) icons.get(0);
+				return icons.get(0);
 			}
 			// No icon found ? return icon of the first frame
 			if (icons == null || icons.isEmpty()) {
@@ -863,7 +863,7 @@ public class BaseTitlePane extends JComponent implements TitlePane {
 	 * @return a boolean.
 	 */
 	protected boolean isActive() {
-		return window == null ? true : window.isActive();
+		return window == null || window.isActive();
 	}
 
 	/**

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.component;
 
 import java.awt.BorderLayout;
@@ -12,16 +32,21 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import org.loboevolution.common.Strings;
+import org.loboevolution.download.DownloadWindow;
 import org.loboevolution.menu.MenuBar;
 import org.loboevolution.store.GeneralStore;
+import org.loboevolution.store.StyleStore;
 import org.loboevolution.store.TabStore;
+import org.loboevolution.store.WebStore;
 
 /**
  * <p>BrowserFrame class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class BrowserFrame extends JFrame implements IBrowserFrame {
 
@@ -67,11 +92,19 @@ public class BrowserFrame extends JFrame implements IBrowserFrame {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				final IWelcomePanel welcome = BrowserFrame.this.panel.getWelcome();
-				final Dimension dim = new Dimension(getWidth(), getHeight());
-				welcome.setSize(dim);
-				welcome.setPreferredSize(dim);
-				welcome.repaint();
+				BrowserPanel bpanel = BrowserFrame.this.panel;
+				final IBrowserFrame browserFrame = bpanel.getBrowserFrame();
+				JTextField addressBar = browserFrame.getToolbar().getAddressBar();
+				if (Strings.isNotBlank(addressBar.getText())) {
+					GoAction go = new GoAction(panel, browserFrame.getToolbar().getAddressBar());
+					go.actionPerformed(null);
+				} else {
+					final IWelcomePanel welcome = bpanel.getWelcome();
+					final Dimension dim = new Dimension(getWidth(), getHeight());
+					welcome.setSize(dim);
+					welcome.setPreferredSize(dim);
+					welcome.repaint();
+				}
 			}
 		});
 
@@ -79,6 +112,9 @@ public class BrowserFrame extends JFrame implements IBrowserFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				TabStore.deleteAll();
+				WebStore.deleteSessionStorage();
+				StyleStore style = new StyleStore();
+				style.deleteStyle();
 			}
 		});
 	}
@@ -117,5 +153,11 @@ public class BrowserFrame extends JFrame implements IBrowserFrame {
 	 */
 	public void setToolbar(ToolBar toolbar) {
 		this.toolbar = toolbar;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public IDownload getDownload() {
+		return new DownloadWindow();
 	}
 }

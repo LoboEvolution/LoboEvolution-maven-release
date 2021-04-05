@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.http;
 
 import java.net.URL;
@@ -12,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.common.Domains;
 import org.loboevolution.common.Strings;
@@ -23,15 +45,18 @@ import org.loboevolution.util.DateUtil;
 /**
  * <p>CookieManager class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class CookieManager {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(CookieManager.class.getName());
 
-	private static String DELETE_COOKIES = "DELETE FROM COOKIE";
+	private static final String DELETE_COOKIES = "DELETE FROM COOKIE";
 
 	/** The date pattern. */
-	private static String PATTERN = "dd/MM/yyyy";
+	private static final String PATTERN = "dd/MM/yyyy";
 
 	/**
 	 * <p>deleteCookies.</p>
@@ -41,7 +66,7 @@ public class CookieManager {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_COOKIES)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -53,19 +78,19 @@ public class CookieManager {
 	 */
 	public static List<CookieInfo> getCookieList(String address) {
 		URL url;
-		List<CookieInfo> cookies = new ArrayList<CookieInfo>();
+		List<CookieInfo> cookies = new ArrayList<>();
 		try {
 			url = new URL(address);
 			final String domain = url.getHost().replaceFirst("^www.*?\\.", "");
 			cookies = getCookies(domain, "/");
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return cookies;
 	}
 
 	private static List<CookieInfo> getCookies(String hostName, String path) {
-		final List<CookieInfo> cookies = new ArrayList<CookieInfo>();
+		final List<CookieInfo> cookies = new ArrayList<>();
 		final GeneralStore settings = GeneralStore.getNetwork();
 		if (settings.isCookie()) {
 			try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
@@ -81,13 +106,13 @@ public class CookieManager {
 						cookie.setPath(rs.getString(4));
 						cookie.setExpires(rs.getString(5));
 						cookie.setMaxAge(rs.getInt(6));
-						cookie.setSecure(rs.getInt(7) > 0 ? true : false);
-						cookie.setHttpOnly(rs.getInt(8) > 0 ? true : false);
+						cookie.setSecure(rs.getInt(7) > 0);
+						cookie.setHttpOnly(rs.getInt(8) > 0);
 						cookies.add(cookie);
 					}
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
 				return null;
 			}
 		}
@@ -107,15 +132,15 @@ public class CookieManager {
 			for (final Map.Entry<String, List<String>> entry : headerFields.entrySet()) {
 				final String key = entry.getKey();
 				for (final String value : entry.getValue()) {
-					if (key != null && value != null
+					if (value != null
 							&& ("Set-Cookie".equalsIgnoreCase(key) || "Set-Cookie2".equalsIgnoreCase(key)
-									|| "Cookie".equalsIgnoreCase(key) || "Cookie2".equalsIgnoreCase(key))) {
+							|| "Cookie".equalsIgnoreCase(key) || "Cookie2".equalsIgnoreCase(key))) {
 						saveCookie(url.getHost(), value);
 					}
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -185,8 +210,8 @@ public class CookieManager {
 		if (maxAge != null) {
 			try {
 				expiresDate = new Date(System.currentTimeMillis() + Integer.parseInt(maxAge) * 1000);
-			} catch (final NumberFormatException nfe) {
-				nfe.printStackTrace();
+			} catch (final NumberFormatException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
 			}
 		} else if (expires != null) {
 			final DateUtil du = new DateUtil();
@@ -227,7 +252,7 @@ public class CookieManager {
 			pstmt.setInt(8, httponly ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

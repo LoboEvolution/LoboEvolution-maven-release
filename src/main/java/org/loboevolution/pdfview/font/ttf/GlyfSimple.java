@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 /**
  * A single simple glyph in a pdf font.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GlyfSimple extends Glyf {
     /** the end points of the various contours */

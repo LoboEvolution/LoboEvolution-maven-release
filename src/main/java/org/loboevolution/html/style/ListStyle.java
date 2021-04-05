@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.style;
 
 import java.awt.Image;
@@ -27,8 +26,8 @@ import java.util.Map;
 /**
  * <p>ListStyle class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ListStyle {
 	
@@ -64,7 +63,7 @@ public class ListStyle {
 	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getRomanNumerals(int num) {
-		LinkedHashMap<String, Integer> roman_numerals = new LinkedHashMap<String, Integer>();
+		LinkedHashMap<String, Integer> roman_numerals = new LinkedHashMap<>();
 		roman_numerals.put("M", 1000);
 		roman_numerals.put("CM", 900);
 		roman_numerals.put("D", 500);
@@ -78,13 +77,13 @@ public class ListStyle {
 		roman_numerals.put("V", 5);
 		roman_numerals.put("IV", 4);
 		roman_numerals.put("I", 1);
-		String res = "";
+		StringBuilder res = new StringBuilder();
 		for (Map.Entry<String, Integer> entry : roman_numerals.entrySet()) {
 			int matches = num / entry.getValue();
-			res += repeat(entry.getKey(), matches);
+			res.append(repeat(entry.getKey(), matches));
 			num = num % entry.getValue();
 		}
-		return res;
+		return res.toString();
 	}
 
 	private static String repeat(String s, int n) {

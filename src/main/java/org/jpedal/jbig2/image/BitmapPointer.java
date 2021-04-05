@@ -52,13 +52,17 @@ package org.jpedal.jbig2.image;
 /**
  * <p>BitmapPointer class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class BitmapPointer {
-	private int x, y, width, height, bits, count;
+	private int x; 
+	private int y;
+	private final int width;
+	private final int height;
+	private int count;
 	private boolean output;
-	private JBIG2Bitmap bitmap;
+	private final JBIG2Bitmap bitmap;
 
 	/**
 	 * <p>Constructor for BitmapPointer.</p>
@@ -80,11 +84,8 @@ public class BitmapPointer {
 	public void setPointer(int x, int y) {
 		this.x = x;
 		this.y = y;
-		output = true;
-		if (y < 0 || y >= height || x >= width) {
-			output = false;
-		}
-		count = y*width;
+		output = this.y >= 0 && this.y < height && this.x < width;
+		count = this.y * width;
 	}
 
 	/**

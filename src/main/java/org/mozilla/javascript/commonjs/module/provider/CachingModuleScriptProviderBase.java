@@ -21,7 +21,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
  * class and its subclasses are thread safe (and written to perform decently
  * under concurrent access).
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: CachingModuleScriptProviderBase.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public abstract class CachingModuleScriptProviderBase implements ModuleScriptProvider, Serializable {
@@ -118,7 +118,7 @@ public abstract class CachingModuleScriptProviderBase implements ModuleScriptPro
 
     /**
      * Instances of this class represent a loaded and cached module script.
-     * @author Attila Szegedi
+     * Author Attila Szegedi
      * @version $Id: CachingModuleScriptProviderBase.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
      */
     public static class CachedModuleScript {

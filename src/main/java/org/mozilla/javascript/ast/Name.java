@@ -17,8 +17,8 @@ import org.mozilla.javascript.Token;
  * pseudo-keywords for object-initializer getter/setter properties, and it's
  * also used for the "*" wildcard in E4X XML namespace and name expressions.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Name extends AstNode {
 

@@ -58,8 +58,8 @@ import org.jpedal.jbig2.segment.Segment;
 /**
  * <p>EndOfStripeSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class EndOfStripeSegment extends Segment {
 

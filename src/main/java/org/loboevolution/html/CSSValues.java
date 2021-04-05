@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html;
 
 import java.util.Collections;
@@ -27,8 +26,8 @@ import java.util.Map;
 /**
  * <p>CSSValues class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public enum CSSValues {
 
@@ -55,6 +54,10 @@ public enum CSSValues {
 	CENTER("center"),
 
 	CIRCLE("circle"),
+	
+	COLUMN("column"),
+	
+	COLUMN_REVERSE("column-reverse"),
 
 	COLLAPSE("collapse"),
 
@@ -72,7 +75,7 @@ public enum CSSValues {
 
 	DEFAULT("default"),
 
-	DISC("dis"),
+	DISC("disc"),
 
 	DOTTED("dotted"),
 
@@ -81,7 +84,13 @@ public enum CSSValues {
 	E_RESIZE("e-resize"),
 
 	FIXED("fixed"),
-
+	
+	FLEX("flex"),
+	
+	FLEX_START("flex-start"),
+	
+	FLEX_END("flex-end"),
+	
 	GRAB("grab"),
 
 	GROOVE("groove"),
@@ -171,6 +180,10 @@ public enum CSSValues {
 	RIDGE("ridge"),
 
 	RIGHT("right"),
+	
+	ROW("row"),
+	
+	ROW_REVERSE("row-reverse"),
 
 	ROWSPAN("rowspan"),
 
@@ -191,10 +204,16 @@ public enum CSSValues {
 	SOLID("solid"),
 	
 	SQUARE("square"),
+	
+	SPACE_AROUND("space-around"),
+	
+	SPACE_BETWEEN("space-between"),
 
 	STATIC("static"),
 
 	STATUS_BAR("status-bar"),
+	
+	STRETCH("stretch"),
 
 	SW_RESIZE("sw-resize"),
 
@@ -223,6 +242,10 @@ public enum CSSValues {
 	W_RESIZE("w-resize"),
 
 	WAIT("wait"),
+	
+	WRAP("wrap"),
+	
+	WRAP_REVERSE("wrap-reverse"),
 
 	X_LARGE("x-large"),
 
@@ -232,11 +255,11 @@ public enum CSSValues {
 
 	XX_SMALL("xx-small");
 	
-	private String value;
+	private final String value;
 	private static final Map<String, CSSValues> ENUM_MAP;
 	
 	static {
-		Map<String, CSSValues> map = new HashMap<String, CSSValues>();
+		Map<String, CSSValues> map = new HashMap<>();
 		for (CSSValues instance : CSSValues.values()) {
 			map.put(instance.getValue(), instance);
 		}

@@ -9,14 +9,22 @@ package org.mozilla.javascript;
 /**
  * <p>Abstract ES6Iterator class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class ES6Iterator extends IdScriptableObject {
 
     private static final long serialVersionUID = 2438373029140003950L;
 
-    static void init(ScriptableObject scope, boolean sealed, IdScriptableObject prototype, String tag) {
+    /**
+     * <p>init.</p>
+     *
+     * @param scope a {@link org.mozilla.javascript.ScriptableObject} object.
+     * @param sealed a boolean.
+     * @param prototype a {@link org.mozilla.javascript.IdScriptableObject} object.
+     * @param tag a {@link java.lang.String} object.
+     */
+    protected static void init(ScriptableObject scope, boolean sealed, IdScriptableObject prototype, String tag) {
         if (scope != null) {
             prototype.setParentScope(scope);
             prototype.setPrototype(getObjectPrototype(scope));
@@ -38,9 +46,18 @@ public abstract class ES6Iterator extends IdScriptableObject {
     protected boolean exhausted = false;
     private String tag;
 
-    ES6Iterator() {}
+    /**
+     * <p>Constructor for ES6Iterator.</p>
+     */
+    protected ES6Iterator() {}
 
-    ES6Iterator(Scriptable scope, String tag) {
+    /**
+     * <p>Constructor for ES6Iterator.</p>
+     *
+     * @param scope a {@link org.mozilla.javascript.Scriptable} object.
+     * @param tag a {@link java.lang.String} object.
+     */
+    protected ES6Iterator(Scriptable scope, String tag) {
         // Set parent and prototype properties. Since we don't have a
         // "Iterator" constructor in the top scope, we stash the
         // prototype in the top scope's associated value.
@@ -80,10 +97,7 @@ public abstract class ES6Iterator extends IdScriptableObject {
         }
         int id = f.methodId();
 
-        if (!(thisObj instanceof ES6Iterator))
-            throw incompatibleCallError(f);
-
-        ES6Iterator iterator = (ES6Iterator) thisObj;
+        ES6Iterator iterator = ensureType(thisObj, ES6Iterator.class, f);
 
         switch (id) {
         case Id_next:
@@ -109,7 +123,7 @@ public abstract class ES6Iterator extends IdScriptableObject {
     /** {@inheritDoc} */
     @Override
     protected int findPrototypeId(String s) {
-        if ("next".equals(s)) {
+        if (NEXT_METHOD.equals(s)) {
             return Id_next;
         }
         return 0;
@@ -148,11 +162,11 @@ public abstract class ES6Iterator extends IdScriptableObject {
         } else {
             this.exhausted = true;
         }
-        return makeIteratorResult(cx, scope, done, value);
+        return makeIteratorResult(cx, scope, Boolean.valueOf(done), value);
     }
 
     /**
-     * <p>Getter for the field tag.</p>
+     * <p>Getter for the field <code>tag</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */
@@ -161,8 +175,12 @@ public abstract class ES6Iterator extends IdScriptableObject {
     }
 
     // 25.1.1.3 The IteratorResult Interface
-    private Scriptable makeIteratorResult(Context cx, Scriptable scope, boolean done, Object value) {
-        Scriptable iteratorResult = cx.newObject(scope);
+    static Scriptable makeIteratorResult(Context cx, Scriptable scope, Boolean done) {
+        return makeIteratorResult(cx, scope, done, Undefined.instance);
+    }
+
+    static Scriptable makeIteratorResult(Context cx, Scriptable scope, Boolean done, Object value) {
+        final Scriptable iteratorResult = cx.newObject(scope);
         ScriptableObject.putProperty(iteratorResult, VALUE_PROPERTY, value);
         ScriptableObject.putProperty(iteratorResult, DONE_PROPERTY, done);
         return iteratorResult;
@@ -174,12 +192,14 @@ public abstract class ES6Iterator extends IdScriptableObject {
         SymbolId_toStringTag = 3,
         MAX_PROTOTYPE_ID     = SymbolId_toStringTag;
 
-    /** Constant NEXT_METHOD="next" */
+    /** Constant <code>NEXT_METHOD="next"</code> */
     public static final String NEXT_METHOD = "next";
-    /** Constant DONE_PROPERTY="done" */
+    /** Constant <code>DONE_PROPERTY="done"</code> */
     public static final String DONE_PROPERTY = "done";
-    /** Constant RETURN_PROPERTY="return" */
+    /** Constant <code>RETURN_PROPERTY="return"</code> */
     public static final String RETURN_PROPERTY = "return";
-    /** Constant VALUE_PROPERTY="value" */
+    /** Constant <code>VALUE_PROPERTY="value"</code> */
     public static final String VALUE_PROPERTY = "value";
+    /** Constant <code>RETURN_METHOD="return"</code> */
+    public static final String RETURN_METHOD = "return";
 }

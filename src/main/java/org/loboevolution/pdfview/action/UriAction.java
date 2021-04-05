@@ -8,24 +8,23 @@ import org.loboevolution.pdfview.PDFObject;
  ***************************************************************************
  * URI action, containing a web link
  *
- * @author  Katja Sondermann
+ * Author  Katja Sondermann
  * @since 07.07.2009
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class UriAction extends PDFAction {
 
 	/** The URL this action links to */
-	private String uri;
+	private final String uri;
 	
 	/**
 	 ***********************************************************************
 	 * Constructor, reading the URL from the given action object
 	 *
-	 * @throws java.io.IOException if any. - in case the action can not be parsed
-	 ***********************************************************************
 	 * @param obj a {@link org.loboevolution.pdfview.PDFObject} object.
 	 * @param root a {@link org.loboevolution.pdfview.PDFObject} object.
+	 * @throws java.io.IOException if any.
 	 */
 	public UriAction(PDFObject obj, PDFObject root) throws IOException {
 		super("URI");
@@ -36,9 +35,8 @@ public class UriAction extends PDFAction {
 	 ***********************************************************************
 	 * Constructor
 	 *
-	 * @throws java.io.IOException if any.
-	 ***********************************************************************
 	 * @param uri a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
 	 */
 	public UriAction(String uri) throws IOException {
 		super("URI");

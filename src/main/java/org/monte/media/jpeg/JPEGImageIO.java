@@ -16,18 +16,30 @@ package org.monte.media.jpeg;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-import javax.imageio.*;
-import javax.imageio.stream.*;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 
 /**
  * JPEGImageIO supports reading of JPEG images with YUV, CMYK and YCCK color
  * encoding.
  *
- * @author Werner Randelshofer, Hausmatt 10, CH-6405 Goldau
+ * Author Werner Randelshofer, Hausmatt 10, CH-6405 Goldau
  * @version 1.0.1 2010-10-10 Do not close input stream in method read(InputStream).
  * <br>1.0 2008-10-17 Created.
  */
@@ -278,6 +290,7 @@ public class JPEGImageIO {
      * @param cmykProfile An ICC_Profile for conversion from the CMYK color space
      * to the RGB color space. If this parameter is null, a default profile is used.
      * @return a BufferedImage in the RGB color space.
+     * @throws java.lang.NullPointerException in case of error
      */
     public static BufferedImage createRGBImageFromYCCK(Raster ycckRaster, ICC_Profile cmykProfile) {
         BufferedImage image;

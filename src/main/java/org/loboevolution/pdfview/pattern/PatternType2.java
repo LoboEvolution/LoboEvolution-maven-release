@@ -28,8 +28,8 @@ import org.loboevolution.pdfview.PDFPaint;
 /**
  * A type 1 (tiling) pattern
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PatternType2 extends PDFPattern {
         

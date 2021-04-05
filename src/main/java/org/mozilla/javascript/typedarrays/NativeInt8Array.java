@@ -15,8 +15,8 @@ import org.mozilla.javascript.Undefined;
  * An array view that stores 8-bit quantities and implements the JavaScript "Int8Array" interface.
  * It also implements List&lt;Byte&gt; for direct manipulation in Java.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeInt8Array
     extends NativeTypedArrayView<Byte>
@@ -92,10 +92,7 @@ public class NativeInt8Array
     @Override
     protected NativeInt8Array realThis(Scriptable thisObj, IdFunctionObject f)
     {
-        if (!(thisObj instanceof NativeInt8Array)) {
-            throw incompatibleCallError(f);
-        }
-        return (NativeInt8Array)thisObj;
+        return ensureType(thisObj, NativeInt8Array.class, f);
     }
 
     /** {@inheritDoc} */

@@ -32,9 +32,9 @@ import org.loboevolution.pdfview.PDFStringUtil;
  * the PDF. It is possible for strings and streams to be encrypted with
  * different mechanisms, so the appropriate method must alwayus be used.
  *
- * @see "PDFReference 1.7, Section 3.5 Encryption"
- * @author Luke Kirby
- * @version $Id: $Id
+ * see "PDFReference 1.7, Section 3.5 Encryption"
+ * Author Luke Kirby
+  *
  */
 public interface PDFDecrypter {
 
@@ -57,11 +57,9 @@ public interface PDFDecrypter {
      * @return a buffer containing the decrypted stream, positioned at its
      *  beginning; will only be the same buffer as streamBuf if the identity
      *  decrypter is being used
-     * @throws org.loboevolution.pdfview.PDFParseException if the named crypt filter does not exist, or
-     *  if a crypt filter is named when named crypt filters are not supported.
-     *  Problems due to incorrect passwords are revealed prior to this point.
+     * @throws org.loboevolution.pdfview.PDFParseException if any.
      */
-    public ByteBuffer decryptBuffer(
+    ByteBuffer decryptBuffer(
             String cryptFilterName,
             PDFObject streamObj,
             ByteBuffer streamBuf)
@@ -74,11 +72,9 @@ public interface PDFDecrypter {
      * @param objGen the generation number of the containing object
      * @param inputBasicString the string to be decrypted
      * @return the decrypted string
-     * @throws org.loboevolution.pdfview.PDFParseException if the named crypt filter does not exist, or
-     *  if a crypt filter is named when named crypt filters are not supported.
-     *  Problems due to incorrect passwords are revealed prior to this point.
+     * @throws org.loboevolution.pdfview.PDFParseException if any.
      */
-    public String decryptString(int objNum, int objGen, String inputBasicString)
+    String decryptString(int objNum, int objGen, String inputBasicString)
             throws PDFParseException;
 
     /**
@@ -90,7 +86,7 @@ public interface PDFDecrypter {
      * @return whether owner authentication is being used to decrypt the
      *  document
      */
-    public boolean isOwnerAuthorised();
+    boolean isOwnerAuthorised();
 
     /**
      * Determine whether this actually applies a decryption other than
@@ -98,7 +94,7 @@ public interface PDFDecrypter {
      *
      * @return whether encryption is present
      */
-    public boolean isEncryptionPresent();
+    boolean isEncryptionPresent();
 
     /**
      * Determines whether decryption applies for a given crypt filter name

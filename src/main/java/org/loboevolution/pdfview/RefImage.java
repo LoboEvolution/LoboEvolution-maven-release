@@ -28,8 +28,8 @@ import java.awt.image.BufferedImage;
  * getGraphics() can be called multiple times safely, and will always return
  * the same graphics object.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class RefImage extends BufferedImage {
 

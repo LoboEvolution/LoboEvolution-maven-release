@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.AlphaComposite;
@@ -13,23 +33,22 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.loboevolution.common.Nodes;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.dom.svg.Drawable;
 import org.loboevolution.html.dom.svg.SVGAnimatedTransformList;
 import org.loboevolution.html.dom.svg.SVGGElement;
+import org.loboevolution.html.dom.svg.SVGImageElement;
 import org.loboevolution.html.dom.svg.SVGRect;
 import org.loboevolution.html.dom.svg.SVGSVGElement;
 import org.loboevolution.html.dom.svg.SVGTransformable;
-import org.loboevolution.html.dom.svg.SVGImageElement;
 import org.loboevolution.html.dom.svg.SVGUseElement;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.node.Node;
 
 /**
  * <p>SVGGElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGGElementImpl extends SVGGraphic implements SVGGElement {
 
@@ -54,7 +73,7 @@ public class SVGGElementImpl extends SVGGraphic implements SVGGElement {
 			if (opacity < 1) {
 				float currentScale = 1;
 				Shape shape = createShape(null);
-				AffineTransform screenCTM = ((SVGMatrixImpl) getScreenCTM()).getAffineTransform();
+				AffineTransform screenCTM = getScreenCTM().getAffineTransform();
 				Shape transformedShape = screenCTM.createTransformedShape(shape);
 				Rectangle2D bounds = transformedShape.getBounds2D();
 				double xInc = bounds.getWidth() / 5;
@@ -102,8 +121,8 @@ public class SVGGElementImpl extends SVGGraphic implements SVGGElement {
 	public Shape createShape(AffineTransform transform) {
 		GeneralPath path = new GeneralPath();
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
+			NodeListImpl nodeList = (NodeListImpl)getChildNodes();
+			nodeList.forEach(child -> {
 				Shape childShape = null;
 				if (child instanceof SVGGElementImpl) {
 					childShape = ((SVGGElementImpl) child).createShape(transform);
@@ -121,7 +140,7 @@ public class SVGGElementImpl extends SVGGraphic implements SVGGElement {
 
 				} else if (child instanceof SVGSVGElementImpl) {
 					SVGSVGElement svg = (SVGSVGElement) child;
-					AffineTransform ctm = ((SVGMatrixImpl) getCTM()).getAffineTransform();
+					AffineTransform ctm = getCTM().getAffineTransform();
 					AffineTransform inverseTransform;
 					try {
 						inverseTransform = ctm.createInverse();
@@ -145,20 +164,20 @@ public class SVGGElementImpl extends SVGGraphic implements SVGGElement {
 				if (childShape != null) {
 					path.append(childShape, false);
 				}
-			}
+			});
 		}
 		return path;
 	}
 	
 	private void drawChildren(Graphics2D graphics) {
-		List<Node> drawableChildren = new ArrayList<Node>();
+		List<Node> drawableChildren = new ArrayList<>();
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
+			NodeListImpl childNodes = (NodeListImpl) getChildNodes();
+			childNodes.forEach(child -> {
 				if (child instanceof Drawable) {
 					drawableChildren.add(child);
 				}
-			}
+			});
 		}
 
 		for (Node node : drawableChildren) {

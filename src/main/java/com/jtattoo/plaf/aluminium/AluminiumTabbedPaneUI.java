@@ -39,13 +39,13 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AluminiumTabbedPaneUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
 
-	private static Color TOP_SELECTED_TAB_COLORS[] = null;
-	private static Color BOTTOM_SELECTED_TAB_COLORS[] = null;
+	private static Color[] TOP_SELECTED_TAB_COLORS = null;
+	private static Color[] BOTTOM_SELECTED_TAB_COLORS = null;
 
 	/** {@inheritDoc} */
 	public static ComponentUI createUI(JComponent c) {
@@ -106,7 +106,7 @@ public class AluminiumTabbedPaneUI extends BaseTabbedPaneUI {
 		}
 		if (JTattooUtilities.isMac() || !AbstractLookAndFeel.getTheme().isBackgroundPatternOn()) {
 			if (isSelected) {
-				Color colorArr[] = getTabColors(tabIndex, isSelected, tabIndex == rolloverIndex);
+				Color[] colorArr = getTabColors(tabIndex, isSelected, tabIndex == rolloverIndex);
 				switch (tabPlacement) {
 				case LEFT:
 					JTattooUtilities.fillHorGradient(g, colorArr, x + 1, y + 1, w + 1, h - 1);

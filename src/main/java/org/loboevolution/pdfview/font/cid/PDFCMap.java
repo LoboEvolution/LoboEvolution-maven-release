@@ -28,8 +28,8 @@ import org.loboevolution.pdfview.PDFObject;
  * A CMap maps from a character in a composite font to a font/glyph number
  * pair in a CID font.
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public abstract class PDFCMap {
     /**
@@ -86,7 +86,7 @@ public abstract class PDFCMap {
      * Populate the cache with well-known types
      */
     protected static void populateCache() {
-        cache = new HashMap<String, PDFCMap>();
+        cache = new HashMap<>();
     
         // add the Identity-H map
         cache.put("Identity-H", new PDFCMap() {

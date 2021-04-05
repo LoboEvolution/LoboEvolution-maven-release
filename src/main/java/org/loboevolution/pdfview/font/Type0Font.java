@@ -27,8 +27,8 @@ import org.loboevolution.pdfview.PDFObject;
  * Type 0 fonts are composite fonts with a CMAP to map between
  * source character codes and destination fonts/codes
  *
- * @author  Jonathan Kaplan
- * @version $Id: $Id
+ * Author  Jonathan Kaplan
+  *
  */
 public class Type0Font extends PDFFont {
    

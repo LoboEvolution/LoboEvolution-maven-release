@@ -23,24 +23,21 @@ package org.loboevolution.pdfview.font.ttf;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.loboevolution.pdfview.font.ttf.CMapFormat4.Segment;
 
 /**
  * <p>CMapFormat4 class.</p>
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class CMapFormat4 extends CMap {
    
     /**
      * The segments and associated data can be a char[] or an Integer
      */
-    public SortedMap<Segment,Object> segments;
+    public final SortedMap<Segment,Object> segments;
     
     /**
      * Creates a new instance of CMapFormat0
@@ -50,7 +47,7 @@ public class CMapFormat4 extends CMap {
     protected CMapFormat4(short language) {
         super((short) 4, language);
     
-        this.segments = Collections.synchronizedSortedMap(new TreeMap<Segment,Object>());
+        this.segments = Collections.synchronizedSortedMap(new TreeMap<>());
         
         char[] map = new char[1];
         map[0] = (char) 0;
@@ -86,7 +83,7 @@ public class CMapFormat4 extends CMap {
         Segment s = new Segment(startCode, endCode, false);
         // make sure we remove any old entries
         this.segments.remove(s);
-        this.segments.put(s, Integer.valueOf(idDelta));
+        this.segments.put(s, (int) idDelta);
     }
     
     /**
@@ -114,9 +111,7 @@ public class CMapFormat4 extends CMap {
         size += this.segments.size() * 8;
         
         // add the total number of mappings times the size of a mapping
-        for (Iterator i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = (Segment) i.next();
-            
+        for (Segment s : this.segments.keySet()) {
             // see if there's a map
             if (s.hasMap) {
                 // if there is, add its size
@@ -152,9 +147,7 @@ public class CMapFormat4 extends CMap {
     @Override
 	public char map(char src) {
         // find first segment with endcode > src
-        for (Iterator i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = (Segment) i.next();
-            
+        for (Segment s : this.segments.keySet()) {
             if (s.endCode >= src) {
                 // are we within range?
                 if (s.startCode <= src) {
@@ -166,7 +159,7 @@ public class CMapFormat4 extends CMap {
                     } else {
                         // return the character code + idDelta
                         Integer idDelta = (Integer) this.segments.get(s);
-                        return (char) (src + idDelta.intValue());
+                        return (char) (src + idDelta);
                     }
                 } else {
                     // undefined character
@@ -187,29 +180,27 @@ public class CMapFormat4 extends CMap {
     @Override
 	public char reverseMap(short glyphID) {
         // look at each segment
-        for (Iterator i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = (Segment) i.next();
-            
+        for (Segment s : this.segments.keySet()) {
             // see if we have a map or a delta
             if (s.hasMap) {
                 char[] map = (char[]) this.segments.get(s);
-                
+
                 // if we have a map, we have to iterate through it
-                for (int c = 0; c < map.length; c++) {
+                for (char c : map) {
                     if (map[c] == glyphID) {
                         return (char) (s.startCode + c);
                     }
                 }
             } else {
                 Integer idDelta = (Integer) this.segments.get(s);
-                
+
                 // we can do the math to see if we're in range
-                int start = s.startCode + idDelta.intValue();
-                int end = s.endCode + idDelta.intValue();
-                
+                int start = s.startCode + idDelta;
+                int end = s.endCode + idDelta;
+
                 if (glyphID >= start && glyphID <= end) {
                     // we're in the range
-                    return (char) (glyphID - idDelta.intValue());
+                    return (char) (glyphID - idDelta);
                 }
             }
         }
@@ -228,10 +219,6 @@ public class CMapFormat4 extends CMap {
 	public void setData(int length, ByteBuffer data) {
         // read the table size values
         short segCount = (short) (data.getShort() / 2);
-        short searchRange = data.getShort();
-        short entrySelector = data.getShort();
-        short rangeShift = data.getShort();
-    
         // create arrays to store segment info
         short[] endCodes = new short[segCount];
         short[] startCodes = new short[segCount];
@@ -315,8 +302,7 @@ public class CMapFormat4 extends CMap {
         buf.putShort(getRangeShift());
         
         // write the endCodes
-        for (Iterator<Segment> i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = i.next();
+        for (Segment s : this.segments.keySet()) {
             buf.putShort((short) s.endCode);
         }
         
@@ -324,15 +310,12 @@ public class CMapFormat4 extends CMap {
         buf.putShort((short) 0);
         
         // write the startCodes
-        for (Iterator<Segment> i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = i.next();
+        for (Segment s : this.segments.keySet()) {
             buf.putShort((short) s.startCode);
         }
         
         // write the idDeltas for segments using deltas
-        for (Iterator<Segment> i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = i.next();
-            
+        for (Segment s : this.segments.keySet()) {
             if (!s.hasMap) {
                 Integer idDelta = (Integer) this.segments.get(s);
                 buf.putShort(idDelta.shortValue());
@@ -345,29 +328,27 @@ public class CMapFormat4 extends CMap {
         int glyphArrayOffset = 16 + (8 * getSegmentCount());
         
         // write the idRangeOffsets and maps for segments using maps
-        for (Iterator<Segment> i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = i.next();
-            
+        for (Segment s : this.segments.keySet()) {
             if (s.hasMap) {
                 // first set the offset, which is the number of bytes from the
                 // current position to the current offset
                 buf.putShort((short) (glyphArrayOffset - buf.position()));
-                
+
                 // remember the current position
                 buf.mark();
-                
+
                 // move the position to the offset
                 buf.position(glyphArrayOffset);
-                
+
                 // now write the map
                 char[] map = (char[]) this.segments.get(s);
-                for (int c = 0; c < map.length; c++) {
-                    buf.putChar(map[c]);
+                for (char value : map) {
+                    buf.putChar(value);
                 }
-                
+
                 // reset the data pointer
                 buf.reset();
-                
+
                 // update the offset
                 glyphArrayOffset += map.length * 2;
             } else {
@@ -434,23 +415,21 @@ public class CMapFormat4 extends CMap {
         String indent = "        ";
         
         buf.append(super.toString());
-        buf.append(indent + "SegmentCount : " + getSegmentCount() + "\n");
-        buf.append(indent + "SearchRange  : " + getSearchRange() + "\n");
-        buf.append(indent + "EntrySelector: " + getEntrySelector() + "\n");
-        buf.append(indent + "RangeShift   : " + getRangeShift() + "\n");
-        
-        for (Iterator<Segment> i = this.segments.keySet().iterator(); i.hasNext();) {
-            Segment s = i.next();
-            
+        buf.append(indent).append("SegmentCount : ").append(getSegmentCount()).append("\n");
+        buf.append(indent).append("SearchRange  : ").append(getSearchRange()).append("\n");
+        buf.append(indent).append("EntrySelector: ").append(getEntrySelector()).append("\n");
+        buf.append(indent).append("RangeShift   : ").append(getRangeShift()).append("\n");
+
+        for (Segment s : this.segments.keySet()) {
             buf.append(indent);
-            buf.append("Segment: " + Integer.toHexString(s.startCode));
-            buf.append("-" + Integer.toHexString(s.endCode) + " ");
-            buf.append("hasMap: " + s.hasMap + " ");
-            
+            buf.append("Segment: ").append(Integer.toHexString(s.startCode));
+            buf.append("-").append(Integer.toHexString(s.endCode)).append(" ");
+            buf.append("hasMap: ").append(s.hasMap).append(" ");
+
             if (!s.hasMap) {
-                buf.append("delta: " + this.segments.get(s));
+                buf.append("delta: ").append(this.segments.get(s));
             }
-            
+
             buf.append("\n");
         }
         
@@ -459,13 +438,13 @@ public class CMapFormat4 extends CMap {
     
     static class Segment implements Comparable {
         /** the end code (highest code in this segment) */
-        int endCode;
+        final int endCode;
         
         /** the start code (lowest code in this segment) */
-        int startCode;
+        final int startCode;
         
         /** whether it is a map or a delta */
-        boolean hasMap;
+        final boolean hasMap;
         
         /** Create a new segment */
         public Segment(short startCode, short endCode, boolean hasMap) {

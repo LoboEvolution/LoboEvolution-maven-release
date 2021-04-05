@@ -24,9 +24,36 @@ import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFParseException;
 
 /**
- * PDF Functions are defined in the reference as Section 3.9.
- * @author utente
- * @version $Id: $Id
+ * <p>PDF Functions are defined in the reference as Section 3.9.</p>
+ *
+ * <p>A PDF function maps some set of <i>m</i> inputs into some set
+ * of <i>n</i> outputs.  There are 4 types of functions:
+ * <ul><li>Type 0: Sampled functions. (PDF 1.2)<br>
+ *                  A sampled function (type 0) uses a table of sample values
+ *                  to define the function. Various techniques are used to
+ *                  interpolate values between the sample values
+ *                  (see Section 3.9.1, "Type 0 (Sampled) Functions").</li>
+ *     <li>Type 2: Exponential Interpolation. (PDF 1.3)<br>
+ *                  An exponential interpolation function (type 2)
+ *                  defines a set of coefficients for an exponential function
+ *                  (see Section 3.9.2,
+ *                  "Type 2 (Exponential Interpolation) Functions").</li>
+ *     <li>Type 3: Stitching functions. (PDF 1.3)<br>
+ *                  A stitching function (type 3) is a combination of
+ *                  other functions, partitioned across a domain
+ *                  (see Section 3.9.3, "Type 3 (Stitching) Functions").</li>
+ *     <li>Type 4: Postscript calculations. (PDF 1.3)<br>
+ *                  A PostScript calculator function (type 4) uses operators
+ *                  from the PostScript language to describe an arithmetic
+ *                  expression (see Section 3.9.4,
+ *                  "Type 4 (PostScript Calculator) Functions").</li>
+ * </ul>
+ *
+ * The function interface contains a single method, <i>calculate</i> which
+ * takes an array of <i>m</i> floats an interprets them into an array of
+ * <i>n</i> floats.
+ * PDFFunctions do not have accessible constructors.  Instead, use the
+ * static <i>getFunction()</i> method to read a functions from a PDF Object.
  */
 public abstract class PDFFunction {
 
@@ -146,7 +173,9 @@ public abstract class PDFFunction {
     }
 
 	/**
-	 * Perform a linear interpolation.
+	 * Perform a linear interpolation.  Given a value x, and two points,
+	 * (xmin, ymin), (xmax, ymax), where xmin {@literal <}= x {@literal <}= xmax, calculate a value
+	 * y on the line from (xmin, ymin) to (xmax, ymax).
 	 *
 	 * @param x the x value of the input
 	 * @param xmin the minimum x value
@@ -249,7 +278,7 @@ public abstract class PDFFunction {
      * domain.  The number of outputs should match one half the size of the
      * range.
      *
-     * @param inputs an array
+     * @param inputs an array of {@literal >}= <i>m</i> input values
      * @return the array of <i>n</i> output values
      */
     public float[] calculate (float[] inputs) {
@@ -264,9 +293,10 @@ public abstract class PDFFunction {
      * domain.  The number of outputs should match one half the size of the
      * range.
      *
-     * @param inputs an array
+     * @param inputs an array of {@literal >}= <i>m</i> input values
      * @param inputOffset the offset into the input array to read from
-     * @param outputs an array of size 
+     * @param outputs an array of size {@literal >}= <i>n</i> which will be filled
+     *                with the output values
      * @param outputOffset the offset into the output array to write to
      * @return the array of <i>n</i> output values
      */
@@ -310,10 +340,11 @@ public abstract class PDFFunction {
      * clipped to the domain, while the outputs will be automatically clipped
      * to the range after being returned from this function.
      *
-     * @param inputs inputs
      * @param inputOffset the offset into the inputs array to read from
-     * @param outputs guaranteed to be at least as big as getNumOutputs(), but not yet clipped to domain
+     * @param outputs guaranteed to be at least as big as
+     *        <code>getNumOutputs()</code>, but not yet clipped to domain
      * @param outputOffset the offset into the output array to write to
+     * @param inputs an array of {@link float} objects.
      */
     protected abstract void doFunction (float[] inputs, int inputOffset,
                                         float[] outputs, int outputOffset);

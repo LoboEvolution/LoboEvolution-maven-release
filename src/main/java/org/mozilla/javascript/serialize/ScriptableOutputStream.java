@@ -31,8 +31,8 @@ import org.mozilla.javascript.UniqueTag;
  * the creation of duplicate copies of standard objects
  * during deserialization.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 
 // API class

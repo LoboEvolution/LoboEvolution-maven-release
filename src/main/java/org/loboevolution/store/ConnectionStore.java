@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.store;
 
 import java.io.Serializable;
@@ -8,6 +28,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.net.NetRoutines;
 
@@ -15,16 +37,19 @@ import org.loboevolution.net.NetRoutines;
 /**
  * <p>ConnectionStore class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ConnectionStore implements Serializable {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(ConnectionStore.class.getName());
 
-	private static String CONNECTIONS = "SELECT DISTINCT proxyType, userName, password, authenticated, host, port, disableProxyForLocalAddresses FROM CONNECTION";
+	private static final String CONNECTIONS = "SELECT DISTINCT proxyType, userName, password, authenticated, host, port, disableProxyForLocalAddresses FROM CONNECTION";
 
-	private static String DELETE_CONNECTIONS = "DELETE FROM CONNECTION";
+	private static final String DELETE_CONNECTIONS = "DELETE FROM CONNECTION";
 
-	private static String INSERT_CONNECTIONS = "INSERT INTO CONNECTION (proxyType, userName, password, authenticated, host, port, disableProxyForLocalAddresses) VALUES(?,?,?,?,?,?,?)";
+	private static final String INSERT_CONNECTIONS = "INSERT INTO CONNECTION (proxyType, userName, password, authenticated, host, port, disableProxyForLocalAddresses) VALUES(?,?,?,?,?,?,?)";
 
 	private static final long serialVersionUID = 1L;
 
@@ -69,14 +94,14 @@ public class ConnectionStore implements Serializable {
 					setting.setProxyType(Proxy.Type.valueOf(rs.getString(1)));
 					setting.setUserName(rs.getString(2));
 					setting.setPassword(rs.getString(3));
-					setting.setAuthenticated(rs.getInt(4) == 1 ? true : false);
+					setting.setAuthenticated(rs.getInt(4) == 1);
 					final InetSocketAddress socketAddress = new InetSocketAddress(rs.getString(5), rs.getInt(6));
 					setting.setInetSocketAddress(socketAddress);
-					setting.setDisableProxyForLocalAddresses(rs.getInt(7) == 1 ? true : false);
+					setting.setDisableProxyForLocalAddresses(rs.getInt(7) == 1);
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return setting;
 	}
@@ -89,7 +114,7 @@ public class ConnectionStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_CONNECTIONS)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -182,7 +207,7 @@ public class ConnectionStore implements Serializable {
 			pstmt.setInt(7, isDisableProxyForLocalAddresses() ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

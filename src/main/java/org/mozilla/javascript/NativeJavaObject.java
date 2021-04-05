@@ -21,11 +21,11 @@ import java.util.Map;
  * reflect fields directly, and uses NativeJavaMethod objects to reflect (possibly
  * overloaded) methods.<p>
  *
- * @author Mike Shaver
+ * Author Mike Shaver
  * @see NativeJavaArray
  * @see NativeJavaPackage
  * @see NativeJavaClass
- * @version $Id: $Id
+ *
  */
 public class NativeJavaObject
     implements Scriptable, SymbolScriptable, Wrapper, Serializable
@@ -281,7 +281,7 @@ public class NativeJavaObject
             } else if (hint == ScriptRuntime.NumberClass) {
                 converterName = "doubleValue";
             } else {
-                throw Context.reportRuntimeError0("msg.default.value");
+                throw Context.reportRuntimeErrorById("msg.default.value");
             }
             Object converterObject = get(converterName, this);
             if (converterObject instanceof Function) {
@@ -293,7 +293,7 @@ public class NativeJavaObject
                     && javaObject instanceof Boolean)
                 {
                     boolean b = ((Boolean)javaObject).booleanValue();
-                    value = ScriptRuntime.wrapNumber(b ? 1.0 : 0.0);
+                    value = b ? ScriptRuntime.wrapNumber(1.0) : ScriptRuntime.zeroObj;
                 } else {
                     value = javaObject.toString();
                 }
@@ -753,9 +753,9 @@ public class NativeJavaObject
                     return value;
                 reportConversionError(value, type);
             }
-            else if (type.isInterface() && (value instanceof NativeObject
-                    || value instanceof NativeFunction
-                    || value instanceof ArrowFunction)) {
+            else if (type.isInterface()
+                     && (value instanceof NativeObject
+                         || (value instanceof Callable && value instanceof ScriptableObject))) {
                 // Try to use function/object as implementation of Java interface.
                 return createInterfaceAdapter(type, (ScriptableObject) value);
             } else {
@@ -891,7 +891,7 @@ public class NativeJavaObject
                                             Byte.MAX_VALUE));
         }
 
-        return new Double(toDouble(value));
+        return Double.valueOf(toDouble(value));
     }
 
 
@@ -966,7 +966,7 @@ public class NativeJavaObject
     {
         // It uses String.valueOf(value), not value.toString() since
         // value can be null, bug 282447.
-        throw Context.reportRuntimeError2(
+        throw Context.reportRuntimeErrorById(
             "msg.conversion.not.allowed",
             String.valueOf(value),
             JavaMembers.javaSignature(type));

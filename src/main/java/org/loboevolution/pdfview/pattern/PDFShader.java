@@ -23,36 +23,72 @@ import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.Map;
 
-import org.loboevolution.pdfview.PDFDebugger;
 import org.loboevolution.pdfview.PDFObject;
 import org.loboevolution.pdfview.PDFPaint;
 import org.loboevolution.pdfview.PDFParseException;
 import org.loboevolution.pdfview.colorspace.PDFColorSpace;
 
 /**
- * A PDFShader fills a given region with a shading, such as a gradient.
- * @author utente
- * @version $Id: $Id
+ *
+ * <p>A PDFShader fills a given region with a shading, such as a gradient.</p>
+ *
+ * Shading Dictionaries (section 4.6)<br>
+ * A shading dictionary specifies details of a particular gradient fill,
+ * including the type of shading to be used, the geometry of the area to
+ * be shaded, and the geometry of the gradient fill. Various shading types
+ * are available, depending on the value of the dictionary’s ShadingType entry:
+ *
+ * <p>Function-based shadings (type 1) define the color of every point in the
+ * domain using a mathematical function (not necessarily smooth or continuous).</p>
+ *
+ * <p>Axial shadings (type 2) define a color blend along a pne between two
+ * points, optionally extended beyond the boundary points by continuing
+ * the boundary colors.</p>
+ *
+ * <p>Radial shadings (type 3) define a blend between two circles,
+ * optionally extended beyond the boundary circles by continuing the
+ * boundary colors. This type of shading is commonly used to represent
+ * three-dimensional spheres and cones.</p>
+ *
+ * <p>Free-form Gouraud-shaded triangle meshes (type 4) define a
+ * common construct used by many three-dimensional apppcations to
+ * represent complex colored and shaded shapes. Vertices are specified
+ * in free-form geometry.</p>
+ *
+ * <p>Lattice-form Gouraud-shaded triangle meshes (type 5) are based on
+ * the same geometrical construct as type 4 but with vertices specified
+ * as a pseudorectangular lattice.</p>
+ *
+ * <p>Coons patch meshes (type 6) construct a shading from one or more
+ * color patches, each bounded by four cubic Bézier curves.</p>
+ *
+ * <p>Tensor-product patch meshes (type 7) are similar to type 6 but
+ * with additional control points in each patch, affording greater
+ * control over color mapping.</p>
+ *
+ * Table 4.28 shows the entries that all shading dictionaries share
+ * in common; entries specific to particular shading types are
+ * described in the relevant sections below.
  */
 public abstract class PDFShader {
     
-    /** Constant FUNCTION_SHADING=1 */
+    /** Constant <code>FUNCTION_SHADING=1</code> */
     public final static int             FUNCTION_SHADING = 1;
-    /** Constant AXIAL_SHADING=2 */
+    /** Constant <code>AXIAL_SHADING=2</code> */
     public final static int             AXIAL_SHADING = 2;
-    /** Constant RADIAL_SHADING=3 */
+    /** Constant <code>RADIAL_SHADING=3</code> */
     public final static int             RADIAL_SHADING = 3;
-    /** Constant FREE_FORM_SHADING=4 */
+    /** Constant <code>FREE_FORM_SHADING=4</code> */
     public final static int             FREE_FORM_SHADING = 4;
-    /** Constant LATTICE_SHADING=5 */
+    /** Constant <code>LATTICE_SHADING=5</code> */
     public final static int             LATTICE_SHADING = 5;
-    /** Constant COONS_PATCH_MESH_SHADING=6 */
+    /** Constant <code>COONS_PATCH_MESH_SHADING=6</code> */
     public final static int             COONS_PATCH_MESH_SHADING = 6;
-    /** Constant TENSOR_PRODUCTS_MESH_SHADING=7 */
+    /** Constant <code>TENSOR_PRODUCTS_MESH_SHADING=7</code> */
     public final static int             TENSOR_PRODUCTS_MESH_SHADING = 7;
 
     /** The tolerance for reevaluating the shading function again */
-    public static float TOLERANCE = 1e-4f;
+    public static final float TOLERANCE = 1e-4f;
 
     /** the type of the shading (1 through 7)*/
     private final int type;

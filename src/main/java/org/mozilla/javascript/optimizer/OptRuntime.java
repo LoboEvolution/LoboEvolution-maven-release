@@ -10,6 +10,7 @@ import org.mozilla.javascript.Callable;
 import org.mozilla.javascript.ConsString;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.ES6Generator;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.NativeFunction;
@@ -19,22 +20,20 @@ import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.Undefined;
 
 /**
  * <p>OptRuntime class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class OptRuntime extends ScriptRuntime
 {
-
-    /** Constant zeroObj */
-    public static final Double zeroObj = new Double(0.0);
-    /** Constant oneObj */
-    public static final Double oneObj = new Double(1.0);
-    /** Constant minusOneObj */
-    public static final Double minusOneObj = new Double(-1.0);
+    /** Constant <code>oneObj</code> */
+    public static final Double oneObj = Double.valueOf(1.0);
+    /** Constant <code>minusOneObj</code> */
+    public static final Double minusOneObj = Double.valueOf(-1.0);
 
     /**
      * Implement ....() call shrinking optimizer code.
@@ -168,13 +167,7 @@ public final class OptRuntime extends ScriptRuntime
         return new ConsString((CharSequence)val1, toString(val2));
     }
 
-    /**
-     * <p>add.</p>
-     *
-     * @param val1 a double.
-     * @param val2 a {@link java.lang.Object} object.
-     * @return a {@link java.lang.Object} object.
-     */
+    /** {@inheritDoc} */
     public static Object add(double val1, Object val2)
     {
         if (val2 instanceof Scriptable)
@@ -375,11 +368,16 @@ public final class OptRuntime extends ScriptRuntime
     /**
      * <p>throwStopIteration.</p>
      *
-     * @param obj a {@link java.lang.Object} object.
+     * @param scope a {@link java.lang.Object} object.
+     * @param genState a {@link java.lang.Object} object.
      */
-    public static void throwStopIteration(Object obj) {
-        throw new JavaScriptException(
-            NativeIterator.getStopIterationObject((Scriptable)obj), "", 0);
+    public static void throwStopIteration(Object scope, Object genState) {
+        Object value = getGeneratorReturnValue(genState);
+        Object si =
+            (value == Undefined.instance) ?
+              NativeIterator.getStopIterationObject((Scriptable)scope) :
+              new NativeIterator.StopIteration(value);
+        throw new JavaScriptException(si, "", 0);
     }
 
     /**
@@ -398,8 +396,12 @@ public final class OptRuntime extends ScriptRuntime
                                                    int maxLocals,
                                                    int maxStack)
     {
-        return new NativeGenerator(scope, funObj,
-                new GeneratorState(thisObj, maxLocals, maxStack));
+        GeneratorState gs = new GeneratorState(thisObj, maxLocals, maxStack);
+        if (Context.getCurrentContext().getLanguageVersion() >= Context.VERSION_ES6) {
+            return new ES6Generator(scope, funObj, gs);
+        } else {
+            return new NativeGenerator(scope, funObj, gs);
+        }
     }
 
     /**
@@ -428,14 +430,38 @@ public final class OptRuntime extends ScriptRuntime
         return rgs.localsState;
     }
 
+    /**
+     * <p>setGeneratorReturnValue.</p>
+     *
+     * @param obj a {@link java.lang.Object} object.
+     * @param val a {@link java.lang.Object} object.
+     */
+    public static void setGeneratorReturnValue(Object obj, Object val) {
+        GeneratorState rgs = (GeneratorState) obj;
+        rgs.returnValue = val;
+    }
+
+    /**
+     * <p>getGeneratorReturnValue.</p>
+     *
+     * @param obj a {@link java.lang.Object} object.
+     * @return a {@link java.lang.Object} object.
+     */
+    public static Object getGeneratorReturnValue(Object obj) {
+        GeneratorState rgs = (GeneratorState) obj;
+        return (rgs.returnValue == null ? Undefined.instance : rgs.returnValue);
+    }
+
     public static class GeneratorState {
         static final String CLASS_NAME =
             "org/mozilla/javascript/optimizer/OptRuntime$GeneratorState";
 
+        @SuppressWarnings("unused")
         public int resumptionPoint;
         static final String resumptionPoint_NAME = "resumptionPoint";
         static final String resumptionPoint_TYPE = "I";
 
+        @SuppressWarnings("unused")
         public Scriptable thisObj;
         static final String thisObj_NAME = "thisObj";
         static final String thisObj_TYPE =
@@ -445,6 +471,7 @@ public final class OptRuntime extends ScriptRuntime
         Object[] localsState;
         int maxLocals;
         int maxStack;
+        Object returnValue;
 
         GeneratorState(Scriptable thisObj, int maxLocals, int maxStack) {
             this.thisObj = thisObj;

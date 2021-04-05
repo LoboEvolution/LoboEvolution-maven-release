@@ -16,8 +16,8 @@ package com.gargoylesoftware.css.parser.javacc;
  * by the lexer. Hence their implementation won't affect the generated lexer's
  * operation.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public
 interface CharStream {

@@ -16,8 +16,8 @@ import org.mozilla.javascript.Token;
  *
  * Node type is {@link org.mozilla.javascript.Token#DOT} or {@link org.mozilla.javascript.Token#DOTDOT}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XmlMemberGet extends InfixExpression {
 

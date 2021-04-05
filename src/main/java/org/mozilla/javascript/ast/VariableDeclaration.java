@@ -24,8 +24,8 @@ import org.mozilla.javascript.Token;
  * A standalone variable declaration in a statement context returns {@code true}
  * from its {@link #isStatement()} method.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class VariableDeclaration extends AstNode {
 

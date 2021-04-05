@@ -61,8 +61,8 @@ import org.mozilla.javascript.Token;
  * statements, as the distinction in JavaScript is not as clear-cut as in
  * Java or C++.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class AstNode extends Node implements Comparable<AstNode> {
 
@@ -113,6 +113,7 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
         operatorNames.put(Token.MUL, "*");
         operatorNames.put(Token.DIV, "/");
         operatorNames.put(Token.MOD, "%");
+        operatorNames.put(Token.EXP, "**");
         operatorNames.put(Token.NOT, "!");
         operatorNames.put(Token.BITNOT, "~");
         operatorNames.put(Token.POS, "+");
@@ -131,6 +132,7 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
         operatorNames.put(Token.ASSIGN_DIV, "/=");
         operatorNames.put(Token.ASSIGN_MOD, "%=");
         operatorNames.put(Token.ASSIGN_BITXOR, "^=");
+        operatorNames.put(Token.ASSIGN_EXP, "**=");
         operatorNames.put(Token.VOID, "void");
     }
 
@@ -473,6 +475,7 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
           case Token.WITH:
           case Token.WITHEXPR:
           case Token.YIELD:
+          case Token.YIELD_STAR:
             return true;
 
           default:
@@ -608,7 +611,8 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
         public String toString() {
             return buffer.toString();
         }
-        private String makeIndent(int depth) {
+
+        private static String makeIndent(int depth) {
             StringBuilder sb = new StringBuilder(DEBUG_INDENT * depth);
             for (int i = 0; i < (DEBUG_INDENT * depth); i++) {
                 sb.append(" ");
@@ -664,7 +668,7 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
     }
 
     /**
-     * <p>Getter for the field inlineComment.</p>
+     * <p>Getter for the field <code>inlineComment</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.AstNode} object.
      */
@@ -673,7 +677,7 @@ public abstract class AstNode extends Node implements Comparable<AstNode> {
     }
 
     /**
-     * <p>Setter for the field inlineComment.</p>
+     * <p>Setter for the field <code>inlineComment</code>.</p>
      *
      * @param inlineComment a {@link org.mozilla.javascript.ast.AstNode} object.
      */

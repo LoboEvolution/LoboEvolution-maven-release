@@ -18,11 +18,11 @@ import java.util.Set;
  * in all other references to the same package (as with Packages.java.lang
  * and java.lang).
  *
- * @author Mike Shaver
+ * Author Mike Shaver
  * @see NativeJavaArray
  * @see NativeJavaObject
  * @see NativeJavaClass
- * @version $Id: $Id
+ *
  */
 public class NativeJavaPackage extends ScriptableObject
 {
@@ -88,7 +88,7 @@ public class NativeJavaPackage extends ScriptableObject
     /** {@inheritDoc} */
     @Override
     public void put(int index, Scriptable start, Object value) {
-        throw Context.reportRuntimeError0("msg.pkg.int");
+        throw Context.reportRuntimeErrorById("msg.pkg.int");
     }
 
     /** {@inheritDoc} */

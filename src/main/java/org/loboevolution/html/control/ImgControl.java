@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Nov 19, 2005
  */
@@ -30,28 +29,30 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import org.loboevolution.common.Strings;
 import org.loboevolution.common.WrapperLayout;
 import org.loboevolution.html.AlignValues;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLImageElementImpl;
 import org.loboevolution.html.renderer.HtmlController;
+import org.loboevolution.html.style.AbstractCSSProperties;
 import org.loboevolution.html.style.HtmlValues;
 import org.loboevolution.net.HttpNetwork;
 
 /**
  * <p>ImgControl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ImgControl extends BaseControl {
 
 	private static final long serialVersionUID = 1L;
 
-	private volatile Image image;
+	private final Image image;
 
-	private String alt;
+	private final String alt;
 
 	private Dimension preferredSize;
 
@@ -135,37 +136,11 @@ public class ImgControl extends BaseControl {
 	public void reset(int availWidth, int availHeight) {
 		super.reset(availWidth, availHeight);
 		final HTMLElementImpl element = this.controlElement;
-		final int dw = HtmlValues.getPixelSize(element.getAttribute("width"), null, -1, availWidth);
-		final int dh = HtmlValues.getPixelSize(element.getAttribute("height"), null, -1, availHeight);
+		AbstractCSSProperties currentStyle = element.getCurrentStyle();
+		final int dw = getValueSize(element.getAttribute("width"), currentStyle.getWidth(), availWidth);
+		final int dh = getValueSize(element.getAttribute("height"), currentStyle.getHeight(), availHeight);
 		this.preferredSize = createPreferredSize(dw, dh);
-		int valign;
-		String alignText = element.getAttribute("align");
-		alignText = Strings.isNotBlank(alignText) ? alignText.toLowerCase().trim() : "";
-
-		switch (alignText) {
-		case "middle":
-			valign = AlignValues.MIDDLE.getValue();
-			break;
-		case "absmiddle":
-			valign = AlignValues.ABSMIDDLE.getValue();
-			break;
-		case "top":
-			valign = AlignValues.TOP.getValue();
-			break;
-		case "bottom":
-			valign = AlignValues.BOTTOM.getValue();
-			break;
-		case "baseline":
-			valign = AlignValues.BASELINE.getValue();
-			break;
-		case "absbottom":
-			valign = AlignValues.ABSBOTTOM.getValue();
-			break;
-		default:
-			valign = AlignValues.BASELINE.getValue();
-			break;
-		}
-		this.valign = valign;
+		this.valign = getValign(element);
 	}
 
 	private Dimension createPreferredSize(int dw, int dh) {
@@ -207,5 +182,43 @@ public class ImgControl extends BaseControl {
 			}
 		}
 		return new Dimension(dw, dh);
+	}
+
+	private int getValign(HTMLElementImpl element){
+		String alignText = element.getAttribute("align");
+
+		if(Strings.isNotBlank(alignText)){
+			alignText = alignText.toLowerCase().trim();
+		} else{
+			AbstractCSSProperties style = element.getCurrentStyle();
+			alignText = Strings.isNotBlank(style.getVerticalAlign()) ? style.getVerticalAlign() : "";
+		}
+
+		switch (alignText) {
+			case "middle":
+				return AlignValues.MIDDLE.getValue();
+			case "absmiddle":
+				return AlignValues.ABSMIDDLE.getValue();
+			case "top":
+				return AlignValues.TOP.getValue();
+			case "bottom":
+				return AlignValues.BOTTOM.getValue();
+			case "absbottom":
+				return AlignValues.ABSBOTTOM.getValue();
+			default:
+			case "baseline":
+				return AlignValues.BASELINE.getValue();
+		}
+	}
+	
+	
+	private int getValueSize(String attribute, String styleAttribute, int availSize) {
+		String size;
+		if(Strings.isNotBlank(attribute)){
+			size = attribute.toLowerCase().trim();
+		} else{
+			size = Strings.isNotBlank(styleAttribute) ? styleAttribute : "";
+		}
+		return  HtmlValues.getPixelSize(size, null, -1, availSize);
 	}
 }

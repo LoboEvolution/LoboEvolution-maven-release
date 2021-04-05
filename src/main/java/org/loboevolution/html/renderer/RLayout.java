@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.renderer;
 
 import java.util.HashMap;
@@ -9,12 +29,14 @@ import org.loboevolution.html.control.ButtonControl;
 import org.loboevolution.html.control.CanvasControl;
 import org.loboevolution.html.control.FrameControl;
 import org.loboevolution.html.control.ImgControl;
+import org.loboevolution.html.control.ImgSvgControl;
 import org.loboevolution.html.control.InputControl;
 import org.loboevolution.html.control.RImgControl;
 import org.loboevolution.html.control.RSSControl;
 import org.loboevolution.html.control.RUIControl;
 import org.loboevolution.html.control.SVGControl;
 import org.loboevolution.html.control.SelectControl;
+import org.loboevolution.html.control.TextAreaControl;
 import org.loboevolution.html.control.UIControl;
 import org.loboevolution.html.control.UIControlWrapper;
 import org.loboevolution.html.dom.domimpl.HTMLButtonElementImpl;
@@ -24,6 +46,7 @@ import org.loboevolution.html.dom.domimpl.HTMLIFrameElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLImageElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLInputElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLSelectElementImpl;
+import org.loboevolution.html.dom.domimpl.HTMLTextAreaElementImpl;
 import org.loboevolution.html.dom.domimpl.UINode;
 import org.loboevolution.html.dom.rss.RSSElementImpl;
 import org.loboevolution.html.dom.svgimpl.SVGSVGElementImpl;
@@ -33,13 +56,13 @@ import org.loboevolution.http.UserAgentContext;
 /**
  * <p>RLayout class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class RLayout {
 	
 	/** Constant elementLayout */
-	protected static final Map<HTMLTag, MarkupLayout> elementLayout = new HashMap<HTMLTag, MarkupLayout>();
+	protected static final Map<HTMLTag, MarkupLayout> elementLayout = new HashMap<>();
 	
 	static {
 		final Map<HTMLTag, MarkupLayout> el = elementLayout;
@@ -146,20 +169,7 @@ public class RLayout {
 
 		@Override
 		public void layoutMarkup(RBlockViewport bodyLayout, HTMLElementImpl markupElement) {
-			final RenderState rs = markupElement.getRenderState();
-			int display = markupElement.getHidden() ? RenderState.DISPLAY_NONE : rs == null ? this.display : rs.getDisplay();
-
-	        if (display == RenderState.DISPLAY_INLINE || display == RenderState.DISPLAY_INLINE_BLOCK) {
-	            final int position = rs == null ? RenderState.POSITION_STATIC : rs.getPosition();
-	            if (position == RenderState.POSITION_ABSOLUTE || position == RenderState.POSITION_FIXED) {
-	                display = RenderState.DISPLAY_BLOCK;
-	            } else {
-	                final int boxFloat = rs == null ? RenderState.FLOAT_NONE : rs.getFloat();
-	                if (boxFloat != RenderState.FLOAT_NONE) {
-	                    display = RenderState.DISPLAY_BLOCK;
-	                }
-	            }
-	        }
+			final int display = calculateLayout(markupElement);
 			
 	        switch (display) {
 	        case RenderState.DISPLAY_TABLE_COLUMN:
@@ -189,11 +199,37 @@ public class RLayout {
 	        case RenderState.DISPLAY_INLINE_BLOCK:
 	            bodyLayout.layoutRInlineBlock(markupElement);
 	            break;
-	        case RenderState.DISPLAY_TABLE_CELL:
+	      case RenderState.DISPLAY_FLEX_BOX:
+	        	 bodyLayout.layoutRFlex(markupElement);
+	        	 break;
+	      case RenderState.DISPLAY_FLEX_CHILD:
+	        	 bodyLayout.layoutChildFlex(markupElement);
+	        	 break; 
+	      case RenderState.DISPLAY_TABLE_CELL:
 	        default:
 	            bodyLayout.layoutMarkup(markupElement);
 	            break;
 	        }
+		}
+		
+		private int calculateLayout(HTMLElementImpl markupElement) {
+			final RenderState rs = markupElement.getRenderState();
+			final boolean isHidden = markupElement.getHidden();
+			final int defaultDispaly = rs == null ? this.display : rs.getDisplay();
+			int display = isHidden ? RenderState.DISPLAY_NONE : defaultDispaly;
+
+			if (display == RenderState.DISPLAY_INLINE || display == RenderState.DISPLAY_INLINE_BLOCK) {
+	            final int position = rs == null ? RenderState.POSITION_STATIC : rs.getPosition();
+	            if (position == RenderState.POSITION_ABSOLUTE || position == RenderState.POSITION_FIXED) {
+	                display = RenderState.DISPLAY_BLOCK;
+	            } else {
+	                final int boxFloat = rs == null ? RenderState.FLOAT_NONE : rs.getFloat();
+	                if (boxFloat != RenderState.FLOAT_NONE) {
+	                    display = RenderState.DISPLAY_BLOCK;
+	                }
+	            }
+	        }
+			return display;
 		}
 	}
 
@@ -326,9 +362,14 @@ public class RLayout {
 
 		@Override
 		protected RElement createRenderable(RBlockViewport bodyLayout, HTMLElementImpl markupElement) {
-			final UIControl control = new ImgControl((HTMLImageElementImpl) markupElement);
-			return new RImgControl(markupElement, control, bodyLayout.container, bodyLayout.frameContext,
-					bodyLayout.userAgentContext);
+			UIControl control = null;
+			HTMLImageElementImpl image = (HTMLImageElementImpl) markupElement;
+			if(image.getSrc() != null && image.getSrc().endsWith(".svg")) {
+				control = new ImgSvgControl(image);
+			} else {
+				control = new ImgControl(image);	
+			}
+			return new RImgControl(markupElement, control, bodyLayout.container, bodyLayout.frameContext, bodyLayout.userAgentContext);
 		}
 	}
 
@@ -391,7 +432,7 @@ public class RLayout {
 		 * Must use this ThreadLocal because an ObjectLayout instance is shared across
 		 * renderers.
 		 */
-		private final ThreadLocal<HtmlObject> htmlObject = new ThreadLocal<HtmlObject>();
+		private final ThreadLocal<HtmlObject> htmlObject = new ThreadLocal<>();
 
 		private final boolean tryToRenderContent;
 
@@ -406,7 +447,7 @@ public class RLayout {
 
 		@Override
 		protected RElement createRenderable(RBlockViewport bodyLayout, HTMLElementImpl markupElement) {
-			final HtmlObject ho = (HtmlObject) this.htmlObject.get();
+			final HtmlObject ho = this.htmlObject.get();
 			final UIControl uiControl = new UIControlWrapper(ho);
 			final RUIControl ruiControl = new RUIControl(markupElement, uiControl, bodyLayout.container,
 					bodyLayout.frameContext, bodyLayout.userAgentContext);
@@ -493,7 +534,7 @@ public class RLayout {
 
 		@Override
 		protected RElement createRenderable(RBlockViewport bodyLayout, HTMLElementImpl markupElement) {
-			UIControl control = new InputControl((HTMLInputElementImpl) markupElement);
+			UIControl control = new TextAreaControl((HTMLTextAreaElementImpl) markupElement);
 			return new RUIControl(markupElement, control, bodyLayout.container, bodyLayout.frameContext,
 					bodyLayout.userAgentContext);
 		}

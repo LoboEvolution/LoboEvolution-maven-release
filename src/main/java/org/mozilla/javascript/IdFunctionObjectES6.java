@@ -3,8 +3,8 @@ package org.mozilla.javascript;
 /**
  * <p>IdFunctionObjectES6 class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class IdFunctionObjectES6 extends IdFunctionObject{
 

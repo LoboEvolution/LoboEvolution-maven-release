@@ -27,14 +27,14 @@ import org.loboevolution.pdfview.PDFParseException;
 /**
  * decode an array of Run Length encoded bytes into a byte array
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class RunLengthDecode {
 	/** the end of data in the RunLength encoding. */
 	private static final int RUN_LENGTH_EOD = 128;
 
-	private ByteBuffer buf;
+	private final ByteBuffer buf;
 
 	/**
 	 * initialize the decoder with an array of bytes in RunLength format

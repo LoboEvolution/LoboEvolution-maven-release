@@ -8,7 +8,6 @@ package org.mozilla.javascript;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.Jump;
@@ -19,14 +18,12 @@ import org.mozilla.javascript.ast.ScriptNode;
  * This class transforms a tree to a lower-level representation for codegen.
  *
  * @see Node
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class NodeTransformer
 {
 
-	private static final Logger logger = Logger.getLogger(NodeTransformer.class.getName());
-	
     /**
      * <p>Constructor for NodeTransformer.</p>
      */
@@ -82,7 +79,7 @@ public class NodeTransformer
         tree.flattenSymbolTable(!createScopeObjects);
 
         //uncomment to print tree before transformation
-        if (Token.printTrees) logger.info(tree.toStringTree(tree));
+        if (Token.printTrees) System.out.println(tree.toStringTree(tree));
         transformCompilationUnit_r(tree, tree, tree, createScopeObjects,
                                    inStrictMode);
     }
@@ -173,6 +170,7 @@ public class NodeTransformer
                 break;
 
               case Token.YIELD:
+              case Token.YIELD_STAR:
                 ((FunctionNode)tree).addResumptionPoint(node);
                 break;
 

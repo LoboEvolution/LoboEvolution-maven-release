@@ -10,23 +10,20 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
 
 /**
  * This class reflects Java methods into the JavaScript environment and
  * handles overloading of methods.
  *
- * @author Mike Shaver
+ * Author Mike Shaver
  * @see NativeJavaArray
  * @see NativeJavaPackage
  * @see NativeJavaClass
- * @version $Id: $Id
+ *
  */
 public class NativeJavaMethod extends BaseFunction
 {
     private static final long serialVersionUID = -3440381785576412928L;
-    
-    private static final Logger logger = Logger.getLogger(NativeJavaMethod.class.getName());
 
     NativeJavaMethod(MemberBox[] methods)
     {
@@ -154,7 +151,7 @@ public class NativeJavaMethod extends BaseFunction
             Class<?> c = methods[0].method().getDeclaringClass();
             String sig = c.getName() + '.' + getFunctionName() + '(' +
                          scriptSignature(args) + ')';
-            throw Context.reportRuntimeError1("msg.java.no_such_method", sig);
+            throw Context.reportRuntimeErrorById("msg.java.no_such_method", sig);
         }
 
         MemberBox meth = methods[index];
@@ -218,7 +215,7 @@ public class NativeJavaMethod extends BaseFunction
             Class<?> c = meth.getDeclaringClass();
             for (;;) {
                 if (o == null) {
-                    throw Context.reportRuntimeError3(
+                    throw Context.reportRuntimeErrorById(
                         "msg.nonjava.method", getFunctionName(),
                         ScriptRuntime.toString(thisObj), c.getName());
                 }
@@ -465,11 +462,11 @@ public class NativeJavaMethod extends BaseFunction
         String memberClass = firstFitMember.getDeclaringClass().getName();
 
         if (methodsOrCtors[0].isCtor()) {
-            throw Context.reportRuntimeError3(
+            throw Context.reportRuntimeErrorById(
                 "msg.constructor.ambiguous",
                 memberName, scriptSignature(args), buf.toString());
         }
-        throw Context.reportRuntimeError4(
+        throw Context.reportRuntimeErrorById(
             "msg.method.ambiguous", memberClass,
             memberName, scriptSignature(args), buf.toString());
     }
@@ -554,13 +551,13 @@ public class NativeJavaMethod extends BaseFunction
             sb.append(" for arguments (");
             sb.append(scriptSignature(args));
             sb.append(')');
-            logger.info(sb.toString());
+            System.out.println(sb);
         }
     }
 
     MemberBox[] methods;
     private String functionName;
-    private transient CopyOnWriteArrayList<ResolvedOverload> overloadCache;
+    private transient final CopyOnWriteArrayList<ResolvedOverload> overloadCache = new CopyOnWriteArrayList<>();
 }
 
 class ResolvedOverload {

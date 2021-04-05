@@ -20,8 +20,8 @@ import org.mozilla.javascript.xml.XMLLib;
  *
  * See ECMA 15.1.[12].
  *
- * @author Mike Shaver
- * @version $Id: $Id
+ * Author Mike Shaver
+ *
  */
 public class NativeGlobal implements Serializable, IdFunctionCall
 {
@@ -380,7 +380,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
      * for the strange constant names should be directed there.
      */
 
-    private Object js_escape(Object[] args) {
+    private static Object js_escape(Object[] args) {
         final int
             URL_XALPHAS = 1,
             URL_XPALPHAS = 2,
@@ -394,7 +394,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
             if (Double.isNaN(d) || ((mask = (int) d) != d) ||
                 0 != (mask & ~(URL_XALPHAS | URL_XPALPHAS | URL_PATH)))
             {
-                throw Context.reportRuntimeError0("msg.bad.esc.mask");
+                throw Context.reportRuntimeErrorById("msg.bad.esc.mask");
             }
         }
 
@@ -447,7 +447,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
      * The global unescape method, as per ECMA-262 15.1.2.5.
      */
 
-    private Object js_unescape(Object[] args)
+    private static Object js_unescape(Object[] args)
     {
         String s = ScriptRuntime.toString(args, 0);
         int firstEscapePos = s.indexOf('%');
@@ -490,7 +490,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
      * This is an indirect call to eval, and thus uses the global environment.
      * Direct calls are executed via ScriptRuntime.callSpecial().
      */
-    private Object js_eval(Context cx, Scriptable scope, Object[] args)
+    private static Object js_eval(Context cx, Scriptable scope, Object[] args)
     {
         Scriptable global = ScriptableObject.getTopLevelScope(scope);
         return ScriptRuntime.evalSpecial(cx, global, global, args, "eval code", 1);
@@ -748,7 +748,7 @@ public class NativeGlobal implements Serializable, IdFunctionCall
 
     private static EcmaError uriError() {
         return ScriptRuntime.constructError("URIError",
-                ScriptRuntime.getMessage0("msg.bad.uri"));
+                ScriptRuntime.getMessageById("msg.bad.uri"));
     }
 
     private static final String URI_DECODE_RESERVED = ";/?:@&=+$,#";

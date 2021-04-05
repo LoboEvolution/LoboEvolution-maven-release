@@ -1,44 +1,43 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.js;
 
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.loboevolution.html.dom.domimpl.NodeImpl;
 import org.loboevolution.http.UserAgentContext;
 import org.loboevolution.js.JavaScript;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.events.Event;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.events.Event;
 
 /**
  * <p>Executor class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Executor {
 	private static final Logger logger = Logger.getLogger(Executor.class.getName());
@@ -66,7 +65,7 @@ public class Executor {
 	/**
 	 * <p>executeFunction.</p>
 	 *
-	 * @param element a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param element a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 * @param f a {@link org.mozilla.javascript.Function} object.
 	 * @param event a {@link org.w3c.dom.events.Event} object.
 	 * @param obj an array of {@link java.lang.Object} objects.
@@ -79,7 +78,7 @@ public class Executor {
 	/**
 	 * <p>executeFunction.</p>
 	 *
-	 * @param element a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param element a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 * @param thisObject a {@link java.lang.Object} object.
 	 * @param f a {@link org.mozilla.javascript.Function} object.
 	 * @param event a {@link org.w3c.dom.events.Event} object.
@@ -108,7 +107,10 @@ public class Executor {
 				if (!(result instanceof Boolean)) {
 					return true;
 				}
-				return ((Boolean) result).booleanValue();
+				return (Boolean) result;
+			} catch (java.util.MissingResourceException mre) {
+				logger.log(Level.WARNING, mre.getMessage());
+				return true;
 			} catch (final Throwable thrown) {
 				logger.log(Level.WARNING, "executeFunction(): There was an error in Javascript code.", thrown);
 				return true;
@@ -136,7 +138,7 @@ public class Executor {
 				if (!(result instanceof Boolean)) {
 					return true;
 				}
-				return ((Boolean) result).booleanValue();
+				return (Boolean) result;
 			} catch (final Throwable err) {
 				logger.log(Level.WARNING,
 						"executeFunction(): Unable to execute Javascript function " + f.getClassName() + ".", err);

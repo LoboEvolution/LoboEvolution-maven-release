@@ -30,8 +30,8 @@ import org.mozilla.javascript.Token;
  *       StringLiteral
  *       NumberLiteral</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ObjectProperty extends InfixExpression {
 

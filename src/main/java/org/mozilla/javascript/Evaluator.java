@@ -14,8 +14,8 @@ import org.mozilla.javascript.ast.ScriptNode;
  * Abstraction of evaluation, which can be implemented either by an
  * interpreter or compiler.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface Evaluator {
 

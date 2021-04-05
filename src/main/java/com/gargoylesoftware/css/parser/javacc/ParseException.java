@@ -11,8 +11,8 @@ package com.gargoylesoftware.css.parser.javacc;
  * You can modify this class to customize your error reporting
  * mechanisms so long as you retain the public fields.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ParseException extends Exception {
 

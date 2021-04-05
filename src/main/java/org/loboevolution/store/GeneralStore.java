@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.store;
 
 import java.awt.GraphicsEnvironment;
@@ -9,39 +29,44 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * General browser settings. 
+ * General browser settings.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GeneralStore implements Serializable {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(GeneralStore.class.getName());
 
-	private static String DELETE_NETWORK = "DELETE FROM NETWORK";
+	private static final String DELETE_NETWORK = "DELETE FROM NETWORK";
 
-	private static String DELETE_SIZE = "DELETE FROM SIZE";
+	private static final String DELETE_SIZE = "DELETE FROM SIZE";
 
-	private static String DELETE_STARTUP = "DELETE FROM STARTUP";
+	private static final String DELETE_STARTUP = "DELETE FROM STARTUP";
 
-	private static String DELETE_USER_AGENT = "DELETE FROM USER_AGENT";
+	private static final String DELETE_USER_AGENT = "DELETE FROM USER_AGENT";
 
-	private static String INSERT_NETWORK = "INSERT INTO NETWORK (js, css, cookie, cache, navigation) VALUES(?,?,?,?,?)";
+	private static final String INSERT_NETWORK = "INSERT INTO NETWORK (js, css, cookie, cache, navigation) VALUES(?,?,?,?,?)";
 
-	private static String INSERT_SIZE = "INSERT INTO SIZE (width, height) VALUES(?,?)";
+	private static final String INSERT_SIZE = "INSERT INTO SIZE (width, height) VALUES(?,?)";
 
-	private static String INSERT_STARTUP = "INSERT INTO STARTUP (baseUrl) VALUES(?)";
+	private static final String INSERT_STARTUP = "INSERT INTO STARTUP (baseUrl) VALUES(?)";
 
-	private static String INSERT_USER_AGENT = "INSERT INTO USER_AGENT (description) VALUES(?)";
+	private static final String INSERT_USER_AGENT = "INSERT INTO USER_AGENT (description) VALUES(?)";
 
-	private static String NETWORK = "SELECT DISTINCT js, css, cookie, cache, navigation FROM NETWORK";
+	private static final String NETWORK = "SELECT DISTINCT js, css, cookie, cache, navigation FROM NETWORK";
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 22574500070000402L;
 
-	private static String SIZE = "SELECT DISTINCT width, height FROM SIZE";
+	private static final String SIZE = "SELECT DISTINCT width, height FROM SIZE";
 
-	private static String STARTUP = "SELECT DISTINCT baseUrl FROM STARTUP";
+	private static final String STARTUP = "SELECT DISTINCT baseUrl FROM STARTUP";
 
 	/**
 	 * <p>deleteBounds.</p>
@@ -51,7 +76,7 @@ public class GeneralStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_SIZE)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -63,7 +88,7 @@ public class GeneralStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_NETWORK)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -75,7 +100,7 @@ public class GeneralStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_STARTUP)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -87,7 +112,7 @@ public class GeneralStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_USER_AGENT)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -109,7 +134,7 @@ public class GeneralStore implements Serializable {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}	
 		if (width > -1 && height > -1) {
 			bounds = new Rectangle(width, height);
@@ -129,15 +154,15 @@ public class GeneralStore implements Serializable {
 				PreparedStatement pstmt = conn.prepareStatement(NETWORK)) {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs != null && rs.next()) {
-					setting.setJs(rs.getInt(1) == 1 ? true : false);
-					setting.setCss(rs.getInt(2) == 1 ? true : false);
-					setting.setCookie(rs.getInt(3) == 1 ? true : false);
-					setting.setCache(rs.getInt(4) == 1 ? true : false);
-					setting.setNavigation(rs.getInt(5) == 1 ? true : false);
+					setting.setJs(rs.getInt(1) == 1);
+					setting.setCss(rs.getInt(2) == 1);
+					setting.setCookie(rs.getInt(3) == 1);
+					setting.setCache(rs.getInt(4) == 1);
+					setting.setNavigation(rs.getInt(5) == 1);
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return setting;
 	}
@@ -148,7 +173,7 @@ public class GeneralStore implements Serializable {
 	 * @return a {@link java.util.List} object.
 	 */
 	public static List<String> getStartupURLs() {
-		final List<String> urls = new ArrayList<String>();
+		final List<String> urls = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				PreparedStatement pstmt = conn.prepareStatement(STARTUP)) {
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -157,7 +182,7 @@ public class GeneralStore implements Serializable {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return urls;
 	}
@@ -174,7 +199,7 @@ public class GeneralStore implements Serializable {
 			pstmt.setInt(2, rect.height);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -197,7 +222,7 @@ public class GeneralStore implements Serializable {
 			pstmt.setInt(5, navigation ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -212,7 +237,7 @@ public class GeneralStore implements Serializable {
 			pstmt.setString(1, url);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -227,7 +252,7 @@ public class GeneralStore implements Serializable {
 			pstmt.setString(1, userAgent);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 

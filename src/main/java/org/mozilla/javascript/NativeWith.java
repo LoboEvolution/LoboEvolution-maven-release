@@ -10,12 +10,12 @@ import java.io.Serializable;
 
 /**
  * This class implements the object lookup required for the
- * with statement.
+ * <code>with</code> statement.
  * It simply delegates every action to its prototype except
  * for operations on its parent.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeWith implements Scriptable, SymbolScriptable, IdFunctionCall, Serializable {
     private static final long serialVersionUID = 1L;
@@ -227,7 +227,7 @@ public class NativeWith implements Scriptable, SymbolScriptable, IdFunctionCall,
     {
         if (f.hasTag(FTAG)) {
             if (f.methodId() == Id_constructor) {
-                throw Context.reportRuntimeError1("msg.cant.call.indirect", "With");
+                throw Context.reportRuntimeErrorById("msg.cant.call.indirect", "With");
             }
         }
         throw f.unknown();

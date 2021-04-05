@@ -57,26 +57,26 @@ import org.jpedal.jbig2.segment.Flags;
 /**
  * <p>PageInformationFlags class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PageInformationFlags extends Flags {
 
 	private static final Logger logger = Logger.getLogger(PageInformationFlags.class.getName());
-	/** Constant DEFAULT_PIXEL_VALUE="DEFAULT_PIXEL_VALUE" */
-	public static String DEFAULT_PIXEL_VALUE = "DEFAULT_PIXEL_VALUE";
-	/** Constant DEFAULT_COMBINATION_OPERATOR="DEFAULT_COMBINATION_OPERATOR" */
-	public static String DEFAULT_COMBINATION_OPERATOR = "DEFAULT_COMBINATION_OPERATOR";
+	/** Constant <code>DEFAULT_PIXEL_VALUE="DEFAULT_PIXEL_VALUE"</code> */
+	public static final String DEFAULT_PIXEL_VALUE = "DEFAULT_PIXEL_VALUE";
+	/** Constant <code>DEFAULT_COMBINATION_OPERATOR="DEFAULT_COMBINATION_OPERATOR"</code> */
+	public static final String DEFAULT_COMBINATION_OPERATOR = "DEFAULT_COMBINATION_OPERATOR";
 
 	/** {@inheritDoc} */
 	public void setFlags(int flagsAsInt) {
 		this.flagsAsInt = flagsAsInt;
 
 		/** extract DEFAULT_PIXEL_VALUE */
-		flags.put(DEFAULT_PIXEL_VALUE, new Integer((flagsAsInt >> 2) & 1));
+		flags.put(DEFAULT_PIXEL_VALUE, (flagsAsInt >> 2) & 1);
 
 		/** extract DEFAULT_COMBINATION_OPERATOR */
-		flags.put(DEFAULT_COMBINATION_OPERATOR, new Integer((flagsAsInt >> 3) & 3));
+		flags.put(DEFAULT_COMBINATION_OPERATOR, (flagsAsInt >> 3) & 3);
 
 		if (JBIG2StreamDecoder.debug)
 			logger.info("flags: " + flags);

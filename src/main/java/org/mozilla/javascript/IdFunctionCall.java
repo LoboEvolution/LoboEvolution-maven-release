@@ -10,8 +10,8 @@ package org.mozilla.javascript;
  * Master for id-based functions that knows their properties and how to
  * execute them.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface IdFunctionCall
 {

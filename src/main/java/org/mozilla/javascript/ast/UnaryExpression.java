@@ -9,24 +9,21 @@ package org.mozilla.javascript.ast;
 import org.mozilla.javascript.Token;
 
 /**
- * AST node representing unary operators such as {@code ++},
- * {@code ~}, {@code typeof} and {@code delete}.  The type field
- * is set to the appropriate Token type for the operator.  The node length spans
- * from the operator to the end of the operand (for prefix operators) or from
- * the start of the operand to the operator (for postfix).<p>
+ * AST node representing unary operators such as {@code typeof} and {@code delete}.
+ * The type field is set to the appropriate Token type for the operator.
+ * The node length spans from the operator to the end of the operand.<p>
  *
  * The {@code default xml namespace = &lt;expr&gt;} statement in E4X
  * (JavaScript 1.6) is represented as a {@code UnaryExpression} of node
  * type {@link org.mozilla.javascript.Token#DEFAULTNAMESPACE}, wrapped with an
  * {@link org.mozilla.javascript.ast.ExpressionStatement}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class UnaryExpression extends AstNode {
 
     private AstNode operand;
-    private boolean isPostfix;
 
     /**
      * <p>Constructor for UnaryExpression.</p>
@@ -44,25 +41,13 @@ public class UnaryExpression extends AstNode {
     }
 
     /**
-     * Constructs a new postfix UnaryExpression
+     * Constructs a new UnaryExpression
      *
      * @param pos a int.
      * @param len a int.
      */
     public UnaryExpression(int pos, int len) {
         super(pos, len);
-    }
-
-    /**
-     * Constructs a new prefix UnaryExpression.
-     *
-     * @param operator a int.
-     * @param operatorPosition a int.
-     * @param operand a {@link org.mozilla.javascript.ast.AstNode} object.
-     */
-    public UnaryExpression(int operator, int operatorPosition,
-                           AstNode operand) {
-        this(operator, operatorPosition, operand, false);
     }
 
     /**
@@ -73,21 +58,16 @@ public class UnaryExpression extends AstNode {
      * @param operator the node type
      * @param operatorPosition the absolute position of the operator.
      * @param operand the operand expression
-     * @param postFix true if the operator follows the operand.  Int
      * @throws java.lang.IllegalArgumentException} if {@code operand} is {@code null}
      */
-    public UnaryExpression(int operator, int operatorPosition,
-                           AstNode operand, boolean postFix) {
+    public UnaryExpression(int operator, int operatorPosition, AstNode operand) {
         assertNotNull(operand);
-        int beg = postFix ? operand.getPosition() : operatorPosition;
+        int beg = operand.getPosition();
         // JavaScript only has ++ and -- postfix operators, so length is 2
-        int end = postFix
-                  ? operatorPosition + 2
-                  : operand.getPosition() + operand.getLength();
+        int end = operand.getPosition() + operand.getLength();
         setBounds(beg, end);
         setOperator(operator);
         setOperand(operand);
-        isPostfix = postFix;
     }
 
     /**
@@ -114,7 +94,7 @@ public class UnaryExpression extends AstNode {
     }
 
     /**
-     * <p>Getter for the field operand.</p>
+     * <p>Getter for the field <code>operand</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.AstNode} object.
      */
@@ -134,49 +114,18 @@ public class UnaryExpression extends AstNode {
         operand.setParent(this);
     }
 
-    /**
-     * Returns whether the operator is postfix
-     *
-     * @return a boolean.
-     */
-    public boolean isPostfix() {
-        return isPostfix;
-    }
-
-    /**
-     * Returns whether the operator is prefix
-     *
-     * @return a boolean.
-     */
-    public boolean isPrefix() {
-        return !isPostfix;
-    }
-
-    /**
-     * Sets whether the operator is postfix
-     *
-     * @param isPostfix a boolean.
-     */
-    public void setIsPostfix(boolean isPostfix) {
-        this.isPostfix = isPostfix;
-    }
-
     /** {@inheritDoc} */
     @Override
     public String toSource(int depth) {
         StringBuilder sb = new StringBuilder();
         sb.append(makeIndent(depth));
         int type = getType();
-        if (!isPostfix) {
-            sb.append(operatorToString(type));
-            if (type == Token.TYPEOF || type == Token.DELPROP || type == Token.VOID) {
-                sb.append(" ");
-            }
+        sb.append(operatorToString(type));
+        if (type == Token.TYPEOF || type == Token.DELPROP || type == Token.VOID) {
+            sb.append(" ");
         }
         sb.append(operand.toSource());
-        if (isPostfix) {
-            sb.append(operatorToString(type));
-        }
+
         return sb.toString();
     }
 

@@ -1,34 +1,33 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.html.dom.svg;
 
 import java.awt.geom.AffineTransform;
 
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGMatrix interface.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SVGMatrix {
 
@@ -45,7 +44,7 @@ public interface SVGMatrix {
 	 * @param a a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setA(float a) throws DOMException;
+	void setA(float a);
 
 	/**
 	 * <p>getB.</p>
@@ -60,7 +59,7 @@ public interface SVGMatrix {
 	 * @param b a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setB(float b) throws DOMException;
+	void setB(float b);
 
 	/**
 	 * <p>getC.</p>
@@ -75,7 +74,7 @@ public interface SVGMatrix {
 	 * @param c a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setC(float c) throws DOMException;
+	void setC(float c);
 
 	/**
 	 * <p>getD.</p>
@@ -90,7 +89,7 @@ public interface SVGMatrix {
 	 * @param d a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setD(float d) throws DOMException;
+	void setD(float d);
 
 	/**
 	 * <p>getE.</p>
@@ -105,7 +104,7 @@ public interface SVGMatrix {
 	 * @param e a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setE(float e) throws DOMException;
+	void setE(float e);
 
 	/**
 	 * <p>getF.</p>
@@ -120,7 +119,7 @@ public interface SVGMatrix {
 	 * @param f a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setF(float f) throws DOMException;
+	void setF(float f);
 
 	/**
 	 * <p>multiply.</p>
@@ -134,6 +133,10 @@ public interface SVGMatrix {
 	 * <p>inverse.</p>
 	 *
 	 * @return a {@link org.loboevolution.html.dom.svg.SVGMatrix} object.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
 	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
 	 */
 	SVGMatrix inverse() throws SVGException;
@@ -178,6 +181,10 @@ public interface SVGMatrix {
 	 * @param x a float.
 	 * @param y a float.
 	 * @return a {@link org.loboevolution.html.dom.svg.SVGMatrix} object.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
+	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
 	 * @throws org.loboevolution.html.dom.svg.SVGException if any.
 	 */
 	SVGMatrix rotateFromVector(float x, float y) throws SVGException;

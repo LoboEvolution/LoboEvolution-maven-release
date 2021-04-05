@@ -11,8 +11,8 @@ package org.mozilla.javascript.ast;
  * node types, both of which may appear in "destructuring" expressions or
  * contexts.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface DestructuringForm {
 

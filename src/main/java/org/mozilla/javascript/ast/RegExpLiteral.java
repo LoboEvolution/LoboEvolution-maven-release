@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
  * AST node for a RegExp literal.
  * Node type is {@link org.mozilla.javascript.Token#REGEXP}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class RegExpLiteral extends AstNode {
 

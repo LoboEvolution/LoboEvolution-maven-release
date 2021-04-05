@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>WhileStatement</i>:
  *     <b>while</b> <b>(</b> Expression <b>)</b> Statement</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class WhileLoop extends Loop {
 

@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Apr 16, 2005
  */
@@ -29,16 +28,16 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.util.Optional;
 
+import org.loboevolution.html.style.HtmlInsets;
 import org.loboevolution.info.BackgroundInfo;
 import org.loboevolution.info.BorderInfo;
 import org.loboevolution.info.WordInfo;
-import org.loboevolution.html.style.HtmlInsets;
 
 /**
  * <p>RenderState interface.</p>
  *
- * @author J. H. S.
- * @version $Id: $Id
+ * Author J. H. S.
+ *
  */
 public interface RenderState {
 	
@@ -114,6 +113,12 @@ public interface RenderState {
 	/** The display table column group. */
 	int DISPLAY_TABLE_COLUMN_GROUP = 14;
 
+	/** The display flex box. */
+	int DISPLAY_FLEX_BOX = 15;
+	
+	/** The display flex child. */
+	int DISPLAY_FLEX_CHILD = 16;
+
 	/** The ws normal. */
 	int WS_NORMAL = 0;
 
@@ -181,6 +186,20 @@ public interface RenderState {
 	 * @return a int.
 	 */
 	int getAlignYPercent();
+	
+	/**
+	 * <p>getAlignItems.</p>
+	 *
+	 * @return a String.
+	 */
+	String getAlignItems();
+	
+	/**
+	 * <p>getAlignContent.</p>
+	 *
+	 * @return a String.
+	 */
+	String getAlignContent();
 
 	/**
 	 * <p>getBackgroundColor.</p>
@@ -239,6 +258,34 @@ public interface RenderState {
 	 * @return a int.
 	 */
 	int getFloat();
+	
+	/**
+	 * <p>getFlexDirection.</p>
+	 *
+	 * @return a String.
+	 */
+	String getFlexDirection();
+	
+	/**
+	 * <p>getFlexWrap.</p>
+	 *
+	 * @return a String.
+	 */
+	String getFlexWrap();
+	
+	/**
+	 * <p>getFlexFlow.</p>
+	 *
+	 * @return a String.
+	 */
+	String getFlexFlow();
+	
+	/**
+	 * <p>getJustifyContent.</p>
+	 *
+	 * @return a String.
+	 */
+	String getJustifyContent();
 
 	/**
 	 * <p>getFont.</p>

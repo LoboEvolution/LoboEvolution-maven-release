@@ -1,3 +1,26 @@
+/*
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
+ */
+
 package org.loboevolution.img;
 
 import java.awt.BorderLayout;
@@ -12,6 +35,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -38,17 +62,17 @@ import javax.swing.JViewport;
  *
  * @see StatusBar
  * @see Overlay
- * @author Kaz Csaba
- * @version $Id: $Id
+ * Author Kaz Csaba
+ *
  */
 public final class ImageViewer {
 	private final LayeredImageView view;
-	private ImageComponent theImage;
+	private final ImageComponent theImage;
 	private final JScrollPane scroller;
-	private JPanel panel;
+	private final JPanel panel;
 	private StatusBar statusBar;
 	private boolean statusBarVisible = false;
-	private PropertyChangeSupport propertyChangeSupport;
+	private final PropertyChangeSupport propertyChangeSupport;
 	private Synchronizer synchronizer;
 
 	/**

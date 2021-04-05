@@ -11,8 +11,8 @@ import org.mozilla.javascript.Token;
 /**
  * AST node for the '.' operator.  Node type is {@link org.mozilla.javascript.Token#GETPROP}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class PropertyGet extends InfixExpression {
 

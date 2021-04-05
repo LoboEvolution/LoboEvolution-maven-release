@@ -56,8 +56,8 @@ import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 /**
  * <p>SegmentHeader class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class SegmentHeader {
 
@@ -76,7 +76,7 @@ public class SegmentHeader {
 	private int dataLength;
 
 	/**
-	 * <p>Setter for the field segmentNumber.</p>
+	 * <p>Setter for the field <code>segmentNumber</code>.</p>
 	 *
 	 * @param SegmentNumber a int.
 	 */
@@ -102,7 +102,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field referredToSegmentCount.</p>
+	 * <p>Setter for the field <code>referredToSegmentCount</code>.</p>
 	 *
 	 * @param referredToSegmentCount a int.
 	 */
@@ -111,7 +111,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field rententionFlags.</p>
+	 * <p>Setter for the field <code>rententionFlags</code>.</p>
 	 *
 	 * @param rententionFlags an array of {@link short} objects.
 	 */
@@ -120,7 +120,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field referredToSegments.</p>
+	 * <p>Setter for the field <code>referredToSegments</code>.</p>
 	 *
 	 * @param referredToSegments an array of {@link int} objects.
 	 */
@@ -129,7 +129,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field referredToSegments.</p>
+	 * <p>Getter for the field <code>referredToSegments</code>.</p>
 	 *
 	 * @return an array of {@link int} objects.
 	 */
@@ -138,7 +138,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field segmentType.</p>
+	 * <p>Getter for the field <code>segmentType</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -147,7 +147,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field segmentNumber.</p>
+	 * <p>Getter for the field <code>segmentNumber</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -174,7 +174,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field referredToSegmentCount.</p>
+	 * <p>Getter for the field <code>referredToSegmentCount</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -183,7 +183,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field rententionFlags.</p>
+	 * <p>Getter for the field <code>rententionFlags</code>.</p>
 	 *
 	 * @return an array of {@link short} objects.
 	 */
@@ -192,7 +192,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Getter for the field pageAssociation.</p>
+	 * <p>Getter for the field <code>pageAssociation</code>.</p>
 	 *
 	 * @return a int.
 	 */
@@ -201,7 +201,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field pageAssociation.</p>
+	 * <p>Setter for the field <code>pageAssociation</code>.</p>
 	 *
 	 * @param pageAssociation a int.
 	 */
@@ -210,7 +210,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field dataLength.</p>
+	 * <p>Setter for the field <code>dataLength</code>.</p>
 	 *
 	 * @param dataLength a int.
 	 */
@@ -219,7 +219,7 @@ public class SegmentHeader {
 	}
 
 	/**
-	 * <p>Setter for the field segmentType.</p>
+	 * <p>Setter for the field <code>segmentType</code>.</p>
 	 *
 	 * @param type a int.
 	 */

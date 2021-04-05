@@ -11,8 +11,8 @@ import java.util.Objects;
 /**
  * <p>NativeContinuation class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class NativeContinuation extends IdScriptableObject
     implements Function
@@ -37,7 +37,7 @@ public final class NativeContinuation extends IdScriptableObject
     }
 
     /**
-     * <p>Getter for the field implementation.</p>
+     * <p>Getter for the field <code>implementation</code>.</p>
      *
      * @return a {@link java.lang.Object} object.
      */
@@ -140,11 +140,14 @@ public final class NativeContinuation extends IdScriptableObject
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2007-05-09 08:16:40 EDT
-        L0: { id = 0; String X = null;
-            if (s.length()==11) { X="constructor";id=Id_constructor; }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:51:50 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;

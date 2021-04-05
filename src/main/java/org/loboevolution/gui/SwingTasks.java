@@ -1,10 +1,28 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.gui;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Frame;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -14,8 +32,8 @@ import javax.swing.border.TitledBorder;
 /**
  * The Class SwingTasks.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SwingTasks {
 
@@ -60,34 +78,6 @@ public class SwingTasks {
 	}
 
 	/**
-	 * Gets the dialog.
-	 *
-	 * @param component the component
-	 * @return the dialog
-	 */
-	public static Dialog getDialog(Component component) {
-		Container ancestor = component.getParent();
-		while (ancestor != null && !(ancestor instanceof Dialog)) {
-			ancestor = ancestor.getParent();
-		}
-		return (Dialog) ancestor;
-	}
-
-	/**
-	 * Gets the frame.
-	 *
-	 * @param component the component
-	 * @return the frame
-	 */
-	public static Frame getFrame(Component component) {
-		Container ancestor = component.getParent();
-		while (ancestor != null && !(ancestor instanceof Frame)) {
-			ancestor = ancestor.getParent();
-		}
-		return (Frame) ancestor;
-	}
-
-	/**
 	 * Sets the enabled recursive.
 	 *
 	 * @param component the component
@@ -102,7 +92,7 @@ public class SwingTasks {
 				final JComponent jchild = (JComponent) child;
 				if (enabled) {
 					final Boolean nestedEnabling = (Boolean) jchild.getClientProperty(NESTED_ENABLING);
-					if (nestedEnabling == null || nestedEnabling.booleanValue()) {
+					if (nestedEnabling == null || nestedEnabling) {
 						setEnabledRecursive(jchild, true);
 					}
 				} else {
@@ -120,7 +110,7 @@ public class SwingTasks {
 	 */
 	public static void setNestedEnabled(JComponent component, boolean enabled) {
 		final Boolean nestedEnabling = (Boolean) component.getClientProperty(NESTED_ENABLING);
-		if (nestedEnabling == null || nestedEnabling.booleanValue() != enabled) {
+		if (nestedEnabling == null || nestedEnabling != enabled) {
 			component.putClientProperty(NESTED_ENABLING, enabled);
 			final Container parent = component.getParent();
 			if (parent == null || !enabled || parent.isEnabled()) {

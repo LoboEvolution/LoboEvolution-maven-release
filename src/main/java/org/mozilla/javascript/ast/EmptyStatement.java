@@ -11,8 +11,8 @@ import org.mozilla.javascript.Token;
 /**
  * AST node for an empty statement.  Node type is {@link org.mozilla.javascript.Token#EMPTY}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class EmptyStatement extends AstNode {
 

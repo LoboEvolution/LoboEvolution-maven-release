@@ -15,8 +15,8 @@ import org.mozilla.javascript.Token;
  * AST node for a JavaScript 1.7 Array comprehension.
  * Node type is {@link org.mozilla.javascript.Token#ARRAYCOMP}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ArrayComprehension extends Scope {
 

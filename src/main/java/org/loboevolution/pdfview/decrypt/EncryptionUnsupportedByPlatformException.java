@@ -24,8 +24,8 @@ package org.loboevolution.pdfview.decrypt;
  * either the JCE does not support a required cipher or that its policy is
  * such that a key of a given length can not be used.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class EncryptionUnsupportedByPlatformException
         extends UnsupportedEncryptionException {

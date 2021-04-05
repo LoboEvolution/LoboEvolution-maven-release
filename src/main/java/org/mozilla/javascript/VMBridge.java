@@ -14,8 +14,8 @@ import java.lang.reflect.Method;
 /**
  * <p>Abstract VMBridge class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class VMBridge
 {
@@ -66,7 +66,7 @@ public abstract class VMBridge
 
     /**
      * Associate {@link org.mozilla.javascript.Context} instance with the current thread or remove
-     * the current association if <tt>cx</tt> is null.
+     * the current association if <code>cx</code> is null.
      *
      * @param contextHelper The result of {@link #getThreadContextHelper()}
      *                      called from the current thread.
@@ -109,7 +109,7 @@ public abstract class VMBridge
      * {@link org.mozilla.javascript.InterfaceAdapter#invoke(ContextFactory, Object, Scriptable,
      *                                Object, Method, Object[])}
      * as implementation of interface methods associated with
-     * <tt>proxyHelper</tt>. {@link java.lang.reflect.Method}
+     * <code>proxyHelper</code>. {@link java.lang.reflect.Method}
      *
      * @param proxyHelper The result of the previous call to
      *        {@link #getInterfaceProxyHelper(ContextFactory, Class[])}.

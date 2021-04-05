@@ -13,8 +13,8 @@ import org.mozilla.javascript.Token;
  * {@link org.mozilla.javascript.Token#EXPR_VOID} if inside a function, or else
  * {@link org.mozilla.javascript.Token#EXPR_RESULT} if inside a script.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ExpressionStatement extends AstNode {
 

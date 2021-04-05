@@ -11,7 +11,7 @@ package org.mozilla.javascript;
  *
  * See ECMA 15.7.
  *
- * @author Norris Boyd
+ * Author Norris Boyd
  */
 final class NativeNumber extends IdScriptableObject
 {
@@ -127,10 +127,7 @@ final class NativeNumber extends IdScriptableObject
         }
 
         // The rest of Number.prototype methods require thisObj to be Number
-
-        if (!(thisObj instanceof NativeNumber))
-            throw incompatibleCallError(f);
-        double value = ((NativeNumber)thisObj).doubleValue;
+        double value = ensureType(thisObj, NativeNumber.class, f).doubleValue;
 
         switch (id) {
 
@@ -192,45 +189,45 @@ final class NativeNumber extends IdScriptableObject
         }
     }
 
-    private Object execConstructorCall(int id, Object[] args)
+    private static Object execConstructorCall(int id, Object[] args)
     {
         switch (id) {
         case ConstructorId_isFinite:
             if ((args.length == 0) || (Undefined.instance == args[0])) {
-                return false;
+                return Boolean.FALSE;
             }
             if (args[0] instanceof Number) {
                 // Match ES6 polyfill, which only works for "number" types
                 return isFinite(args[0]);
             }
-            return false;
+            return Boolean.FALSE;
 
         case ConstructorId_isNaN:
             if ((args.length == 0) || (Undefined.instance == args[0])) {
-                return false;
+                return Boolean.FALSE;
             }
             if (args[0] instanceof Number) {
                 return isNaN((Number)args[0]);
             }
-            return false;
+            return Boolean.FALSE;
 
         case ConstructorId_isInteger:
             if ((args.length == 0) || (Undefined.instance == args[0])) {
-                return false;
+                return Boolean.FALSE;
             }
             if (args[0] instanceof Number) {
-                return isInteger((Number)args[0]);
+                return Boolean.valueOf(isInteger((Number)args[0]));
             }
-            return false;
+            return Boolean.FALSE;
 
         case ConstructorId_isSafeInteger:
             if ((args.length == 0) || (Undefined.instance == args[0])) {
-                return false;
+                return Boolean.FALSE;
             }
             if (args[0] instanceof Number) {
-                return isSafeInteger((Number)args[0]);
+                return Boolean.valueOf(isSafeInteger((Number)args[0]));
             }
-            return false;
+            return Boolean.FALSE;
 
         case ConstructorId_parseFloat:
             return NativeGlobal.js_parseFloat(args);
@@ -263,9 +260,9 @@ final class NativeNumber extends IdScriptableObject
                ECMA requires; this is permitted by ECMA. */
             double p = ScriptRuntime.toInteger(args[0]);
             if (p < precisionMin || p > MAX_PRECISION) {
-                String msg = ScriptRuntime.getMessage1(
+                String msg = ScriptRuntime.getMessageById(
                     "msg.bad.precision", ScriptRuntime.toString(args[0]));
-                throw ScriptRuntime.constructError("RangeError", msg);
+                throw ScriptRuntime.rangeError(msg);
             }
             precision = ScriptRuntime.toInt32(p);
         }
@@ -281,51 +278,59 @@ final class NativeNumber extends IdScriptableObject
         return ScriptRuntime.wrapBoolean(!nd.isInfinite() && !nd.isNaN());
     }
 
-    private Object isNaN(Number val)
-    {
-        Double nd = doubleVal(val);
-        return ScriptRuntime.toBoolean(isDoubleNan(nd));
-    }
-
-    private boolean isDoubleNan(Double d)
-    {
-        return d.isNaN();
-    }
-
-    private boolean isInteger(Number val)
-    {
-        Double nd = doubleVal(val);
-        return ScriptRuntime.toBoolean(isDoubleInteger(nd));
-    }
-
-    private boolean isDoubleInteger(Double d)
-    {
-        return (!d.isInfinite() && !d.isNaN() &&
-                (Math.floor(d.doubleValue()) == d.doubleValue()));
-    }
-
-    private boolean isSafeInteger(Number val)
-    {
-        Double nd = doubleVal(val);
-        return ScriptRuntime.toBoolean(isDoubleSafeInteger(nd));
-    }
-
-    private boolean isDoubleSafeInteger(Double d)
-    {
-        return (isDoubleInteger(d) &&
-                (d.doubleValue() <= MAX_SAFE_INTEGER) &&
-                (d.doubleValue() >= MIN_SAFE_INTEGER));
-    }
-
-    private Double doubleVal(Number val)
+    private static Boolean isNaN(Number val)
     {
         if (val instanceof Double) {
-            return (Double)val;
+            return Boolean.valueOf(((Double)val).isNaN());
         }
+
         double d = val.doubleValue();
-        return Double.valueOf(d);
+        return Boolean.valueOf(Double.isNaN(d));
     }
 
+    private static boolean isInteger(Number val)
+    {
+        if (val instanceof Double) {
+            return isDoubleInteger((Double)val);
+        }
+        return isDoubleInteger(val.doubleValue());
+    }
+
+    private static boolean isDoubleInteger(Double d)
+    {
+        return !d.isInfinite() &&
+                !d.isNaN() &&
+                (Math.floor(d.doubleValue()) == d.doubleValue());
+    }
+
+    private static boolean isDoubleInteger(double d)
+    {
+        return !Double.isInfinite(d) &&
+                !Double.isNaN(d) &&
+                (Math.floor(d) == d);
+    }
+
+    private static boolean isSafeInteger(Number val)
+    {
+        if (val instanceof Double) {
+            return isDoubleSafeInteger((Double)val);
+        }
+        return isDoubleSafeInteger(val.doubleValue());
+    }
+
+    private static boolean isDoubleSafeInteger(Double d)
+    {
+        return isDoubleInteger(d) &&
+                (d.doubleValue() <= MAX_SAFE_INTEGER) &&
+                (d.doubleValue() >= MIN_SAFE_INTEGER);
+    }
+
+    private static boolean isDoubleSafeInteger(double d)
+    {
+        return isDoubleInteger(d) &&
+                (d <= MAX_SAFE_INTEGER) &&
+                (d >= MIN_SAFE_INTEGER);
+    }
 // #string_id_map#
 
     /** {@inheritDoc} */
@@ -333,26 +338,35 @@ final class NativeNumber extends IdScriptableObject
     protected int findPrototypeId(String s)
     {
         int id;
-// #generated# Last update: 2007-05-09 08:15:50 EDT
-        L0: { id = 0; String X = null; int c;
-            L: switch (s.length()) {
-            case 7: c=s.charAt(0);
-                if (c=='t') { X="toFixed";id=Id_toFixed; }
-                else if (c=='v') { X="valueOf";id=Id_valueOf; }
-                break L;
-            case 8: c=s.charAt(3);
-                if (c=='o') { X="toSource";id=Id_toSource; }
-                else if (c=='t') { X="toString";id=Id_toString; }
-                break L;
-            case 11: c=s.charAt(0);
-                if (c=='c') { X="constructor";id=Id_constructor; }
-                else if (c=='t') { X="toPrecision";id=Id_toPrecision; }
-                break L;
-            case 13: X="toExponential";id=Id_toExponential; break L;
-            case 14: X="toLocaleString";id=Id_toLocaleString; break L;
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:51:08 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        case "toString":
+            id = Id_toString;
+            break;
+        case "toLocaleString":
+            id = Id_toLocaleString;
+            break;
+        case "toSource":
+            id = Id_toSource;
+            break;
+        case "valueOf":
+            id = Id_valueOf;
+            break;
+        case "toFixed":
+            id = Id_toFixed;
+            break;
+        case "toExponential":
+            id = Id_toExponential;
+            break;
+        case "toPrecision":
+            id = Id_toPrecision;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;

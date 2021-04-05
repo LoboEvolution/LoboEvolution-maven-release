@@ -31,8 +31,8 @@ package org.mozilla.javascript;
  * @see org.mozilla.javascript.Context#setSecurityController(SecurityController)
  * @see java.lang.ClassLoader
  * @since 1.5 Release 4
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class SecurityController
 {
@@ -163,7 +163,7 @@ public abstract class SecurityController
      * allowed only if it is allowed according to the Java stack on the
      * moment of the <i>execWithDomain</i> call and <i>securityDomain</i>.
      * Any call to {@link #getDynamicSecurityDomain(Object)} during
-     * execution of <tt>callable.call(cx, scope, thisObj, args)</tt>
+     * execution of <code>callable.call(cx, scope, thisObj, args)</code>
      * should return a domain incorporate restrictions imposed by
      * <i>securityDomain</i> and Java stack on the moment of callWithDomain
      * invocation.

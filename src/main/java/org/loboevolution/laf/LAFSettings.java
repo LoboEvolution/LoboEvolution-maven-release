@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.laf;
 
 import java.awt.Color;
@@ -8,19 +28,24 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.store.SQLiteCommon;
 
 /**
  * The Class LAFSettings.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class LAFSettings implements Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(LAFSettings.class.getName());
 	
 	/** The Acryl . */
 	private boolean acryl = false;
@@ -36,19 +61,10 @@ public class LAFSettings implements Serializable {
 
 	/** The Bold . */
 	private boolean bold = false;
-
-	/** The Color . */
-	private Color color = Color.BLACK;
-
+	
 	/** The Fast . */
 	private boolean fast = false;
-
-	/** The Font . */
-	private String font = FontType.TIMES_NEW_ROMAN.getValue();
-
-	/** The Font Size . */
-	private float fontSize = 14.0f;
-
+	
 	/** The Graphite . */
 	private boolean graphite = false;
 
@@ -57,11 +73,31 @@ public class LAFSettings implements Serializable {
 
 	/** The Italic . */
 	private boolean italic = false;
+	
+	/** The modern . */
+	private boolean modern = false;
 
-	private final String LOOK_AND_FEEL = " SELECT DISTINCT acryl, aero, aluminium, bernstein, fast, graphite,"
-			+ " 	    		 hiFi,luna, mcWin, mint, noire, smart, texture,"
-			+ "	 			 subscript, superscript, underline, italic, strikethrough,"
-			+ "				 fontSize, font, color, bold" + " FROM LOOK_AND_FEEL";
+	/** The blackWhite . */
+	private boolean blackWhite = false;
+
+	/** The Italic . */
+	private boolean whiteBlack = true;	
+
+	/** The Color . */
+	private Color color = Color.BLACK;
+	
+	/** The Font . */
+	private String font = FontType.TIMES_NEW_ROMAN.getValue();
+
+	/** The Font Size . */
+	private float fontSize = 14.0f;
+
+	private final String LOOK_AND_FEEL = 
+			" SELECT DISTINCT acryl, aero, aluminium, bernstein, fast, graphite," +
+			" 	    		 hiFi,luna, mcWin, mint, noire, smart, texture," +
+			"	 			 subscript, superscript, underline, italic, strikethrough," +
+			"				 fontSize, font, color, bold, modern, black, white" +
+			" FROM LOOK_AND_FEEL";
 
 	/** The Luna . */
 	private boolean luna = false;
@@ -100,7 +136,7 @@ public class LAFSettings implements Serializable {
 	 * @return an array of {@link java.lang.String} objects.
 	 */
 	public static String[] getFonts(String type) {
-		final List<String> fonts = new ArrayList<String>();
+		final List<String> fonts = new ArrayList<>();
 		final String query = "SELECT name FROM " + type;
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				Statement stmt = conn.createStatement();
@@ -109,9 +145,63 @@ public class LAFSettings implements Serializable {
 				fonts.add(rs.getString(1));
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		return fonts.toArray(new String[fonts.size()]);
+		return fonts.toArray(new String[0]);
+	}
+	
+	/**
+	 * <p>getInstance.</p>
+	 *
+	 * @return the instance
+	 */
+	public LAFSettings getInstance() {
+		LAFSettings laf = retriveFontDate();
+		if (laf == null) {
+			laf = this;
+		}
+		return laf;
+	}
+	
+	private LAFSettings retriveFontDate() {
+		LAFSettings laf = null;
+		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(this.LOOK_AND_FEEL)) {
+			while (rs != null && rs.next()) {
+				laf = new LAFSettings();
+				laf.setAcryl(rs.getInt(1) == 1);
+				laf.setAero(rs.getInt(2) == 1);
+				laf.setAluminium(rs.getInt(3) == 1);
+				laf.setBernstein(rs.getInt(4) == 1);
+				laf.setFast(rs.getInt(5) == 1);
+				laf.setGraphite(rs.getInt(6) == 1);
+				laf.setHiFi(rs.getInt(7) == 1);
+				laf.setLuna(rs.getInt(8) == 1);
+				laf.setMcWin(rs.getInt(9) == 1);
+				laf.setMint(rs.getInt(10) == 1);
+				laf.setNoire(rs.getInt(11) == 1);
+				laf.setSmart(rs.getInt(12) == 1);
+				laf.setTexture(rs.getInt(13) == 1);
+				laf.setSubscript(rs.getInt(14) == 1);
+				laf.setSuperscript(rs.getInt(15) == 1);
+				laf.setUnderline(rs.getInt(16) == 1);
+				laf.setItalic(rs.getInt(17) == 1);
+				laf.setStrikethrough(rs.getInt(18) == 1);
+				laf.setFontSize(Float.parseFloat(rs.getString(19)));
+				laf.setFont(rs.getString(20));
+				laf.setColor(ColorFactory.getInstance().getColor(rs.getString(21)));
+				laf.setBold(rs.getInt(22) == 1);
+				laf.setModern(rs.getInt(23) == 1);
+				laf.setBlackWhite(rs.getInt(24) == 1);
+				laf.setWhiteBlack(rs.getInt(25) == 1);
+				
+			}
+		} catch (final Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+			return null;
+		}
+		return laf;
 	}
 
 	/**
@@ -139,19 +229,6 @@ public class LAFSettings implements Serializable {
 	 */
 	public float getFontSize() {
 		return this.fontSize;
-	}
-
-	/**
-	 * <p>getInstance.</p>
-	 *
-	 * @return the instance
-	 */
-	public LAFSettings getInstance() {
-		LAFSettings laf = retriveFontDate();
-		if (laf == null) {
-			laf = this;
-		}
-		return laf;
 	}
 
 	/**
@@ -323,43 +400,6 @@ public class LAFSettings implements Serializable {
 	 */
 	public boolean isUnderline() {
 		return this.underline;
-	}
-
-	private LAFSettings retriveFontDate() {
-		LAFSettings laf = null;
-		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(this.LOOK_AND_FEEL)) {
-			while (rs != null && rs.next()) {
-				laf = new LAFSettings();
-				laf.setAcryl(rs.getInt(1) == 1 ? true : false);
-				laf.setAero(rs.getInt(2) == 1 ? true : false);
-				laf.setAluminium(rs.getInt(3) == 1 ? true : false);
-				laf.setBernstein(rs.getInt(4) == 1 ? true : false);
-				laf.setFast(rs.getInt(5) == 1 ? true : false);
-				laf.setGraphite(rs.getInt(6) == 1 ? true : false);
-				laf.setHiFi(rs.getInt(7) == 1 ? true : false);
-				laf.setLuna(rs.getInt(8) == 1 ? true : false);
-				laf.setMcWin(rs.getInt(9) == 1 ? true : false);
-				laf.setMint(rs.getInt(10) == 1 ? true : false);
-				laf.setNoire(rs.getInt(11) == 1 ? true : false);
-				laf.setSmart(rs.getInt(12) == 1 ? true : false);
-				laf.setTexture(rs.getInt(13) == 1 ? true : false);
-				laf.setSubscript(rs.getInt(14) == 1 ? true : false);
-				laf.setSuperscript(rs.getInt(15) == 1 ? true : false);
-				laf.setUnderline(rs.getInt(16) == 1 ? true : false);
-				laf.setItalic(rs.getInt(17) == 1 ? true : false);
-				laf.setStrikethrough(rs.getInt(18) == 1 ? true : false);
-				laf.setFontSize(Float.parseFloat(rs.getString(19)));
-				laf.setFont(rs.getString(20));
-				laf.setColor(ColorFactory.getInstance().getColor(rs.getString(21)));
-				laf.setBold(rs.getInt(22) == 1 ? true : false);
-			}
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		return laf;
 	}
 
 	/**
@@ -558,5 +598,59 @@ public class LAFSettings implements Serializable {
 	 */
 	public void setUnderline(boolean underline) {
 		this.underline = underline;
+	}
+
+	/**
+	 * <p>isModern.</p>
+	 *
+	 * @return the modern
+	 */
+	public boolean isModern() {
+		return modern;
+	}
+
+	/**
+	 * <p>Setter for the field <code>modern</code>.</p>
+	 *
+	 * @param modern the modern to set
+	 */
+	public void setModern(boolean modern) {
+		this.modern = modern;
+	}
+
+	/**
+	 * <p>isBlackWhite.</p>
+	 *
+	 * @return the blackWhite
+	 */
+	public boolean isBlackWhite() {
+		return blackWhite;
+	}
+
+	/**
+	 * <p>Setter for the field <code>blackWhite</code>.</p>
+	 *
+	 * @param blackWhite the blackWhite to set
+	 */
+	public void setBlackWhite(boolean blackWhite) {
+		this.blackWhite = blackWhite;
+	}
+
+	/**
+	 * <p>isWhiteBlack.</p>
+	 *
+	 * @return the whiteBlack
+	 */
+	public boolean isWhiteBlack() {
+		return whiteBlack;
+	}
+
+	/**
+	 * <p>Setter for the field <code>whiteBlack</code>.</p>
+	 *
+	 * @param whiteBlack the whiteBlack to set
+	 */
+	public void setWhiteBlack(boolean whiteBlack) {
+		this.whiteBlack = whiteBlack;
 	}
 }

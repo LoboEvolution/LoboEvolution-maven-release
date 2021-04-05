@@ -69,12 +69,12 @@ import org.jpedal.jbig2.segment.pageinformation.PageInformationSegment;
 /**
  * <p>JBIG2Decoder class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBIG2Decoder {
 	
-	private JBIG2StreamDecoder streamDecoder;
+	private final JBIG2StreamDecoder streamDecoder;
 
 	/**
 	 * Constructor
@@ -88,10 +88,9 @@ public class JBIG2Decoder {
 	 * in here.  Call this method before decodeJBIG2(...)
 	 *
 	 * @param data global data
-	 * @throws java.io.IOException if any.
 	 * @throws org.jpedal.jbig2.JBIG2Exception if any.
 	 */
-	public void setGlobalData(byte[] data) throws IOException, JBIG2Exception {
+	public void setGlobalData(byte[] data) throws JBIG2Exception {
 		streamDecoder.setGlobalData(data);
 	}
 
@@ -133,22 +132,6 @@ public class JBIG2Decoder {
 		decodeJBIG2(bytes);
 	}
 	
-	/**
-	 * Decodes a JBIG2 image from a DataInput
-	 *
-	 * @param dataInput DataInput
-	 * @throws java.io.IOException if any.
-	 * @throws org.jpedal.jbig2.JBIG2Exception if any.
-	 */
-	public void decodeJBIG2(DataInput dataInput) throws IOException, JBIG2Exception {
-//		long availiable = inputStream.length();
-//
-//		byte[] bytes = new byte[availiable];
-//		inputStream.read(bytes);
-//
-//		decodeJBIG2(bytes);
-	}
-
 	/**
 	 * Decodes a JBIG2 image from a byte array
 	 *

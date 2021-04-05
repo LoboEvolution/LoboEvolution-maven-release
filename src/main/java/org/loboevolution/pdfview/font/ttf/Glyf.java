@@ -24,8 +24,8 @@ import java.nio.ByteBuffer;
 /**
  * A single glyph in a pdf font.  May be simple or compound via subclasses
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class Glyf {
     /** If true, the glyf is compound */
@@ -48,7 +48,7 @@ public class Glyf {
     
     /**
      * Creates a new instance of glyf
-     * Don't use this directly, use Glyf.getGlyf()
+     * Don't use this directly, use <code>Glyf.getGlyf()</code>
      */
     protected Glyf() {
     }

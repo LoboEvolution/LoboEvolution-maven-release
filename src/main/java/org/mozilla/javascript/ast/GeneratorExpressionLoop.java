@@ -9,8 +9,8 @@ package org.mozilla.javascript.ast;
 /**
  * <p>GeneratorExpressionLoop class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class GeneratorExpressionLoop extends ForInLoop {
     

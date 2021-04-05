@@ -18,7 +18,7 @@ import org.mozilla.javascript.ast.ScriptNode;
  * This class performs node transforms to prepare for optimization.
  *
  * @see NodeTransformer
- * @author Norris Boyd
+ * Author Norris Boyd
  */
 
 class OptTransformer extends NodeTransformer {

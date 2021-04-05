@@ -15,8 +15,8 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * <p>Abstract XMLLib class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public abstract class XMLLib
 {
@@ -78,7 +78,7 @@ public abstract class XMLLib
         if (lib != null) {
             return lib;
         }
-        String msg = ScriptRuntime.getMessage0("msg.XML.not.available");
+        String msg = ScriptRuntime.getMessageById("msg.XML.not.available");
         throw Context.reportRuntimeError(msg);
     }
 

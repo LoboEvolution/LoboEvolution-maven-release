@@ -21,8 +21,8 @@ import java.util.NoSuchElementException;
  * * If it has a function property called "return" then it will be called
  *   when the caller is done iterating.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class IteratorLikeIterable
     implements Iterable<Object>, Closeable

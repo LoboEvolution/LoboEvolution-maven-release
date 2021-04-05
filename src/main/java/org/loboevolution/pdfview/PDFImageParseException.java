@@ -5,8 +5,8 @@ import java.io.IOException;
 /**
  * an exception class for recording errors when parsing an PDFImage
  *
- * @author Katja Sondermann
- * @version $Id: $Id
+ * Author Katja Sondermann
+  *
  */
 public class PDFImageParseException extends IOException {
     /**

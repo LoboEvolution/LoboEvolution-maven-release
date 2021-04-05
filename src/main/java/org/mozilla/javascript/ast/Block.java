@@ -17,8 +17,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>Block</i> :
  *     <b>{</b> Statement* <b>}</b></pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Block extends AstNode {
 

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.Color;
@@ -16,8 +36,8 @@ import org.loboevolution.laf.ColorFactory;
 /**
  * <p>SVGAnimateImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGAnimateImpl extends JComponent implements ActionListener {
 
@@ -77,9 +97,9 @@ public class SVGAnimateImpl extends JComponent implements ActionListener {
 	
 	private Timer timer;
 	
-	private SVGElementImpl elem;
+	private final SVGElementImpl elem;
 	
-	private SVGAnimateElementImpl animate;
+	private final SVGAnimateElementImpl animate;
 		
 	/**
 	 * <p>Constructor for SVGAnimateImpl.</p>
@@ -484,16 +504,12 @@ public class SVGAnimateImpl extends JComponent implements ActionListener {
 			range = (cxTo - cxFrom) + (cyTo - cyFrom);
 			return Math.round(dur / range);
 		case SVGTransform.SVG_TRANSFORM_SKEWX:
-			sxFrom = Float.parseFloat(from_trans);
+            case SVGTransform.SVG_TRANSFORM_SKEWY:
+                sxFrom = Float.parseFloat(from_trans);
 			sxTo = Float.parseFloat(to_trans);
 			range = sxTo - sxFrom;
 			return Math.round(dur / range);
-		case SVGTransform.SVG_TRANSFORM_SKEWY:
-			sxFrom = Float.parseFloat(from_trans);
-			sxTo = Float.parseFloat(to_trans);
-			range = sxTo - sxFrom;
-			return Math.round(dur / range);
-		default:
+            default:
 			return 0;}
 	}
 }

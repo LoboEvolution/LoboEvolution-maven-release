@@ -43,8 +43,8 @@ import org.mozilla.javascript.Token;
  * In this case the FunctionNode node will have no body but will have an
  * expression.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FunctionNode extends ScriptNode {
 
@@ -64,11 +64,11 @@ public class FunctionNode extends ScriptNode {
      * distinguished.
      */
     public static final int FUNCTION_STATEMENT            = 1;
-    /** Constant FUNCTION_EXPRESSION=2 */
+    /** Constant <code>FUNCTION_EXPRESSION=2</code> */
     public static final int FUNCTION_EXPRESSION           = 2;
-    /** Constant FUNCTION_EXPRESSION_STATEMENT=3 */
+    /** Constant <code>FUNCTION_EXPRESSION_STATEMENT=3</code> */
     public static final int FUNCTION_EXPRESSION_STATEMENT = 3;
-    /** Constant ARROW_FUNCTION=4 */
+    /** Constant <code>ARROW_FUNCTION=4</code> */
     public static final int ARROW_FUNCTION                = 4;
 
     public static enum Form { FUNCTION, GETTER, SETTER, METHOD }
@@ -88,6 +88,7 @@ public class FunctionNode extends ScriptNode {
     private int functionType;
     private boolean needsActivation;
     private boolean isGenerator;
+    private boolean isES6Generator;
     private List<Node> generatorResumePoints;
     private Map<Node,int[]> liveLocals;
     private AstNode memberExprNode;
@@ -334,9 +335,26 @@ public class FunctionNode extends ScriptNode {
     }
 
     /**
-     * <p>Setter for the field isGenerator.</p>
+     * <p>Setter for the field <code>isGenerator</code>.</p>
      */
     public void setIsGenerator() {
+        isGenerator = true;
+    }
+
+    /**
+     * <p>isES6Generator.</p>
+     *
+     * @return a boolean.
+     */
+    public boolean isES6Generator() {
+        return isES6Generator;
+    }
+
+    /**
+     * <p>Setter for the field <code>isES6Generator</code>.</p>
+     */
+    public void setIsES6Generator() {
+        isES6Generator = true;
         isGenerator = true;
     }
 
@@ -361,7 +379,7 @@ public class FunctionNode extends ScriptNode {
     }
 
     /**
-     * <p>Getter for the field liveLocals.</p>
+     * <p>Getter for the field <code>liveLocals</code>.</p>
      *
      * @return a {@link java.util.Map} object.
      */
@@ -401,7 +419,7 @@ public class FunctionNode extends ScriptNode {
     }
 
     /**
-     * <p>Setter for the field functionType.</p>
+     * <p>Setter for the field <code>functionType</code>.</p>
      *
      * @param type a int.
      */
@@ -485,7 +503,7 @@ public class FunctionNode extends ScriptNode {
     }
 
     /**
-     * <p>Getter for the field memberExprNode.</p>
+     * <p>Getter for the field <code>memberExprNode</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.AstNode} object.
      */

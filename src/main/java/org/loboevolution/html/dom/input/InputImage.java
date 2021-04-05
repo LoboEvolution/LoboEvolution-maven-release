@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.Graphics;
@@ -10,6 +30,8 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,14 +44,17 @@ import org.loboevolution.net.HttpNetwork;
 /**
  * <p>InputImage class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputImage {
-
-	private BufferedImage image;
 	
-	private HTMLInputElementImpl modelNode;
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(InputImage.class.getName());
+
+	private final BufferedImage image;
+	
+	private final HTMLInputElementImpl modelNode;
 
 	/**
 	 * <p>Constructor for InputImage.</p>
@@ -88,7 +113,7 @@ public class InputImage {
 		try {
 			pg.grabPixels();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		ColorModel cm = pg.getColorModel();

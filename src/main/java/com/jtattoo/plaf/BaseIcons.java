@@ -51,15 +51,15 @@ import javax.swing.plaf.UIResource;
 /**
  * <p>BaseIcons class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseIcons {
 
 	// -----------------------------------------------------------------------------------------------------------
 	private static class CheckBoxIcon implements Icon {
 
-		private static int GAP = 2;
+		private static final int GAP = 2;
 		private static final Icon SMALL_CHECK_ICON = new LazyImageIcon("icons/small/check_symbol_10x10.png");
 		private static final Icon SMALL_CHECK_DISABLED_ICON = new LazyImageIcon(
 				"icons/small/check_symbol_disabled_10x10.png");
@@ -837,7 +837,7 @@ public class BaseIcons {
 
 	private static class RadioButtonIcon implements Icon {
 
-		private static int GAP = 2;
+		private static final int GAP = 2;
 
 		@Override
 		public int getIconHeight() {
@@ -876,7 +876,7 @@ public class BaseIcons {
 			Color cHi = Color.white;
 			Color cLo = Color.white;
 			if (!(c instanceof JRadioButtonMenuItem)) {
-				Color colors[];
+				Color[] colors;
 				if (button.isEnabled()) {
 					if (button.isRolloverEnabled() && model.isRollover() || model.isPressed() && model.isArmed()) {
 						colors = AbstractLookAndFeel.getTheme().getRolloverColors();

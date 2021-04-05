@@ -30,13 +30,13 @@ import org.loboevolution.pdfview.PDFParseException;
  * A sampled function maps input values to output values by interpolating
  * along a line or cubic between two known values.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class FunctionType0 extends PDFFunction {
     /** the valid interpolation methods */
     protected static final int LINEAR_INTERPOLATION = 1;
-    /** Constant CUBIC_INTERPOLATION=3 */
+    /** Constant <code>CUBIC_INTERPOLATION=3</code> */
     protected static final int CUBIC_INTERPOLATION = 3;
     
     /** the size of each input dimension, as an array of <i>m</i> integers */
@@ -387,7 +387,6 @@ public class FunctionType0 extends PDFFunction {
         // first calculate the distances -- the differences between
         // each encoded value and the integer below it.
         float[] dists = new float[encoded.length];
-        
         for (int i = 0; i < dists.length; i++) {
             dists[i] = (float) (encoded[i] - Math.floor(encoded[i]));
         }

@@ -12,8 +12,8 @@ package org.mozilla.javascript;
  * See ECMA 10.1.6
  *
  * @see org.mozilla.javascript.Arguments
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public final class NativeCall extends IdScriptableObject
 {
@@ -112,7 +112,7 @@ public final class NativeCall extends IdScriptableObject
         int id = f.methodId();
         if (id == Id_constructor) {
             if (thisObj != null) {
-                throw Context.reportRuntimeError1("msg.only.from.new", "Call");
+                throw Context.reportRuntimeErrorById("msg.only.from.new", "Call");
             }
             ScriptRuntime.checkDeprecated(cx, "Call");
             NativeCall result = new NativeCall();

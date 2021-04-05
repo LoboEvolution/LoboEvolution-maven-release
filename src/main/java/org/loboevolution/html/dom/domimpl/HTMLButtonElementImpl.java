@@ -1,43 +1,45 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.dom.domimpl;
 
 import javax.swing.JButton;
 
-import org.loboevolution.common.Nodes;
-import org.loboevolution.html.dom.input.FormInput;
 import org.loboevolution.html.control.ButtonControl;
 import org.loboevolution.html.dom.HTMLButtonElement;
 import org.loboevolution.html.dom.HTMLFormElement;
+import org.loboevolution.html.dom.input.FormInput;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.renderer.HtmlController;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.NodeType;
+import org.loboevolution.html.node.ValidityState;
 
 /**
  * <p>HTMLButtonElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTMLButtonElement {
+public class HTMLButtonElementImpl extends HTMLElementImpl implements HTMLButtonElement {
 
 	/**
 	 * <p>Constructor for HTMLButtonElementImpl.</p>
@@ -57,9 +59,9 @@ public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTML
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getDisabled() {
+	public boolean isDisabled() {
 		final String disabled = getAttribute("disabled");
-		return disabled == null ? false : true;
+		return disabled != null;
 	}
 
 	/** {@inheritDoc} */
@@ -76,13 +78,6 @@ public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTML
 	@Override
 	public String getName() {
 		return getAttribute("name");
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public int getTabIndex() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	/** {@inheritDoc} */
@@ -121,13 +116,6 @@ public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTML
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTabIndex(int tabIndex) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void setValue(String value) {
 		setAttribute("value", value);
 		
@@ -142,7 +130,7 @@ public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTML
 		final JButton button = new JButton();
 		button.setContentAreaFilled(false);
 		button.setText(getText());
-		button.setEnabled(!getDisabled());
+		button.setEnabled(!isDisabled());
 		button.addActionListener(event -> HtmlController.getInstance().onMouseClick(this, null, 0, 0));
 		buttonControl.add(button);
 	}
@@ -181,37 +169,274 @@ public class HTMLButtonElementImpl extends HTMLAbstractUIElement implements HTML
 	public void resetInput() {
 		final HTMLFormElementImpl form = (HTMLFormElementImpl) getForm();
 		if (form != null && form.hasChildNodes()) {
-			NodeList childNodes = form.getChildNodes();
-			for (Node node : Nodes.iterable(childNodes)) {
+			NodeListImpl childNodes = (NodeListImpl) form.getChildNodes();
+			childNodes.forEach(node -> {
 				if (node instanceof HTMLInputElementImpl) {
 					final HTMLInputElementImpl hie = (HTMLInputElementImpl) node;
 					hie.resetInput();
 				}
-			}
+			});
 		}
 	}
 
 	private String getText() {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		if (hasChildNodes()) {
-			NodeList children = getChildNodes();
-			for (Node child : Nodes.iterable(children)) {
-				if (child.getNodeType() == Node.TEXT_NODE) {
+			NodeListImpl childNodes = (NodeListImpl) getChildNodes();
+			childNodes.forEach(child -> {
+				if (child.getNodeType() == NodeType.TEXT_NODE) {
 					String nodeValue = child.getNodeValue();
 					String childText = "";
 					nodeValue = nodeValue.replace('\n', ' ');
 					nodeValue = nodeValue.replace('\r', ' ');
 					nodeValue = nodeValue.replace('\t', ' ');
 					childText = nodeValue;
-					text += childText + " ";
+					text.append(childText).append(" ");
 				}
-			}
+			});
 		}
 
 		if (text.length() > 0) {
 			return text.substring(0, text.length() - 1);
 		} else {
-			return text;
+			return text.toString();
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isAutofocus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutofocus(boolean autofocus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormAction() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormAction(String formAction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormEnctype() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormEnctype(String formEnctype) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormMethod() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormMethod(String formMethod) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isFormNoValidate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormNoValidate(boolean formNoValidate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getFormTarget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setFormTarget(String formTarget) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public NodeList getLabels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setType(String type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getValidationMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public ValidityState getValidity() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isWillValidate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean checkValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean reportValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setCustomValidity(String error) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLButtonElement]";
 	}
 }

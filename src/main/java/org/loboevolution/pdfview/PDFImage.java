@@ -56,25 +56,21 @@ import javax.imageio.ImageReader;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataFormatImpl;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
-
 import org.loboevolution.pdfview.colorspace.AlternateColorSpace;
 import org.loboevolution.pdfview.colorspace.IndexedColor;
 import org.loboevolution.pdfview.colorspace.PDFColorSpace;
 import org.loboevolution.pdfview.colorspace.YCCKColorSpace;
 import org.loboevolution.pdfview.decode.PDFDecoder;
 import org.loboevolution.pdfview.function.FunctionType0;
+import org.loboevolution.html.node.Attr;
+import org.w3c.dom.Node;
 
 /**
  * Encapsulates a PDF Image
- *
- * @author utente
- * @version $Id: $Id
  */
 public class PDFImage {
 
-	private static int[][] GREY_TO_ARGB = new int[8][];
+	private static final int[][] GREY_TO_ARGB = new int[8][];
 
 	/**
 	 * color key mask. Array of start/end pairs of ranges of color components to
@@ -103,8 +99,8 @@ public class PDFImage {
 	/**
 	 * Create an instance of a PDFImage
 	 *
-	 * @throws java.io.IOException if {@link org.loboevolution.pdfview.decode.PDFDecoder} throws one while evaluating if the image is a Jpeg
 	 * @param imageObj a {@link org.loboevolution.pdfview.PDFObject} object.
+	 * @throws java.io.IOException if any.
 	 */
 	protected PDFImage(PDFObject imageObj) throws IOException {
 		this.imageObj = imageObj;
@@ -248,7 +244,7 @@ public class PDFImage {
 	 * Get the image that this PDFImage generates.
 	 *
 	 * @return a buffered image containing the decoded image data
-	 * @throws org.loboevolution.pdfview.PDFImageParseException if any
+	 * @throws org.loboevolution.pdfview.PDFImageParseException if any.
 	 */
 	public BufferedImage getImage() throws PDFImageParseException {
 		try {
@@ -542,9 +538,9 @@ public class PDFImage {
 	/**
 	 * Scale the softmask image to the size of the actual image
 	 * 
-	 * @param sMaskImage
-	 * @return
-	 * @throws PDFImageParseException 
+	 * @param sMaskImage a {@link java.awt.image.BufferedImage} object.
+	 * @return a {@link java.awt.image.BufferedImage} object.
+	 * @throws org.loboevolution.pdfview.PDFImageParseException if any.
 	 */
 	private BufferedImage scaleSMaskImage(PDFImage sMaskImage) throws PDFImageParseException {
 		BufferedImage before = sMaskImage.getImage();
@@ -685,7 +681,7 @@ public class PDFImage {
 	}
 
 	/**
-	 * Creates a new image of type {@link TYPE_BYTE_GRAY} which represents the
+	 * Creates a new image which represents the
 	 * given raster
 	 * 
 	 * @param raster
@@ -880,9 +876,7 @@ public class PDFImage {
 	/**
 	 * get a Java ColorModel consistent with the current color space, number of
 	 * bits per component and decode array
-	 * 
-	 * @param bpc
-	 *            the number of bits per component
+	 *
 	 */
 	private ColorModel getColorModel() {
 		PDFColorSpace cs = getColorSpace();
@@ -1047,8 +1041,6 @@ public class PDFImage {
 	 * get a Java ColorModel consistent with the current color space, number of
 	 * bits per component and decode array
 	 *
-	 * @param bpc
-	 *            the number of bits per component
 	 */
 	private ColorModel createColorModel() {
 		PDFColorSpace cs = getColorSpace();
@@ -1337,7 +1329,7 @@ public class PDFImage {
 	 */
 	static class PdfComponentColorModel extends ComponentColorModel {
 
-		int bitsPerComponent;
+		final int bitsPerComponent;
 
 		public PdfComponentColorModel(ColorSpace cs, int[] bpc) {
 			super(cs, bpc, false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);

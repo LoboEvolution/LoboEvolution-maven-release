@@ -27,8 +27,8 @@ import org.loboevolution.pdfview.PDFDebugger;
 /**
  * Model the TrueType Post table
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class PostTable extends TrueTypeTable {
     
@@ -342,7 +342,7 @@ public class PostTable extends TrueTypeTable {
     }
     
     /** An empty post map */
-    class PostMap {
+    static class PostMap {
         /** map a name to a character index */
         short getCharIndex(String charName) {
             return (short) 0;
@@ -373,7 +373,7 @@ public class PostTable extends TrueTypeTable {
     /** A Format 0 post map */
     class PostMapFormat0 extends PostMap {
         /** the glyph names in standard Macintosh ordering */
-        protected final String stdNames[] = {
+        protected final String[] stdNames = {
 /* 0 */     ".notdef", ".null", "nonmarkingreturn", "space", "exclam", "quotedbl", "numbersign", "dollar",
 /* 8 */     "percent", "ampersand", "quotesingle", "parenleft", "parenright", "asterisk", "plus", "comma",
 /* 16 */    "hyphen", "period", "slash", "zero", "one", "two", "three", "four",
@@ -504,8 +504,8 @@ public class PostTable extends TrueTypeTable {
             
             // the size of each string -- note the extra byte for a pascal
             // string
-            for (int i = 0; i < this.glyphNames.length; i++) {
-                size += this.glyphNames[i].length() + 1;
+            for (String glyphName : this.glyphNames) {
+                size += glyphName.length() + 1;
             }
             
             return size;
@@ -520,14 +520,14 @@ public class PostTable extends TrueTypeTable {
             buf.putShort((short) this.glyphNameIndex.length);
             
             // write the name indices
-            for (int i = 0; i < this.glyphNameIndex.length; i++) {
-                buf.putShort(this.glyphNameIndex[i]);
+            for (short nameIndex : this.glyphNameIndex) {
+                buf.putShort(nameIndex);
             }
             
             // write the names as pascal strings
-            for (int i = 0; i < this.glyphNames.length; i++) {
-                buf.put((byte) this.glyphNames[i].length());
-                buf.put(this.glyphNames[i].getBytes());
+            for (String glyphName : this.glyphNames) {
+                buf.put((byte) glyphName.length());
+                buf.put(glyphName.getBytes());
             }
             
             // reset the start pointer

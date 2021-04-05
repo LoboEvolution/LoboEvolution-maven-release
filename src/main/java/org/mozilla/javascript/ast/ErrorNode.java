@@ -12,8 +12,8 @@ import org.mozilla.javascript.Token;
  * AST node representing a parse error or a warning.  Node type is
  * {@link org.mozilla.javascript.Token#ERROR}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ErrorNode extends AstNode {
 

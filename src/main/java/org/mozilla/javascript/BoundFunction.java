@@ -10,8 +10,8 @@ package org.mozilla.javascript;
  * The class for results of the Function.bind operation
  * EcmaScript 5 spec, 15.3.4.5
  *
- * @author Raphael Speyer
- * @version $Id: $Id
+ * Author Raphael Speyer
+ *
  */
 public class BoundFunction extends BaseFunction {
 
@@ -49,8 +49,8 @@ public class BoundFunction extends BaseFunction {
     NativeObject throwing = new NativeObject();
     throwing.put("get", throwing, thrower);
     throwing.put("set", throwing, thrower);
-    throwing.put("enumerable", throwing, false);
-    throwing.put("configurable", throwing, false);
+    throwing.put("enumerable", throwing, Boolean.FALSE);
+    throwing.put("configurable", throwing, Boolean.FALSE);
     throwing.preventExtensions();
 
     this.defineOwnProperty(cx, "caller", throwing, false);
@@ -71,7 +71,7 @@ public class BoundFunction extends BaseFunction {
     if (targetFunction instanceof Function) {
       return ((Function) targetFunction).construct(cx, scope, concat(boundArgs, extraArgs));
     }
-    throw ScriptRuntime.typeError0("msg.not.ctor");
+    throw ScriptRuntime.typeErrorById("msg.not.ctor");
   }
 
   /** {@inheritDoc} */
@@ -80,7 +80,7 @@ public class BoundFunction extends BaseFunction {
     if (targetFunction instanceof Function) {
       return ((Function) targetFunction).hasInstance(instance);
     }
-    throw ScriptRuntime.typeError0("msg.not.ctor");
+    throw ScriptRuntime.typeErrorById("msg.not.ctor");
   }
 
   /** {@inheritDoc} */
@@ -89,7 +89,7 @@ public class BoundFunction extends BaseFunction {
     return length;
   }
 
-  private Object[] concat(Object[] first, Object[] second) {
+  private static Object[] concat(Object[] first, Object[] second) {
     Object[] args = new Object[first.length + second.length];
     System.arraycopy(first, 0, args, 0, first.length);
     System.arraycopy(second, 0, args, first.length, second.length);

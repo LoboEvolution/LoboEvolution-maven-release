@@ -20,11 +20,11 @@ import java.util.Map;
  * method return or property access, rather than by walking the
  * Packages/java tree.
  *
- * @author Mike Shaver
+ * Author Mike Shaver
  * @see NativeJavaArray
  * @see NativeJavaObject
  * @see NativeJavaPackage
- * @version $Id: $Id
+ *
  */
 public class NativeJavaClass extends NativeJavaObject implements Function
 {
@@ -191,7 +191,7 @@ public class NativeJavaClass extends NativeJavaObject implements Function
             int index = ctors.findCachedFunction(cx, args);
             if (index < 0) {
                 String sig = NativeJavaMethod.scriptSignature(args);
-                throw Context.reportRuntimeError2(
+                throw Context.reportRuntimeErrorById(
                     "msg.no.java.ctor", classObject.getName(), sig);
             }
 
@@ -199,7 +199,7 @@ public class NativeJavaClass extends NativeJavaObject implements Function
             return constructSpecific(cx, scope, args, ctors.methods[index]);
         }
         if (args.length == 0) {
-            throw Context.reportRuntimeError0("msg.adapter.zero.args");
+            throw Context.reportRuntimeErrorById("msg.adapter.zero.args");
         }
         Scriptable topLevel = ScriptableObject.getTopLevelScope(this);
         String msg = "";
@@ -227,7 +227,7 @@ public class NativeJavaClass extends NativeJavaObject implements Function
             if (m != null)
                 msg = m;
         }
-        throw Context.reportRuntimeError2(
+        throw Context.reportRuntimeErrorById(
             "msg.cant.instantiate", msg, classObject.getName());
     }
 

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.event.MouseEvent;
@@ -13,8 +33,8 @@ import org.loboevolution.html.renderer.HtmlController;
 /**
  * <p>InputCheckbox class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputCheckbox {
 	
@@ -32,8 +52,8 @@ public class InputCheckbox {
 		checkBox.setVisible(!modelNode.getHidden());
 		checkBox.applyComponentOrientation(ic.direction(modelNode.getDir()));
 		checkBox.setSelected(modelNode.getAttributeAsBoolean("checked"));
-		checkBox.setEnabled(!modelNode.getDisabled());
-		checkBox.setSelected(modelNode.getChecked());
+		checkBox.setEnabled(!modelNode.isDisabled());
+		checkBox.setSelected(modelNode.isChecked());
 		checkBox.addActionListener(event -> HtmlController.getInstance().onPressed(modelNode, null, 0, 0));
 		
 		MouseInputAdapter mouseHandler = new MouseInputAdapter() {

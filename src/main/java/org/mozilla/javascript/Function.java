@@ -13,8 +13,8 @@ package org.mozilla.javascript;
  * The interface provides for calling functions and constructors.
  *
  * @see org.mozilla.javascript.Scriptable
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public interface Function extends Scriptable, Callable
 {
@@ -34,7 +34,7 @@ public interface Function extends Scriptable, Callable
      * Call the function as a constructor.
      *
      * This method is invoked by the runtime in order to satisfy a use
-     * of the JavaScript new operator.  This method is
+     * of the JavaScript <code>new</code> operator.  This method is
      * expected to create a new object and return it.
      *
      * @param cx the current Context for this thread

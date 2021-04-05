@@ -16,8 +16,8 @@ import org.mozilla.javascript.Undefined;
  * It also implements List&lt;Integer&gt; for direct manipulation in Java. Bytes inserted that fall out of the range
  * (0 &lt;= X &lt; 256) will be adjusted so that they match before insertion.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeUint8ClampedArray
     extends NativeTypedArrayView<Integer>
@@ -93,10 +93,7 @@ public class NativeUint8ClampedArray
     @Override
     protected NativeUint8ClampedArray realThis(Scriptable thisObj, IdFunctionObject f)
     {
-        if (!(thisObj instanceof NativeUint8ClampedArray)) {
-            throw incompatibleCallError(f);
-        }
-        return (NativeUint8ClampedArray)thisObj;
+        return ensureType(thisObj, NativeUint8ClampedArray.class, f);
     }
 
     /** {@inheritDoc} */

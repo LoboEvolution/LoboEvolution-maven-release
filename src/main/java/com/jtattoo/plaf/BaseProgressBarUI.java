@@ -44,8 +44,8 @@ import javax.swing.plaf.basic.BasicProgressBarUI;
 /**
  * <p>BaseProgressBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseProgressBarUI extends BasicProgressBarUI {
 
@@ -132,7 +132,7 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
 
 		// amount of progress to draw
 		int amountFull = getAmountFull(b, w, h);
-		Color colors[];
+		Color[] colors;
 		if (progressBar.getForeground() instanceof UIResource) {
 			if (!JTattooUtilities.isActive(c)) {
 				colors = AbstractLookAndFeel.getTheme().getInActiveColors();
@@ -190,7 +190,7 @@ public class BaseProgressBarUI extends BasicProgressBarUI {
 		int barRectWidth = progressBar.getWidth() - (b.right + b.left);
 		int barRectHeight = progressBar.getHeight() - (b.top + b.bottom);
 
-		Color colors[];
+		Color[] colors;
 		if (progressBar.getForeground() instanceof UIResource) {
 			if (!JTattooUtilities.isActive(c)) {
 				colors = AbstractLookAndFeel.getTheme().getInActiveColors();

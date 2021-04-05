@@ -10,17 +10,17 @@ package org.mozilla.javascript;
  * A proxy for the regexp package, so that the regexp package can be
  * loaded optionally.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public interface RegExpProxy
 {
     // Types of regexp actions
-    /** Constant RA_MATCH=1 */
+    /** Constant <code>RA_MATCH=1</code> */
     public static final int RA_MATCH   = 1;
-    /** Constant RA_REPLACE=2 */
+    /** Constant <code>RA_REPLACE=2</code> */
     public static final int RA_REPLACE = 2;
-    /** Constant RA_SEARCH=3 */
+    /** Constant <code>RA_SEARCH=3</code> */
     public static final int RA_SEARCH  = 3;
 
     /**

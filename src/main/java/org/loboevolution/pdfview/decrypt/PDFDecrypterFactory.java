@@ -34,9 +34,9 @@ import org.loboevolution.pdfview.PDFParseException;
  * 40-128 bits; esentially, password-protected documents with compatibility
  * up to Acrobat 8.
  *
- * "PDF Reference version 1.7, section 3.5: Encryption"
- * @author Luke Kirby
- * @version $Id: $Id
+ * See "PDF Reference version 1.7, section 3.5: Encryption"
+ * Author Luke Kirby
+  *
  */
 public class PDFDecrypterFactory {
 
@@ -56,19 +56,13 @@ public class PDFDecrypterFactory {
      *  be returned.
      * @param documentId the object with key "ID" in the trailer's dictionary.
      *  Should always be present if Encrypt is.
-     * @param password the password to use; may be null
+     * @param password the password to use; may be <code>null</code>
      * @return The decryptor that should be used for all encrypted data in the
      *  PDF
-     * @throws java.io.IOException if any. will typically be a {@link
-     *  org.loboevolution.pdfview.PDFParseException}, indicating an IO problem, an error
-     *  in the structure of the document, or a failure to obtain various ciphers
-     *  from the installed JCE providers
-     * @throws org.loboevolution.pdfview.decrypt.EncryptionUnsupportedByPlatformException if the encryption
-     *  is not supported by the environment in which the code is executing
-     * @throws org.loboevolution.pdfview.decrypt.EncryptionUnsupportedByProductException if PDFRenderer does
-     *  not currently support the specified encryption
-     * @throws org.loboevolution.pdfview.decrypt.PDFAuthenticationFailureException if the supplied password
-     *  was not able to
+     * @throws java.io.IOException if any.
+     * @throws org.loboevolution.pdfview.decrypt.EncryptionUnsupportedByPlatformException if any.
+     * @throws org.loboevolution.pdfview.decrypt.EncryptionUnsupportedByProductException if any.
+     * @throws org.loboevolution.pdfview.decrypt.PDFAuthenticationFailureException if any.
      */
     public static PDFDecrypter createDecryptor
             (PDFObject encryptDict, PDFObject documentId, PDFPassword password)
@@ -168,7 +162,7 @@ public class PDFDecrypterFactory {
         // Assemble decrypters for each filter in the
         // crypt filter (CF) dictionary
         final Map<String, PDFDecrypter> cfDecrypters =
-                new HashMap<String, PDFDecrypter>();
+                new HashMap<>();
         final PDFObject cfDict = encryptDict.getDictRef("CF");
         if (cfDict == null) {
             throw new PDFParseException(
@@ -238,7 +232,7 @@ public class PDFDecrypterFactory {
      * @param encryptDict the Encrypt dictionary
      * @param documentId the document ID
      * @param password the password
-     * @param keyLength the key length, in bits; may be null
+     * @param keyLength the key length, in bits; may be <code>null</code>
      *  to use a {@link #DEFAULT_KEY_LENGTH default}
      * @param encryptMetadata whether metadata is being encrypted
      * @param encryptionAlgorithm, the encryption algorithm

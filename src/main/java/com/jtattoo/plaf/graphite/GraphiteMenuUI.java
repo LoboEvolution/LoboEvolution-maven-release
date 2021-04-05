@@ -43,8 +43,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>GraphiteMenuUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class GraphiteMenuUI extends BaseMenuUI {
 
@@ -64,7 +64,7 @@ public class GraphiteMenuUI extends BaseMenuUI {
 						h);
 			}
 			if (model.isRollover() && !model.isSelected()) {
-				Color colArr[] = AbstractLookAndFeel.getTheme().getMenuSelectionColors();
+				Color[] colArr = AbstractLookAndFeel.getTheme().getMenuSelectionColors();
 				Color frameColor = ColorHelper.darker(colArr[colArr.length - 1], 5);
 				g.setColor(frameColor);
 				g.drawRect(x, y, w - 1, h - 1);

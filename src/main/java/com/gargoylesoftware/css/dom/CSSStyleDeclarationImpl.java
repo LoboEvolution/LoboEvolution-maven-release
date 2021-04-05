@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ import com.gargoylesoftware.css.util.LangUtils;
 /**
  * Implementation of CSSStyleDeclaration.
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public class CSSStyleDeclarationImpl implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final String PRIORITY_IMPORTANT = "important";
+    private static final String PRIORITY_IMPORTANT = "important";
+
     private AbstractCSSRuleImpl parentRule_;
     private List<Property> properties_ = new ArrayList<>();
 

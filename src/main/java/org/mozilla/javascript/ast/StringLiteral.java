@@ -13,8 +13,8 @@ import org.mozilla.javascript.Token;
  * AST node for a single- or double-quoted string literal.
  * Node type is {@link org.mozilla.javascript.Token#STRING}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class StringLiteral extends AstNode {
 

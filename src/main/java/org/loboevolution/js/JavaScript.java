@@ -1,22 +1,21 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.js;
 
@@ -29,11 +28,11 @@ import org.mozilla.javascript.Undefined;
 /**
  * <p>JavaScript class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class JavaScript {
-	private static JavaScript instance = new JavaScript();
+	private static final JavaScript instance = new JavaScript();
 
 	/**
 	 * <p>Getter for the field instance.</p>
@@ -57,7 +56,7 @@ public class JavaScript {
 	// objectMap must be a map that uses weak keys
 	// and refers to values using weak references.
 	// Keys are java objects other than ScriptableDelegate instances.
-	private final WeakHashMap<Object, WeakReference<JavaObjectWrapper>> javaObjectToWrapper = new WeakHashMap<Object, WeakReference<JavaObjectWrapper>>();
+	private final WeakHashMap<Object, WeakReference<JavaObjectWrapper>> javaObjectToWrapper = new WeakHashMap<>();
 
 	/**
 	 * <p>getJavaObject.</p>
@@ -91,17 +90,17 @@ public class JavaScript {
 			}
 		} else if (type == int.class || type == Integer.class) {
 			if (javascriptObject instanceof Double) {
-				return Integer.valueOf(((Double) javascriptObject).intValue());
+				return ((Double) javascriptObject).intValue();
 			} else if (javascriptObject instanceof Integer) {
 				return javascriptObject;
 			} else if (javascriptObject instanceof String) {
 				return Integer.valueOf((String) javascriptObject);
 			} else if (javascriptObject instanceof Short) {
-				return Integer.valueOf(((Short) javascriptObject).shortValue());
+				return (int) ((Short) javascriptObject).shortValue();
 			} else if (javascriptObject instanceof Long) {
-				return Integer.valueOf(((Long) javascriptObject).intValue());
+				return ((Long) javascriptObject).intValue();
 			} else if (javascriptObject instanceof Float) {
-				return Integer.valueOf(((Float) javascriptObject).intValue());
+				return ((Float) javascriptObject).intValue();
 			} else {
 				return javascriptObject;
 			}
@@ -155,7 +154,7 @@ public class JavaScript {
 					final Class<? extends Object> javaClass = raw.getClass();
 					final JavaClassWrapper wrapper = JavaClassWrapperFactory.getInstance().getClassWrapper(javaClass);
 					jow = new JavaObjectWrapper(wrapper, raw);
-					this.javaObjectToWrapper.put(raw, new WeakReference<JavaObjectWrapper>(jow));
+					this.javaObjectToWrapper.put(raw, new WeakReference<>(jow));
 				}
 				jow.setParentScope(scope);
 				return jow;

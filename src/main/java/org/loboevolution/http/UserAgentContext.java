@@ -1,20 +1,38 @@
-package org.loboevolution.http;
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 
-import java.net.Proxy;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+package org.loboevolution.http;
 
 import org.loboevolution.net.Cookie;
 import org.loboevolution.store.CookieStore;
 import org.loboevolution.store.GeneralStore;
 
+import java.net.Proxy;
+import java.net.URL;
+import java.util.List;
+
 /**
  * <p>UserAgentContext class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class UserAgentContext {
 	
@@ -83,20 +101,5 @@ public class UserAgentContext {
 	 */
 	public void setCookie(URL url, String cookieSpec) {
 		CookieStore.saveCookie(url.toString(), cookieSpec);
-	}
-	
-	/**
-	 * <p>isMedia.</p>
-	 *
-	 * @param mediaName a {@link java.lang.String} object.
-	 * @return a boolean.
-	 */
-	public boolean isMedia(String mediaName) {
-		final Set<String> mediaNames = new HashSet<String>();
-		mediaNames.add("screen");
-		mediaNames.add("tv");
-		mediaNames.add("tty");
-		mediaNames.add("all");
-		return mediaNames.contains(mediaName.toLowerCase());
 	}
 }

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.store;
 
 import java.sql.Connection;
@@ -6,28 +26,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.info.TabInfo;
 
 /**
  * <p>TabStore class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class TabStore {
-
-	private static String INSERT_TAB = "INSERT INTO TAB (index_tab, url, title) VALUES(?,?,?)";
-
-	private static String DELETE_TAB = "DELETE FROM TAB WHERE index_tab = ?";
 	
-	private static String DELETE_TAB_ALL = "DELETE FROM TAB";
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(TabStore.class.getName());
 
-	private static String TAB = "SELECT url FROM TAB WHERE index_tab = ?";
+	private static final String INSERT_TAB = "INSERT INTO TAB (index_tab, url, title) VALUES(?,?,?)";
+
+	private static final String DELETE_TAB = "DELETE FROM TAB WHERE index_tab = ?";
 	
-	private static String TAB_URL = "SELECT DISTINCT url FROM TAB";
+	private static final String DELETE_TAB_ALL = "DELETE FROM TAB";
 
-	private static String TABS = "SELECT index_tab, url, title FROM TAB";
+	private static final String TAB = "SELECT url FROM TAB WHERE index_tab = ?";
+	
+	private static final String TAB_URL = "SELECT DISTINCT url FROM TAB";
+
+	private static final String TABS = "SELECT index_tab, url, title FROM TAB";
 	
 	/**
 	 * <p>insertTab.</p>
@@ -54,7 +79,7 @@ public class TabStore {
 			pstmt.setString(3, title);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -69,7 +94,7 @@ public class TabStore {
 			pstmt.setInt(1, index);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 	
@@ -81,7 +106,7 @@ public class TabStore {
 				PreparedStatement pstmt = conn.prepareStatement(DELETE_TAB_ALL)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -102,7 +127,7 @@ public class TabStore {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return url;
 	}
@@ -113,7 +138,7 @@ public class TabStore {
 	 * @return a {@link java.util.List} object.
 	 */
 	public static List<TabInfo> getTabs() {
-		List<TabInfo> urls = new ArrayList<TabInfo>();
+		List<TabInfo> urls = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				PreparedStatement pstmt = conn.prepareStatement(TABS)) {
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -126,7 +151,7 @@ public class TabStore {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return urls;
 	}
@@ -137,7 +162,7 @@ public class TabStore {
 	 * @return a {@link java.util.List} object.
 	 */
 	public static List<String> getUrls() {
-		List<String> urls = new ArrayList<String>();
+		List<String> urls = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(SQLiteCommon.getDatabaseDirectory());
 				PreparedStatement pstmt = conn.prepareStatement(TAB_URL)) {
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -146,7 +171,7 @@ public class TabStore {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return urls;
 	}

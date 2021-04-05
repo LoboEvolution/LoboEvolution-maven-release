@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 
 package org.loboevolution.html.renderer;
 
@@ -33,8 +32,8 @@ import java.util.Collection;
  * component. It's is a Renderable or GUI component whose layout may be
  * invalidated.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface RenderableContainer {
 	/**
@@ -138,15 +137,15 @@ public interface RenderableContainer {
      *
      * @return a int.
      */
-    default int getInnerWidth() {return 0;};
+    default int getInnerWidth() {return 0;}
 
     /**
      * <p>getInnerHeight.</p>
      *
      * @return a int.
      */
-    default int getInnerHeight() {return 0;};
-    
+    default int getInnerHeight() {return 0;}
+
     /**
      * <p>getVisualBounds.</p>
      *
@@ -186,4 +185,12 @@ public interface RenderableContainer {
      * @return a {@link java.awt.Point} object.
      */
     Point translateDescendentPoint(BoundableRenderable descendent, int x, int y);
+
+	/**
+	 * <p>getOriginRelativeToAbs.</p>
+	 *
+	 * @param bodyLayout a {@link org.loboevolution.html.renderer.RCollection} object.
+	 * @return a {@link java.awt.Point} object.
+	 */
+	public Point getOriginRelativeToAbs(RCollection bodyLayout);
 }

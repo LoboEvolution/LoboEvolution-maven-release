@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.Graphics2D;
@@ -6,9 +26,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.loboevolution.common.Strings;
 import org.loboevolution.html.dom.svg.SVGAnimatedNumber;
 import org.loboevolution.html.dom.svg.SVGPathElement;
 import org.loboevolution.html.dom.svg.SVGPathSeg;
@@ -38,8 +60,8 @@ import org.loboevolution.html.dom.svg.SVGPointList;
 /**
  * <p>SVGPathElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 
@@ -249,11 +271,13 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 			SVGPathSeg seg = pathSegList.getItem(i);
 
 			if (startOfSubPath) {
-				while (!seg.getPathSegTypeAsLetter().equalsIgnoreCase("m") && i < numPathSegs) {
+				final boolean isMoved  = "M".equalsIgnoreCase(seg.getPathSegTypeAsLetter());
+				while (!isMoved && i < numPathSegs) {
 					i++;
 					seg = pathSegList.getItem(i);
 				}
-				if (seg.getPathSegTypeAsLetter().equalsIgnoreCase("m")) {
+				
+				if (isMoved) {
 					if (seg.getPathSegType() == SVGPathSeg.PATHSEG_MOVETO_REL) {
 						float x = ((SVGPathSegMovetoRel) seg).getX();
 						float y = ((SVGPathSegMovetoRel) seg).getY();
@@ -275,9 +299,7 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 				}
 
 			} else {
-
 				switch (seg.getPathSegType()) {
-
 				case SVGPathSeg.PATHSEG_CLOSEPATH: {
 					path.closePath();
 					lastControlPoint = null;
@@ -464,15 +486,10 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 				case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS: {
 					float x = ((SVGPathSegCurvetoQuadraticSmoothAbs) seg).getX();
 					float y = ((SVGPathSegCurvetoQuadraticSmoothAbs) seg).getY();
-					// if no last control point then make it the current point
 					if (lastControlPoint == null) {
 						lastControlPoint = new Point2D.Float(lastX, lastY);
 					}
-
-					// calculate next control point to be reflection of the last
-					// control point, relative to current point
-					Point2D nextControlPoint = new Point2D.Float(2 * lastX - (float) lastControlPoint.getX(),
-							2 * lastY - (float) lastControlPoint.getY());
+					Point2D nextControlPoint = new Point2D.Float(2 * lastX - (float) lastControlPoint.getX(), 2 * lastY - (float) lastControlPoint.getY());
 
 					path.quadTo((float) nextControlPoint.getX(), (float) nextControlPoint.getY(), x, y);
 					lastControlPoint = nextControlPoint;
@@ -485,15 +502,10 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 				case SVGPathSeg.PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL: {
 					float x = ((SVGPathSegCurvetoQuadraticSmoothRel) seg).getX();
 					float y = ((SVGPathSegCurvetoQuadraticSmoothRel) seg).getY();
-					// if no last control point then make it the current point
 					if (lastControlPoint == null) {
 						lastControlPoint = new Point2D.Float(lastX, lastY);
 					}
-
-					// calculate next control point to be reflection of the last
-					// control point, relative to current point
-					Point2D nextControlPoint = new Point2D.Float(2 * lastX - (float) lastControlPoint.getX(),
-							2 * lastY - (float) lastControlPoint.getY());
+					Point2D nextControlPoint = new Point2D.Float(2 * lastX - (float) lastControlPoint.getX(), 2 * lastY - (float) lastControlPoint.getY());
 
 					path.quadTo((float) nextControlPoint.getX(), (float) nextControlPoint.getY(), lastX + x, lastY + y);
 					lastControlPoint = nextControlPoint;
@@ -516,7 +528,6 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 					boolean fS = ((SVGPathSegArcAbs) seg).getSweepFlag();
 
 					if (rx == 0 || ry == 0) {
-						// radii 0, just do a lineTo
 						path.lineTo(x2, y2);
 						lastX = x2;
 						lastY = y2;
@@ -546,7 +557,6 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 					boolean fS = ((SVGPathSegArcRel) seg).getSweepFlag();
 
 					if (rx == 0 || ry == 0) {
-						// radii 0, just do a lineTo
 						path.lineTo(x2, y2);
 						lastX = x2;
 						lastY = y2;
@@ -564,8 +574,8 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 					points.appendItem(new SVGPointImpl(lastX, lastY));
 					break;
 				}
-				default: {
-				}
+				default: 
+					break;
 
 				}
 			}
@@ -583,7 +593,6 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 		double x1prime2 = x1prime * x1prime;
 		double y1prime2 = y1prime * y1prime;
 
-		// check that radii are large enough
 		double radiiCheck = x1prime2 / rx2 + y1prime2 / ry2;
 		if (radiiCheck > 1) {
 			rx = (float) Math.sqrt(radiiCheck) * rx;
@@ -668,7 +677,6 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 				}
 			}
 		}
-		pathSegList = new SVGPathSegListImpl(pathSegList);
 	}
 
 	private void addCommand(String command, String parameters, String data) {
@@ -749,7 +757,7 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 			String token = getNextToken(st, delims, "0");
 			float x = Float.parseFloat(token);
 			token = getNextToken(st, delims, "0");
-			float y = Float.parseFloat(token);
+			float y = Float.parseFloat(token);			
 			if (firstPoint) {
 				if (absolute) {
 					pathSegList.appendItem(new SVGPathSegMovetoAbsImpl(x, y));
@@ -975,11 +983,11 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 
 			// get large-arc-flag
 			token = getNextToken(st, delims, "0");
-			int largeArc = Integer.parseInt(token);
+			float largeArc = Float.parseFloat(token);
 
 			// get sweep-flag
 			token = getNextToken(st, delims, "0");
-			int sweepFlag = Integer.parseInt(token);
+			float sweepFlag = Float.parseFloat(token);
 
 			// get x coordinate
 			token = getNextToken(st, delims, "0");
@@ -1079,11 +1087,7 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 		try {
 			token = st.nextToken();
 			while (st.hasMoreTokens() && delims.indexOf(token) != -1) {
-				if (token.equals("-")) {
-					neg = true;
-				} else {
-					neg = false;
-				}
+                neg = token.equals("-");
 				token = st.nextToken();
 			}
 			if (delims.indexOf(token) != -1) {
@@ -1111,14 +1115,36 @@ public class SVGPathElementImpl extends SVGGraphic implements SVGPathElement {
 	}
 
 	private String trimCommas(String params) {
-		String result = params;
-		while (result.startsWith(",")) {
-			result = result.substring(1);
+		int dot = 0;
+		StringBuilder tok = new StringBuilder();
+		final List<String> tokensWithCollection = Strings.getTokensWithCollection(params, " ,.-\n\t\r");
+		
+		for (String token : tokensWithCollection) {
+			switch (token) {
+			case ".":
+				if (dot == 1) {
+					tok.append(" .");
+					dot = 0;
+				} else {
+					tok.append(token);
+				}
+				dot++;
+				break;
+			default:
+				switch (token) {
+				case " ":
+					dot = 0;
+					break;
+				case "-":
+					tok.append(" ");
+					dot = 0;
+					break;
+				default:
+					break;
+				}
+				tok.append(token);
+			}
 		}
-		while (result.endsWith(",")) {
-			result = result.substring(0, result.length() - 1);
-		}
-		return result;
+		return Strings.isNotBlank(tok.toString()) ? tok.toString() : params;
 	}
-
 }

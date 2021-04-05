@@ -1,172 +1,204 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
 /**
- * The FORM element encompasses behavior similar to a collection
- * and an element. It provides direct access to the contained form controls as
- * well as the attributes of the form element. See the FORM element definition
- * in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * A &lt;form&gt; element in the DOM; it allows access to and in some cases modification of aspects of the form, as well as access to its component elements.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLFormElement extends HTMLElement {
-	/**
-	 * List of character sets supported by the server. See the accept-charset
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAcceptCharset();
 
-	/**
-	 * Server-side form handler. See the action attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAction();
+    /**
+     * Sets or retrieves a list of character encodings for input data that must be accepted by the server processing the form.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAcceptCharset();
 
-	/**
-	 * Returns a collection of all form control elements in the form.
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
-	 */
-	HTMLCollection getElements();
+    
+    /**
+     * <p>setAcceptCharset.</p>
+     *
+     * @param acceptCharset a {@link java.lang.String} object.
+     */
+    void setAcceptCharset(String acceptCharset);
 
-	/**
-	 * The content type of the submitted form, generally
-	 * "application/x-www-form-urlencoded". See the enctype attribute definition in
-	 * HTML 4.01. The onsubmit even handler is not guaranteed to be triggered when
-	 * invoking this method. The behavior is inconsistent for historical reasons and
-	 * authors should not rely on a particular one.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getEnctype();
+    /**
+     * Sets or retrieves the URL to which the form content is sent for processing.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAction();
 
-	/**
-	 * The number of form controls in the form.
-	 *
-	 * @return a int.
-	 */
-	int getLength();
+    
+    /**
+     * <p>setAction.</p>
+     *
+     * @param action a {@link java.lang.String} object.
+     */
+    void setAction(String action);
 
-	/**
-	 * HTTP method [<a href='http://www.ietf.org/rfc/rfc2616.txt'>IETF RFC 2616</a>]
-	 * used to submit form. See the method attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getMethod();
+    /**
+     * Specifies whether autocomplete is applied to an editable text field.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getAutocomplete();
 
-	/**
-	 * Names the form.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    
+    /**
+     * <p>setAutocomplete.</p>
+     *
+     * @param autocomplete a {@link java.lang.String} object.
+     */
+    void setAutocomplete(String autocomplete);
 
-	/**
-	 * Frame to render the resource in. See the target attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getTarget();
+    /**
+     * Retrieves a collection, in source order, of all controls in a given form.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
+     */
+    HTMLCollection getElements();
 
-	/**
-	 * Restores a form element's default values. It performs the same action as a
-	 * reset button.
-	 */
-	void reset();
+    /**
+     * Sets or retrieves the MIME encoding for the form.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getEncoding();
 
-	/**
-	 * List of character sets supported by the server. See the accept-charset
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param acceptCharset a {@link java.lang.String} object.
-	 */
-	void setAcceptCharset(String acceptCharset);
+    
+    /**
+     * <p>setEncoding.</p>
+     *
+     * @param encoding a {@link java.lang.String} object.
+     */
+    void setEncoding(String encoding);
 
-	/**
-	 * Server-side form handler. See the action attribute definition in HTML 4.01.
-	 *
-	 * @param action a {@link java.lang.String} object.
-	 */
-	void setAction(String action);
+    /**
+     * Sets or retrieves the encoding type for the form.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getEnctype();
 
-	/**
-	 * The content type of the submitted form, generally
-	 * "application/x-www-form-urlencoded". See the enctype attribute definition in
-	 * HTML 4.01. The onsubmit even handler is not guaranteed to be triggered when
-	 * invoking this method. The behavior is inconsistent for historical reasons and
-	 * authors should not rely on a particular one.
-	 *
-	 * @param enctype a {@link java.lang.String} object.
-	 */
-	void setEnctype(String enctype);
+    
+    /**
+     * <p>setEnctype.</p>
+     *
+     * @param enctype a {@link java.lang.String} object.
+     */
+    void setEnctype(String enctype);
 
-	/**
-	 * HTTP method [<a href='http://www.ietf.org/rfc/rfc2616.txt'>IETF RFC 2616</a>]
-	 * used to submit form. See the method attribute definition in HTML 4.01.
-	 *
-	 * @param method a {@link java.lang.String} object.
-	 */
-	void setMethod(String method);
+    /**
+     * Sets or retrieves the number of objects in a collection.
+     *
+     * @return a int.
+     */
+    int getLength();
 
-	/**
-	 * Names the form.
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    /**
+     * Sets or retrieves how to send the form data to the server.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getMethod();
 
-	/**
-	 * Frame to render the resource in. See the target attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param target a {@link java.lang.String} object.
-	 */
-	void setTarget(String target);
+    
+    /**
+     * <p>setMethod.</p>
+     *
+     * @param method a {@link java.lang.String} object.
+     */
+    void setMethod(String method);
 
-	/**
-	 * Submits the form. It performs the same action as a submit button.
-	 */
-	void submit();
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getName();
+
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
+
+    /**
+     * Designates a form that is not validated when submitted.
+     *
+     * @return a boolean.
+     */
+    boolean isNoValidate();
+
+    
+    /**
+     * <p>setNoValidate.</p>
+     *
+     * @param noValidate a boolean.
+     */
+    void setNoValidate(boolean noValidate);
+
+    /**
+     * Sets or retrieves the window or frame at which to target content.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getTarget();
+
+    
+    /**
+     * <p>setTarget.</p>
+     *
+     * @param target a {@link java.lang.String} object.
+     */
+    void setTarget(String target);
+
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * @return a boolean.
+     */
+    boolean checkValidity();
+
+    /**
+     * <p>reportValidity.</p>
+     *
+     * @return a boolean.
+     */
+    boolean reportValidity();
+
+    /**
+     * Fires when the user resets a form.
+     */
+    void reset();
+
+    /**
+     * Fires when a FORM is about to be submitted.
+     */
+    void submit();
 
 }

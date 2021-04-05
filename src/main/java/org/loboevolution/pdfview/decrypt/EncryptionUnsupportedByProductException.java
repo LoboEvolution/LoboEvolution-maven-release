@@ -25,8 +25,8 @@ package org.loboevolution.pdfview.decrypt;
  * a {@link EncryptionUnsupportedByPlatformException limitation in
  * the platform}.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 public class EncryptionUnsupportedByProductException
         extends UnsupportedEncryptionException {

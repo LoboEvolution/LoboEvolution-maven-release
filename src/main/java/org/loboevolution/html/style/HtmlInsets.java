@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The XAMJ Project
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.style;
 
 import java.awt.Insets;
@@ -27,18 +26,22 @@ import org.loboevolution.html.renderstate.RenderState;
 /**
  * <p>HtmlInsets class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlInsets {
-	/** Constant TYPE_AUTO=2 */
-	public static final int TYPE_AUTO = 2;
-	/** Constant TYPE_PERCENT=3 */
-	public static final int TYPE_PERCENT = 3;
-	/** Constant TYPE_PIXELS=1 */
-	public static final int TYPE_PIXELS = 1;
+	
 	/** Constant TYPE_UNDEFINED=0 */
 	public static final int TYPE_UNDEFINED = 0;
+	
+	/** Constant TYPE_PIXELS=1 */
+	public static final int TYPE_PIXELS = 1;
+	
+	/** Constant TYPE_AUTO=2 */
+	public static final int TYPE_AUTO = 2;
+	
+	/** Constant TYPE_PERCENT=3 */
+	public static final int TYPE_PERCENT = 3;
 	
 	public int top, bottom, left, right;
 
@@ -54,40 +57,20 @@ public class HtmlInsets {
 	/**
 	 * <p>getAWTInsets.</p>
 	 *
-	 * @param defaultTop a int.
-	 * @param defaultLeft a int.
-	 * @param defaultBottom a int.
-	 * @param defaultRight a int.
 	 * @param availWidth a int.
 	 * @param availHeight a int.
 	 * @param autoX a int.
 	 * @param autoY a int.
 	 * @return a {@link java.awt.Insets} object.
 	 */
-	public Insets getAWTInsets(int defaultTop, int defaultLeft, int defaultBottom, int defaultRight,
-			int availWidth, int availHeight, int autoX, int autoY) {
-		final int top = getInsetPixels(this.top, this.topType, defaultTop, availHeight, autoY);
-		final int left = getInsetPixels(this.left, this.leftType, defaultLeft, availWidth, autoX);
-		final int bottom = getInsetPixels(this.bottom, this.bottomType, defaultBottom, availHeight, autoY);
-		final int right = getInsetPixels(this.right, this.rightType, defaultRight, availWidth, autoX);
+	public Insets getAWTInsets(int availWidth, int availHeight, int autoX, int autoY) {
+		final int top = getInsetPixels(this.top, this.topType, availHeight, autoY);
+		final int left = getInsetPixels(this.left, this.leftType, availWidth, autoX);
+		final int bottom = getInsetPixels(this.bottom, this.bottomType, availHeight, autoY);
+		final int right = getInsetPixels(this.right, this.rightType, availWidth, autoX);
 		return new Insets(top, left, bottom, right);
 	}
-	
-	/**
-	 * <p>getSimpleAWTInsets.</p>
-	 *
-	 * @param availWidth a int.
-	 * @param availHeight a int.
-	 * @return a {@link java.awt.Insets} object.
-	 */
-	public Insets getSimpleAWTInsets(int availWidth, int availHeight) {
-		final int top = getInsetPixels(this.top, this.topType, 0, availHeight, 0);
-		final int left = getInsetPixels(this.left, this.leftType, 0, availWidth, 0);
-		final int bottom = getInsetPixels(this.bottom, this.bottomType, 0, availHeight, 0);
-		final int right = getInsetPixels(this.right, this.rightType, 0, availWidth, 0);
-		return new Insets(top, left, bottom, right);
-	}
-	
+
 	/**
 	 * <p>updateBottomInset.</p>
 	 *
@@ -227,18 +210,19 @@ public class HtmlInsets {
 		}
 		return insets;
 	}
-	
-	private int getInsetPixels(int value, int type, int defaultValue, int availSize, int autoValue) {
-		if (type == TYPE_PIXELS) {
-			return value;
-		} else if (type == TYPE_UNDEFINED) {
-			return defaultValue;
-		} else if (type == TYPE_AUTO) {
-			return autoValue;
-		} else if (type == TYPE_PERCENT) {
-			return availSize * value / 100;
-		} else {
-			throw new IllegalStateException();
+
+	private int getInsetPixels(int value, int type, int availSize, int autoValue) {
+		switch (type) {
+			case TYPE_PIXELS:
+				return value;
+			case TYPE_UNDEFINED:
+				return 0;
+			case TYPE_AUTO:
+				return autoValue;
+			case TYPE_PERCENT:
+				return availSize * value / 100;
+			default:
+				throw new IllegalStateException();
 		}
 	}
 

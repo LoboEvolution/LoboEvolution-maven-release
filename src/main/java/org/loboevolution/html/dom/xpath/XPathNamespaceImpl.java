@@ -1,22 +1,21 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 /*
  * $Id: XPathNamespaceImpl.java 1225426 2011-12-29 04:13:08Z mrglavas $
@@ -24,15 +23,20 @@
 
 package org.loboevolution.html.dom.xpath;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.node.Attr;
+import org.loboevolution.html.node.Code;
+import org.loboevolution.html.dom.HTMLElement;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.NodeType;
+import org.loboevolution.html.node.ParentNode;
+import org.loboevolution.html.node.events.Event;
+import org.loboevolution.html.xpath.XPathNamespace;
+import org.mozilla.javascript.Function;
 import org.w3c.dom.UserDataHandler;
-import org.w3c.dom.xpath.XPathNamespace;
 
 /**
  *
@@ -79,9 +83,8 @@ import org.w3c.dom.xpath.XPathNamespace;
  * This implementation wraps the DOM attribute node that contained the namespace
  * declaration.
  *
- * 
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class XPathNamespaceImpl implements XPathNamespace {
 
@@ -112,25 +115,25 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public String getNodeValue() throws DOMException {
+	public String getNodeValue() {
 		return m_attributeNode.getNodeValue();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setNodeValue(String arg0) throws DOMException {
+	public void setNodeValue(String arg0) {
 		// Method not implemented
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public short getNodeType() {
-		return XPathNamespace.XPATH_NAMESPACE_NODE;
+	public NodeType getNodeType() {
+		return NodeType.ATTRIBUTE_NODE;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Node getParentNode() {
+	public ParentNode getParentNode() {
 		return m_attributeNode.getParentNode();
 	}
 
@@ -166,37 +169,31 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public NamedNodeMap getAttributes() {
-		return m_attributeNode.getAttributes();
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Document getOwnerDocument() {
 		return m_attributeNode.getOwnerDocument();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Node insertBefore(Node arg0, Node arg1) throws DOMException {
+	public Node insertBefore(Node arg0, Node arg1) {
 		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Node replaceChild(Node arg0, Node arg1) throws DOMException {
+	public Node replaceChild(Node arg0, Node arg1) {
 		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Node removeChild(Node arg0) throws DOMException {
+	public Node removeChild(Node arg0) {
 		return null;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public Node appendChild(Node arg0) throws DOMException {
+	public Node appendChild(Node arg0) {
 		return null;
 	}
 
@@ -209,7 +206,7 @@ public class XPathNamespaceImpl implements XPathNamespace {
 	/** {@inheritDoc} */
 	@Override
 	public Node cloneNode(boolean arg0) {
-		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, null);
+		throw new DOMException(Code.NOT_SUPPORTED_ERR, null);
 	}
 
 	/** {@inheritDoc} */
@@ -220,16 +217,7 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean isSupported(String arg0, String arg1) {
-		return m_attributeNode.isSupported(arg0, arg1);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public String getNamespaceURI() {
-
-		// For namespace node, the namespaceURI is the namespace URI
-		// of the namespace represented by the node.
 		return m_attributeNode.getNodeValue();
 	}
 
@@ -241,22 +229,16 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPrefix(String arg0) throws DOMException {
+	public void setPrefix(String arg0) {
 		// Method not implemented
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String getLocalName() {
-		// For namespace node, the local name is the same as the prefix
 		return m_attributeNode.getPrefix();
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean hasAttributes() {
-		return m_attributeNode.hasAttributes();
-	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -266,19 +248,19 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public short compareDocumentPosition(Node other) throws DOMException {
+	public short compareDocumentPosition(Node other) {
 		return 0;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public String getTextContent() throws DOMException {
+	public String getTextContent() {
 		return textContent;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextContent(String textContent) throws DOMException {
+	public void setTextContent(String textContent) {
 		this.textContent = textContent;
 	}
 
@@ -314,12 +296,6 @@ public class XPathNamespaceImpl implements XPathNamespace {
 
 	/** {@inheritDoc} */
 	@Override
-	public Object getFeature(String feature, String version) {
-		return null; // PENDING
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Object setUserData(String key, Object data, UserDataHandler handler) {
 		return null; // PENDING
 	}
@@ -328,5 +304,69 @@ public class XPathNamespaceImpl implements XPathNamespace {
 	@Override
 	public Object getUserData(String key) {
 		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isIsConnected() {
+		return  m_attributeNode.isIsConnected();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public HTMLElement getParentElement() {
+		return  m_attributeNode.getParentElement();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node getRootNode() {
+		return  m_attributeNode.getRootNode();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node cloneNode() {
+		return  m_attributeNode.cloneNode();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean contains(Node other) {
+		return m_attributeNode.contains(other);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void addEventListener(String type, Function listener) {
+		m_attributeNode.addEventListener(type, listener);
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void addEventListener(String type, Function listener, boolean useCapture) {
+		m_attributeNode.addEventListener(type, listener, useCapture);
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void removeEventListener(String script, Function function) {
+		m_attributeNode.removeEventListener(script, function);
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void removeEventListener(String type, Function listener, boolean useCapture) {
+		m_attributeNode.removeEventListener(type, listener, useCapture);
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean dispatchEvent(Node element, Event evt) {
+		return m_attributeNode.dispatchEvent(element, evt);
 	}
 }

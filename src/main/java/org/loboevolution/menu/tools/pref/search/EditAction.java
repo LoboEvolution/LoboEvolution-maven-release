@@ -1,19 +1,35 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.pref.search;
 
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import org.loboevolution.gui.SwingTasks;
-
 /**
  * <p>EditAction class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class EditAction<T> extends AbstractAction {
 
@@ -23,7 +39,7 @@ public class EditAction<T> extends AbstractAction {
 	/** The add. */
 	private final boolean add;
 
-	private transient ItemListControl<T> item;
+	private final transient ItemListControl<T> item;
 
 	/**
 	 * Instantiates a new edits the action.
@@ -45,15 +61,7 @@ public class EditAction<T> extends AbstractAction {
 	/** {@inheritDoc} */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final Frame parentFrame = SwingTasks.getFrame(this.item);
-		ItemEditorDialog<T> dialog;
-		if (parentFrame != null) {
-			dialog = new ItemEditorDialog<T>(parentFrame, this.item.getItemEditorFactory());
-		} else {
-			final Dialog parentDialog = SwingTasks.getDialog(this.item);
-			dialog = new ItemEditorDialog<T>(parentDialog, this.item.getItemEditorFactory());
-		}
-		dialog.setModal(true);
+		ItemEditor<T> dialog = new ItemEditor<>(this.item.getItemEditorFactory());
 		dialog.setTitle(this.add ? "Add Item" : "Edit Item");
 		dialog.setCaption(this.item.getEditListCaption());
 		dialog.pack();
@@ -81,9 +89,9 @@ public class EditAction<T> extends AbstractAction {
 	 *
 	 * @param item the item
 	 */
-	private void addItem(T itm) {
-		this.item.getComboBox().addItem(itm);
-		this.item.getComboBox().setSelectedItem(itm);
+	private void addItem(T item) {
+		this.item.getComboBox().addItem(item);
+		this.item.getComboBox().setSelectedItem(item);
 	}
 
 	/**
@@ -99,14 +107,14 @@ public class EditAction<T> extends AbstractAction {
 	/**
 	 * Replace selected item.
 	 *
-	 * @param item the item
+	 * @param item
 	 */
-	private void replaceSelectedItem(T itm) {
+	private void replaceSelectedItem(T item) {
 		final int index = this.item.getComboBox().getSelectedIndex();
 		if (index != -1) {
 			this.item.getComboBox().removeItemAt(index);
 		}
-		this.item.getComboBox().addItem(itm);
-		this.item.getComboBox().setSelectedItem(itm);
+		this.item.getComboBox().addItem(item);
+		this.item.getComboBox().setSelectedItem(item);
 	}
 }

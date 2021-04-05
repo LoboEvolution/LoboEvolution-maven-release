@@ -49,20 +49,20 @@
 */
 package org.jpedal.jbig2.segment.pageinformation;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 import org.jpedal.jbig2.JBIG2Exception;
 import org.jpedal.jbig2.decoders.JBIG2StreamDecoder;
 import org.jpedal.jbig2.image.JBIG2Bitmap;
 import org.jpedal.jbig2.segment.Segment;
 import org.jpedal.jbig2.util.BinaryOperation;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * <p>PageInformationSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class PageInformationSegment extends Segment {
 
@@ -70,7 +70,7 @@ public class PageInformationSegment extends Segment {
 	private int pageBitmapHeight, pageBitmapWidth;
 	private int yResolution, xResolution;
 
-	PageInformationFlags pageInformationFlags = new PageInformationFlags();
+	final PageInformationFlags pageInformationFlags = new PageInformationFlags();
 	private int pageStriping;
 
 	private JBIG2Bitmap pageBitmap;
@@ -85,7 +85,7 @@ public class PageInformationSegment extends Segment {
 	}
 
 	/**
-	 * <p>Getter for the field pageInformationFlags.</p>
+	 * <p>Getter for the field <code>pageInformationFlags</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.segment.pageinformation.PageInformationFlags} object.
 	 */
@@ -94,7 +94,7 @@ public class PageInformationSegment extends Segment {
 	}
 
 	/**
-	 * <p>Getter for the field pageBitmap.</p>
+	 * <p>Getter for the field <code>pageBitmap</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.image.JBIG2Bitmap} object.
 	 */
@@ -165,7 +165,7 @@ public class PageInformationSegment extends Segment {
 	}
 
 	/**
-	 * <p>Getter for the field pageBitmapHeight.</p>
+	 * <p>Getter for the field <code>pageBitmapHeight</code>.</p>
 	 *
 	 * @return a int.
 	 */

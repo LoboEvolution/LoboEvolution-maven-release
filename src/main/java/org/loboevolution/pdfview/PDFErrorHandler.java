@@ -1,13 +1,19 @@
 package org.loboevolution.pdfview;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Simple class to handle exceptions - as default we just print the stack trace
  * but it's possible to inject another behaviour
  *
- * @author xond
- * @version $Id: $Id
+ * Author xond
+  *
  */
 public class PDFErrorHandler {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(PDFErrorHandler.class.getName());
 
     /**
      * <p>publishException.</p>
@@ -15,6 +21,6 @@ public class PDFErrorHandler {
      * @param e a {@link java.lang.Throwable} object.
      */
     public void publishException(Throwable e){
-       e.printStackTrace(); 
+       logger.log(Level.SEVERE, e.getMessage(), e); 
     }
 }

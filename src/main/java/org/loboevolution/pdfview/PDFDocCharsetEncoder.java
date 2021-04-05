@@ -30,9 +30,9 @@ import java.util.Map;
  * (if that) are represented in the PDFDocEncoding, so users should be
  * prepared to deal with unmappable character exceptions.
  *
- * @see "PDF Reference version 1.7, Appendix D"
- * @author Luke Kirby
- * @version $Id: $Id
+ * see "PDF Reference version 1.7, Appendix D"
+ * Author Luke Kirby
+  *
  */
 public class PDFDocCharsetEncoder extends CharsetEncoder {
 
@@ -61,7 +61,7 @@ public class PDFDocCharsetEncoder extends CharsetEncoder {
      * in the PDFDocEncoding.
      */
     final static Map<Character,Byte> EXTENDED_TO_PDF_DOC_ENCODING_MAP =
-            new HashMap<Character,Byte>();
+            new HashMap<>();
     static
     {
         for (byte i = 0; i < PDFStringUtil.PDF_DOC_ENCODING_MAP.length; ++i) {
@@ -81,7 +81,7 @@ public class PDFDocCharsetEncoder extends CharsetEncoder {
         super(null, 1, 1);
     }
 
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
         while (in.remaining() > 0) {

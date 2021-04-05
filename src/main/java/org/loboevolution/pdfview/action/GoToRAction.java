@@ -9,25 +9,25 @@ import org.loboevolution.pdfview.PDFObject;
  ***************************************************************************
  * Action directing to a location within another PDF document
  *
- * @author  Katja Sondermann
+ * Author  Katja Sondermann
  * @since 07.07.2009
  ***************************************************************************
- * @version $Id: $Id
+  *
  */
 public class GoToRAction extends PDFAction {
 
 	/** the destination within the remote PDF file */
-    private PDFDestination destination;
+    private final PDFDestination destination;
     /** the remote file this action refers to*/
-    private String file;
+    private final String file;
     /** Should the remote file be opened in a new window? (optional)*/
     private boolean newWindow=false;
     /**
      * Creates a new instance of GoToRAction from an object
      *
      * @param obj the PDFObject with the action information
-     * @throws java.io.IOException if any. - in case the action can not be parsed
      * @param root a {@link org.loboevolution.pdfview.PDFObject} object.
+     * @throws java.io.IOException if any.
      */
     public GoToRAction(PDFObject obj, PDFObject root) throws IOException {
         super("GoToR");
@@ -47,7 +47,7 @@ public class GoToRAction extends PDFAction {
      *
      * @param dest a {@link org.loboevolution.pdfview.PDFDestination} object.
      * @param file a {@link java.lang.String} object.
-     * @param newWindow newWindow
+     * @param newWindow a {@link java.lang.String} object.
      ***********************************************************************
      */
     public GoToRAction(PDFDestination dest, String file, boolean newWindow){

@@ -19,21 +19,21 @@ import org.loboevolution.pdfview.PDFParser;
  * PDF annotation describing a widget.
  *
  * @since Aug 20, 2010
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class WidgetAnnotation extends PDFAnnotation {
 
 	private String fieldValue;
 	private FieldType fieldType;
 	private String fieldName;
-	private PDFObject fieldValueRef;
+	private final PDFObject fieldValueRef;
 	private List<PDFCmd> cmd;
 
 	/**
 	 * Type for PDF form elements
 	 * @version $Id: WidgetAnnotation.java,v 1.2 2010-09-30 10:34:44 xphc Exp $ 
-	 * @author  xphc
+	 * Author  xphc
 	 * @since Aug 20, 2010
 	 */
 	public enum FieldType {
@@ -181,7 +181,7 @@ public class WidgetAnnotation extends PDFAnnotation {
         	}
         }
         
-        ArrayList<PDFCmd> result = new ArrayList<PDFCmd>();
+        ArrayList<PDFCmd> result = new ArrayList<>();
         result.add(PDFPage.createPushCmd());
         result.add(PDFPage.createPushCmd());
         if ("Image".equals(type)) {
@@ -189,7 +189,7 @@ public class WidgetAnnotation extends PDFAnnotation {
             AffineTransform rectAt = getPositionTransformation();
             result.add(PDFPage.createXFormCmd(rectAt));
             
-        	PDFImage img = PDFImage.createImage(obj, new HashMap<String, PDFObject>() , false);        	
+        	PDFImage img = PDFImage.createImage(obj, new HashMap<>() , false);
         	result.add(PDFPage.createImageCmd(img));
         } else if ("Form".equals(type)) {
             // rats.  parse it.
@@ -212,7 +212,7 @@ public class WidgetAnnotation extends PDFAnnotation {
             if (matrix == null) {
                 at = new AffineTransform();
             } else {
-                float elts[] = new float[6];
+                float[] elts = new float[6];
                 for (int i = 0; i < elts.length; i++) {
                     elts[i] = (matrix.getAt(i)).getFloatValue();
                 }
@@ -220,7 +220,7 @@ public class WidgetAnnotation extends PDFAnnotation {
             }
             formCmds.addXform(at);
             
-            HashMap<String,PDFObject> r = new HashMap<String,PDFObject>(new HashMap<String, PDFObject>());
+            HashMap<String,PDFObject> r = new HashMap<>(new HashMap<>());
             PDFObject rsrc = obj.getDictRef("Resources");
             if (rsrc != null) {
                 r.putAll(rsrc.getDictionary());

@@ -5,10 +5,10 @@ package com.gargoylesoftware.css.parser.javacc;
 /**
  * Describes the input token stream.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-@SuppressWarnings("all") public class Token implements java.io.Serializable {
+public class Token implements java.io.Serializable {
 
   /**
    * The version identifier for this Serializable class.

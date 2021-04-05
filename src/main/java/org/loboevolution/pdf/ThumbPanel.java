@@ -1,22 +1,20 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
+ * Santa Clara, California 95054, U.S.A. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.loboevolution.pdf;
 
@@ -29,6 +27,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 import javax.swing.JViewport;
@@ -42,28 +42,31 @@ import org.loboevolution.pdfview.PDFPage;
  * A panel of thumbnails, one for each page of a PDFFile. You can add a
  * PageChangeListener to be informed of when the user clicks one of the pages.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObserver {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -6761217072379594185L;
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(ThumbPanel.class.getName());
 
 	/** The PDFFile being displayed. */
 	private transient PDFFile file;
 
 	/** Array of images, one per page in the file. */
-	private transient Image images[];
+	private transient Image[] images;
 
 	/** Size of the border between images. */
-	private int border = 2;
+	private final int border = 2;
 	
 	/**
 	 * Height of each line. Thumbnails will be scaled to this height (minus the
 	 * border).
 	 */
-	private int lineheight = 96 + border;
+	private final int lineheight = 96 + border;
 	
 	/**
 	 * Guesstimate of the width of a thumbnail that hasn't been processed yet.
@@ -74,7 +77,7 @@ public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObs
 	 * Array of the x locations of each of the thumbnails. Every 0 stored in
 	 * this array indicates the start of a new line of thumbnails.
 	 */
-	private int xloc[];
+	private int[] xloc;
 
 	/** Thread that renders each thumbnail in turn. */
 	private transient Thread anim;
@@ -103,7 +106,6 @@ public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObs
 	 * @param file a {@link org.loboevolution.pdfview.PDFFile} object.
 	 */
 	public ThumbPanel(PDFFile file) {
-		super();
 		createAndShowGUI(file);
 	}
 
@@ -179,7 +181,7 @@ public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObs
 				}
 				repaint();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.log(Level.SEVERE, e.getMessage(), e);
 
 				int size = lineheight - border;
 				images[workingon] = new BufferedImage(size, size, BufferedImage.TYPE_BYTE_BINARY);
@@ -401,7 +403,7 @@ public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObs
 	}
 
 	/**
-	 * <p>Getter for the field listener.</p>
+	 * <p>Getter for the field <code>listener</code>.</p>
 	 *
 	 * @return the listener
 	 */
@@ -410,7 +412,7 @@ public class ThumbPanel extends JPanel implements Runnable, Scrollable, ImageObs
 	}
 
 	/**
-	 * <p>Setter for the field listener.</p>
+	 * <p>Setter for the field <code>listener</code>.</p>
 	 *
 	 * @param listener the listener to set
 	 */

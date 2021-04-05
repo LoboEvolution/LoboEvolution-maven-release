@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 
 import org.jpedal.jbig2.JBIG2Decoder;
 import org.jpedal.jbig2.JBIG2Exception;
-
 import org.loboevolution.pdfview.PDFObject;
 
 /**
@@ -19,8 +18,8 @@ import org.loboevolution.pdfview.PDFObject;
  *
  * @since 17.11.2010
  ***************************************************************************
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBig2Decode {	
 	/**

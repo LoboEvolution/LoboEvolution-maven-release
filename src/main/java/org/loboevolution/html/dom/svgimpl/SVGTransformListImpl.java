@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.geom.AffineTransform;
@@ -9,13 +29,12 @@ import org.loboevolution.html.dom.svg.SVGException;
 import org.loboevolution.html.dom.svg.SVGMatrix;
 import org.loboevolution.html.dom.svg.SVGTransform;
 import org.loboevolution.html.dom.svg.SVGTransformList;
-import org.w3c.dom.DOMException;
 
 /**
  * <p>SVGTransformListImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGTransformListImpl implements SVGTransformList {
 	
@@ -25,7 +44,7 @@ public class SVGTransformListImpl implements SVGTransformList {
 	 * <p>Constructor for SVGTransformListImpl.</p>
 	 */
 	public SVGTransformListImpl() {
-		transList = new ArrayList<SVGTransform>();
+		transList = new ArrayList<>();
 	}
 
 	/** {@inheritDoc} */
@@ -36,31 +55,29 @@ public class SVGTransformListImpl implements SVGTransformList {
 
 	/** {@inheritDoc} */
 	@Override
-	public void clear() throws DOMException {
+	public void clear() {
 		transList.clear();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform initialize(SVGTransform newItem) throws DOMException, SVGException {
-		transList = new ArrayList<SVGTransform>();
+	public SVGTransform initialize(SVGTransform newItem) throws SVGException {
+		transList = new ArrayList<>();
 		transList.add(newItem);
 		return newItem;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform getItem(int index) throws DOMException {
+	public SVGTransform getItem(int index) {
 		return transList.get(index);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform insertItemBefore(SVGTransform newItem, int index) throws DOMException, SVGException {
+	public SVGTransform insertItemBefore(SVGTransform newItem, int index) throws SVGException {
 
-		if (transList.contains(newItem)) {
-			transList.remove(newItem);
-		}
+        transList.remove(newItem);
 
 		if (index < 0) {
 			transList.add(0, newItem);
@@ -74,11 +91,9 @@ public class SVGTransformListImpl implements SVGTransformList {
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform replaceItem(SVGTransform newItem, int index) throws DOMException, SVGException {
+	public SVGTransform replaceItem(SVGTransform newItem, int index) throws SVGException {
 
-		if (transList.contains(newItem)) {
-			transList.remove(newItem);
-		}
+        transList.remove(newItem);
 
 		if (index < 0 || index > getNumberOfItems() - 1) {
 			return null;
@@ -91,13 +106,13 @@ public class SVGTransformListImpl implements SVGTransformList {
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform removeItem(int index) throws DOMException {
+	public SVGTransform removeItem(int index) {
 		return transList.remove(index);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public SVGTransform appendItem(SVGTransform newItem) throws DOMException, SVGException {
+	public SVGTransform appendItem(SVGTransform newItem) throws SVGException {
 		transList.add(newItem);
 		return newItem;
 	}

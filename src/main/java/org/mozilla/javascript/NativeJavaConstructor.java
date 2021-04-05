@@ -14,11 +14,11 @@ package org.mozilla.javascript;
  * always construct the same NativeJavaClass regardless of any reparenting
  * that may occur.
  *
- * @author Frank Mitchell
+ * Author Frank Mitchell
  * @see NativeJavaMethod
  * @see NativeJavaPackage
  * @see NativeJavaClass
- * @version $Id: $Id
+ *
  */
 public class NativeJavaConstructor extends BaseFunction
 {

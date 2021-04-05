@@ -15,8 +15,8 @@ import org.mozilla.javascript.Token;
  *       <b>if</b> ( Expression ) Statement <b>else</b> Statement
  *       <b>if</b> ( Expression ) Statement</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class IfStatement extends AstNode {
 
@@ -244,7 +244,7 @@ public class IfStatement extends AstNode {
     }
 
     /**
-     * <p>Getter for the field elseKeyWordInlineComment.</p>
+     * <p>Getter for the field <code>elseKeyWordInlineComment</code>.</p>
      *
      * @return a {@link org.mozilla.javascript.ast.AstNode} object.
      */
@@ -253,7 +253,7 @@ public class IfStatement extends AstNode {
     }
 
     /**
-     * <p>Setter for the field elseKeyWordInlineComment.</p>
+     * <p>Setter for the field <code>elseKeyWordInlineComment</code>.</p>
      *
      * @param elseKeyWordInlineComment a {@link org.mozilla.javascript.ast.AstNode} object.
      */

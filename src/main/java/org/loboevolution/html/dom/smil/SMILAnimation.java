@@ -1,63 +1,62 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom.smil;
 
-import org.w3c.dom.DOMException;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
 
 /**
  * This interface define the set of animation extensions for SMIL. The
  * attributes will go in a XLink interface.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SMILAnimation extends SMILElement, ElementTargetAttributes, ElementTime, ElementTimeControl {
 	
 	// additiveTypes
 	/** Constant ADDITIVE_REPLACE=0 */
-	public static final short ADDITIVE_REPLACE = 0;
+	short ADDITIVE_REPLACE = 0;
 
 	/** Constant ADDITIVE_SUM=1 */
-	public static final short ADDITIVE_SUM = 1;
+	short ADDITIVE_SUM = 1;
 
 	// calcModeTypes
 	/** Constant CALCMODE_DISCRETE=0 */
-	public static final short CALCMODE_DISCRETE = 0;
+	short CALCMODE_DISCRETE = 0;
 	
 	/** Constant CALCMODE_LINEAR=1 */
-	public static final short CALCMODE_LINEAR = 1;
+	short CALCMODE_LINEAR = 1;
 	
 	/** Constant CALCMODE_PACED=2 */
-	public static final short CALCMODE_PACED = 2;
+	short CALCMODE_PACED = 2;
 	
 	/** Constant CALCMODE_SPLINE=3 */
-	public static final short CALCMODE_SPLINE = 3;
+	short CALCMODE_SPLINE = 3;
 
 	// accumulateTypes
 	/** Constant ACCUMULATE_NONE=0 */
-	public static final short ACCUMULATE_NONE = 0;
+	short ACCUMULATE_NONE = 0;
 	
 	/** Constant ACCUMULATE_SUM=1 */
-	public static final short ACCUMULATE_SUM = 1;
+	short ACCUMULATE_SUM = 1;
 	
 	/**
 	 * A code representing the value of the additive attribute, as defined
@@ -95,7 +94,7 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *
 	 * @param accumulate a short.
 	 */
-	default void setAccumulate(short accumulate) {};
+	default void setAccumulate(short accumulate) {}
 
 	/**
 	 * A code representing the value of the calcMode attribute, as defined
@@ -113,7 +112,7 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *
 	 * @param calcMode a short.
 	 */
-	default void setCalcMode(short calcMode) {};
+	default void setCalcMode(short calcMode) {}
 
 	/**
 	 * A DOMString representing the value of the keySplines
@@ -131,7 +130,7 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *
 	 * @param keySplines a {@link java.lang.String} object.
 	 */
-	default void setKeySplines(String keySplines) {};
+	default void setKeySplines(String keySplines) {}
 
 	/**
 	 * A list of the time value of the keyTimes attribute.
@@ -148,7 +147,7 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *
 	 * @param keyTimes a {@link org.loboevolution.html.dom.smil.TimeList} object.
 	 */
-	default void setKeyTimes(TimeList keyTimes)  {};
+	default void setKeyTimes(TimeList keyTimes)  {}
 
 	/**
 	 * A DOMString representing the value of the values attribute.
@@ -158,15 +157,16 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *                readonly.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public String getValues();
+	String getValues();
 
 	/**
 	 * <p>setValues.</p>
 	 *
 	 * @param values a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
+	 * @throws org.loboevolution.html.dom.nodeimpl.DOMException if any.
 	 */
-	public void setValues(String values) throws DOMException;
+	void setValues(String values) throws DOMException;
 
 	/**
 	 * A DOMString representing the value of the from attribute.
@@ -176,15 +176,16 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *                readonly.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public String getFrom();
+	String getFrom();
 
 	/**
 	 * <p>setFrom.</p>
 	 *
 	 * @param from a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
+	 * @throws org.loboevolution.html.dom.nodeimpl.DOMException if any.
 	 */
-	public void setFrom(String from) throws DOMException;
+	void setFrom(String from) throws DOMException;
 
 	/**
 	 * A DOMString representing the value of the to attribute.
@@ -194,15 +195,16 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *                readonly.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public String getTo();
+	String getTo();
 
 	/**
 	 * <p>setTo.</p>
 	 *
 	 * @param to a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
+	 * @throws org.loboevolution.html.dom.nodeimpl.DOMException if any.
 	 */
-	public void setTo(String to) throws DOMException;
+	void setTo(String to) throws DOMException;
 
 	/**
 	 * A DOMString representing the value of the by attribute.
@@ -212,14 +214,15 @@ public interface SMILAnimation extends SMILElement, ElementTargetAttributes, Ele
 	 *                readonly.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public String getBy();
+	String getBy();
 
 	/**
 	 * <p>setBy.</p>
 	 *
 	 * @param by a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
+	 * @throws org.loboevolution.html.dom.nodeimpl.DOMException if any.
 	 */
-	public void setBy(String by) throws DOMException;
+	void setBy(String by) throws DOMException;
 
 }

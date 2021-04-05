@@ -14,8 +14,8 @@ package org.mozilla.javascript;
  * support does not break compatibility for existing code.
  *
  * @since 1.7.8
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SymbolScriptable
 {

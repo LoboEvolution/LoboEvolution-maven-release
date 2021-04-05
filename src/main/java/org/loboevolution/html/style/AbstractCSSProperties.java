@@ -1,386 +1,58 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Nov 20, 2005
  */
 package org.loboevolution.html.style;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.loboevolution.common.Objects;
-import org.loboevolution.common.Strings;
-import org.loboevolution.common.Urls;
-import org.loboevolution.html.CSSValues;
-import org.loboevolution.info.FontInfo;
-import org.loboevolution.laf.ColorFactory;
+import org.loboevolution.html.node.css.CSS3Properties;
+import org.loboevolution.html.style.setter.BackgroundImageSetter;
+import org.loboevolution.html.style.setter.BackgroundSetter;
+import org.loboevolution.html.style.setter.BorderSetter1;
+import org.loboevolution.html.style.setter.BorderSetter2;
+import org.loboevolution.html.style.setter.BorderStyleSetter;
+import org.loboevolution.html.style.setter.FontSetter;
+import org.loboevolution.html.style.setter.FourCornersSetter;
+import org.loboevolution.html.style.setter.PropertyCSS;
+import org.loboevolution.html.style.setter.SubPropertySetter;
 import org.loboevolution.js.AbstractScriptableDelegate;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.css.CSS3Properties;
-import com.gargoylesoftware.css.dom.AbstractCSSRuleImpl;
+
 import com.gargoylesoftware.css.dom.CSSStyleDeclarationImpl;
-import com.gargoylesoftware.css.dom.CSSStyleSheetImpl;
 import com.gargoylesoftware.css.dom.Property;
 import com.gargoylesoftware.css.util.CSSProperties;
 
 /**
  * <p>AbstractCSSProperties class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class AbstractCSSProperties extends AbstractScriptableDelegate implements CSSProperties, CSS3Properties {
 	
-	private static class BackgroundImageSetter implements SubPropertySetter {
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, newValue, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration,
-				boolean important) {
-			String baseHref = null;
-			String finalValue;
-			if (declaration != null) {
-				final AbstractCSSRuleImpl rule = declaration.getParentRule();
-				if (rule != null) {
-					final CSSStyleSheetImpl sheet = rule.getParentStyleSheet();
-					final CSSStyleSheetImpl ssheet = sheet;
-					baseHref = ssheet.getHref();
-				}
-			}
-			if (baseHref == null) {
-				baseHref = properties.context.getDocumentBaseURI();
-			}
-			final String start = "url(";
-			if (newValue == null || !newValue.toLowerCase().startsWith(start)) {
-				finalValue = newValue;
-			} else {
-				final int startIdx = start.length();
-				final int closingIdx = newValue.lastIndexOf(')');
-				if (closingIdx == -1) {
-					finalValue = newValue;
-				} else {
-					final String quotedUri = newValue.substring(startIdx, closingIdx);
-					final String tentativeUri = HtmlValues.unquoteAndUnescape(quotedUri);
-					if (baseHref == null) {
-						finalValue = newValue;
-					} else {
-						try {
-							final URL styleUrl = Urls.createURL(null, baseHref);
-							if(tentativeUri.contains("data:image")) {
-								finalValue = tentativeUri;
-							} else {
-								finalValue = "url(" + HtmlValues.quoteAndEscape(Urls.createURL(styleUrl, tentativeUri).toExternalForm()) + ")";
-							}
-							
-						} catch (final Exception mfu) {
-							logger.log(Level.WARNING, "Unable to create URL for URI=[" + tentativeUri + "], with base=[" + baseHref + "].", mfu);
-							finalValue = newValue;
-						}
-					}
-				}
-			}
-			properties.setPropertyValueLCAlt(BACKGROUND_IMAGE, finalValue, important);
-		}
-	}
-
-	private static class BackgroundSetter implements SubPropertySetter {
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, newValue, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration,
-				boolean important) {
-			properties.setPropertyValueLCAlt(BACKGROUND, newValue, important);
-			if (newValue != null && newValue.length() > 0) {
-				final String[] tokens = HtmlValues.splitCssValue(newValue);
-				boolean hasXPosition = false;
-				boolean hasYPosition = false;
-				String color = null;
-				String image = null;
-				String backgroundRepeat = null;
-				String position = null;
-				for (final String token : tokens) {
-					if (ColorFactory.getInstance().isColor(token) || CSSValues.INITIAL.equals(CSSValues.get(token))) {
-						color = token;
-					} else if (HtmlValues.isUrl(token) || HtmlValues.isGradient(token)) {
-						image = token;
-					} else if (HtmlValues.isBackgroundRepeat(token)) {
-						backgroundRepeat = token;
-					} else if (HtmlValues.isBackgroundPosition(token)) {
-						if (hasXPosition && !hasYPosition) {
-							position += " " + token;
-							hasYPosition = true;
-						} else {
-							hasXPosition = true;
-							position = token;
-						}
-					}
-				}
-				if (color != null) {
-					if(CSSValues.INITIAL.equals(CSSValues.get(color))){
-						color = "white";
-					}
-					properties.setPropertyValueLCAlt(BACKGROUND_COLOR, color, important);
-				}
-				if (image != null) {
-					properties.setPropertyValueProcessed(BACKGROUND_IMAGE, image, declaration, important);
-				}
-				if (backgroundRepeat != null) {
-					properties.setPropertyValueLCAlt(BACKGROUND_REPEAT, backgroundRepeat, important);
-				}
-				if (position != null) {
-					properties.setPropertyValueLCAlt(BACKGROUND_POSITION, position, important);
-				}
-			}
-		}
-
-	}
-
-	private static class BorderSetter1 implements SubPropertySetter {
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, newValue, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration, boolean important) {
-			properties.setPropertyValueLCAlt(BORDER, newValue, important);
-			properties.setPropertyValueProcessed(BORDER_TOP, newValue, declaration, important);
-			properties.setPropertyValueProcessed(BORDER_LEFT, newValue, declaration, important);
-			properties.setPropertyValueProcessed(BORDER_BOTTOM, newValue, declaration, important);
-			properties.setPropertyValueProcessed(BORDER_RIGHT, newValue, declaration, important);
-		}
-	}
-
-	private static class BorderSetter2 implements SubPropertySetter {
-		private final String name;
-
-		public BorderSetter2(String baseName) {
-			this.name = baseName;
-		}
-
-		public void changeValue(AbstractCSSProperties properties, String value, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, value, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String value, CSSStyleDeclarationImpl declaration, boolean important) {
-			properties.setPropertyValueLCAlt(this.name, value, important);
-			if (Strings.isNotBlank(value)) {
-				final String[] array = HtmlValues.splitCssValue(value);
-				String color = null;
-				String style = null;
-				String width = null;
-				for (final String token : array) {
-					if (HtmlValues.isBorderStyle(token)) {
-						style = token;
-					} else if (ColorFactory.getInstance().isColor(token)) {
-						color = token;
-					} else {
-						width = token;
-					}
-				}
-				final String name = this.name;
-				if (style != null) {
-					properties.setPropertyValueLCAlt(name + "-style", style, important);
-					if(color == null) {
-						color = "black";
-					}
-					
-					if(width == null) {
-						width = "2px";
-					}
-				}
-				
-				if (color != null) {
-					properties.setPropertyValueLCAlt(name + "-color", color, important);
-				}
-				if (width != null) {
-					properties.setPropertyValueLCAlt(name + "-width", width, important);
-				}				
-			}
-		}
-	}
-
-	private static class FontSetter implements SubPropertySetter {
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, newValue, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration,
-				boolean important) {
-			properties.setPropertyValueLCAlt(FONT, newValue, important);
-			if (Strings.isNotBlank(newValue)) {
-				final String fontSpecTL = newValue.toLowerCase();
-				final FontInfo fontInfo = (FontInfo) HtmlValues.SYSTEM_FONTS.get(fontSpecTL);
-				if (fontInfo != null) {
-					if (fontInfo.getFontFamily() != null) {
-						properties.setPropertyValueLCAlt(FONT_FAMILY, fontInfo.getFontFamily(), important);
-					}
-					if (fontInfo.getFontSize() != null) {
-						properties.setPropertyValueLCAlt(FONT_SIZE, fontInfo.getFontSize(), important);
-					}
-					if (fontInfo.getFontStyle() != null) {
-						properties.setPropertyValueLCAlt(FONT_STYLE, fontInfo.getFontStyle(), important);
-					}
-					if (fontInfo.getFontVariant() != null) {
-						properties.setPropertyValueLCAlt(FONT_VARIANT, fontInfo.getFontVariant(), important);
-					}
-					if (fontInfo.getFontWeight() != null) {
-						properties.setPropertyValueLCAlt(FONT_WEIGHT, fontInfo.getFontWeight(), important);
-					}
-					return;
-				}
-				final String[] tokens = HtmlValues.splitCssValue(fontSpecTL);
-				String token = null;
-				final int length = tokens.length;
-				int i;
-				for (i = 0; i < length; i++) {
-					token = tokens[i];
-					if (HtmlValues.isFontStyle(token)) {
-						properties.setPropertyValueLCAlt(FONT_STYLE, token, important);
-						continue;
-					}
-					if (HtmlValues.isFontVariant(token)) {
-						properties.setPropertyValueLCAlt(FONT_VARIANT, token, important);
-						continue;
-					}
-					if (HtmlValues.isFontWeight(token)) {
-						properties.setPropertyValueLCAlt(FONT_WEIGHT, token, important);
-						continue;
-					}
-					// Otherwise exit loop
-					break;
-				}
-				if (token != null) {
-					final int slashIdx = token.indexOf('/');
-					final String fontSizeText = slashIdx == -1 ? token : token.substring(0, slashIdx);
-					properties.setPropertyValueLCAlt(FONT_SIZE, fontSizeText, important);
-					final String lineHeightText = slashIdx == -1 ? null : token.substring(slashIdx + 1);
-					if (lineHeightText != null) {
-						properties.setPropertyValueLCAlt(LINE_HEIGHT, lineHeightText, important);
-					}
-					if (++i < length) {
-						final StringBuilder fontFamilyBuff = new StringBuilder();
-						do {
-							token = tokens[i];
-							fontFamilyBuff.append(token);
-							fontFamilyBuff.append(' ');
-						} while (++i < length);
-						properties.setPropertyValueLCAlt(FONT_FAMILY, fontFamilyBuff.toString(), important);
-					}
-				}
-			}
-		}
-	}
-
-	private static class FourCornersSetter implements SubPropertySetter {
-		private final String prefix;
-		private final String property;
-		private final String suffix;
-
-		public FourCornersSetter(String property, String prefix, String suffix) {
-			this.prefix = prefix;
-			this.suffix = suffix;
-			this.property = property;
-		}
-
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration) {
-			this.changeValue(properties, newValue, declaration, true);
-		}
-
-		@Override
-		public void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration, boolean important) {
-			
-			if (Strings.isNotBlank(newValue)) {
-				properties.setPropertyValueLCAlt(this.property, newValue, important);
-				if (BORDER_STYLE.equals(property)) {
-					properties.setPropertyValueLCAlt(BORDER_TOP_WIDTH, "2px", important);
-					properties.setPropertyValueLCAlt(BORDER_BOTTOM_WIDTH, "2px", important);
-					properties.setPropertyValueLCAlt(BORDER_LEFT_WIDTH, "2px", important);
-					properties.setPropertyValueLCAlt(BORDER_RIGHT_WIDTH, "2px", important);
-				}
-				
-				final String[] array = HtmlValues.splitCssValue(newValue);
-				final int size = array.length;
-				if (size == 1) {
-					final String prefix = this.prefix;
-					final String suffix = this.suffix;
-					final String value = array[0];
-					properties.setPropertyValueLCAlt(prefix + "top" + suffix, value, important);
-					properties.setPropertyValueLCAlt(prefix + "right" + suffix, value, important);
-					properties.setPropertyValueLCAlt(prefix + "bottom" + suffix, value, important);
-					properties.setPropertyValueLCAlt(prefix + "left" + suffix, value, important);
-				} else if (size >= 4) {
-					final String prefix = this.prefix;
-					final String suffix = this.suffix;
-					properties.setPropertyValueLCAlt(prefix + "top" + suffix, array[0], important);
-					properties.setPropertyValueLCAlt(prefix + "right" + suffix, array[1], important);
-					properties.setPropertyValueLCAlt(prefix + "bottom" + suffix, array[2], important);
-					properties.setPropertyValueLCAlt(prefix + "left" + suffix, array[3], important);
-				} else if (size == 2) {
-					final String prefix = this.prefix;
-					final String suffix = this.suffix;
-					properties.setPropertyValueLCAlt(prefix + "top" + suffix, array[0], important);
-					properties.setPropertyValueLCAlt(prefix + "right" + suffix, array[1], important);
-					properties.setPropertyValueLCAlt(prefix + "bottom" + suffix, array[0], important);
-					properties.setPropertyValueLCAlt(prefix + "left" + suffix, array[1], important);
-				} else if (size == 3) {
-					final String prefix = this.prefix;
-					final String suffix = this.suffix;
-					properties.setPropertyValueLCAlt(prefix + "top" + suffix, array[0], important);
-					properties.setPropertyValueLCAlt(prefix + "right" + suffix, array[1], important);
-					properties.setPropertyValueLCAlt(prefix + "bottom" + suffix, array[2], important);
-					properties.setPropertyValueLCAlt(prefix + "left" + suffix, array[1], important);
-				}
-			}
-		}
-	}
-
-	private static class PropertyCSS {
-		public final boolean important;
-		public final String value;
-
-		public PropertyCSS(final String value, final boolean important) {
-			this.value = value;
-			this.important = important;
-		}
-	}
-
-	private interface SubPropertySetter {
-		void changeValue(AbstractCSSProperties properties, String newValue, CSSStyleDeclarationImpl declaration,
-				boolean important);
-	}
-
-	private static final Logger logger = Logger.getLogger(AbstractCSSProperties.class.getName());
-	
-	private static final Map<String, SubPropertySetter> SUB_SETTERS = new HashMap<String, SubPropertySetter>();
+	private static final Map<String, SubPropertySetter> SUB_SETTERS = new HashMap<>();
 
 	static {
 		final Map<String, SubPropertySetter> subSetters = SUB_SETTERS;
@@ -396,7 +68,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		subSetters.put(BORDER_BOTTOM_STYLE, new BorderSetter2(BORDER_BOTTOM));
 		subSetters.put(BORDER_RIGHT_STYLE, new BorderSetter2(BORDER_RIGHT));
 		subSetters.put(BORDER_COLOR, new FourCornersSetter(BORDER_COLOR, "border-", "-color"));
-		subSetters.put(BORDER_STYLE, new FourCornersSetter(BORDER_STYLE, "border-", "-style"));
+		subSetters.put(BORDER_STYLE, new BorderStyleSetter(BORDER_STYLE, "border-", "-style"));
 		subSetters.put(BORDER_WIDTH, new FourCornersSetter(BORDER_WIDTH, "border-", "-width"));
 		subSetters.put(BACKGROUND, new BackgroundSetter());
 		subSetters.put(BACKGROUND_IMAGE, new BackgroundImageSetter());
@@ -431,7 +103,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		synchronized (this) {
 			List<CSSStyleDeclarationImpl> sd = this.styleDeclarations;
 			if (sd == null) {
-				sd = new LinkedList<CSSStyleDeclarationImpl>();
+				sd = new LinkedList<>();
 				this.styleDeclarations = sd;
 			}
 			sd.add(styleDeclaration);
@@ -471,23 +143,17 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		this.overlayColor = value;
 		this.context.informLookInvalid();
 	}
-
-	/**
-	 * <p>getFloat.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getFloat() {
-		return this.getPropertyValueLC(FLOAT);
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getAlignItems() {
+		return this.getPropertyValueLC(ALIGN_ITEMS);
 	}
-
-	/**
-	 * <p>setFloat.</p>
-	 *
-	 * @param value a {@link java.lang.String} object.
-	 */
-	public void setFloat(String value) {
-		this.setPropertyValueLC(FLOAT, value);
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getAlignContent() {
+		return this.getPropertyValueLC(ALIGN_CONTENT);
 	}
 
 	/** {@inheritDoc} */
@@ -832,7 +498,37 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 	public String getFontWeight() {
 		return this.getPropertyValueLC(FONT_WEIGHT);
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getFloat() {
+		return this.getPropertyValueLC(FLOAT);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexDirection() {
+		return this.getPropertyValueLC(FLEX_DIRECTION);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexWrap() {
+		return this.getPropertyValueLC(FLEX_WRAP);
+	}
 
+	/** {@inheritDoc} */
+	@Override
+	public String getFlexFlow() {
+		return this.getPropertyValueLC(FLEX_FLOW);
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getJustifyContent() {
+		return this.getPropertyValueLC(JUSTIFY_CONTENT);
+	}
+	
 	/** {@inheritDoc} */
 	@Override
 	public String getHeight() {
@@ -1245,41 +941,41 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 
 	/** {@inheritDoc} */
 	@Override
-	public void setAzimuth(String azimuth) throws DOMException {
+	public void setAzimuth(String azimuth) {
 		this.setPropertyValueLC(AZIMUTH, azimuth);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBackground(String background) throws DOMException {
+	public void setBackground(String background) {
 		new BackgroundSetter().changeValue(this, background, null);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBackgroundAttachment(String backgroundAttachment) throws DOMException {
+	public void setBackgroundAttachment(String backgroundAttachment) {
 		this.setPropertyValueLC(BACKGROUND_ATTACHMENT, backgroundAttachment);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBackgroundColor(String backgroundColor) throws DOMException {
+	public void setBackgroundColor(String backgroundColor) {
 		this.setPropertyValueLC(BACKGROUND_COLOR, backgroundColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBackgroundPosition(String backgroundPosition) throws DOMException {
+	public void setBackgroundPosition(String backgroundPosition) {
 		this.setPropertyValueLC(BACKGROUND_POSITION, backgroundPosition);
 		this.context.informLookInvalid();
 	}
 	
 	/** {@inheritDoc} */
 	@Override
-	public void setBackgroundImage(String backgroundImage) throws DOMException {
+	public void setBackgroundImage(String backgroundImage) {
 		checkSetProperty();
 		new BackgroundImageSetter().changeValue(this, backgroundImage, null);
 		this.context.informLookInvalid();
@@ -1287,188 +983,188 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBackgroundRepeat(String backgroundRepeat) throws DOMException {
+	public void setBackgroundRepeat(String backgroundRepeat) {
 		this.setPropertyValueLC(BACKGROUND_REPEAT, backgroundRepeat);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorder(String border) throws DOMException {
+	public void setBorder(String border) {
 		new BorderSetter1().changeValue(this, border, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderBottom(String borderBottom) throws DOMException {
+	public void setBorderBottom(String borderBottom) {
 		new BorderSetter2(BORDER_BOTTOM).changeValue(this, borderBottom, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderBottomColor(String borderBottomColor) throws DOMException {
+	public void setBorderBottomColor(String borderBottomColor) {
 		this.setPropertyValueLC(BORDER_BOTTOM_COLOR, borderBottomColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderBottomStyle(String borderBottomStyle) throws DOMException {
+	public void setBorderBottomStyle(String borderBottomStyle) {
 		new BorderSetter2(BORDER_BOTTOM).changeValue(this, borderBottomStyle, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderBottomWidth(String borderBottomWidth) throws DOMException {
+	public void setBorderBottomWidth(String borderBottomWidth) {
 		this.setPropertyValueLC(BORDER_BOTTOM_WIDTH, borderBottomWidth);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderCollapse(String borderCollapse) throws DOMException {
+	public void setBorderCollapse(String borderCollapse) {
 		this.setPropertyValueLC(BORDER_COLLAPSE, borderCollapse);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderColor(String borderColor) throws DOMException {
+	public void setBorderColor(String borderColor) {
 		new FourCornersSetter(BORDER_COLOR, "border-", "-color").changeValue(this, borderColor, null);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderLeft(String borderLeft) throws DOMException {
+	public void setBorderLeft(String borderLeft) {
 		new BorderSetter2(BORDER_LEFT).changeValue(this, borderLeft, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderLeftColor(String borderLeftColor) throws DOMException {
+	public void setBorderLeftColor(String borderLeftColor) {
 		this.setPropertyValueLC(BORDER_LEFT_COLOR, borderLeftColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderLeftStyle(String borderLeftStyle) throws DOMException {
+	public void setBorderLeftStyle(String borderLeftStyle) {
 		new BorderSetter2(BORDER_LEFT).changeValue(this, borderLeftStyle, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderLeftWidth(String borderLeftWidth) throws DOMException {
+	public void setBorderLeftWidth(String borderLeftWidth) {
 		this.setPropertyValueLC(BORDER_LEFT_WIDTH, borderLeftWidth);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderRight(String borderRight) throws DOMException {
+	public void setBorderRight(String borderRight) {
 		new BorderSetter2(BORDER_RIGHT).changeValue(this, borderRight, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderRightColor(String borderRightColor) throws DOMException {
+	public void setBorderRightColor(String borderRightColor) {
 		this.setPropertyValueLC(BORDER_RIGHT_COLOR, borderRightColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderRightStyle(String borderRightStyle) throws DOMException {
+	public void setBorderRightStyle(String borderRightStyle) {
 		new BorderSetter2(BORDER_RIGHT).changeValue(this, borderRightStyle, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderRightWidth(String borderRightWidth) throws DOMException {
+	public void setBorderRightWidth(String borderRightWidth) {
 		this.setPropertyValueLC(BORDER_RIGHT_WIDTH, borderRightWidth);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderSpacing(String borderSpacing) throws DOMException {
+	public void setBorderSpacing(String borderSpacing) {
 		this.setPropertyValueLC(BORDER_SPACING, borderSpacing);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderStyle(String borderStyle) throws DOMException {
+	public void setBorderStyle(String borderStyle) {
 		new FourCornersSetter(BORDER_STYLE, "border-", "-style").changeValue(this, borderStyle, null);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderTop(String borderTop) throws DOMException {
+	public void setBorderTop(String borderTop) {
 		new BorderSetter2(BORDER_TOP).changeValue(this, borderTop, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderTopColor(String borderTopColor) throws DOMException {
+	public void setBorderTopColor(String borderTopColor) {
 		this.setPropertyValueLC(BORDER_TOP_COLOR, borderTopColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderTopStyle(String borderTopStyle) throws DOMException {
+	public void setBorderTopStyle(String borderTopStyle) {
 		new BorderSetter2(BORDER_TOP).changeValue(this, borderTopStyle, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderTopWidth(String borderTopWidth) throws DOMException {
+	public void setBorderTopWidth(String borderTopWidth) {
 		this.setPropertyValueLC(BORDER_TOP_WIDTH, borderTopWidth);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBorderWidth(String borderWidth) throws DOMException {
+	public void setBorderWidth(String borderWidth) {
 		new FourCornersSetter(BORDER_WIDTH, "border-", "-width").changeValue(this, borderWidth, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setBottom(String bottom) throws DOMException {
+	public void setBottom(String bottom) {
 		this.setPropertyValueLC(BOTTOM, bottom);
 		this.context.informPositionInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCaptionSide(String captionSide) throws DOMException {
+	public void setCaptionSide(String captionSide) {
 		this.setPropertyValueLC(CAPTION_SIDE, captionSide);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setClear(String clear) throws DOMException {
+	public void setClear(String clear) {
 		this.setPropertyValueLC(CLEAR, clear);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setClip(String clip) throws DOMException {
+	public void setClip(String clip) {
 		this.setPropertyValueLC(CLIP, clip);
 	}
 	
@@ -1486,108 +1182,108 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 
 	/** {@inheritDoc} */
 	@Override
-	public void setColor(String color) throws DOMException {
+	public void setColor(String color) {
 		this.setPropertyValueLC(COLOR, color);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setContent(String content) throws DOMException {
+	public void setContent(String content) {
 		this.setPropertyValueLC(CONTENT, content);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCounterIncrement(String counterIncrement) throws DOMException {
+	public void setCounterIncrement(String counterIncrement) {
 		this.setPropertyValueLC(COUNTER_INCREMENT, counterIncrement);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCounterReset(String counterReset) throws DOMException {
+	public void setCounterReset(String counterReset) {
 		this.setPropertyValueLC(COUNTER_RESET, counterReset);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCssFloat(String cssFloat) throws DOMException {
+	public void setCssFloat(String cssFloat) {
 		this.setPropertyValueLC(CSS_FLOAT, cssFloat);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCue(String cue) throws DOMException {
+	public void setCue(String cue) {
 		this.setPropertyValueLC(CUE, cue);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCueAfter(String cueAfter) throws DOMException {
+	public void setCueAfter(String cueAfter) {
 		this.setPropertyValueLC(CUE_AFTER, cueAfter);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCueBefore(String cueBefore) throws DOMException {
+	public void setCueBefore(String cueBefore) {
 		this.setPropertyValueLC(CUE_BEFORE, cueBefore);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCursor(String cursor) throws DOMException {
+	public void setCursor(String cursor) {
 		this.setPropertyValueLC(CURSOR, cursor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setDirection(String direction) throws DOMException {
+	public void setDirection(String direction) {
 		this.setPropertyValueLC(DIRECTION, direction);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setDisplay(String display) throws DOMException {
+	public void setDisplay(String display) {
 		this.setPropertyValueLC(DISPLAY, display);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setElevation(String elevation) throws DOMException {
+	public void setElevation(String elevation) {
 		this.setPropertyValueLC(ELEVATION, elevation);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setEmptyCells(String emptyCells) throws DOMException {
+	public void setEmptyCells(String emptyCells) {
 		this.setPropertyValueLC(EMPTY_CELLS, emptyCells);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFont(String font) throws DOMException {
+	public void setFont(String font) {
 		new FontSetter().changeValue(this, font, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontFamily(String fontFamily) throws DOMException {
+	public void setFontFamily(String fontFamily) {
 		this.setPropertyValueLC(FONT_FAMILY, fontFamily);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontSize(String fontSize) throws DOMException {
+	public void setFontSize(String fontSize) {
 		this.setPropertyValueLC(FONT_SIZE, fontSize);
 		this.context.informInvalid();
 	}
@@ -1595,489 +1291,495 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontSizeAdjust(String fontSizeAdjust) throws DOMException {
+	public void setFontSizeAdjust(String fontSizeAdjust) {
 		this.setPropertyValueLC(FONT_SIZE_ADJUST, fontSizeAdjust);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontStretch(String fontStretch) throws DOMException {
+	public void setFontStretch(String fontStretch) {
 		this.setPropertyValueLC(FONT_STRETCH, fontStretch);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontStyle(String fontStyle) throws DOMException {
+	public void setFontStyle(String fontStyle) {
 		this.setPropertyValueLC(FONT_STYLE, fontStyle);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontVariant(String fontVariant) throws DOMException {
+	public void setFontVariant(String fontVariant) {
 		this.setPropertyValueLC(FONT_VARIANT, fontVariant);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setFontWeight(String fontWeight) throws DOMException {
+	public void setFontWeight(String fontWeight) {
 		this.setPropertyValueLC(FONT_WEIGHT, fontWeight);
 		this.context.informInvalid();
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void setFloat(String value) {
+		this.setPropertyValueLC(FLOAT, value);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setHeight(String height) throws DOMException {
+	public void setHeight(String height) {
 		this.setPropertyValueLC(HEIGHT, height);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setLeft(String left) throws DOMException {
+	public void setLeft(String left) {
 		this.setPropertyValueLC(LEFT, left);
 		this.context.informPositionInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setLetterSpacing(String letterSpacing) throws DOMException {
+	public void setLetterSpacing(String letterSpacing) {
 		this.setPropertyValueLC(LETTER_SPACING, letterSpacing);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setLineHeight(String lineHeight) throws DOMException {
+	public void setLineHeight(String lineHeight) {
 		this.setPropertyValueLC(LINE_HEIGHT, lineHeight);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setListStyle(String listStyle) throws DOMException {
+	public void setListStyle(String listStyle) {
 		this.setPropertyValueLC(LIST_STYLE, listStyle);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setListStyleImage(String listStyleImage) throws DOMException {
+	public void setListStyleImage(String listStyleImage) {
 		this.setPropertyValueLC(LIST_STYLE_IMAGE, listStyleImage);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setListStylePosition(String listStylePosition) throws DOMException {
+	public void setListStylePosition(String listStylePosition) {
 		this.setPropertyValueLC(LIST_STYLE_POSITION, listStylePosition);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setListStyleType(String listStyleType) throws DOMException {
+	public void setListStyleType(String listStyleType) {
 		this.setPropertyValueLC(LIST_STYLE_TYPE, listStyleType);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMargin(String margin) throws DOMException {
+	public void setMargin(String margin) {
 		new FourCornersSetter(MARGIN, "margin-", "").changeValue(this, margin, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarginBottom(String marginBottom) throws DOMException {
+	public void setMarginBottom(String marginBottom) {
 		this.setPropertyValueLC(MARGIN_BOTTOM, marginBottom);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarginLeft(String marginLeft) throws DOMException {
+	public void setMarginLeft(String marginLeft) {
 		this.setPropertyValueLC(MARGIN_LEFT, marginLeft);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarginRight(String marginRight) throws DOMException {
+	public void setMarginRight(String marginRight) {
 		this.setPropertyValueLC(MARGIN_RIGHT, marginRight);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarginTop(String marginTop) throws DOMException {
+	public void setMarginTop(String marginTop) {
 		this.setPropertyValueLC(MARGIN_TOP, marginTop);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarkerOffset(String markerOffset) throws DOMException {
+	public void setMarkerOffset(String markerOffset) {
 		this.setPropertyValueLC(MARKER_OFFSET, markerOffset);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMarks(String marks) throws DOMException {
+	public void setMarks(String marks) {
 		this.setPropertyValueLC(MARKS, marks);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMaxHeight(String maxHeight) throws DOMException {
+	public void setMaxHeight(String maxHeight) {
 		this.setPropertyValueLC(MAX_HEIGHT, maxHeight);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMaxWidth(String maxWidth) throws DOMException {
+	public void setMaxWidth(String maxWidth) {
 		this.setPropertyValueLC(MAX_WIDTH, maxWidth);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMinHeight(String minHeight) throws DOMException {
+	public void setMinHeight(String minHeight) {
 		this.setPropertyValueLC(MIN_HEIGHT, minHeight);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setMinWidth(String minWidth) throws DOMException {
+	public void setMinWidth(String minWidth) {
 		this.setPropertyValueLC(MIN_WIDTH, minWidth);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOrphans(String orphans) throws DOMException {
+	public void setOrphans(String orphans) {
 		this.setPropertyValueLC(ORPHANS, orphans);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOutline(String outline) throws DOMException {
+	public void setOutline(String outline) {
 		this.setPropertyValueLC(OUTLINE, outline);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOutlineColor(String outlineColor) throws DOMException {
+	public void setOutlineColor(String outlineColor) {
 		this.setPropertyValueLC(OUTLINE_COLOR, outlineColor);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOutlineStyle(String outlineStyle) throws DOMException {
+	public void setOutlineStyle(String outlineStyle) {
 		this.setPropertyValueLC(OUTLINE_STYLE, outlineStyle);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOutlineWidth(String outlineWidth) throws DOMException {
+	public void setOutlineWidth(String outlineWidth) {
 		this.setPropertyValueLC(OUTLINE_WIDTH, outlineWidth);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setOverflow(String overflow) throws DOMException {
+	public void setOverflow(String overflow) {
 		this.setPropertyValueLC(OVERFLOW, overflow);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPadding(String padding) throws DOMException {
+	public void setPadding(String padding) {
 		new FourCornersSetter(PADDING, "padding-", "").changeValue(this, padding, null);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPaddingBottom(String paddingBottom) throws DOMException {
+	public void setPaddingBottom(String paddingBottom) {
 		this.setPropertyValueLC(PADDING_BOTTOM, paddingBottom);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPaddingLeft(String paddingLeft) throws DOMException {
+	public void setPaddingLeft(String paddingLeft) {
 		this.setPropertyValueLC(PADDING_LEFT, paddingLeft);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPaddingRight(String paddingRight) throws DOMException {
+	public void setPaddingRight(String paddingRight) {
 		this.setPropertyValueLC(PADDING_RIGHT, paddingRight);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPaddingTop(String paddingTop) throws DOMException {
+	public void setPaddingTop(String paddingTop) {
 		this.setPropertyValueLC(PADDING_TOP, paddingTop);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPage(String page) throws DOMException {
+	public void setPage(String page) {
 		this.setPropertyValueLC(PAGE, page);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPageBreakAfter(String pageBreakAfter) throws DOMException {
+	public void setPageBreakAfter(String pageBreakAfter) {
 		this.setPropertyValueLC(PAGE_BREAK_AFTER, pageBreakAfter);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPageBreakBefore(String pageBreakBefore) throws DOMException {
+	public void setPageBreakBefore(String pageBreakBefore) {
 		this.setPropertyValueLC(PAGE_BREAK_BEFORE, pageBreakBefore);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPageBreakInside(String pageBreakInside) throws DOMException {
+	public void setPageBreakInside(String pageBreakInside) {
 		this.setPropertyValueLC(PAGE_BREAK_INSIDE, pageBreakInside);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPause(String pause) throws DOMException {
+	public void setPause(String pause) {
 		this.setPropertyValueLC(PAUSE, pause);
 	}
 
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPauseAfter(String pauseAfter) throws DOMException {
+	public void setPauseAfter(String pauseAfter) {
 		this.setPropertyValueLC(PAUSE_AFTER, pauseAfter);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPauseBefore(String pauseBefore) throws DOMException {
+	public void setPauseBefore(String pauseBefore) {
 		this.setPropertyValueLC(PAUSE_BEFORE, pauseBefore);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPitch(String pitch) throws DOMException {
+	public void setPitch(String pitch) {
 		this.setPropertyValueLC(PITCH, pitch);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPitchRange(String pitchRange) throws DOMException {
+	public void setPitchRange(String pitchRange) {
 		this.setPropertyValueLC(PITCH_RANGE, pitchRange);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPlayDuring(String playDuring) throws DOMException {
+	public void setPlayDuring(String playDuring) {
 		this.setPropertyValueLC(PLAY_DURING, playDuring);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setPosition(String position) throws DOMException {
+	public void setPosition(String position) {
 		this.setPropertyValueLC(POSITION, position);
 		this.context.informPositionInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setQuotes(String quotes) throws DOMException {
+	public void setQuotes(String quotes) {
 		this.setPropertyValueLC(QUOTES, quotes);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setRichness(String richness) throws DOMException {
+	public void setRichness(String richness) {
 		this.setPropertyValueLC(RICHNESS, richness);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setRight(String right) throws DOMException {
+	public void setRight(String right) {
 		this.setPropertyValueLC(RIGHT, right);
 		this.context.informPositionInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSize(String size) throws DOMException {
+	public void setSize(String size) {
 		this.setPropertyValueLC(SIZE, size);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSpeak(String speak) throws DOMException {
+	public void setSpeak(String speak) {
 		this.setPropertyValueLC(SPEAK, speak);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSpeakHeader(String speakHeader) throws DOMException {
+	public void setSpeakHeader(String speakHeader) {
 		this.setPropertyValueLC(SPEAK_HEADER, speakHeader);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSpeakNumeral(String speakNumeral) throws DOMException {
+	public void setSpeakNumeral(String speakNumeral) {
 		this.setPropertyValueLC(SPEAK_NUMERAL, speakNumeral);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSpeakPunctuation(String speakPunctuation) throws DOMException {
+	public void setSpeakPunctuation(String speakPunctuation) {
 		this.setPropertyValueLC(SPEAK_PUNCTUATION, speakPunctuation);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setSpeechRate(String speechRate) throws DOMException {
+	public void setSpeechRate(String speechRate) {
 		this.setPropertyValueLC(SPEECH_RATE, speechRate);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setStress(String stress) throws DOMException {
+	public void setStress(String stress) {
 		this.setPropertyValueLC(STRESS, stress);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTableLayout(String tableLayout) throws DOMException {
+	public void setTableLayout(String tableLayout) {
 		this.setPropertyValueLC(TABLE_LAYOUT, tableLayout);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextAlign(String textAlign) throws DOMException {
+	public void setTextAlign(String textAlign) {
 		this.setPropertyValueLC(TEXT_ALIGN, textAlign);
 		this.context.informLayoutInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextDecoration(String textDecoration) throws DOMException {
+	public void setTextDecoration(String textDecoration) {
 		this.setPropertyValueLC(TEXT_DECORATION, textDecoration);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextIndent(String textIndent) throws DOMException {
+	public void setTextIndent(String textIndent) {
 		this.setPropertyValueLC(TEXT_INDENT, textIndent);
 		this.context.informLayoutInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextShadow(String textShadow) throws DOMException {
+	public void setTextShadow(String textShadow) {
 		this.setPropertyValueLC(TEXT_SHADOW, textShadow);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextTransform(String textTransform) throws DOMException {
+	public void setTextTransform(String textTransform) {
 		this.setPropertyValueLC(TEXT_TRANSFORM, textTransform);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTop(String top) throws DOMException {
+	public void setTop(String top) {
 		this.setPropertyValueLC(TOP, top);
 		this.context.informPositionInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setUnicodeBidi(String unicodeBidi) throws DOMException {
+	public void setUnicodeBidi(String unicodeBidi) {
 		this.setPropertyValueLC(UNICODE_BIDI, unicodeBidi);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setVerticalAlign(String verticalAlign) throws DOMException {
+	public void setVerticalAlign(String verticalAlign) {
 		this.setPropertyValueLC(VERTICAL_ALIGN, verticalAlign);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setVisibility(String visibility) throws DOMException {
+	public void setVisibility(String visibility) {
 		this.setPropertyValueLC(VISIBILITY, visibility);
 		this.context.informLookInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setVoiceFamily(String voiceFamily) throws DOMException {
+	public void setVoiceFamily(String voiceFamily) {
 		this.setPropertyValueLC(VOICE_FAMILY, voiceFamily);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setVolume(String volume) throws DOMException {
+	public void setVolume(String volume) {
 		this.setPropertyValueLC(VOLUME, volume);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setWhiteSpace(String whiteSpace) throws DOMException {
+	public void setWhiteSpace(String whiteSpace) {
 		this.setPropertyValueLC(WHITE_SPACE, whiteSpace);
 		this.context.informInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setWidows(String widows) throws DOMException {
+	public void setWidows(String widows) {
 		this.setPropertyValueLC(WIDOWS, widows);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setWidth(String width) throws DOMException {
+	public void setWidth(String width) {
 		this.setPropertyValueLC(WIDTH, width);
 		this.context.informSizeInvalid();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setWordSpacing(String wordSpacing) throws DOMException {
+	public void setWordSpacing(String wordSpacing) {
 		this.setPropertyValueLC(WORD_SPACING, wordSpacing);
 		this.context.informInvalid();
 	}
 
-	/** {@inheritDoc} */
+    /** {@inheritDoc} */
 	@Override
     public String getFill() {
         return this.getPropertyValueLC(FILL);
@@ -2302,7 +2004,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 
 	/** {@inheritDoc} */
 	@Override
-	public void setZIndex(String zIndex) throws DOMException {
+	public void setZIndex(String zIndex) {
 		this.setPropertyValueLC(Z_INDEX, zIndex);
 		this.context.informPositionInvalid();
 	}
@@ -2317,7 +2019,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		return getPropertyValueLC(name.toLowerCase());
 	}
 
-	private final String getPropertyValueLC(String lowerCaseName) {
+	private String getPropertyValueLC(String lowerCaseName) {
 		final Map<String, PropertyCSS> vm = this.valueMap;
 		synchronized (this) {
 			// Local properties have precedence
@@ -2329,7 +2031,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 				}
 			}
 			if (vm != null) {
-				final PropertyCSS p = (PropertyCSS) vm.get(lowerCaseName);
+				final PropertyCSS p = vm.get(lowerCaseName);
 				return p == null ? null : p.value;
 			}
 		}
@@ -2346,7 +2048,7 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		Map<String, PropertyCSS> vm = this.valueMap;
 		synchronized (this) {
 			if (vm == null) {
-				vm = new HashMap<String, PropertyCSS>(1);
+				vm = new HashMap<>(1);
 				this.valueMap = vm;
 			}
 			vm.put(lowerCaseName, new PropertyCSS(value, true));
@@ -2364,11 +2066,11 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		Map<String, PropertyCSS> vm = this.valueMap;
 		synchronized (this) {
 			if (vm == null) {
-				vm = new HashMap<String, PropertyCSS>(1);
+				vm = new HashMap<>(1);
 				this.valueMap = vm;
 			} else {
 				if (!important) {
-					final PropertyCSS oldProperty = (PropertyCSS) vm.get(lowerCaseName);
+					final PropertyCSS oldProperty = vm.get(lowerCaseName);
 					if (oldProperty != null && oldProperty.important) {
 						// Ignore setting
 						return;
@@ -2387,8 +2089,8 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 	 * @param declaration a {@link com.gargoylesoftware.css.dom.CSSStyleDeclarationImpl} object.
 	 * @param important a boolean.
 	 */
-	protected final void setPropertyValueProcessed(String lowerCaseName, String value, CSSStyleDeclarationImpl declaration,boolean important) {
-		final SubPropertySetter setter = (SubPropertySetter) SUB_SETTERS.get(lowerCaseName);
+	public final void setPropertyValueProcessed(String lowerCaseName, String value, CSSStyleDeclarationImpl declaration,boolean important) {
+		final SubPropertySetter setter = SUB_SETTERS.get(lowerCaseName);
 		if (setter != null) {
 			setter.changeValue(this, value, declaration, important);
 		} else {
@@ -2408,6 +2110,15 @@ public class AbstractCSSProperties extends AbstractScriptableDelegate implements
 		synchronized (this) {
 			this.localStyleProperties = properties;
 		}
+	}
+
+	/**
+	 * <p>Getter for the field <code>context</code>.</p>
+	 *
+	 * @return a {@link org.loboevolution.html.style.CSSPropertiesContext} object.
+	 */
+	public CSSPropertiesContext getContext() {
+		return context;
 	}
 
 	/** {@inheritDoc} */

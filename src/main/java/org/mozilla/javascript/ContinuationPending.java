@@ -15,8 +15,8 @@ package org.mozilla.javascript;
  * Exception will contain the captured state needed to restart the continuation
  * with {@link org.mozilla.javascript.Context#resumeContinuation(Object, Scriptable, Object)}.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class ContinuationPending extends RuntimeException {
     private static final long serialVersionUID = 4956008116771118856L;
@@ -74,7 +74,7 @@ public class ContinuationPending extends RuntimeException {
     }
 
     /**
-     * <p>Getter for the field applicationState.</p>
+     * <p>Getter for the field <code>applicationState</code>.</p>
      *
      * @return arbitrary application state
      */

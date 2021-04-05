@@ -44,8 +44,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>MintButtonUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class MintButtonUI extends BaseButtonUI {
 
@@ -97,7 +97,7 @@ public class MintButtonUI extends BaseButtonUI {
 			return;
 		}
 
-		Color colors[] = AbstractLookAndFeel.getTheme().getButtonColors();
+		Color[] colors = AbstractLookAndFeel.getTheme().getButtonColors();
 		if (!model.isEnabled()) {
 			colors = AbstractLookAndFeel.getTheme().getDisabledColors();
 		} else if (b.isRolloverEnabled() && model.isRollover()) {

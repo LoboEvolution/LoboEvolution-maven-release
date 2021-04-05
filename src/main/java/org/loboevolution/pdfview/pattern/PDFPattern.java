@@ -31,13 +31,13 @@ import org.loboevolution.pdfview.PDFParseException;
 /**
  * The abstract superclass of all PDF Pattern types
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class PDFPattern {
  
     /** the pattern type (1 or 2) */
-    private int type;
+    private final int type;
     
     /** the matrix to transform from pattern space to PDF space */
     private AffineTransform xform;
@@ -78,7 +78,7 @@ public abstract class PDFPattern {
         if (matrix == null) {
             xform = new AffineTransform();
         } else {
-            float elts[]= new float[6];
+            float[] elts = new float[6];
             for (int i = 0; i < elts.length; i++) {
             	elts[i] = matrix.getAt(i).getFloatValue();
             }

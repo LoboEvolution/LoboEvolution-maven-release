@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Oct 22, 2005
  */
@@ -36,6 +35,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -59,7 +59,6 @@ import org.loboevolution.component.IBrowserPanel;
 import org.loboevolution.component.IToolBar;
 import org.loboevolution.html.HtmlObject;
 import org.loboevolution.html.dom.HTMLElement;
-import org.loboevolution.html.dom.domimpl.HTMLAbstractUIElement;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLImageElementImpl;
@@ -70,8 +69,9 @@ import org.loboevolution.html.gui.HtmlPanel;
 import org.loboevolution.html.parser.DocumentBuilderImpl;
 import org.loboevolution.html.parser.InputSourceImpl;
 import org.loboevolution.img.ImageViewer;
+import org.loboevolution.info.BookmarkInfo;
 import org.loboevolution.net.HttpNetwork;
-import org.loboevolution.pdf.PdfDialog;
+import org.loboevolution.pdf.PDFViewer;
 import org.loboevolution.store.LinkStore;
 import org.loboevolution.store.NavigationStore;
 import org.loboevolution.store.TabStore;
@@ -89,8 +89,8 @@ import org.xml.sax.InputSource;
  * A simple way to load a URL into the {@link org.loboevolution.html.gui.HtmlPanel} of the renderer context
  * is to invoke {@link #navigate(String)}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlRendererContext {
 	private static final Logger logger = Logger.getLogger(HtmlRendererContext.class.getName());
@@ -114,6 +114,8 @@ public class HtmlRendererContext {
 	private final HtmlRendererContext parentRcontext;
 
 	private volatile String sourceCode;
+
+	private boolean test = false;
 
 	/**
 	 * Constructs a HtmlRendererContext that is a child of another
@@ -162,19 +164,17 @@ public class HtmlRendererContext {
 		String url = addressBar.getText();
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(bpanel));
 		NavigationStore nh = new NavigationStore();
-        
         final int indexPanel = tabbedPane.getSelectedIndex();
-        List<String> tabsById = nh.getHostOrdered(indexPanel);
-        
-        for (int i = 0; i < tabsById.size(); i++) {
-            String tab = tabsById.get(i);
-            if(tab.equals(url) && i > 0) {
-            	url = tabsById.get(i - 1);
-            }
-        }
+        List<BookmarkInfo> tabsById = nh.getRecentHost(indexPanel, true);
+		for (int i = 0; i < tabsById.size(); i++) {
+			BookmarkInfo info = tabsById.get(i);
+			String tab = info.getUrl();
+			if(tab.equals(url) && i > 0) {
+				url = tabsById.get(i - 1).getUrl();
+			}
+		}
 
-        final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(url);
-    	hpanel.setBrowserPanel(bpanel);
+        final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, url);
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
         tabbedPane.remove(indexPanel);
@@ -221,8 +221,8 @@ public class HtmlRendererContext {
 	 * specialized document implmentations.
 	 *
 	 * @param inputSource The document input source.
-	 * @throws java.lang.Exception if any
 	 * @return a {@link org.loboevolution.html.dom.domimpl.HTMLDocumentImpl} object.
+	 * @throws java.lang.Exception if any.
 	 */
 	protected HTMLDocumentImpl createDocument(InputSource inputSource) throws Exception {
 		final DocumentBuilderImpl builder = new DocumentBuilderImpl(getUserAgentContext(), this);
@@ -272,19 +272,17 @@ public class HtmlRendererContext {
 		String url = addressBar.getText();
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(bpanel));
 		NavigationStore nh = new NavigationStore();
-        
         final int indexPanel = tabbedPane.getSelectedIndex();
-        List<String> tabsById = nh.getHostOrdered(indexPanel);
-        
+        List<BookmarkInfo> tabsById = nh.getRecentHost(indexPanel, true);
 		for (int i = 0; i < tabsById.size(); i++) {
-			String tab = tabsById.get(i);
+			BookmarkInfo info = tabsById.get(i);
+			String tab = info.getUrl();
 			if (tab.equals(url) && i < tabsById.size() - 1) {
-				url = tabsById.get(i + 1);
+				url = tabsById.get(i + 1).getUrl();
 			}
 		}
 
-        final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(url);
-    	hpanel.setBrowserPanel(bpanel);
+        final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, url);
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
         tabbedPane.remove(indexPanel);
@@ -303,12 +301,12 @@ public class HtmlRendererContext {
 	 * @return a {@link java.lang.String} object.
 	 */
 	public String getCurrentURL() {
-		final Object node = this.htmlPanel.getRootNode();
-		if (node instanceof HTMLDocumentImpl) {
-			final HTMLDocumentImpl doc = (HTMLDocumentImpl) node;
-			return doc.getDocumentURI();
-		}
-		return null;
+		HtmlPanel html = htmlPanel;
+		IBrowserPanel panel = html.getBrowserPanel();
+		IBrowserFrame frame = panel.getBrowserFrame();
+		IToolBar toolbar = frame.getToolbar();
+		JTextField jtf = toolbar.getAddressBar();
+		return jtf.getText();
 	}
 
 	/**
@@ -417,7 +415,7 @@ public class HtmlRendererContext {
 	/**
 	 * Gets the connection proxy used in {@link #navigate(URL, String)}. If
 	 * {@link #getUserAgentContext()} returns an instance assignable to
-	 * {@link UserAgentContext}. The method may be overridden to provide a
+	 * {@link org.loboevolution.http.UserAgentContext}. The method may be overridden to provide a
 	 * different proxy setting.
 	 *
 	 * @return a {@link java.net.Proxy} object.
@@ -461,7 +459,7 @@ public class HtmlRendererContext {
 	/**
 	 * If a {@link org.loboevolution.http.UserAgentContext} instance was provided in
 	 * the constructor, then that instance is returned. Otherwise, an instance of
-	 * {@link UserAgentContext} is created and returned.
+	 * {@link org.loboevolution.http.UserAgentContext} is created and returned.
 	 * <p>
 	 * The context returned by this method is used by local request facilities and
 	 * other parts of the renderer.
@@ -528,7 +526,7 @@ public class HtmlRendererContext {
 	public void linkClicked(URL url, boolean isNewTab) {
 		String fullURL = url.toString();
 		if (fullURL.endsWith(".pdf")) {
-			PdfDialog viewer = new PdfDialog(true);
+			PDFViewer viewer = new PDFViewer(true);
 			viewer.doOpen(fullURL);
 		} else {
 			final IBrowserPanel bpanel = htmlPanel.getBrowserPanel();
@@ -542,8 +540,7 @@ public class HtmlRendererContext {
 				index = tabbedPane.getIndex();
 			}
 
-			final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(fullURL);
-			hpanel.setBrowserPanel(bpanel);
+			final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, fullURL);
 			final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 			final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 			if (!isNewTab) {
@@ -574,8 +571,8 @@ public class HtmlRendererContext {
 	 * Convenience method provided to allow loading a document into the renderer.
 	 *
 	 * @param fullURL The absolute URL of the document.
-	 * @throws java.lang.Exception if any
 	 * @see #navigate(URL, String)
+	 * @throws java.lang.Exception if any.
 	 */
 	public void navigate(String fullURL) throws Exception {
 		final URL href = Urls.createURL(null, fullURL);
@@ -614,15 +611,16 @@ public class HtmlRendererContext {
 			element = elmImg;
 		}
 		HtmlContextMenu menu = new HtmlContextMenu(element, this);
+		
 		if (element instanceof HTMLImageElementImpl) {
-			JPopupMenu popupMenuImage = menu.popupMenuImage();
+			JPopupMenu popupMenuImage = menu.popupMenuImage(htmlPanel.getBrowserPanel());
 			popupMenuImage.show(event.getComponent(), event.getX(), event.getY());
 			return false;
 		} else if (element instanceof HTMLLinkElementImpl) {
-			JPopupMenu popupMenuLink = menu.popupMenuLink();
+			JPopupMenu popupMenuLink = menu.popupMenuLink(htmlPanel.getBrowserPanel());
 			popupMenuLink.show(event.getComponent(), event.getX(), event.getY());
 			return false;
-		} else if (element instanceof HTMLAbstractUIElement) {
+		} else if (element instanceof HTMLElementImpl) {
 			JPopupMenu popupMenuAbstract = menu.popupMenuAbstractUI();
 			popupMenuAbstract.show(event.getComponent(), event.getX(), event.getY());
 			return false;
@@ -677,7 +675,7 @@ public class HtmlRendererContext {
 	 *
 	 * @param url            The requested URL.
 	 * @param windowName     A window identifier.
-	 * @param windowFeatures Window features specified in a format equivalent to
+	 * @param windowFeatures WindowImpl features specified in a format equivalent to
 	 *                       that of window.open() in Javascript.
 	 * @param replace        Whether an existing window with the same name should be
 	 *                       replaced.
@@ -689,8 +687,7 @@ public class HtmlRendererContext {
 		tabbedPane.setComponentPopupMenu(new TabbedPanePopupMenu(bpanel));
 		int index = TabStore.getTabs().size();
 		String fullURL = url.toString();
-		final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(fullURL);
-		hpanel.setBrowserPanel(bpanel);
+		final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, fullURL);
 		final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 		final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 		tabbedPane.insertTab(title, null, hpanel, title, index);
@@ -727,7 +724,7 @@ public class HtmlRendererContext {
 			LinkStore.insertLinkVisited(fullURL);
 			bpanel.getScroll().getViewport().add(tabbedPane);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 	
@@ -752,7 +749,7 @@ public class HtmlRendererContext {
 			tabbedPane.insertTab(title, null, viewer.getComponent(), title, index);
 			bpanel.getScroll().getViewport().add(tabbedPane);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -808,6 +805,59 @@ public class HtmlRendererContext {
 			window.setSize(width, height);
 		}
 	}
+	
+	/**
+	 * <p> getInnerHeight.</p>
+	 *
+	 * @return a int.
+	 */
+	public int getInnerHeight() {
+		final IBrowserPanel bpanel = htmlPanel.getBrowserPanel();
+		if (bpanel != null) {
+			return bpanel.getHeight();
+		}
+		return -1;
+	}
+	
+	/**
+	 * <p> getInnerWidth.</p>
+	 *
+	 * @return a int.
+	 */
+	public int getInnerWidth() {
+		final IBrowserPanel bpanel = htmlPanel.getBrowserPanel();
+		if (bpanel != null) {
+			return bpanel.getWidth();
+		}
+		return -1;
+	}
+	
+	/**
+	 * <p> getOuterHeight.</p>
+	 *
+	 * @return a int.
+	 */
+	public int getOuterHeight() {
+		final IBrowserPanel bpanel = htmlPanel.getBrowserPanel();
+		if (bpanel != null) {
+			return bpanel.getHeight();
+		}
+		return -1;
+	}
+	
+	/**
+	 * <p> getOuterWidth.</p>
+	 *
+	 * @return a int.
+	 */
+	public int getOuterWidth() {
+		final IBrowserPanel bpanel = htmlPanel.getBrowserPanel();
+		if (bpanel != null) {
+			return bpanel.getWidth();
+		}
+		return -1;
+	}
+
 
 	/**
 	 * Changes the origin of the HTML block's scrollable area according to the
@@ -910,18 +960,22 @@ public class HtmlRendererContext {
 	public void submitForm(final String method, final URL action, final String target, final String enctype, final FormInput[] formInputs) {
 		if (target != null) {
 			final String actualTarget = target.trim().toLowerCase();
-			if ("_top".equals(actualTarget)) {
-				getTop().navigate(action, null);
-				return;
-			} else if ("_parent".equals(actualTarget)) {
-				final HtmlRendererContext parent = getParent();
-				if (parent != null) {
-					parent.navigate(action, null);
-					return;
-				}
-			} else if ("_blank".equals(actualTarget)) {
-				open(action, "cobra.blank", "", false);
-				return;
+			switch (actualTarget) {
+				case "_top":
+					getTop().navigate(action, null);
+					break;
+				case "_parent":
+					final HtmlRendererContext parent = getParent();
+					if (parent != null) {
+						parent.navigate(action, null);
+						return;
+					}
+					break;
+				case "_blank":
+					open(action, "cobra.blank", "", false);
+					break;
+				default:
+					break;
 			}
 		}
 
@@ -930,8 +984,7 @@ public class HtmlRendererContext {
 			final DnDTabbedPane tabbedPane = bpanel.getTabbedPane();
 			final int indexPanel = tabbedPane.getSelectedIndex();
 			final IBrowserFrame browserFrame = bpanel.getBrowserFrame();
-			final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(action.toString());
-	    	hpanel.setBrowserPanel(bpanel);
+			final HtmlPanel hpanel = HtmlPanel.createHtmlPanel(bpanel, action.toString());
 			final HTMLDocumentImpl nodeImpl = (HTMLDocumentImpl) hpanel.getRootNode();
 			final String title = Strings.isNotBlank(nodeImpl.getTitle()) ? nodeImpl.getTitle() : "New Tab";
 			tabbedPane.remove(indexPanel);
@@ -1083,8 +1136,7 @@ public class HtmlRendererContext {
 					return;
 				}
 			}
-			final InputStream in = HttpNetwork.openConnectionCheckRedirects(connection);
-			try {
+			try (InputStream in = HttpNetwork.openConnectionCheckRedirects(connection)) {
 				sourceCode = null;
 				final RecordedInputStream rin = new RecordedInputStream(in, 1000000);
 				final InputStream bin = new BufferedInputStream(rin, 8192);
@@ -1106,9 +1158,9 @@ public class HtmlRendererContext {
 				} catch (final BufferExceededException bee) {
 					sourceCode = "[TOO BIG]";
 				}
-			} finally {
-				in.close();
-			}
+			} catch (SocketTimeoutException e) {
+				logger.log(Level.SEVERE, "More than " + connection.getConnectTimeout() + " elapsed.");
+		    }
 		} finally {
 			this.currentConnection = null;
 		}
@@ -1135,5 +1187,23 @@ public class HtmlRendererContext {
 		if (logger.isLoggable(Level.WARNING)) {
 			logger.log(Level.WARNING, message, throwable);
 		}
+	}
+
+	/**
+	 * <p>isTest.</p>
+	 *
+	 * @return a boolean.
+	 */
+	public boolean isTest() {
+		return test;
+	}
+
+	/**
+	 * <p>Setter for the field <code>test</code>.</p>
+	 *
+	 * @param test a boolean.
+	 */
+	public void setTest(boolean test) {
+		this.test = test;
 	}
 }

@@ -1,16 +1,38 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
+import org.loboevolution.html.dom.nodeimpl.DOMException;
 import org.loboevolution.html.dom.svg.SVGLength;
-import org.w3c.dom.DOMException;
+import org.loboevolution.html.node.Code;
+
 
 /**
  * <p>SVGLengthImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGLengthImpl implements SVGLength {
 
@@ -90,7 +112,7 @@ public class SVGLengthImpl implements SVGLength {
 	public String getValueAsString() {
 		String suffix = getUnitTypeAsString(this.unitType);
 		if ("unkown".equals(suffix)) {
-			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Unknow unit type");
+			throw new DOMException(Code.NOT_SUPPORTED_ERR, "Unknow unit type");
 		}
 		if (this.valueInSpecifiedUnits == (long) this.valueInSpecifiedUnits) {
 			return String.format("%f" + suffix, (long) this.valueInSpecifiedUnits);
@@ -143,7 +165,7 @@ public class SVGLengthImpl implements SVGLength {
 		try {
 			this.valueInSpecifiedUnits = Float.parseFloat(valueString);
 		} catch (NumberFormatException e) {
-			throw new DOMException(DOMException.SYNTAX_ERR, "Invalid value: '" + valueString + "'!");
+			throw new DOMException(Code.SYNTAX_ERR, "Invalid value: '" + valueString + "'!");
 		}
 	}
 
@@ -166,7 +188,7 @@ public class SVGLengthImpl implements SVGLength {
 			this.valueInSpecifiedUnits = valueInSpecifiedUnits;
 			break;
 		default:
-			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Invalid unit type");
+			throw new DOMException(Code.NOT_SUPPORTED_ERR, "Invalid unit type");
 		}
 	}
 
@@ -282,7 +304,7 @@ public class SVGLengthImpl implements SVGLength {
 			suffix = "unknown";
 			break;
 		default:
-			throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Invalid unit type");
+			throw new DOMException(Code.NOT_SUPPORTED_ERR, "Invalid unit type");
 		}
 		return suffix;
 	}

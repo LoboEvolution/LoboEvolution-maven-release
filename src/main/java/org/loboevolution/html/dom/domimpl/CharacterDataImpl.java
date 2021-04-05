@@ -1,39 +1,38 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Sep 3, 2005
  */
 package org.loboevolution.html.dom.domimpl;
 
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Node;
+import org.loboevolution.html.node.CharacterData;
+import org.loboevolution.html.node.Node;
 
 /**
  * <p>Abstract CharacterDataImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public abstract class CharacterDataImpl extends NodeImpl implements CharacterData {
+public class CharacterDataImpl extends EventTargetImpl implements CharacterData {
+	
 	protected volatile String text;
 
 	/**
@@ -54,7 +53,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public void appendData(String arg) throws DOMException {
+	public void appendData(String arg) {
 		this.text += arg;
 		if (!this.notificationsSuspended) {
 			informInvalid();
@@ -76,7 +75,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public void deleteData(int offset, int count) throws DOMException {
+	public void deleteData(int offset, int count) {
 		final StringBuilder buffer = new StringBuilder(this.text);
 		final StringBuilder result = buffer.delete(offset, offset + count);
 		this.text = result.toString();
@@ -96,7 +95,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public String getData() throws DOMException {
+	public String getData() {
 		return this.text;
 	}
 
@@ -108,13 +107,13 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public String getTextContent() throws DOMException {
+	public String getTextContent() {
 		return this.text;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void insertData(int offset, String arg) throws DOMException {
+	public void insertData(int offset, String arg) {
 		final StringBuilder buffer = new StringBuilder(this.text);
 		final StringBuilder result = buffer.insert(offset, arg);
 		this.text = result.toString();
@@ -125,7 +124,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public void replaceData(int offset, int count, String arg) throws DOMException {
+	public void replaceData(int offset, int count, String arg) {
 		final StringBuilder buffer = new StringBuilder(this.text);
 		final StringBuilder result = buffer.replace(offset, offset + count, arg);
 		this.text = result.toString();
@@ -136,7 +135,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public void setData(String data) throws DOMException {
+	public void setData(String data) {
 		this.text = data;
 		if (!this.notificationsSuspended) {
 			informInvalid();
@@ -145,7 +144,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTextContent(String textContent) throws DOMException {
+	public void setTextContent(String textContent) {
 		this.text = textContent;
 		if (!this.notificationsSuspended) {
 			informInvalid();
@@ -154,7 +153,7 @@ public abstract class CharacterDataImpl extends NodeImpl implements CharacterDat
 
 	/** {@inheritDoc} */
 	@Override
-	public String substringData(int offset, int count) throws DOMException {
+	public String substringData(int offset, int count) {
 		return this.text.substring(offset, offset + count);
 	}
 

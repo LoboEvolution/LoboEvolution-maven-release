@@ -15,7 +15,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScript;
  * thus a module once loaded will not be eligible for garbage collection before
  * the module provider itself becomes eligible.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: StrongCachingModuleScriptProvider.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public class StrongCachingModuleScriptProvider extends CachingModuleScriptProviderBase {

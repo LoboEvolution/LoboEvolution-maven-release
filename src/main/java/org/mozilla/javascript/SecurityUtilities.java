@@ -13,8 +13,8 @@ import java.security.ProtectionDomain;
 /**
  * <p>SecurityUtilities class.</p>
  *
- * @author Attila Szegedi
- * @version $Id: $Id
+ * Author Attila Szegedi
+ *
  */
 public class SecurityUtilities
 {
@@ -61,7 +61,7 @@ public class SecurityUtilities
      * Look up the top-most element in the current stack representing a
      * script and return its protection domain. This relies on the system-wide
      * SecurityManager being an instance of {@link org.mozilla.javascript.RhinoSecurityManager},
-     * otherwise it returns null.
+     * otherwise it returns <code>null</code>.
      *
      * @return The protection of the top-most script in the current stack, or null
      */

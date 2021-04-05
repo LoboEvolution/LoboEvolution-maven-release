@@ -12,8 +12,8 @@ import java.util.NoSuchElementException;
 /**
  * <p>NativeTypedArrayIterator class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NativeTypedArrayIterator<T>
     implements ListIterator<T>

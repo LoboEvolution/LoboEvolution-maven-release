@@ -27,7 +27,7 @@ import org.mozilla.javascript.commonjs.module.ModuleScript;
  * for garbage collection if it is otherwise unused under memory pressure.
  * Instances of this class are thread safe.
  *
- * @author Attila Szegedi
+ * Author Attila Szegedi
  * @version $Id: SoftCachingModuleScriptProvider.java,v 1.3 2011/04/07 20:26:12 hannes%helma.at Exp $
  */
 public class SoftCachingModuleScriptProvider extends CachingModuleScriptProviderBase {
@@ -110,6 +110,7 @@ public class SoftCachingModuleScriptProvider extends CachingModuleScriptProvider
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream in) throws IOException,
     ClassNotFoundException
     {

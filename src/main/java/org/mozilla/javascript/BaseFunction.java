@@ -7,18 +7,22 @@
 package org.mozilla.javascript;
 
 /**
- * The base class for Function objects
+ * The base class for Function objects. That is one of two purposes. It is also
+ * the prototype for every "function" defined except those that are used
+ * as GeneratorFunctions via the ES6 "function *" syntax.
+ *
  * See ECMA 15.3.
  *
- * @author Norris Boyd
- * @version $Id: $Id
+ * Author Norris Boyd
+ *
  */
 public class BaseFunction extends IdScriptableObject implements Function
 {
-
     private static final long serialVersionUID = 5311394446546053859L;
 
     private static final Object FUNCTION_TAG = "Function";
+    private static final String FUNCTION_CLASS = "Function";
+    static final String GENERATOR_FUNCTION_CLASS = "__GeneratorFunction";
 
     static void init(Scriptable scope, boolean sealed)
     {
@@ -28,11 +32,29 @@ public class BaseFunction extends IdScriptableObject implements Function
         obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
     }
 
+    static Object initAsGeneratorFunction(Scriptable scope, boolean sealed)
+    {
+        BaseFunction obj = new BaseFunction(true);
+        // Function.prototype attributes: see ECMA 15.3.3.1
+        obj.prototypePropertyAttributes = READONLY | PERMANENT;
+        obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
+        // The "GeneratorFunction" name actually never appears in the global scope.
+        // Return it here so it can be cached as a "builtin"
+        return ScriptableObject.getProperty(scope, GENERATOR_FUNCTION_CLASS);
+    }
+
     /**
      * <p>Constructor for BaseFunction.</p>
      */
-    public BaseFunction()
-    {
+    public BaseFunction() {}
+
+    /**
+     * <p>Constructor for BaseFunction.</p>
+     *
+     * @param isGenerator a boolean.
+     */
+    public BaseFunction(boolean isGenerator) {
+        this.isGeneratorFunction = isGenerator;
     }
 
     /**
@@ -41,15 +63,24 @@ public class BaseFunction extends IdScriptableObject implements Function
      * @param scope a {@link org.mozilla.javascript.Scriptable} object.
      * @param prototype a {@link org.mozilla.javascript.Scriptable} object.
      */
-    public BaseFunction(Scriptable scope, Scriptable prototype)
-    {
+    public BaseFunction(Scriptable scope, Scriptable prototype) {
         super(scope, prototype);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getClassName() {
-        return "Function";
+        return isGeneratorFunction() ? GENERATOR_FUNCTION_CLASS : FUNCTION_CLASS;
+    }
+
+    // Generated code will override this
+    /**
+     * <p>isGeneratorFunction.</p>
+     *
+     * @return a boolean.
+     */
+    protected boolean isGeneratorFunction() {
+        return isGeneratorFunction;
     }
 
     /**
@@ -69,10 +100,10 @@ public class BaseFunction extends IdScriptableObject implements Function
      *
      * Implements the instanceof operator for JavaScript Function objects.
      * <p>
-     * 
+     * <code>
      * foo = new Foo();<br>
      * foo instanceof Foo;  // true<br>
-     * 
+     * </code>
      */
     @Override
     public boolean hasInstance(Scriptable instance)
@@ -81,7 +112,7 @@ public class BaseFunction extends IdScriptableObject implements Function
         if (protoProp instanceof Scriptable) {
             return ScriptRuntime.jsDelegatesTo(instance, (Scriptable)protoProp);
         }
-        throw ScriptRuntime.typeError1("msg.instanceof.bad.prototype",
+        throw ScriptRuntime.typeErrorById("msg.instanceof.bad.prototype",
                                        getFunctionName());
     }
 
@@ -108,19 +139,26 @@ public class BaseFunction extends IdScriptableObject implements Function
     protected int findInstanceIdInfo(String s)
     {
         int id;
-// #generated# Last update: 2007-05-09 08:15:15 EDT
-        L0: { id = 0; String X = null; int c;
-            L: switch (s.length()) {
-            case 4: X="name";id=Id_name; break L;
-            case 5: X="arity";id=Id_arity; break L;
-            case 6: X="length";id=Id_length; break L;
-            case 9: c=s.charAt(0);
-                if (c=='a') { X="arguments";id=Id_arguments; }
-                else if (c=='p') { X="prototype";id=Id_prototype; }
-                break L;
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:52:05 MEZ
+        switch (s) {
+        case "length":
+            id = Id_length;
+            break;
+        case "arity":
+            id = Id_arity;
+            break;
+        case "name":
+            id = Id_name;
+            break;
+        case "prototype":
+            id = Id_prototype;
+            break;
+        case "arguments":
+            id = Id_arguments;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
 // #/string_id_map#
@@ -326,17 +364,13 @@ public class BaseFunction extends IdScriptableObject implements Function
         throw new IllegalArgumentException(String.valueOf(id));
     }
 
-    private BaseFunction realFunction(Scriptable thisObj, IdFunctionObject f)
+    private static BaseFunction realFunction(Scriptable thisObj, IdFunctionObject f)
     {
         Object x = thisObj.getDefaultValue(ScriptRuntime.FunctionClass);
         if (x instanceof Delegator) {
             x = ((Delegator)x).getDelegee();
         }
-        if (x instanceof BaseFunction) {
-            return (BaseFunction)x;
-        }
-        throw ScriptRuntime.typeError1("msg.incompat.call",
-                                       f.getFunctionName());
+        return ensureType(x, BaseFunction.class, f);
     }
 
     /**
@@ -419,9 +453,9 @@ public class BaseFunction extends IdScriptableObject implements Function
     /**
      * Creates new script object.
      * The default implementation of {@link #construct} uses the method to
-     * to get the value for <tt>thisObj</tt> argument when invoking
+     * to get the value for <code>thisObj</code> argument when invoking
      * {@link #call}.
-     * The methos is allowed to return <tt>null</tt> to indicate that
+     * The methos is allowed to return <code>null</code> to indicate that
      * {@link #call} will create a new object itself. In this case
      * {@link #construct} will set scope and prototype on the result
      * {@link #call} unless they are already set.
@@ -497,7 +531,7 @@ public class BaseFunction extends IdScriptableObject implements Function
     }
 
     /**
-     * <p>Getter for the field prototypeProperty.</p>
+     * <p>Getter for the field <code>prototypeProperty</code>.</p>
      *
      * @return a {@link java.lang.Object} object.
      */
@@ -557,13 +591,15 @@ public class BaseFunction extends IdScriptableObject implements Function
              : activation.get("arguments", activation);
     }
 
-    private static Object jsConstructor(Context cx, Scriptable scope,
-                                        Object[] args)
+    private Object jsConstructor(Context cx, Scriptable scope, Object[] args)
     {
         int arglen = args.length;
         StringBuilder sourceBuf = new StringBuilder();
 
         sourceBuf.append("function ");
+        if (isGeneratorFunction()) {
+            sourceBuf.append("* ");
+        }
         /* version != 1.2 Function constructor behavior -
          * print 'anonymous' as the function name if the
          * version (under which the function was compiled) is
@@ -624,22 +660,29 @@ public class BaseFunction extends IdScriptableObject implements Function
     {
         int id;
 // #string_id_map#
-// #generated# Last update: 2009-07-24 16:00:52 EST
-        L0: { id = 0; String X = null; int c;
-            L: switch (s.length()) {
-            case 4: c=s.charAt(0);
-                if (c=='b') { X="bind";id=Id_bind; }
-                else if (c=='c') { X="call";id=Id_call; }
-                break L;
-            case 5: X="apply";id=Id_apply; break L;
-            case 8: c=s.charAt(3);
-                if (c=='o') { X="toSource";id=Id_toSource; }
-                else if (c=='t') { X="toString";id=Id_toString; }
-                break L;
-            case 11: X="constructor";id=Id_constructor; break L;
-            }
-            if (X!=null && X!=s && !X.equals(s)) id = 0;
-            break L0;
+// #generated# Last update: 2021-03-21 09:52:05 MEZ
+        switch (s) {
+        case "constructor":
+            id = Id_constructor;
+            break;
+        case "toString":
+            id = Id_toString;
+            break;
+        case "toSource":
+            id = Id_toSource;
+            break;
+        case "apply":
+            id = Id_apply;
+            break;
+        case "call":
+            id = Id_call;
+            break;
+        case "bind":
+            id = Id_bind;
+            break;
+        default:
+            id = 0;
+            break;
         }
 // #/generated#
         return id;
@@ -659,6 +702,7 @@ public class BaseFunction extends IdScriptableObject implements Function
 
     private Object prototypeProperty;
     private Object argumentsObj = NOT_FOUND;
+    private boolean isGeneratorFunction = false;
 
     // For function object instances, attributes are
     //  {configurable:false, enumerable:false};

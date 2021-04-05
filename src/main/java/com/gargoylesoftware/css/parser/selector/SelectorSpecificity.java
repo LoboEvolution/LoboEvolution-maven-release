@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,13 @@ import com.gargoylesoftware.css.parser.condition.Condition;
  * Calculates a selector's specificity.
  *
  * @see <a href="http://www.w3.org/TR/CSS21/cascade.html#specificity">W3C CSS21</a>
- * @author Marc Guillemot
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Marc Guillemot
+ * Author Ronald Brill
+ *
  */
 public class SelectorSpecificity implements Comparable<SelectorSpecificity>, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	/**
+    /**
      * The specificity for declarations made in the style attributes of an element.
      */
     public static final SelectorSpecificity FROM_STYLE_ATTRIBUTE = new SelectorSpecificity(1, 0, 0, 0);

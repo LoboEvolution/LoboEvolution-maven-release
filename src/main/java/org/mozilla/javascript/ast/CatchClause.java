@@ -15,8 +15,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>CatchClause</i> :
  *        <b>catch</b> ( <i><b>Identifier</b></i> [<b>if</b> Expression] ) Block</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class CatchClause extends AstNode {
 

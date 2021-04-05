@@ -52,12 +52,12 @@ package org.jpedal.jbig2.decoders;
 /**
  * <p>ArithmeticDecoderStats class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class ArithmeticDecoderStats {
-	private int contextSize;
-	private int[] codingContextTable;
+	private final int contextSize;
+	private final int[] codingContextTable;
 
 	/**
 	 * <p>Constructor for ArithmeticDecoderStats.</p>
@@ -112,7 +112,7 @@ public class ArithmeticDecoderStats {
 	}
 	
 	/**
-	 * <p>Getter for the field contextSize.</p>
+	 * <p>Getter for the field <code>contextSize</code>.</p>
 	 *
 	 * @return a int.
 	 */

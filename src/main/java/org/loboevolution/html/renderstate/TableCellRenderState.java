@@ -1,26 +1,47 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.renderstate;
 
 import java.awt.Color;
 import java.util.Base64;
 
 import org.loboevolution.common.Strings;
-import org.loboevolution.info.BackgroundInfo;
-import org.loboevolution.laf.ColorFactory;
 import org.loboevolution.html.dom.HTMLElement;
 import org.loboevolution.html.dom.HTMLTableElement;
 import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLTableCellElementImpl;
 import org.loboevolution.html.dom.domimpl.HTMLTableRowElementImpl;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.css.CSS3Properties;
 import org.loboevolution.html.style.AbstractCSSProperties;
 import org.loboevolution.html.style.HtmlInsets;
 import org.loboevolution.html.style.HtmlValues;
-import org.w3c.dom.css.CSS3Properties;
+import org.loboevolution.info.BackgroundInfo;
+import org.loboevolution.laf.ColorFactory;
 
 /**
  * <p>TableCellRenderState class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class TableCellRenderState extends DisplayRenderState {
 	private int alignXPercent = -1;
@@ -221,7 +242,7 @@ public class TableCellRenderState extends DisplayRenderState {
 	}
 
 	private HTMLTableElement getTableElement() {
-		org.w3c.dom.Node ancestor = this.element.getParentNode();
+		Node ancestor = this.element.getParentNode();
 		while (ancestor != null && !(ancestor instanceof HTMLTableElement)) {
 			ancestor = ancestor.getParentNode();
 		}
@@ -237,7 +258,7 @@ public class TableCellRenderState extends DisplayRenderState {
 		}
 		final Integer ws = this.iWhiteSpace;
 		if (ws != null) {
-			return ws.intValue();
+			return ws;
 		}
 		final AbstractCSSProperties props = getCssProperties();
 		final String whiteSpaceText = props == null ? null : props.getWhiteSpace();
@@ -280,7 +301,7 @@ public class TableCellRenderState extends DisplayRenderState {
 				}
 			}
 		}
-		this.iWhiteSpace = Integer.valueOf(wsValue);
+		this.iWhiteSpace = wsValue;
 		return wsValue;
 	}
 

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.style;
 
 import java.awt.Font;
@@ -6,14 +26,14 @@ import java.awt.Toolkit;
 import java.awt.font.TextAttribute;
 
 import org.loboevolution.html.CSSValues;
-import org.loboevolution.laf.LAFSettings;
 import org.loboevolution.html.renderstate.RenderState;
+import org.loboevolution.laf.LAFSettings;
 
 /**
  * <p>FontValues class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class FontValues extends HtmlValues {
 	/**
@@ -23,7 +43,7 @@ public class FontValues extends HtmlValues {
 	 * @param parentRenderState a {@link org.loboevolution.html.renderstate.RenderState} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public static final String getFontFamily(String spec, RenderState parentRenderState) {
+	public static String getFontFamily(String spec, RenderState parentRenderState) {
 		final String fontFamily = spec;
 		if (fontFamily == null) {
 			if (parentRenderState != null) {
@@ -42,7 +62,7 @@ public class FontValues extends HtmlValues {
 	 * @param parentRenderState the parent render state
 	 * @return the font size
 	 */
-	public static final float getFontSize(String spec, RenderState parentRenderState) {
+	public static float getFontSize(String spec, RenderState parentRenderState) {
 
 		if (spec == null) {
 			return new LAFSettings().getInstance().getFontSize();
@@ -63,8 +83,8 @@ public class FontValues extends HtmlValues {
 				return new LAFSettings().getInstance().getFontSize();
 			}
 			return (int) Math.round(font.getSize() * value);
-		} else if (specTL.endsWith("px") || specTL.endsWith("pt") || specTL.endsWith("em") || specTL.endsWith("pc")
-				|| specTL.endsWith("em") || specTL.endsWith("mm") || specTL.endsWith("ex")) {
+		} else if (specTL.endsWith("px") || specTL.endsWith("pt") || specTL.endsWith("pc")
+				|| specTL.endsWith("mm") || specTL.endsWith("ex")) {
 			final int pixelSize = getPixelSize(spec, parentRenderState,
 					(int) new LAFSettings().getInstance().getFontSize());
 			final int dpi = GraphicsEnvironment.isHeadless() ? 72 : Toolkit.getDefaultToolkit().getScreenResolution();
@@ -148,7 +168,7 @@ public class FontValues extends HtmlValues {
 	 * @param spec a {@link java.lang.String} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	public static final String getFontStyle(String spec) {
+	public static String getFontStyle(String spec) {
 		final String fontStyle = spec;
 		if (fontStyle == null && new LAFSettings().getInstance().isItalic()) {
 			return CSSValues.ITALIC.getValue();
@@ -167,8 +187,8 @@ public class FontValues extends HtmlValues {
 		final String verticalAlign = spec;
 		Integer superscript = null;
 
-		final boolean isSuper = verticalAlign != null && "super".equalsIgnoreCase(verticalAlign);
-		final boolean isSub = verticalAlign != null && "sub".equalsIgnoreCase(verticalAlign);
+		final boolean isSuper = "super".equalsIgnoreCase(verticalAlign);
+		final boolean isSub = "sub".equalsIgnoreCase(verticalAlign);
 
 		if (isSuper || new LAFSettings().getInstance().isSuperscript()) {
 			superscript = TextAttribute.SUPERSCRIPT_SUPER;

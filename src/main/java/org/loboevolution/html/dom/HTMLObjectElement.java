@@ -1,342 +1,352 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
-import org.w3c.dom.Document;
+
+import org.loboevolution.html.node.Document;
+import org.loboevolution.html.node.ValidityState;
 
 /**
- * Generic embedded object.In principle, all properties on the object element
- * are read-write but in some environments some properties may be read-only once
- * the underlying object is instantiated. See the OBJECT element definition in
- * [<a href='http://www.w3.org/TR/1999/REC-html401-19991224'>HTML 4.01</a>].
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of &lt;object&gt; element, representing external resources.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLObjectElement extends HTMLElement {
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlign();
 
-	/**
-	 * Space-separated list of archives. See the archive attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getArchive();
+    /**
+     * <p>getAlign.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * Width of border around the object. See the border attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBorder();
+    
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    void setAlign(String align);
 
-	/**
-	 * Applet class file. See the code attribute for HTMLAppletElement.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCode();
+    /**
+     * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getArchive();
 
-	/**
-	 * Base URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * for classid, data, and archive
-	 * attributes. See the codebase attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCodeBase();
+    
+    /**
+     * <p>setArchive.</p>
+     *
+     * @param archive a {@link java.lang.String} object.
+     */
+    void setArchive(String archive);
 
-	/**
-	 * Content type for data downloaded via classid attribute. See the
-	 * codetype attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCodeType();
+    /**
+     * <p>getBorder.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getBorder();
 
-	/**
-	 * The document this object contains, if there is any and it is available, or
-	 * null otherwise.
-	 *
-	 * @since DOM Level 2
-	 * @return a {@link org.w3c.dom.Document} object.
-	 */
-	Document getContentDocument();
+    
+    /**
+     * <p>setBorder.</p>
+     *
+     * @param border a {@link java.lang.String} object.
+     */
+    void setBorder(String border);
 
-	/**
-	 * A URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * specifying the location of the object's data. See the data attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getData();
+    /**
+     * Sets or retrieves the URL of the file containing the compiled Java class.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCode();
 
-	/**
-	 * Declare (for future reference), but do not instantiate, this object. See the
-	 * declare attribute definition in HTML 4.01.
-	 *
-	 * @return a boolean.
-	 */
-	boolean getDeclare();
+    
+    /**
+     * <p>setCode.</p>
+     *
+     * @param code a {@link java.lang.String} object.
+     */
+    void setCode(String code);
 
-	/**
-	 * Returns the FORM element containing this control. Returns
-	 * null if this control is not within the context of a form.
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
-	 */
-	HTMLFormElement getForm();
+    /**
+     * Sets or retrieves the URL of the component.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCodeBase();
 
-	/**
-	 * Override height. See the height attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getHeight();
+    
+    /**
+     * <p>setCodeBase.</p>
+     *
+     * @param codeBase a {@link java.lang.String} object.
+     */
+    void setCodeBase(String codeBase);
 
-	/**
-	 * Horizontal space, in pixels, to the left and right of this image, applet, or
-	 * object. See the hspace attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getHspace();
+    /**
+     * Sets or retrieves the Internet media type for the code associated with the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCodeType();
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getName();
+    
+    /**
+     * <p>setCodeType.</p>
+     *
+     * @param codeType a {@link java.lang.String} object.
+     */
+    void setCodeType(String codeType);
 
-	/**
-	 * Message to render while loading the object. See the standby attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getStandby();
+    /**
+     * Retrieves the document object of the page or frame.
+     *
+     * @return a {@link org.loboevolution.html.node.Document} object.
+     */
+    Document getContentDocument();
 
-	/**
-	 * Index that represents the element's position in the tabbing order. See the
-	 * tabindex attribute definition in HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getTabIndex();
+        
+  //  WindowProxy getContentWindow();
 
-	/**
-	 * Content type for data downloaded via data attribute. See the
-	 * type attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getType();
+    /**
+     * Sets or retrieves the URL that references the data of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getData();
 
-	/**
-	 * Use client-side image map. See the usemap attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getUseMap();
+    
+    /**
+     * <p>setData.</p>
+     *
+     * @param data a {@link java.lang.String} object.
+     */
+    void setData(String data);
 
-	/**
-	 * Vertical space, in pixels, above and below this image, applet, or object. See
-	 * the vspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @return a int.
-	 */
-	int getVspace();
+    /**
+     * <p>isDeclare.</p>
+     *
+     * @return a boolean.
+     */
+    @Deprecated
+    boolean isDeclare();
 
-	/**
-	 * Override width. See the width attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getWidth();
+    
+    /**
+     * <p>setDeclare.</p>
+     *
+     * @param declare a boolean.
+     */
+    void setDeclare(boolean declare);
 
-	/**
-	 * Aligns this object (vertically or horizontally) with respect to its
-	 * surrounding text. See the align attribute definition in HTML 4.01. This
-	 * attribute is deprecated in HTML 4.01.
-	 *
-	 * @param align a {@link java.lang.String} object.
-	 */
-	void setAlign(String align);
+    /**
+     * Retrieves a reference to the form that the object is embedded in.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLFormElement} object.
+     */
+    HTMLFormElement getForm();
 
-	/**
-	 * Space-separated list of archives. See the archive attribute definition in
-	 * HTML 4.01.
-	 *
-	 * @param archive a {@link java.lang.String} object.
-	 */
-	void setArchive(String archive);
+    /**
+     * Sets or retrieves the height of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getHeight();
 
-	/**
-	 * Width of border around the object. See the border attribute definition in
-	 * HTML 4.01. This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param border a {@link java.lang.String} object.
-	 */
-	void setBorder(String border);
+    
+    /**
+     * <p>setHeight.</p>
+     *
+     * @param height a {@link java.lang.String} object.
+     */
+    void setHeight(String height);
 
-	/**
-	 * Applet class file. See the code attribute for HTMLAppletElement.
-	 *
-	 * @param code a {@link java.lang.String} object.
-	 */
-	void setCode(String code);
+    /**
+     * <p>getHspace.</p>
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getHspace();
 
-	/**
-	 * Base URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * for classid, data, and archive
-	 * attributes. See the codebase attribute definition in HTML 4.01.
-	 *
-	 * @param codeBase a {@link java.lang.String} object.
-	 */
-	void setCodeBase(String codeBase);
+    
+    /**
+     * <p>setHspace.</p>
+     *
+     * @param hspace a double.
+     */
+    void setHspace(double hspace);
 
-	/**
-	 * Content type for data downloaded via classid attribute. See the
-	 * codetype attribute definition in HTML 4.01.
-	 *
-	 * @param codeType a {@link java.lang.String} object.
-	 */
-	void setCodeType(String codeType);
+    /**
+     * Sets or retrieves the name of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getName();
 
-	/**
-	 * A URI [<a href='http://www.ietf.org/rfc/rfc2396.txt'>IETF RFC 2396</a>]
-	 * specifying the location of the object's data. See the data attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param data a {@link java.lang.String} object.
-	 */
-	void setData(String data);
+    
+    /**
+     * <p>setName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
+    void setName(String name);
 
-	/**
-	 * Declare (for future reference), but do not instantiate, this object. See the
-	 * declare attribute definition in HTML 4.01.
-	 *
-	 * @param declare a boolean.
-	 */
-	void setDeclare(boolean declare);
+    /**
+     * Sets or retrieves a message to be displayed while an object is loading.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getStandby();
 
-	/**
-	 * Override height. See the height attribute definition in HTML 4.01.
-	 *
-	 * @param height a {@link java.lang.String} object.
-	 */
-	void setHeight(String height);
+    
+    /**
+     * <p>setStandby.</p>
+     *
+     * @param standby a {@link java.lang.String} object.
+     */
+    void setStandby(String standby);
 
-	/**
-	 * Horizontal space, in pixels, to the left and right of this image, applet, or
-	 * object. See the hspace attribute definition in HTML 4.01. This attribute is
-	 * deprecated in HTML 4.01.
-	 *
-	 * @param hspace a int.
-	 */
-	void setHspace(int hspace);
+    /**
+     * Sets or retrieves the MIME type of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getType();
 
-	/**
-	 * Form control or object name when submitted with a form. See the name
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param name a {@link java.lang.String} object.
-	 */
-	void setName(String name);
+    
+    /**
+     * <p>setType.</p>
+     *
+     * @param type a {@link java.lang.String} object.
+     */
+    void setType(String type);
 
-	/**
-	 * Message to render while loading the object. See the standby attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param standby a {@link java.lang.String} object.
-	 */
-	void setStandby(String standby);
+    /**
+     * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getUseMap();
 
-	/**
-	 * Index that represents the element's position in the tabbing order. See the
-	 * tabindex attribute definition in HTML 4.01.
-	 *
-	 * @param tabIndex a int.
-	 */
-	void setTabIndex(int tabIndex);
+    
+    /**
+     * <p>setUseMap.</p>
+     *
+     * @param useMap a {@link java.lang.String} object.
+     */
+    void setUseMap(String useMap);
 
-	/**
-	 * Content type for data downloaded via data attribute. See the
-	 * type attribute definition in HTML 4.01.
-	 *
-	 * @param type a {@link java.lang.String} object.
-	 */
-	void setType(String type);
+    /**
+     * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getValidationMessage();
 
-	/**
-	 * Use client-side image map. See the usemap attribute definition in HTML 4.01.
-	 *
-	 * @param useMap a {@link java.lang.String} object.
-	 */
-	void setUseMap(String useMap);
+    /**
+     * Returns a  ValidityState object that represents the validity states of an element.
+     *
+     * @return a {@link org.loboevolution.html.node.ValidityState} object.
+     */
+    ValidityState getValidity();
 
-	/**
-	 * Vertical space, in pixels, above and below this image, applet, or object. See
-	 * the vspace attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @param vspace a int.
-	 */
-	void setVspace(int vspace);
+    /**
+     * <p>getVspace.</p>
+     *
+     * @return a double.
+     */
+    @Deprecated
+    double getVspace();
 
-	/**
-	 * Override width. See the width attribute definition in HTML 4.01.
-	 *
-	 * @param width a {@link java.lang.String} object.
-	 */
-	void setWidth(String width);
+    
+    /**
+     * <p>setVspace.</p>
+     *
+     * @param vspace a double.
+     */
+    void setVspace(double vspace);
+
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    String getWidth();
+
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a {@link java.lang.String} object.
+     */
+    void setWidth(String width);
+
+    /**
+     * Returns whether an element will successfully validate based on forms validation rules and constraints.
+     *
+     * @return a boolean.
+     */
+    boolean isWillValidate();
+
+    /**
+     * Returns whether a form will validate when it is submitted, without having to submit it.
+     *
+     * @return a boolean.
+     */
+    boolean checkValidity();
+
+    
+    /**
+     * <p>getSVGDocument.</p>
+     *
+     * @return a {@link org.loboevolution.html.node.Document} object.
+     */
+    Document getSVGDocument();
+
+    /**
+     * <p>reportValidity.</p>
+     *
+     * @return a boolean.
+     */
+    boolean reportValidity();
+
+    /**
+     * Sets a custom error message that is displayed when a form is submitted.
+     *
+     * @param error Sets a custom error message that is displayed when a form is submitted.
+     */
+    void setCustomValidity(String error);
 
 }

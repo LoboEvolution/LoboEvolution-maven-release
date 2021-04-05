@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu;
 
 import java.awt.event.InputEvent;
@@ -12,22 +32,21 @@ import javax.swing.KeyStroke;
 import org.loboevolution.component.BrowserFrame;
 import org.loboevolution.menu.bookmarks.AddBookmarkAction;
 import org.loboevolution.menu.bookmarks.ShowBookmarksAction;
+import org.loboevolution.menu.crono.ShowPasswordAction;
+import org.loboevolution.menu.crono.ShowRecentDownloadAction;
 import org.loboevolution.menu.crono.ShowRecentHostsAction;
 import org.loboevolution.menu.file.OpenFileAction;
 import org.loboevolution.menu.file.SaveFileAction;
 import org.loboevolution.menu.tools.clear.ClearHistoryAction;
 import org.loboevolution.menu.tools.pref.PreferencesAction;
 import org.loboevolution.menu.tools.screen.ScreenShotAction;
-import org.loboevolution.menu.view.CookiePageAction;
-import org.loboevolution.menu.view.FullScreenAction;
-import org.loboevolution.menu.view.InfoPageAction;
-import org.loboevolution.menu.view.SourceAction;
+import org.loboevolution.menu.view.*;
 
 /**
  * <p>MenuBar class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class MenuBar extends JMenuBar {
 
@@ -40,7 +59,6 @@ public class MenuBar extends JMenuBar {
 	 */
 	public MenuBar(BrowserFrame frame) {
 		add(getFileMenu(frame));
-		add(getEditMenu());
 		add(getViewMenu(frame));
 		add(getBookmarksMenu(frame));
 		add(getChronologyMenu(frame));
@@ -71,20 +89,9 @@ public class MenuBar extends JMenuBar {
 	public JMenu getChronologyMenu(BrowserFrame frame) {
 		final JMenu menu = new JMenu("Recent");
 		menu.add(menuItem("Hosts", new ShowRecentHostsAction(frame)));
+		menu.add(menuItem("Download", new ShowRecentDownloadAction(frame)));
 		menu.add(menuItem("Bookmarks", new ShowBookmarksAction(frame, 20)));
-		return menu;
-	}
-
-	/**
-	 * Gets the edits the menu.
-	 *
-	 * @return the edits the menu
-	 */
-	public JMenu getEditMenu() {
-		final JMenu menu = new JMenu("Edit");
-		// menu.setMnemonic('E');
-		// menu.add(menuItem("Copy", 'C', "ctrl C", new CopyAction(window,
-		// actionPool)));
+		menu.add(menuItem("Password Manager", new ShowPasswordAction(frame, 20)));
 		return menu;
 	}
 
@@ -162,6 +169,7 @@ public class MenuBar extends JMenuBar {
 		menu.add(menuItem("Page Source", 'S', new SourceAction(frame)));
 		menu.add(menuItem("Info Page", ' ', new InfoPageAction(frame)));
 		menu.add(menuItem("Cookie Page", ' ', new CookiePageAction(frame)));
+		menu.add(menuItem("Style", ' ', new StyleAction(frame)));
 		menu.add(menuItem("Full Screen", ' ', KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0), new FullScreenAction(frame)));
 		return menu;
 	}
@@ -230,7 +238,6 @@ public class MenuBar extends JMenuBar {
 	 *
 	 * @param title       the title
 	 * @param mnemonic    the mnemonic
-	 * @param accelerator the accelerator
 	 * @param action      the action
 	 * @return the j menu item
 	 */

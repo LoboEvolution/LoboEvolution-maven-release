@@ -19,8 +19,8 @@ import org.mozilla.javascript.Token;
  * sharing.  Structurally a {@code NewExpression} node is very similar to a
  * {@code FunctionCall}, so it made a certain amount of sense.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class NewExpression extends FunctionCall {
 

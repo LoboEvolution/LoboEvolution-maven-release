@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.menu.tools.pref.startup;
 
 import java.io.BufferedReader;
@@ -7,15 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+
+import com.jtattoo.plaf.lobo.LoboButton;
 
 /**
  * <p>StartupListControl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class StartupListControl extends JComponent {
 
@@ -35,14 +56,14 @@ public class StartupListControl extends JComponent {
 	 * Instantiates a String.valueOf list control.
 	 */
 	public StartupListControl() {
-		this.comboBox = new JComboBox<String>();
+		this.comboBox = new JComboBox<>();
 		createAndShowGUI();
 	}
 
 	private void createAndShowGUI() {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.comboBox.setEditable(false);
-		final JButton editButton = new JButton();
+		final LoboButton editButton = new LoboButton();
 		editButton.setAction(new EditActionStartup(this));
 		editButton.setText("Edit List");
 		this.add(this.comboBox);
@@ -118,7 +139,7 @@ public class StartupListControl extends JComponent {
 		try {
 			final BufferedReader reader = new BufferedReader(new StringReader(text));
 			String line;
-			final ArrayList<String> stringsAL = new ArrayList<String>();
+			final ArrayList<String> stringsAL = new ArrayList<>();
 			while ((line = reader.readLine()) != null) {
 				stringsAL.add(line);
 			}

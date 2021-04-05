@@ -21,7 +21,6 @@ package org.loboevolution.pdfview;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,8 +48,8 @@ import org.loboevolution.pdfview.decrypt.PDFDecrypter;
  * by the time any data is returned from one of the methods
  * in this class.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public class PDFObject {
 
@@ -97,7 +96,7 @@ public class PDFObject {
     /** the encoded stream, if this is a STREAM object */
     private ByteBuffer stream;
     /** a cached version of the decoded stream */
-    private SoftReference decodedStream;
+    private SoftReference<ByteBuffer> decodedStream;
     /** The filter limits used to generate the cached decoded stream */
     private Set<String> decodedStreamFilterLimits = null;
     /**
@@ -110,7 +109,7 @@ public class PDFObject {
      * garbage collected at any time, after which it will
      * have to be rebuilt.
      */
-    private SoftReference cache;
+    private SoftReference<?> cache;
 
     /** @see #getObjNum() */
     private int objNum = OBJ_NUM_EMBEDDED;
@@ -151,8 +150,7 @@ public class PDFObject {
      * which should be "true" or "false" to turn into a BOOLEAN.
      *
      * @param obj the sample Java object to convert to a PDFObject.
-     * @throws org.loboevolution.pdfview.PDFParseException if the object isn't one of the
-     * above examples, and can't be turned into a PDFObject.
+     * @throws org.loboevolution.pdfview.PDFParseException if any.
      */
     public PDFObject(Object obj) throws PDFParseException {
         this.owner = null;
@@ -259,12 +257,12 @@ public class PDFObject {
             dereference().setCache(obj);
             return;
         } else {
-            cache = new SoftReference<Object>(obj);
+            cache = new SoftReference<>(obj);
         }
     }
 
     /**
-     * <p>Getter for the field stream.</p>
+     * <p>Getter for the field <code>stream</code>.</p>
      *
      * @param filterLimits a {@link java.util.Set} object.
      * @return an array of {@link byte} objects.
@@ -318,7 +316,7 @@ public class PDFObject {
      * @throws java.io.IOException if any.
      */
     public byte[] getStream() throws IOException {
-       return getStream(Collections.<String>emptySet());
+       return getStream(Collections.emptySet());
     }
 
     /**
@@ -366,14 +364,14 @@ public class PDFObject {
 
         // first try the cache
         if (decodedStream != null && filterLimits.equals(decodedStreamFilterLimits)) {
-            outStream = (ByteBuffer) decodedStream.get();
+            outStream = decodedStream.get();
         }
 
         // no luck in the cache, do the actual decoding
         if (outStream == null) {
             stream.rewind();
             outStream = PDFDecoder.decodeStream(this, stream, filterLimits);
-            decodedStreamFilterLimits = new HashSet<String>(filterLimits);
+            decodedStreamFilterLimits = new HashSet<>(filterLimits);
             decodedStream = new SoftReference(outStream);
         }
 
@@ -540,7 +538,7 @@ public class PDFObject {
      * @return a {@link java.util.Iterator} object.
      * @throws java.io.IOException if any.
      */
-    public Iterator getDictKeys() throws IOException {
+    public Iterator<String> getDictKeys() throws IOException {
         if (type == INDIRECT) {
             return dereference().getDictKeys();
         } else if (type == DICTIONARY || type == STREAM) {
@@ -548,25 +546,25 @@ public class PDFObject {
         }
 
         // wrong type
-        return new ArrayList().iterator();
+        return Collections.emptyIterator();
     }
 
     /**
      * get the dictionary as a HashMap.  If this isn't a DICTIONARY
      * or a STREAM, returns null
      *
-     * @return a {@link java.util.HashMap} object.
+     * @return a {@link java.util.Map} object.
      * @throws java.io.IOException if any.
      */
-    public HashMap<String,PDFObject> getDictionary() throws IOException {
+    public Map<String,PDFObject> getDictionary() throws IOException {
         if (type == INDIRECT) {
             return dereference().getDictionary();
         } else if (type == DICTIONARY || type == STREAM) {
-            return (HashMap<String,PDFObject>) value;
+            return (Map<String,PDFObject>) value;
         }
 
         // wrong type
-        return new HashMap<String,PDFObject>();
+        return new HashMap<>();
     }
 
     /**
@@ -682,9 +680,9 @@ public class PDFObject {
         try {
             if (type == INDIRECT) {
                 StringBuilder str = new StringBuilder ();
-                str.append("Indirect to #" + ((PDFXref) value).getID());
+                str.append("Indirect to #").append(((PDFXref) value).getID());
                 try {
-                    str.append("\n" + dereference().toString());
+                    str.append("\n").append(dereference().toString());
                 } catch (Throwable t) {
                     str.append(t.toString());
                 }
@@ -709,7 +707,7 @@ public class PDFObject {
                         obj = getDictRef("S");
                     }
                     if (obj != null) {
-                        sb.append("/" + obj.getStringValue());
+                        sb.append("/").append(obj.getStringValue());
                     }
                 } else {
                     sb.append("Untyped");
@@ -720,7 +718,7 @@ public class PDFObject {
                 Map.Entry entry;
                 while (it.hasNext()) {
                     entry = (Map.Entry) it.next();
-                    sb.append("\n   " + entry.getKey() + "  " + entry.getValue());
+                    sb.append("\n   ").append(entry.getKey()).append("  ").append(entry.getValue());
                 }
                 return sb.toString();
             } else if (type == STREAM) {
@@ -773,7 +771,7 @@ public class PDFObject {
 
                 obj = owner.dereference((PDFXref)value, getDecrypter());
 
-                cache = new SoftReference<PDFObject>(obj);
+                cache = new SoftReference<>(obj);
             }
 
             return obj;

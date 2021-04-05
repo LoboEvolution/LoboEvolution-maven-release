@@ -39,13 +39,13 @@ import com.jtattoo.plaf.AbstractLookAndFeel;
 /**
  * <p>TexturePopupMenuSeparatorUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class TexturePopupMenuSeparatorUI extends BasicSeparatorUI {
 
 	private static final Dimension PREF_SIZE = new Dimension(8, 8);
-	private static final Color BORDER_COLORS[] = new Color[] { Color.black, new Color(164, 164, 164),
+	private static final Color[] BORDER_COLORS = new Color[] { Color.black, new Color(164, 164, 164),
 			new Color(48, 48, 48), new Color(128, 128, 128) };
 
 	/** {@inheritDoc} */

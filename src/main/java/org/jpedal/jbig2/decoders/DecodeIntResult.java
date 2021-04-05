@@ -52,13 +52,13 @@ package org.jpedal.jbig2.decoders;
 /**
  * <p>DecodeIntResult class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class DecodeIntResult {
 
-	private int intResult;
-	private boolean booleanResult;
+	private final int intResult;
+	private final boolean booleanResult;
 
 	/**
 	 * <p>Constructor for DecodeIntResult.</p>

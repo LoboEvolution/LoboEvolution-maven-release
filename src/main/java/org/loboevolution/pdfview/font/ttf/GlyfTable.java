@@ -23,20 +23,20 @@ import java.nio.ByteBuffer;
 /**
  * Model the TrueType Glyf table
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class GlyfTable extends TrueTypeTable {
     /** 
      * the glyph data, as either a byte buffer (unparsed) or a 
      * glyph object (parsed)
      */
-    private Object[] glyphs;
+    private final Object[] glyphs;
     
     /**
      * The glyph location table
      */
-    private LocaTable loca;
+    private final LocaTable loca;
     
     /**
      * Creates a new instance of HmtxTable
@@ -88,10 +88,9 @@ public class GlyfTable extends TrueTypeTable {
         ByteBuffer buf = ByteBuffer.allocate(size);
         
         // write the offsets
-        for (int i = 0; i < this.glyphs.length; i++) {
-            Object o = this.glyphs[i];
+        for (Object o : this.glyphs) {
             if (o == null) {
-		continue;
+                continue;
             }
 
             ByteBuffer glyfData = null;
@@ -100,7 +99,7 @@ public class GlyfTable extends TrueTypeTable {
             } else {
                 glyfData = ((Glyf) o).getData();
             }
-            
+
             glyfData.rewind();
             buf.put(glyfData);
             glyfData.flip();
@@ -144,13 +143,12 @@ public class GlyfTable extends TrueTypeTable {
     @Override
 	public int getLength() {
         int length = 0;
-        
-        for (int i = 0; i < this.glyphs.length; i++) {
-            Object o = this.glyphs[i];
+
+        for (Object o : this.glyphs) {
             if (o == null) {
                 continue;
             }
-            
+
             if (o instanceof ByteBuffer) {
                 length += ((ByteBuffer) o).remaining();
             } else {
@@ -171,8 +169,8 @@ public class GlyfTable extends TrueTypeTable {
         StringBuilder buf = new StringBuilder();
         String indent = "    ";
      
-        buf.append(indent + "Glyf Table: (" + this.glyphs.length + " glyphs)\n");
-        buf.append(indent + "  Glyf 0: " + getGlyph(0));
+        buf.append(indent).append("Glyf Table: (").append(this.glyphs.length).append(" glyphs)\n");
+        buf.append(indent).append("  Glyf 0: ").append(getGlyph(0));
         
         return buf.toString();
     }

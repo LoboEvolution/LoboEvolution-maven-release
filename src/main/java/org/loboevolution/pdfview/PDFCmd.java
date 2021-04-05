@@ -23,8 +23,8 @@ import java.awt.geom.Rectangle2D;
 /**
  * The abstract superclass of all drawing commands for a PDFPage.
  *
- * @author Mike Wessler
- * @version $Id: $Id
+ * Author Mike Wessler
+  *
  */
 public abstract class PDFCmd {
 

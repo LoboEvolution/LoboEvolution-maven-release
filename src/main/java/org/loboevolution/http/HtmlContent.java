@@ -1,23 +1,41 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.http;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.loboevolution.common.Nodes;
 import org.loboevolution.common.Strings;
 import org.loboevolution.common.Urls;
-import org.loboevolution.info.MetaInfo;
 import org.loboevolution.html.dom.HTMLElement;
+import org.loboevolution.html.dom.domimpl.HTMLCollectionImpl;
 import org.loboevolution.html.dom.domimpl.HTMLDocumentImpl;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.info.MetaInfo;
+import org.loboevolution.html.node.Document;
 
 /**
  * <p>HtmlContent class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class HtmlContent {
 
@@ -38,15 +56,15 @@ public class HtmlContent {
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaInfo> getJSList() {
-		final List<MetaInfo> infoList = new ArrayList<MetaInfo>();
+		final List<MetaInfo> infoList = new ArrayList<>();
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
-		final NodeList nodeList = doc.getElementsByTagName("script");
+		final HTMLCollectionImpl nodeList = (HTMLCollectionImpl) doc.getElementsByTagName("script");
 
 		if (nodeList == null) {
 			return null;
 		}
 
-		for (final Node node : Nodes.iterable(nodeList)) {
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElement) {
 				final MetaInfo info = new MetaInfo();
 				final HTMLElement element = (HTMLElement) node;
@@ -63,7 +81,7 @@ public class HtmlContent {
 					infoList.add(info);
 				}
 			}
-		}
+		});
 		return infoList;
 	}
 
@@ -73,15 +91,15 @@ public class HtmlContent {
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaInfo> getMediaList() {
-		final List<MetaInfo> infoList = new ArrayList<MetaInfo>();
+		final List<MetaInfo> infoList = new ArrayList<>();
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
-		NodeList nodeList = doc.getElementsByTagName("img");
+		HTMLCollectionImpl nodeList = (HTMLCollectionImpl) doc.getElementsByTagName("img");
 
 		if (nodeList == null) {
 			return null;
 		}
-
-		for (final Node node : Nodes.iterable(nodeList)) {
+		
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElement) {
 				final MetaInfo info = new MetaInfo();
 				final HTMLElement element = (HTMLElement) node;
@@ -98,10 +116,10 @@ public class HtmlContent {
 					infoList.add(info);
 				}
 			}
-		}
+		});
 
-		nodeList = doc.getElementsByTagName("link");
-		for (final Node node : Nodes.iterable(nodeList)) {
+		nodeList = (HTMLCollectionImpl) doc.getElementsByTagName("link");
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElement) {
 				final MetaInfo info = new MetaInfo();
 				final HTMLElement element = (HTMLElement) node;
@@ -119,7 +137,7 @@ public class HtmlContent {
 					infoList.add(info);
 				}
 			}
-		}
+		});
 		return infoList;
 	}
 
@@ -129,15 +147,15 @@ public class HtmlContent {
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaInfo> getMetaList() {
-		final List<MetaInfo> infoList = new ArrayList<MetaInfo>();
+		final List<MetaInfo> infoList = new ArrayList<>();
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
-		final NodeList nodeList = doc.getElementsByTagName("meta");
+		final HTMLCollectionImpl nodeList = (HTMLCollectionImpl) doc.getElementsByTagName("meta");
 
 		if (nodeList == null) {
 			return null;
 		}
 
-		for (final Node node : Nodes.iterable(nodeList)) {
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElement) {
 				final MetaInfo info = new MetaInfo();
 				final HTMLElement element = (HTMLElement) node;
@@ -150,7 +168,7 @@ public class HtmlContent {
 				info.setCharset(element.getAttribute("charset"));
 				infoList.add(info);
 			}
-		}
+		});
 		return infoList;
 	}
 
@@ -160,15 +178,15 @@ public class HtmlContent {
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaInfo> getStyleList() {
-		final List<MetaInfo> infoList = new ArrayList<MetaInfo>();
+		final List<MetaInfo> infoList = new ArrayList<>();
 		final HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
-		final NodeList nodeList = doc.getElementsByTagName("link");
+		final HTMLCollectionImpl nodeList = (HTMLCollectionImpl) doc.getElementsByTagName("link");
 
 		if (nodeList == null) {
 			return null;
 		}
 
-		for (final Node node : Nodes.iterable(nodeList)) {
+		nodeList.forEach(node -> {
 			if (node instanceof HTMLElement) {
 				final MetaInfo info = new MetaInfo();
 				final HTMLElement element = (HTMLElement) node;
@@ -186,7 +204,7 @@ public class HtmlContent {
 					infoList.add(info);
 				}
 			}
-		}
+		});
 		return infoList;
 	}
 

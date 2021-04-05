@@ -37,12 +37,12 @@ import com.jtattoo.plaf.ColorHelper;
 /**
  * <p>McWinMenuBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class McWinMenuBarUI extends BaseMenuBarUI {
 
-	private static final Color SHADOW_COLORS[] = ColorHelper.createColorArr(Color.white, new Color(240, 240, 240), 8);
+	private static final Color[] SHADOW_COLORS = ColorHelper.createColorArr(Color.white, new Color(240, 240, 240), 8);
 
 	/** {@inheritDoc} */
 	public static ComponentUI createUI(JComponent x) {
@@ -54,7 +54,7 @@ public class McWinMenuBarUI extends BaseMenuBarUI {
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		if (c != null && c instanceof JMenuBar) {
-			((JMenuBar) c).setBorder(BaseBorders.getMenuBarBorder());
+			c.setBorder(BaseBorders.getMenuBarBorder());
 			((JMenuBar) c).setBorderPainted(true);
 		}
 	}

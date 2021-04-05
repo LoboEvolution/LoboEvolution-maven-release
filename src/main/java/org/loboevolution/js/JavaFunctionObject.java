@@ -1,28 +1,28 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.js;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EvaluatorException;
@@ -34,14 +34,14 @@ import org.mozilla.javascript.WrappedException;
 /**
  * <p>JavaFunctionObject class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class JavaFunctionObject extends ScriptableObject implements Function {
 
 	private static final long serialVersionUID = 1L;
 	private final String className;
-	private final ArrayList<Method> methods = new ArrayList<Method>();
+	private final List<Method> methods = new ArrayList<>();
 
 	/**
 	 * <p>Constructor for JavaFunctionObject.</p>
@@ -109,12 +109,11 @@ public class JavaFunctionObject extends ScriptableObject implements Function {
 	}
 
 	private Method getBestMethod(Object[] args) {
-		final ArrayList<Method> methods = this.methods;
+		final List<Method> methods = this.methods;
 		final int size = methods.size();
 		int matchingNumParams = 0;
 		Method matchingMethod = null;
-		for (int i = 0; i < size; i++) {
-			final Method m = methods.get(i);
+		for (final Method m : methods) {
 			final Class[] parameterTypes = m.getParameterTypes();
 			if (args == null) {
 				if (parameterTypes == null || parameterTypes.length == 0) {

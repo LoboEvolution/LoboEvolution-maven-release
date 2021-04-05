@@ -29,13 +29,13 @@ import org.loboevolution.pdfview.PDFParseException;
  * The abstract superclass of various predictor objects that undo well-known
  * prediction algorithms.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public abstract class Predictor {
     /** well known algorithms */
     public static final int TIFF = 0;
-    /** Constant PNG=1 */
+    /** Constant <code>PNG=1</code> */
     public static final int PNG = 1;
     
     /** the algorithm to use */
@@ -51,7 +51,7 @@ public abstract class Predictor {
     private int columns = 1;
     
     /**
-     * Create an instance of a predictor.  Use getPredictor()
+     * Create an instance of a predictor.  Use <code>getPredictor()</code>
      * instead of this.
      *
      * @param algorithm a int.

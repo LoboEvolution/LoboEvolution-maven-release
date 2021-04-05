@@ -74,8 +74,8 @@ import org.jpedal.jbig2.util.BinaryOperation;
 /**
  * <p>JBIG2StreamDecoder class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBIG2StreamDecoder {
 	
@@ -88,8 +88,8 @@ public class JBIG2StreamDecoder {
 
 	private int noOfPages = -1;
 
-	private List<Segment> segments = new ArrayList<Segment>();
-	private List<JBIG2Bitmap> bitmaps = new ArrayList<JBIG2Bitmap>();
+	private final List<Segment> segments = new ArrayList<>();
+	private final List<JBIG2Bitmap> bitmaps = new ArrayList<>();
 
 	private byte[] globalData;
 
@@ -99,8 +99,8 @@ public class JBIG2StreamDecoder {
 
 	private MMRDecoder mmrDecoder;
 	
-	/** Constant debug=false */
-	public static boolean debug = false;
+	/** Constant <code>debug=false</code> */
+	public static final boolean debug = false;
 
 	/**
 	 * <p>movePointer.</p>
@@ -112,7 +112,7 @@ public class JBIG2StreamDecoder {
 	}
 	
 	/**
-	 * <p>Setter for the field globalData.</p>
+	 * <p>Setter for the field <code>globalData</code>.</p>
 	 *
 	 * @param data an array of {@link byte} objects.
 	 */
@@ -201,7 +201,7 @@ public class JBIG2StreamDecoder {
 	}
 	
 	/**
-	 * <p>Getter for the field huffmanDecoder.</p>
+	 * <p>Getter for the field <code>huffmanDecoder</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.decoders.HuffmanDecoder} object.
 	 */
@@ -219,7 +219,7 @@ public class JBIG2StreamDecoder {
 	}
 	
 	/**
-	 * <p>Getter for the field arithmeticDecoder.</p>
+	 * <p>Getter for the field <code>arithmeticDecoder</code>.</p>
 	 *
 	 * @return a {@link org.jpedal.jbig2.decoders.ArithmeticDecoder} object.
 	 */
@@ -606,8 +606,9 @@ public class JBIG2StreamDecoder {
 			logger.info("retentionFlags = ");
 
 		if (JBIG2StreamDecoder.debug) {
-			for (int i = 0; i < retentionFlags.length; i++)
-				logger.info(retentionFlags[i] + " ");
+			for (short s : retentionFlags) {
+				logger.info(s + " ");
+			}
 		}
 	}
 
@@ -638,8 +639,8 @@ public class JBIG2StreamDecoder {
 
 		if (JBIG2StreamDecoder.debug) {
 			logger.info("referredToSegments = ");
-			for (int i = 0; i < referredToSegments.length; i++)
-				logger.info(referredToSegments[i] + " ");
+			for (int i : referredToSegments)
+				logger.info(i + " ");
 			logger.info("");
 		}
 	}

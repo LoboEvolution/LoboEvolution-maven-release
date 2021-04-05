@@ -15,8 +15,8 @@ import org.mozilla.javascript.Token;
  * <pre><b>for</b> ( ExpressionNoInopt; Expressionopt ; Expressionopt ) Statement</pre>
  * <pre><b>for</b> ( <b>var</b> VariableDeclarationListNoIn; Expressionopt ; Expressionopt ) Statement</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ForLoop extends Loop {
 

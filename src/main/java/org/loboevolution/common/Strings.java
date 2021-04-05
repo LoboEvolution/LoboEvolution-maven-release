@@ -1,56 +1,54 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.common;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 /**
  * The Class Strings.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Strings {
+	
+	private static final int iterations = 20*1000;
+        
+    private static final int desiredKeyLen = 256;
 
 	/** The Constant EMPTY_ARRAY. */
 	public static final String[] EMPTY_ARRAY = new String[0];
-
-	/** The Constant HEX_CHARS. */
-	private static final String HEX_CHARS = "0123456789ABCDEF";
-
-	/** The Constant MESSAGE_DIGEST. */
-	private static final MessageDigest MESSAGE_DIGEST;
-
-	static {
-		MessageDigest md;
-		try {
-			md = MessageDigest.getInstance("MD5");
-		} catch (final NoSuchAlgorithmException err) {
-			throw new IllegalStateException();
-		}
-		MESSAGE_DIGEST = md;
+	
+	/**
+	 * Instantiates a strings.
+	 */
+	private Strings() {
 	}
 
 	/**
@@ -182,30 +180,6 @@ public class Strings {
 	}
 
 	/**
-	 * Gets the hash32.
-	 *
-	 * @param source the source
-	 * @return the hash32
-	 * @throws java.io.UnsupportedEncodingException the unsupported encoding exception
-	 */
-	public static String getHash32(String source) throws UnsupportedEncodingException {
-		final String md5 = getMD5(source);
-		return md5.substring(0, 8);
-	}
-
-	/**
-	 * Gets the hash64.
-	 *
-	 * @param source the source
-	 * @return the hash64
-	 * @throws java.io.UnsupportedEncodingException the unsupported encoding exception
-	 */
-	public static String getHash64(String source) throws UnsupportedEncodingException {
-		final String md5 = getMD5(source);
-		return md5.substring(0, 16);
-	}
-
-	/**
 	 * Gets the java identifier.
 	 *
 	 * @param candidateID the candidate id
@@ -261,36 +235,6 @@ public class Strings {
 		}
 		buf.append('"');
 		return buf.toString();
-	}
-
-	/**
-	 * Gets the m d5.
-	 *
-	 * @param source the source
-	 * @return the m d5
-	 */
-	public static String getMD5(String source) {
-		byte[] bytes;
-		try {
-			bytes = source.getBytes("UTF-8");
-		} catch (final UnsupportedEncodingException ue) {
-			throw new IllegalStateException(ue);
-		}
-		byte[] result;
-		synchronized (MESSAGE_DIGEST) {
-			MESSAGE_DIGEST.update(bytes);
-			result = MESSAGE_DIGEST.digest();
-		}
-		final char[] resChars = new char[32];
-		final int len = result.length;
-		for (int i = 0; i < len; i++) {
-			final byte b = result[i];
-			final int lo4 = b & 0x0F;
-			final int hi4 = (b & 0xF0) >> 4;
-			resChars[i * 2] = HEX_CHARS.charAt(hi4);
-			resChars[i * 2 + 1] = HEX_CHARS.charAt(lo4);
-		}
-		return String.valueOf(resChars);
 	}
 
 	/**
@@ -417,7 +361,7 @@ public class Strings {
 	 * @return the string[]
 	 */
 	public static String[] split(String phrase) {
-		final ArrayList<String> wordList = new ArrayList<String>();
+		final ArrayList<String> wordList = new ArrayList<>();
 		StringBuilder word = null;
 		final char[] list = phrase.toCharArray();
 		for (final char ch : list) {
@@ -454,13 +398,26 @@ public class Strings {
 	 */
 	public static String[] splitUsingTokenizer(String subject, String delimiters) {
 		final StringTokenizer strTkn = new StringTokenizer(subject, delimiters);
-		final ArrayList<String> arrLis = new ArrayList<String>(subject.length());
+		final ArrayList<String> arrLis = new ArrayList<>(subject.length());
 
 		while (strTkn.hasMoreTokens()) {
 			arrLis.add(strTkn.nextToken());
 		}
 
 		return arrLis.toArray(new String[0]);
+	}
+	
+	/**
+	 * <p>getTokensWithCollection.</p>
+	 *
+	 * @param str a {@link java.lang.String} object.
+	 * @param delimiters a {@link java.lang.String} object.
+	 * @return an list of {@link java.lang.String} objects.
+	 */
+	public static List<String> getTokensWithCollection(String str, String delimiters) {
+	    return Collections.list(new StringTokenizer(str, delimiters, true)).stream()
+	      .map(token -> (String) token)
+	      .collect(Collectors.toList());
 	}
 
 	/**
@@ -552,34 +509,6 @@ public class Strings {
 	}
 
 	/**
-	 * Instantiates a strings.
-	 */
-	private Strings() {
-	}
-
-	/**
-	 * <p>substringBetween.</p>
-	 *
-	 * @param str a {@link java.lang.String} object.
-	 * @param open a {@link java.lang.String} object.
-	 * @param close a {@link java.lang.String} object.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public static String substringBetween(String str, String open, String close) {
-		if (str == null || open == null || close == null) {
-			return null;
-		}
-		int start = str.indexOf(open);
-		if (start != -1) {
-			int end = str.indexOf(close, start + open.length());
-			if (end != -1) {
-				return str.substring(start + open.length(), end);
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * <p>unquoteSingle.</p>
 	 *
 	 * @param text a {@link java.lang.String} object.
@@ -611,5 +540,48 @@ public class Strings {
 			}
 		}
 		return found;
+	}
+	
+	/**
+	 * <p>hash.</p>
+	 *
+	 * @param password a {@link java.lang.String} object.
+	 * @param salt an array of {@link byte} objects.
+	 * @return a {@link java.lang.String} object.
+	 * @throws java.lang.Exception if any.
+	 */
+	public static String hash(String password, byte[] salt) throws Exception {
+        if (password == null || password.length() == 0)
+            throw new IllegalArgumentException("Empty passwords are not supported.");
+        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        SecretKey key = f.generateSecret(new PBEKeySpec(
+            password.toCharArray(), salt, iterations, desiredKeyLen));
+        return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
+    
+	/**
+	 * <p>randomAlphaNumeric.</p>
+	 *
+	 * @param count a int.
+	 * @return a {@link java.lang.String} object.
+	 */
+	public static String randomAlphaNumeric(int count) {
+		final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		StringBuilder builder = new StringBuilder();
+		while (count-- != 0) {
+			int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+			builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+		}
+		return builder.toString();
+	}
+	
+	/**
+	 * <p>normalizeAttributeName.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
+	public static String normalizeAttributeName(String name) {
+		return name.toLowerCase();
 	}
 }

@@ -1,46 +1,46 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The XAMJ Project
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 package org.loboevolution.html.js.events;
 
 import java.awt.event.InputEvent;
-
-import org.w3c.dom.events.EventTarget;
-import org.w3c.dom.events.MouseEvent;
-import org.w3c.dom.views.AbstractView;
+import org.loboevolution.html.node.events.EventTarget;
+import org.loboevolution.html.node.events.MouseEvent;
+import org.loboevolution.html.node.js.Window;
 
 /**
- * <p>MouseEventImpl class.</p>
+ * <p>
+ * MouseEventImpl class.
+ * </p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 
-	private int screenX;
+	private double screenX;
 
-	private int screenY;
+	private double screenY;
 
-	private int clientX;
+	private double clientX;
 
-	private int clientY;
+	private double clientY;
 
 	private boolean ctrlKey;
 
@@ -50,32 +50,36 @@ public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 
 	private boolean metaKey;
 
-	private short button;
+	private int button;
 
 	private EventTarget relatedTarget;
 
 	private InputEvent ie;
 
 	/**
-	 * <p>Constructor for MouseEventImpl.</p>
+	 * <p>
+	 * Constructor for MouseEventImpl.
+	 * </p>
 	 *
-	 * @param type a {@link java.lang.String} object.
+	 * @param type     a {@link java.lang.String} object.
 	 * @param shiftKey a boolean.
-	 * @param ctrlKey a boolean.
-	 * @param altKey a boolean.
-	 * @param button a int.
+	 * @param ctrlKey  a boolean.
+	 * @param altKey   a boolean.
+	 * @param button   a int.
 	 */
-	public MouseEventImpl(final String type, final boolean shiftKey, final boolean ctrlKey,
-			final boolean altKey, final int button) {
-		super(type, ("dblclick".equals(type) ? 2 :1), null);
+	public MouseEventImpl(final String type, final boolean shiftKey, final boolean ctrlKey, final boolean altKey,
+			final int button) {
+		super(type, ("dblclick".equals(type) ? 2 : 1), null);
 		this.shiftKey = shiftKey;
 		this.ctrlKey = ctrlKey;
 		this.altKey = altKey;
-		this.button = (short)button;
+		this.button = (short) button;
 	}
 
 	/**
-	 * <p>Constructor for MouseEventImpl.</p>
+	 * <p>
+	 * Constructor for MouseEventImpl.
+	 * </p>
 	 */
 	public MouseEventImpl() {
 		this.shiftKey = false;
@@ -86,55 +90,75 @@ public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 
 	/** {@inheritDoc} */
 	@Override
-	public int getScreenX() {
+	public void initMouseEvent(String typeArg, boolean canBubbleArg, boolean cancelableArg, Window viewArg,
+			double detailArg, double screenXArg, double screenYArg, double clientXArg, double clientYArg,
+			boolean ctrlKeyArg, boolean altKeyArg, boolean shiftKeyArg, boolean metaKeyArg, int buttonArg,
+			EventTarget relatedTargetArg) {
+		super.initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
+		screenX = screenXArg;
+		screenY = screenYArg;
+		clientX = clientXArg;
+		clientY = clientYArg;
+		ctrlKey = ctrlKeyArg;
+		altKey = altKeyArg;
+		shiftKey = shiftKeyArg;
+		metaKey = metaKeyArg;
+		button = buttonArg;
+		relatedTarget = relatedTargetArg;
+
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getScreenX() {
 		return screenX;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public int getScreenY() {
+	public double getScreenY() {
 		return screenY;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public int getClientX() {
+	public double getClientX() {
 		return clientX;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public int getClientY() {
+	public double getClientY() {
 		return clientY;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getCtrlKey() {
-		return ctrlKey ? ie.isControlDown() : false;
+	public boolean isCtrlKey() {
+		return ctrlKey && ie.isControlDown();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getShiftKey() {
-		return shiftKey ? ie.isShiftDown() : false;
+	public boolean isShiftKey() {
+		return shiftKey && ie.isShiftDown();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getAltKey() {
-		return altKey ? ie.isAltDown() : false;
+	public boolean isAltKey() {
+		return altKey && ie.isAltDown();
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean getMetaKey() {
+	public boolean isMetaKey() {
 		return metaKey;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public short getButton() {
+	public int getButton() {
 		if (ie instanceof MouseEvent) {
 			return (short) (((MouseEvent) ie).getButton() - 1);
 		} else {
@@ -149,7 +173,9 @@ public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 	}
 
 	/**
-	 * <p>Getter for the field ie.</p>
+	 * <p>
+	 * Getter for the field ie.
+	 * </p>
 	 *
 	 * @return a {@link java.awt.event.InputEvent} object.
 	 */
@@ -158,7 +184,9 @@ public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 	}
 
 	/**
-	 * <p>Setter for the field ie.</p>
+	 * <p>
+	 * Setter for the field ie.
+	 * </p>
 	 *
 	 * @param ie a {@link java.awt.event.InputEvent} object.
 	 */
@@ -168,19 +196,71 @@ public class MouseEventImpl extends UIEventImpl implements MouseEvent {
 
 	/** {@inheritDoc} */
 	@Override
-	public void initMouseEvent(String typeArg, boolean canBubbleArg, boolean cancelableArg, AbstractView viewArg,
-			int detailArg, int screenXArg, int screenYArg, int clientXArg, int clientYArg, boolean ctrlKeyArg,
-			boolean altKeyArg, boolean shiftKeyArg, boolean metaKeyArg, short buttonArg, EventTarget relatedTargetArg) {
-		super.initUIEvent(typeArg, canBubbleArg, cancelableArg, viewArg, detailArg);
-		screenX = screenXArg;
-		screenY = screenYArg;
-		clientX = clientXArg;
-		clientY = clientYArg;
-		ctrlKey = ctrlKeyArg;
-		altKey = altKeyArg;
-		shiftKey = shiftKeyArg;
-		metaKey = metaKeyArg;
-		button = buttonArg;
-		relatedTarget = relatedTargetArg;
+	public int getButtons() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getMovementX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getMovementY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getOffsetX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getOffsetY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getPageX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getPageY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public double getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean getModifierState(String keyArg) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.geom.AffineTransform;
@@ -5,13 +25,13 @@ import java.awt.geom.NoninvertibleTransformException;
 
 import org.loboevolution.html.dom.svg.SVGException;
 import org.loboevolution.html.dom.svg.SVGMatrix;
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGMatrixImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGMatrixImpl implements SVGMatrix {
 	
@@ -55,7 +75,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setA(float a) throws DOMException {
+	public void setA(float a) {
 		final float b = getB();
 		final float c = getC();
 		final float d = getD();
@@ -73,7 +93,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setB(float b) throws DOMException {
+	public void setB(float b) {
 		final float a = getA();
 		final float c = getC();
 		final float d = getD();
@@ -91,7 +111,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setC(float c) throws DOMException {
+	public void setC(float c) {
 		final float a = getA();
 		final float b = getB();
 		final float d = getD();
@@ -109,7 +129,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setD(float d) throws DOMException {
+	public void setD(float d) {
 		final float a = getA();
 		final float b = getB();
 		final float c = getC();
@@ -127,7 +147,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setE(float e) throws DOMException {
+	public void setE(float e) {
 		final float a = getA();
 		final float b = getB();
 		final float c = getC();
@@ -145,7 +165,7 @@ public class SVGMatrixImpl implements SVGMatrix {
 
 	/** {@inheritDoc} */
 	@Override
-	public void setF(float f) throws DOMException {
+	public void setF(float f) {
 		final float a = getA();
 		final float b = getB();
 		final float c = getC();

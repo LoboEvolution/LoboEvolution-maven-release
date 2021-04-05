@@ -9,8 +9,8 @@ package org.mozilla.javascript.regexp;
 /**
  * A utility class for lazily instantiated substrings.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SubString {
 

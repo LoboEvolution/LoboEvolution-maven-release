@@ -27,8 +27,8 @@ import org.loboevolution.pdfview.PDFDebugger;
 /**
  * <p>Abstract CMap class.</p>
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public abstract class CMap {
 
@@ -44,7 +44,7 @@ public abstract class CMap {
 
     /**
      * Creates a new instance of CMap
-     * Don't use this directly, use CMap.createMap()
+     * Don't use this directly, use <code>CMap.createMap()</code>
      *
      * @param format a short.
      * @param language a short.

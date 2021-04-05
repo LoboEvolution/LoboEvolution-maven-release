@@ -17,8 +17,8 @@ import org.mozilla.javascript.Token;
  * Base type for {@link org.mozilla.javascript.ast.AstRoot} and {@link org.mozilla.javascript.ast.FunctionNode} nodes, which need to
  * collect much of the same information.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ScriptNode extends Scope {
 
@@ -185,7 +185,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Getter for the field endLineno.</p>
+     * <p>Getter for the field <code>endLineno</code>.</p>
      *
      * @return a int.
      */
@@ -194,7 +194,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Setter for the field endLineno.</p>
+     * <p>Setter for the field <code>endLineno</code>.</p>
      *
      * @param lineno a int.
      */
@@ -224,7 +224,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Getter for the field functions.</p>
+     * <p>Getter for the field <code>functions</code>.</p>
      *
      * @return a {@link java.util.List} object.
      */
@@ -298,9 +298,10 @@ public class ScriptNode extends Scope {
     public int getIndexForNameNode(Node nameNode) {
         if (variableNames == null) codeBug();
         Scope node = nameNode.getScope();
-        Symbol symbol = node == null
-            ? null
-            : node.getSymbol(((Name)nameNode).getIdentifier());
+        Symbol symbol = null;
+        if (node != null && nameNode instanceof Name) {
+            symbol = node.getSymbol(((Name) nameNode).getIdentifier());
+        }
         return (symbol == null) ? -1 : symbol.getIndex();
     }
 
@@ -316,7 +317,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Getter for the field paramCount.</p>
+     * <p>Getter for the field <code>paramCount</code>.</p>
      *
      * @return a int.
      */
@@ -363,7 +364,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Getter for the field symbols.</p>
+     * <p>Getter for the field <code>symbols</code>.</p>
      *
      * @return a {@link java.util.List} object.
      */
@@ -372,7 +373,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Setter for the field symbols.</p>
+     * <p>Setter for the field <code>symbols</code>.</p>
      *
      * @param symbols a {@link java.util.List} object.
      */
@@ -415,7 +416,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Getter for the field compilerData.</p>
+     * <p>Getter for the field <code>compilerData</code>.</p>
      *
      * @return a {@link java.lang.Object} object.
      */
@@ -424,7 +425,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Setter for the field compilerData.</p>
+     * <p>Setter for the field <code>compilerData</code>.</p>
      *
      * @param data a {@link java.lang.Object} object.
      */
@@ -446,7 +447,7 @@ public class ScriptNode extends Scope {
     }
 
     /**
-     * <p>Setter for the field inStrictMode.</p>
+     * <p>Setter for the field <code>inStrictMode</code>.</p>
      *
      * @param inStrictMode a boolean.
      */

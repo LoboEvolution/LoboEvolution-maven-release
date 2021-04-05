@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
 import java.awt.Color;
@@ -11,20 +31,18 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.loboevolution.common.Nodes;
+import org.loboevolution.html.dom.nodeimpl.NodeListImpl;
 import org.loboevolution.html.dom.svg.SVGAnimatedEnumeration;
 import org.loboevolution.html.dom.svg.SVGAnimatedString;
 import org.loboevolution.html.dom.svg.SVGAnimatedTransformList;
 import org.loboevolution.html.dom.svg.SVGGradientElement;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.loboevolution.html.node.Element;
 
 /**
  * <p>SVGGradientElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SVGGradientElementImpl extends SVGGraphic implements SVGGradientElement {
 
@@ -111,14 +129,14 @@ public class SVGGradientElementImpl extends SVGGraphic implements SVGGradientEle
 	}
 
 	private float[] fractions(Element elem) {
-		ArrayList<Float> fractions = new ArrayList<Float>();
-		NodeList childNodes = elem.getChildNodes();
-		for (Node n : Nodes.iterable(childNodes)) {
-			if (n instanceof SVGStopElementImpl) {
-				SVGStopElementImpl stop = (SVGStopElementImpl) n;
+		ArrayList<Float> fractions = new ArrayList<>();
+		NodeListImpl children = (NodeListImpl)elem.getChildNodes();
+		children.forEach(child -> {
+			if (child instanceof SVGStopElementImpl) {
+				SVGStopElementImpl stop = (SVGStopElementImpl)child;
 				fractions.add(stop.getOffset().getBaseVal());
 			}
-		}
+		});
 		float[] floatArray = new float[fractions.size()];
 		int i = 0;
 
@@ -130,14 +148,14 @@ public class SVGGradientElementImpl extends SVGGraphic implements SVGGradientEle
 	}
 
 	private Color[] colors(Element elem) {
-		ArrayList<Color> colors = new ArrayList<Color>();
-		NodeList childNodes = elem.getChildNodes();
-		for (Node n : Nodes.iterable(childNodes)) {
-			if (n instanceof SVGStopElementImpl) {
-				SVGStopElementImpl stop = (SVGStopElementImpl) n;
+		ArrayList<Color> colors = new ArrayList<>();
+		NodeListImpl children = (NodeListImpl)elem.getChildNodes();
+		children.forEach(child -> {
+			if (child instanceof SVGStopElementImpl) {
+				SVGStopElementImpl stop = (SVGStopElementImpl) child;
 				colors.add(stop.getStopColor());
 			}
-		}
+		});
 		Color[] colorArray = new Color[colors.size()];
 		int i = 0;
 		for (Color c : colors) {

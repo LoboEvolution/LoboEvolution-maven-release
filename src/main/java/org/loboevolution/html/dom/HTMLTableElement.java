@@ -1,356 +1,307 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
- */
-/*
- * Copyright (c) 2003 World Wide Web Consortium,
- * (Massachusetts Institute of Technology, Institut National de
- * Recherche en Informatique et en Automatique, Keio University). All
- * Rights Reserved. This program is distributed under the W3C's Software
- * Intellectual Property License. This program is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.
- * See W3C License http://www.w3.org/Consortium/Legal/ for more details.
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 
 package org.loboevolution.html.dom;
 
-import org.w3c.dom.DOMException;
 
 /**
- * The create* and delete* methods on the table allow authors to construct and
- * modify tables. [<a href='http://www.w3.org/TR/1999/REC-html401-19991224'>HTML
- * 4.01</a>] specifies that only one of each of the CAPTION,
- * THEAD, and TFOOT elements may exist in a table.
- * Therefore, if one exists, and the createTHead() or createTFoot() method is
- * called, the method returns the existing THead or TFoot element. See the TABLE
- * element definition in HTML 4.01.
- * <p>
- * See also the
- * <a href='http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030109'>Document
- * Object Model (DOM) Level 2 HTML Specification</a>.
+ * Provides special properties and methods (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating the layout and presentation of tables in an HTML document.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface HTMLTableElement extends HTMLElement {
-	/**
-	 * Create a new table caption object or return an existing one.
-	 *
-	 * @return A CAPTION element.
-	 */
-	HTMLElement createCaption();
+    
+    /**
+     * Sets or retrieves a value that indicates the table alignment.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getAlign();
 
-	/**
-	 * Create a table footer row or return an existing one.
-	 *
-	 * @return A footer element (TFOOT).
-	 */
-	HTMLElement createTFoot();
+    
+    /**
+     * <p>setAlign.</p>
+     *
+     * @param align a {@link java.lang.String} object.
+     */
+    void setAlign(String align);
 
-	/**
-	 * Create a table header row or return an existing one.
-	 *
-	 * @return A new table header element (THEAD).
-	 */
-	HTMLElement createTHead();
-	
-	/**
-	 * Create a table body row or return an existing one.
-	 *
-	 * @return A new table header element (BODY).
-	 */
-	HTMLElement createTBody();
+    /**
+     * <p>getBgColor.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getBgColor();
 
-	/**
-	 * Delete the table caption, if one exists.
-	 */
-	void deleteCaption();
+    
+    /**
+     * <p>setBgColor.</p>
+     *
+     * @param bgColor a {@link java.lang.String} object.
+     */
+    void setBgColor(String bgColor);
 
-	/**
-	 * Delete a table row.
-	 *
-	 * @param index The index of the row to be deleted. This index starts from 0 and
-	 *              is relative to the logical order (not document order) of all the
-	 *              rows contained inside the table. If the index is -1 the last row
-	 *              in the table is deleted.
-	 * @exception DOMException INDEX_SIZE_ERR: Raised if the specified index is
-	 *                         greater than or equal to the number of rows or if the
-	 *                         index is a negative number other than -1.
-	 * @version DOM Level 2
-	 * @throws org.w3c.dom.DOMException if any.
-	 */
-	void deleteRow(int index) throws DOMException;
+    /**
+     * Sets or retrieves the width of the border to draw around the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getBorder();
 
-	/**
-	 * Delete the footer from the table, if one exists.
-	 */
-	void deleteTFoot();
+    
+    /**
+     * <p>setBorder.</p>
+     *
+     * @param border a {@link java.lang.String} object.
+     */
+    void setBorder(String border);
 
-	/**
-	 * Delete the header from the table, if one exists.
-	 */
-	void deleteTHead();
-	
-	/**
-	 * Delete the body from the table, if one exists.
-	 */
-	void deleteTBody();
+    /**
+     * Retrieves the caption object of a table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLTableCaptionElement} object.
+     */
+    HTMLTableCaptionElement getCaption();
 
-	/**
-	 * Specifies the table's position with respect to the rest of the document. See
-	 * the align attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getAlign();
+    
+    /**
+     * <p>setCaption.</p>
+     *
+     * @param caption a {@link org.loboevolution.html.dom.HTMLTableCaptionElement} object.
+     */
+    void setCaption(HTMLTableCaptionElement caption);
 
-	/**
-	 * Cell background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBgColor();
+    /**
+     * Sets or retrieves the amount of space between the border of the cell and the content of the cell.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCellPadding();
 
-	/**
-	 * The width of the border around the table. See the border attribute definition
-	 * in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getBorder();
+    
+    /**
+     * <p>setCellPadding.</p>
+     *
+     * @param cellPadding a {@link java.lang.String} object.
+     */
+    void setCellPadding(String cellPadding);
 
-	/**
-	 * Returns the table's CAPTION, or void if none exists.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link org.loboevolution.html.dom.HTMLTableCaptionElement} object.
-	 */
-	HTMLTableCaptionElement getCaption();
+    /**
+     * Sets or retrieves the amount of space between cells in a table.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getCellSpacing();
 
-	/**
-	 * Specifies the horizontal and vertical space between cell content and cell
-	 * borders. See the cellpadding attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCellPadding();
+    
+    /**
+     * <p>setCellSpacing.</p>
+     *
+     * @param cellSpacing a {@link java.lang.String} object.
+     */
+    void setCellSpacing(String cellSpacing);
 
-	/**
-	 * Specifies the horizontal and vertical separation between cells. See the
-	 * cellspacing attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getCellSpacing();
+    /**
+     * Sets or retrieves the way the border frame around the table is displayed.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getFrame();
 
-	/**
-	 * Specifies which external table borders to render. See the frame attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getFrame();
+    
+    /**
+     * <p>setFrame.</p>
+     *
+     * @param frame a {@link java.lang.String} object.
+     */
+    void setFrame(String frame);
 
-	/**
-	 * Returns a collection of all the rows in the table, including all in
-	 * THEAD, TFOOT, all TBODY elements.
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
-	 */
-	HTMLCollection getRows();
+    /**
+     * Sets or retrieves the number of horizontal rows contained in the object.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
+     */
+    HTMLCollection getRows();
 
-	/**
-	 * Specifies which internal table borders to render. See the rules attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getRules();
+    /**
+     * Sets or retrieves which dividing lines (inner borders) are displayed.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getRules();
 
-	/**
-	 * Description about the purpose or structure of a table. See the summary
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getSummary();
+    
+    /**
+     * <p>setRules.</p>
+     *
+     * @param rules a {@link java.lang.String} object.
+     */
+    void setRules(String rules);
 
-	/**
-	 * Returns a collection of the table bodies (including implicit ones).
-	 *
-	 * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
-	 */
-	HTMLCollection getTBodies();
+    /**
+     * Sets or retrieves a description and/or structure of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getSummary();
 
-	/**
-	 * Returns the table's TFOOT, or null if none exists.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
-	 */
-	HTMLTableSectionElement getTFoot();
+    
+    /**
+     * <p>setSummary.</p>
+     *
+     * @param summary a {@link java.lang.String} object.
+     */
+    void setSummary(String summary);
 
-	/**
-	 * Returns the table's THEAD, or null if none exists.
-	 *
-	 * @version DOM Level 2
-	 * @return a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
-	 */
-	HTMLTableSectionElement getTHead();
+    /**
+     * Retrieves a collection of all tBody objects in the table. Objects in this collection are in source order.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLCollection} object.
+     */
+    HTMLCollection gettBodies();
 
-	/**
-	 * Specifies the desired table width. See the width attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	String getWidth();
+    /**
+     * Retrieves the tFoot object of the table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
+     */
+    HTMLTableSectionElement gettFoot();
 
-	/**
-	 * Insert a new empty row in the table. The new row is inserted immediately
-	 * before and in the same section as the current indexth row in the
-	 * table. If index is -1 or equal to the number of rows, the new
-	 * row is appended. In addition, when the table is empty the row is inserted
-	 * into a TBODY which is created and inserted into the table.A
-	 * table row cannot be empty according to
-	 * [<a href='http://www.w3.org/TR/1999/REC-html401-19991224'>HTML 4.01</a>].
-	 *
-	 * @param index The row number where to insert a new row. This index starts from
-	 *              0 and is relative to the logical order (not document order) of
-	 *              all the rows contained inside the table.
-	 * @return The newly created row.
-	 * @exception DOMException INDEX_SIZE_ERR: Raised if the specified index is
-	 *                         greater than the number of rows or if the index is a
-	 *                         negative number other than -1.
-	 * @version DOM Level 2
-	 * @throws org.w3c.dom.DOMException if any.
-	 */
-	HTMLElement insertRow(int index) throws DOMException;
+    
+    /**
+     * <p>settFoot.</p>
+     *
+     * @param tFoot a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
+     */
+    void settFoot(HTMLTableSectionElement tFoot);
 
-	/**
-	 * Specifies the table's position with respect to the rest of the document. See
-	 * the align attribute definition in HTML 4.01. This attribute is deprecated in
-	 * HTML 4.01.
-	 *
-	 * @param align a {@link java.lang.String} object.
-	 */
-	void setAlign(String align);
+    /**
+     * Retrieves the tHead object of the table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
+     */
+    HTMLTableSectionElement gettHead();
 
-	/**
-	 * Cell background color. See the bgcolor attribute definition in HTML 4.01.
-	 * This attribute is deprecated in HTML 4.01.
-	 *
-	 * @param bgColor a {@link java.lang.String} object.
-	 */
-	void setBgColor(String bgColor);
+    
+    /**
+     * <p>settHead.</p>
+     *
+     * @param tHead a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
+     */
+    void settHead(HTMLTableSectionElement tHead);
 
-	/**
-	 * The width of the border around the table. See the border attribute definition
-	 * in HTML 4.01.
-	 *
-	 * @param border a {@link java.lang.String} object.
-	 */
-	void setBorder(String border);
+    /**
+     * Sets or retrieves the width of the object.
+     *
+     * @return a {@link java.lang.String} object.
+     */
+    @Deprecated
+    String getWidth();
 
-	/**
-	 * Returns the table's CAPTION, or void if none exists.
-	 *
-	 * @exception DOMException HIERARCHY_REQUEST_ERR: if the element is not a
-	 *                         CAPTION.
-	 * @version DOM Level 2
-	 * @param caption a {@link org.loboevolution.html.dom.HTMLTableCaptionElement} object.
-	 * @throws org.w3c.dom.DOMException if any.
-	 */
-	void setCaption(HTMLTableCaptionElement caption) throws DOMException;
+    
+    /**
+     * <p>setWidth.</p>
+     *
+     * @param width a {@link java.lang.String} object.
+     */
+    void setWidth(String width);
 
-	/**
-	 * Specifies the horizontal and vertical space between cell content and cell
-	 * borders. See the cellpadding attribute definition in HTML 4.01.
-	 *
-	 * @param cellPadding a {@link java.lang.String} object.
-	 */
-	void setCellPadding(String cellPadding);
+    /**
+     * Creates an empty caption element in the table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
+     */
+    HTMLElement createCaption();
 
-	/**
-	 * Specifies the horizontal and vertical separation between cells. See the
-	 * cellspacing attribute definition in HTML 4.01.
-	 *
-	 * @param cellSpacing a {@link java.lang.String} object.
-	 */
-	void setCellSpacing(String cellSpacing);
+    /**
+     * Creates an empty tBody element in the table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
+     */
+    HTMLElement createTBody();
 
-	/**
-	 * Specifies which external table borders to render. See the frame attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param frame a {@link java.lang.String} object.
-	 */
-	void setFrame(String frame);
+    /**
+     * Creates an empty tFoot element in the table.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
+     */
+    HTMLElement createTFoot();
 
-	/**
-	 * Specifies which internal table borders to render. See the rules attribute
-	 * definition in HTML 4.01.
-	 *
-	 * @param rules a {@link java.lang.String} object.
-	 */
-	void setRules(String rules);
+    /**
+     * Returns the tHead element object if successful, or null otherwise.
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLElement} object.
+     */
+    HTMLElement createTHead();
 
-	/**
-	 * Description about the purpose or structure of a table. See the summary
-	 * attribute definition in HTML 4.01.
-	 *
-	 * @param summary a {@link java.lang.String} object.
-	 */
-	void setSummary(String summary);
+    /**
+     * Deletes the caption element and its contents from the table.
+     */
+    void deleteCaption();
 
-	/**
-	 * Returns the table's TFOOT, or null if none exists.
-	 *
-	 * @exception DOMException HIERARCHY_REQUEST_ERR: if the element is not a
-	 *                         TFOOT.
-	 * @version DOM Level 2
-	 * @param tFoot a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
-	 * @throws org.w3c.dom.DOMException if any.
-	 */
-	void setTFoot(HTMLTableSectionElement tFoot) throws DOMException;
+    /**
+     * Removes the specified row (tr) from the element and from the rows collection.
+     *
+     * @param index Number that specifies the zero-based position in the rows collection of the row to remove.
+     */
+    void deleteRow(int index);
 
-	/**
-	 * Returns the table's THEAD, or null if none exists.
-	 *
-	 * @exception DOMException HIERARCHY_REQUEST_ERR: if the element is not a
-	 *                         THEAD.
-	 * @version DOM Level 2
-	 * @param tHead a {@link org.loboevolution.html.dom.HTMLTableSectionElement} object.
-	 * @throws org.w3c.dom.DOMException if any.
-	 */
-	void setTHead(HTMLTableSectionElement tHead) throws DOMException;
+    /**
+     * Deletes the tFoot element and its contents from the table.
+     */
+    void deleteTFoot();
 
-	/**
-	 * Specifies the desired table width. See the width attribute definition in HTML
-	 * 4.01.
-	 *
-	 * @param width a {@link java.lang.String} object.
-	 */
-	void setWidth(String width);
+    /**
+     * Deletes the tHead element and its contents from the table.
+     */
+    void deleteTHead();
+    
+    /**
+     * Deletes the tBody element and its contents from the table.
+     */
+    void deleteTBody();
+
+    /**
+     * Creates a new row (tr) in the table, and adds the row to the rows collection.
+     *
+     * @param index Number that specifies where to insert the row in the rows collection.
+     *              The default value is -1, which appends the new row to the end of the rows collection.
+     * @return a {@link org.loboevolution.html.dom.HTMLTableRowElement} object.
+     * @throws java.lang.Exception if any.
+     */
+    HTMLTableRowElement insertRow(int index) throws Exception;
+
+    /**
+     * <p>insertRow.</p>
+     *
+     * @return a {@link org.loboevolution.html.dom.HTMLTableRowElement} object.
+     */
+    HTMLTableRowElement insertRow();
 
 }

@@ -11,8 +11,8 @@ package org.mozilla.javascript.ast;
  * an arbitrary order.  The visitor must cast nodes to the appropriate
  * type based on their token-type.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface NodeVisitor {
 

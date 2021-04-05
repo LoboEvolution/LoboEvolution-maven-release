@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.Color;
@@ -15,12 +35,12 @@ import org.loboevolution.html.dom.domimpl.HTMLInputElementImpl;
 /**
  * <p>InputNumber class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputNumber extends InputText {
 
-	private JTextField numeric;
+	private final JTextField numeric;
 	private String min = "";
 	private String max = "";
 
@@ -32,7 +52,7 @@ public class InputNumber extends InputText {
 	 */
 	public InputNumber(HTMLInputElementImpl modelNode, InputControl ic) {
 		super(modelNode, ic);
-		numeric = (JTextField) this.iText;
+		numeric = this.iText;
         String value = modelNode.getValue();
         min = modelNode.getAttribute("min");
         max = modelNode.getAttribute("max");
@@ -55,9 +75,9 @@ public class InputNumber extends InputText {
 
 					if (Strings.isNotBlank(min) && Strings.isNotBlank(max)) {
 						try {
-							int intText = Integer.valueOf(num.getText());
-							int intMin = Integer.valueOf(min);
-							int intMax = Integer.valueOf(max);
+							int intText = Integer.parseInt(num.getText());
+							int intMin = Integer.parseInt(min);
+							int intMax = Integer.parseInt(max);
 
 							if (intText < intMin || intText > intMax) {
 								numeric.setBorder(BorderFactory.createLineBorder(Color.RED));

@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * {@link org.mozilla.javascript.ast.ForInLoop}, except that it has no body statement.
  * Node type is {@link org.mozilla.javascript.Token#FOR}.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ArrayComprehensionLoop extends ForInLoop {
 

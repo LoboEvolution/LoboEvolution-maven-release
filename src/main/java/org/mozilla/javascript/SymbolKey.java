@@ -8,8 +8,8 @@ import java.io.Serializable;
  * A SymbolKey has the special property that two NativeSymbol objects
  * with the same key are equal.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class SymbolKey
     implements Symbol, Serializable
@@ -18,29 +18,29 @@ public class SymbolKey
 
     // These are common SymbolKeys that are equivalent to well-known symbols
     // defined in ECMAScript.
-    /** Constant ITERATOR */
+    /** Constant <code>ITERATOR</code> */
     public static final SymbolKey ITERATOR = new SymbolKey("Symbol.iterator");
-    /** Constant TO_STRING_TAG */
+    /** Constant <code>TO_STRING_TAG</code> */
     public static final SymbolKey TO_STRING_TAG = new SymbolKey("Symbol.toStringTag");
-    /** Constant SPECIES */
+    /** Constant <code>SPECIES</code> */
     public static final SymbolKey SPECIES = new SymbolKey("Symbol.species");
-    /** Constant HAS_INSTANCE */
+    /** Constant <code>HAS_INSTANCE</code> */
     public static final SymbolKey HAS_INSTANCE = new SymbolKey("Symbol.hasInstance");
-    /** Constant IS_CONCAT_SPREADABLE */
+    /** Constant <code>IS_CONCAT_SPREADABLE</code> */
     public static final SymbolKey IS_CONCAT_SPREADABLE = new SymbolKey("Symbol.isConcatSpreadable");
-    /** Constant IS_REGEXP */
+    /** Constant <code>IS_REGEXP</code> */
     public static final SymbolKey IS_REGEXP = new SymbolKey("Symbol.isRegExp");
-    /** Constant TO_PRIMITIVE */
+    /** Constant <code>TO_PRIMITIVE</code> */
     public static final SymbolKey TO_PRIMITIVE = new SymbolKey("Symbol.toPrimitive");
-    /** Constant MATCH */
+    /** Constant <code>MATCH</code> */
     public static final SymbolKey MATCH = new SymbolKey("Symbol.match");
-    /** Constant REPLACE */
+    /** Constant <code>REPLACE</code> */
     public static final SymbolKey REPLACE = new SymbolKey("Symbol.replace");
-    /** Constant SEARCH */
+    /** Constant <code>SEARCH</code> */
     public static final SymbolKey SEARCH = new SymbolKey("Symbol.search");
-    /** Constant SPLIT */
+    /** Constant <code>SPLIT</code> */
     public static final SymbolKey SPLIT = new SymbolKey("Symbol.split");
-    /** Constant UNSCOPABLES */
+    /** Constant <code>UNSCOPABLES</code> */
     public static final SymbolKey UNSCOPABLES = new SymbolKey("Symbol.unscopables");
 
     private String name;
@@ -56,7 +56,7 @@ public class SymbolKey
     }
 
     /**
-     * <p>Getter for the field name.</p>
+     * <p>Getter for the field <code>name</code>.</p>
      *
      * @return a {@link java.lang.String} object.
      */

@@ -9,8 +9,8 @@ package org.mozilla.javascript;
 /**
  * <p>NativeStringIterator class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class NativeStringIterator extends ES6Iterator {
     private static final long serialVersionUID = 1L;
@@ -27,7 +27,7 @@ public final class NativeStringIterator extends ES6Iterator {
         super();
     }
 
-    NativeStringIterator(Scriptable scope, Scriptable stringLike) {
+    NativeStringIterator(Scriptable scope, Object stringLike) {
         super(scope, ITERATOR_TAG);
         this.index = 0;
         this.string  = ScriptRuntime.toString(stringLike);

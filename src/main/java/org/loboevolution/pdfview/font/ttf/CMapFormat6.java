@@ -20,13 +20,14 @@
 package org.loboevolution.pdfview.font.ttf;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>CMapFormat6 class.</p>
  *
- * @author  jkaplan
- * @version $Id: $Id
+ * Author  jkaplan
+  *
  */
 public class CMapFormat6 extends CMap {
     /** First character code of subrange. */
@@ -36,7 +37,7 @@ public class CMapFormat6 extends CMap {
     /** Array of glyph index values for character codes in the range. */
     private short [] glyphIndexArray;
     /** a reverse lookup from glyph id to index. */
-    private HashMap<Short,Short> glyphLookup = new HashMap<Short,Short>();
+    private final Map<Short,Short> glyphLookup = new HashMap<>();
 
     /**
      * Creates a new instance of CMapFormat0
@@ -101,7 +102,7 @@ public class CMapFormat6 extends CMap {
 	 */
     @Override
 	public char reverseMap(short glyphID) {
-        Short result = this.glyphLookup.get(Short.valueOf(glyphID));
+        Short result = this.glyphLookup.get(glyphID);
         if (result == null) {
             return '\000';
         }
@@ -123,8 +124,8 @@ public class CMapFormat6 extends CMap {
         this.glyphIndexArray = new short [this.entryCount];
         for (int i = 0; i < this.glyphIndexArray.length; i++) {
             this.glyphIndexArray[i] = data.getShort();
-            this.glyphLookup.put(Short.valueOf(this.glyphIndexArray[i]),
-                            Short.valueOf((short) (i + this.firstCode)));
+            this.glyphLookup.put(this.glyphIndexArray[i],
+                    (short) (i + this.firstCode));
         }
     }
 
@@ -147,8 +148,8 @@ public class CMapFormat6 extends CMap {
         buf.putShort(this.entryCount);
 
         // write the endCodes
-        for (int i = 0; i < this.glyphIndexArray.length; i++) {
-            buf.putShort(this.glyphIndexArray[i]);
+        for (short value : this.glyphIndexArray) {
+            buf.putShort(value);
         }
         // reset the data pointer
         buf.flip();

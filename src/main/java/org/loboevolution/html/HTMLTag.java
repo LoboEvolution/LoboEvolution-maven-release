@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html;
 
 import java.util.Collections;
@@ -7,8 +27,8 @@ import java.util.Map;
 /**
  * <p>HTMLTag class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public enum HTMLTag {
 	
@@ -31,6 +51,7 @@ public enum HTMLTag {
 	CITE("CITE"),
 	CLIPPATH("CLIPPATH"),
 	CODE("CODE"),
+	COL("COL"),
 	DD("DD"),
 	DEFS("DEFS"),
 	DESCRIPTION("DESCRIPTION"),
@@ -94,16 +115,19 @@ public enum HTMLTag {
 	TH("TH"),
 	TITLE("TITLE"),
 	TR("TR"),
+	TFOOT("TFOOT"),
+	THEAD("THEAD"),
+	TBODY("TBODY"),
 	TT("TT"),
 	U("U"),
 	UL("UL"),
 	USE("USE");
 	
-	private String value;
+	private final String value;
 	private static final Map<String, HTMLTag> ENUM_MAP;
 
 	static {
-		Map<String, HTMLTag> map = new HashMap<String, HTMLTag>();
+		Map<String, HTMLTag> map = new HashMap<>();
 		for (HTMLTag instance : HTMLTag.values()) {
 			map.put(instance.getValue(), instance);
 		}

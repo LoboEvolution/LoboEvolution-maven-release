@@ -52,8 +52,8 @@ package org.jpedal.jbig2.segment.tables;
 /**
  * <p>JBIG2CodeTable class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class JBIG2CodeTable {
 

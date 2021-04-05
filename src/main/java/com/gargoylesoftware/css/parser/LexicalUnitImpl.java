@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Ronald Brill.
+ * Copyright (c) 2019-2020 Ronald Brill.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,12 @@ import java.util.Locale;
 /**
  * Implementation of {@link com.gargoylesoftware.css.parser.LexicalUnit}.
  *
- * @author Ronald Brill
- * @version $Id: $Id
+ * Author Ronald Brill
+ *
  */
 public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private LexicalUnitType lexicalUnitType_;
+    private LexicalUnitType lexicalUnitType_;
     private LexicalUnit nextLexicalUnit_;
     private LexicalUnit previousLexicalUnit_;
     private double doubleValue_;
@@ -257,6 +256,16 @@ public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, S
                 return "rem";
             case EX:
                 return "ex";
+            case CH:
+                return "ch";
+            case VW:
+                return "vw";
+            case VH:
+                return "vh";
+            case VMIN:
+                return "vmin";
+            case VMAX:
+                return "vmax";
             case PIXEL:
                 return "px";
             case INCH:
@@ -376,6 +385,11 @@ public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, S
             case EM:
             case REM:
             case EX:
+            case CH:
+            case VW:
+            case VH:
+            case VMIN:
+            case VMAX:
             case PIXEL:
             case INCH:
             case CENTIMETER:
@@ -543,6 +557,36 @@ public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, S
                 break;
             case EX:
                 sb.append("EX(")
+                    .append(getTrimedDoubleValue())
+                    .append(getDimensionUnitText())
+                    .append(")");
+                break;
+            case CH:
+                sb.append("CH(")
+                    .append(getTrimedDoubleValue())
+                    .append(getDimensionUnitText())
+                    .append(")");
+                break;
+            case VW:
+                sb.append("VW(")
+                    .append(getTrimedDoubleValue())
+                    .append(getDimensionUnitText())
+                    .append(")");
+                break;
+            case VH:
+                sb.append("VH(")
+                    .append(getTrimedDoubleValue())
+                    .append(getDimensionUnitText())
+                    .append(")");
+                break;
+            case VMIN:
+                sb.append("VMIN(")
+                    .append(getTrimedDoubleValue())
+                    .append(getDimensionUnitText())
+                    .append(")");
+                break;
+            case VMAX:
+                sb.append("VMAX(")
                     .append(getTrimedDoubleValue())
                     .append(getDimensionUnitText())
                     .append(")");
@@ -866,6 +910,61 @@ public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, S
     }
 
     /**
+     * <p>createCh.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @param d the double value
+     * @return lexical unit with type ch
+     */
+    public static LexicalUnit createCh(final LexicalUnit prev, final double d) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.CH, d);
+    }
+
+    /**
+     * <p>createVw.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @param d the double value
+     * @return lexical unit with type vw
+     */
+    public static LexicalUnit createVw(final LexicalUnit prev, final double d) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.VW, d);
+    }
+
+    /**
+     * <p>createVh.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @param d the double value
+     * @return lexical unit with type vh
+     */
+    public static LexicalUnit createVh(final LexicalUnit prev, final double d) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.VH, d);
+    }
+
+    /**
+     * <p>createVMin.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @param d the double value
+     * @return lexical unit with type vmin
+     */
+    public static LexicalUnit createVMin(final LexicalUnit prev, final double d) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.VMIN, d);
+    }
+
+    /**
+     * <p>createVMax.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @param d the double value
+     * @return lexical unit with type vmax
+     */
+    public static LexicalUnit createVMax(final LexicalUnit prev, final double d) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.VMAX, d);
+    }
+
+    /**
      * <p>createDegree.</p>
      *
      * @param prev the previous LexicalUnit
@@ -1064,5 +1163,45 @@ public class LexicalUnitImpl extends AbstractLocatable implements LexicalUnit, S
      */
     public static LexicalUnit createComma(final LexicalUnit prev) {
         return new LexicalUnitImpl(prev, LexicalUnitType.OPERATOR_COMMA);
+    }
+
+    /**
+     * <p>createPlus.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @return lexical unit with type plus
+     */
+    public static LexicalUnit createPlus(final LexicalUnit prev) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.OPERATOR_PLUS);
+    }
+
+    /**
+     * <p>createMinus.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @return lexical unit with type minus
+     */
+    public static LexicalUnit createMinus(final LexicalUnit prev) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.OPERATOR_MINUS);
+    }
+
+    /**
+     * <p>createMultiply.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @return lexical unit with type multiply
+     */
+    public static LexicalUnit createMultiply(final LexicalUnit prev) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.OPERATOR_MULTIPLY);
+    }
+
+    /**
+     * <p>createDivide.</p>
+     *
+     * @param prev the previous LexicalUnit
+     * @return lexical unit with type slash
+     */
+    public static LexicalUnit createDivide(final LexicalUnit prev) {
+        return new LexicalUnitImpl(prev, LexicalUnitType.OPERATOR_SLASH);
     }
 }

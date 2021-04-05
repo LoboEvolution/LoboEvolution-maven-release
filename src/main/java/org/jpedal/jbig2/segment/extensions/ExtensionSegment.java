@@ -58,8 +58,8 @@ import org.jpedal.jbig2.segment.Segment;
 /**
  * <p>ExtensionSegment class.</p>
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class ExtensionSegment extends Segment {
 

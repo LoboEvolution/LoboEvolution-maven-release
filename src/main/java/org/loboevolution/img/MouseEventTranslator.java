@@ -1,22 +1,24 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ *
+ *     GNU GENERAL LICENSE
+ *     Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public
+ *     License as published by the Free Software Foundation; either
+ *     verion 3 of the License, or (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *     General License for more details.
+ *
+ *     You should have received a copy of the GNU General Public
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *     Contact info: ivan.difrancesco@yahoo.it
+ *
  */
 package org.loboevolution.img;
 
@@ -33,8 +35,8 @@ import javax.swing.event.MouseInputListener;
  * Helper class that generates ImageMouseEvents by translating normal mouse
  * events onto the image.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class MouseEventTranslator implements MouseInputListener, PropertyChangeListener {
 	/** This flag is true if the mouse cursor is inside the bounds of the image. */
@@ -45,7 +47,7 @@ public class MouseEventTranslator implements MouseInputListener, PropertyChangeL
 	 */
 	private Point lastPosition = null;
 	
-	private ImageComponent ic;
+	private final ImageComponent ic;
 	
 	/**
 	 * <p>Constructor for MouseEventTranslator.</p>

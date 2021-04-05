@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.UIDefaults;
@@ -60,8 +61,8 @@ import com.jtattoo.plaf.BaseTreeUI;
 /**
  * <p>McWinLookAndFeel class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class McWinLookAndFeel extends AbstractLookAndFeel {
 
@@ -72,8 +73,8 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
 
 	private static McWinDefaultTheme myTheme = null;
 
-	private static final ArrayList<String> themesList = new ArrayList<String>();
-	private static final HashMap<String, Properties> themesMap = new HashMap<String, Properties>();
+	private static final List<String> themesList = new ArrayList<>();
+	private static final Map<String, Properties> themesMap = new HashMap<>();
 	private static final Properties defaultProps = new Properties();
 	private static final Properties smallFontProps = new Properties();
 	private static final Properties largeFontProps = new Properties();
@@ -234,7 +235,7 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
 	 * @return a {@link java.util.Properties} object.
 	 */
 	public static Properties getThemeProperties(String name) {
-		return (Properties) themesMap.get(name);
+		return themesMap.get(name);
 	}
 
 	/**
@@ -274,12 +275,12 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
 	}
 
 	/**
-	 * <p>setTheme.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param name a {@link java.lang.String} object.
+	 * <p>setTheme.</p>
 	 */
 	public static void setTheme(String name) {
-		setTheme((Properties) themesMap.get(name));
+		setTheme(themesMap.get(name));
 		if (myTheme != null) {
 			AbstractTheme.setInternalName(name);
 		}
@@ -293,7 +294,7 @@ public class McWinLookAndFeel extends AbstractLookAndFeel {
 	 * @param logoString a {@link java.lang.String} object.
 	 */
 	public static void setTheme(String name, String licenseKey, String logoString) {
-		Properties props = (Properties) themesMap.get(name);
+		Properties props = themesMap.get(name);
 		if (props != null) {
 			props.put("licenseKey", licenseKey);
 			props.put("logoString", logoString);

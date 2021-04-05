@@ -24,8 +24,8 @@ import org.loboevolution.pdfview.PDFParseException;
  * Identifies that the supplied password was incorrect or non-existent
  * and required.
  *
- * @author Luke Kirby
- * @version $Id: $Id
+ * Author Luke Kirby
+  *
  */
 // TODO - consider having this not extend PDFParseException so that
 // it will be handled more explicitly?

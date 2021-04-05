@@ -1,31 +1,28 @@
-/*    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Sep 3, 2005
  */
 package org.loboevolution.html.dom.domimpl;
 
 import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.Reader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.SocketPermission;
@@ -34,6 +31,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -41,25 +39,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.loboevolution.common.Domains;
-import org.loboevolution.common.Nodes;
 import org.loboevolution.common.Urls;
 import org.loboevolution.html.dom.HTMLCollection;
 import org.loboevolution.html.dom.HTMLDocument;
 import org.loboevolution.html.dom.HTMLElement;
-import org.loboevolution.html.dom.filter.AnchorFilter;
 import org.loboevolution.html.dom.filter.BodyFilter;
-import org.loboevolution.html.dom.filter.CommandFilter;
-import org.loboevolution.html.dom.filter.ElementNameFilter;
-import org.loboevolution.html.dom.filter.EmbedFilter;
-import org.loboevolution.html.dom.filter.FormFilter;
 import org.loboevolution.html.dom.filter.HeadFilter;
-import org.loboevolution.html.dom.filter.ImageFilter;
-import org.loboevolution.html.dom.filter.LinkFilter;
-import org.loboevolution.html.dom.filter.ScriptFilter;
+import org.loboevolution.html.dom.nodeimpl.DOMException;
+import org.loboevolution.html.dom.nodeimpl.NodeImpl;
+import org.loboevolution.html.io.LocalErrorHandler;
 import org.loboevolution.html.io.WritableLineReader;
 import org.loboevolution.html.js.Executor;
-import org.loboevolution.html.js.Location;
-import org.loboevolution.html.js.Window;
+import org.loboevolution.html.js.WindowImpl;
 import org.loboevolution.html.parser.HtmlParser;
 import org.loboevolution.html.renderstate.RenderState;
 import org.loboevolution.html.renderstate.StyleSheetRenderState;
@@ -67,14 +58,15 @@ import org.loboevolution.html.style.StyleSheetAggregator;
 import org.loboevolution.http.HtmlRendererContext;
 import org.loboevolution.http.UserAgentContext;
 import org.mozilla.javascript.Function;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.UserDataHandler;
-import org.w3c.dom.views.AbstractView;
-import org.w3c.dom.views.DocumentView;
+
+import org.loboevolution.html.node.Code;
+import org.loboevolution.html.node.DOMImplementation;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
+import org.loboevolution.html.node.js.Location;
+import org.loboevolution.html.node.js.Window;
+import org.loboevolution.html.node.views.DocumentView;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 
@@ -83,39 +75,10 @@ import com.gargoylesoftware.css.dom.CSSStyleSheetListImpl;
 
 /**
  * Implementation of the W3C HTMLDocument interface.
- *
- * @author utente
- * @version $Id: $Id
  */
 public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, DocumentView {
 
-	private class LocalWritableLineReader extends WritableLineReader {
-		/**
-		 * @param reader
-		 */
-		public LocalWritableLineReader(LineNumberReader reader) {
-			super(reader);
-		}
-
-		/**
-		 * @param reader
-		 */
-		public LocalWritableLineReader(Reader reader) {
-			super(reader);
-		}
-
-		@Override
-		public void write(String text) throws IOException {
-			super.write(text);
-			if ("".equals(text)) {
-				openBufferChanged(text);
-			}
-		}
-	}
-
 	private static final Logger logger = Logger.getLogger(HTMLDocumentImpl.class.getName());
-
-	private HTMLCollection anchors;
 
 	private volatile String baseURI;
 
@@ -123,7 +86,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	private String defaultTarget;
 
-	private final ArrayList<DocumentNotificationListener> documentNotificationListeners = new ArrayList<DocumentNotificationListener>();
+	private final List<DocumentNotificationListener> documentNotificationListeners = new ArrayList<>();
 
 	private URL documentURL;
 
@@ -131,11 +94,9 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	private DOMImplementation domImplementation;
 	
-    private final Map<String, Element> elementsById = new HashMap<String, Element>();
+    private final Map<String, Element> elementsById = new HashMap<>();
 
-	private final Map<String, Element> elementsByName = new HashMap<String, Element>();
-
-	private String inputEncoding;
+	private final Map<String, Element> elementsByName = new HashMap<>();
 
 	private Set<Locale> locales;
 
@@ -143,12 +104,10 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	private final HtmlRendererContext rcontext;
 
-	private WritableLineReader reader;
 	private String referrer;
 
 	private StyleSheetAggregator styleSheetAggregator = null;
     private final CSSStyleSheetListImpl styleSheets = new CSSStyleSheetListImpl();
-	private String title;
 
 	private final UserAgentContext ucontext;
 
@@ -200,15 +159,15 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 			logger.warning("HTMLDocumentImpl(): Document URI [" + documentURI + "] is malformed.");
 		}
 		this.document = this;
-		// Get Window object
-		Window window;
+		// Get WindowImpl object
+		WindowImpl window;
 		if (rcontext != null) {
-			window = Window.getWindow(rcontext);
+			window = WindowImpl.getWindow(rcontext);
 		} else {
 			// Plain parsers may use Javascript too.
-			window = new Window(null, ucontext);
+			window = new WindowImpl(null, ucontext);
 		}
-		// Window must be retained or it will be garbage collected.
+		// WindowImpl must be retained or it will be garbage collected.
 		this.window = window;
 		window.setDocument(this);
 	}
@@ -220,7 +179,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	 * @param listener An instance of {@link org.loboevolution.html.dom.domimpl.DocumentNotificationListener}.
 	 */
 	public void addDocumentNotificationListener(DocumentNotificationListener listener) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		synchronized (listenersList) {
 			listenersList.add(listener);
 		}
@@ -233,11 +192,11 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 			// Need to invalidate all children up to
 			// this point.
 			forgetRenderState();
-			for (Node node : Nodes.iterable(nodeList)) {
+			nodeList.forEach(node -> {
 				if (node instanceof HTMLElementImpl) {
 					((HTMLElementImpl) node).forgetStyle(true);
 				}
-			}
+			});
 		}
 		this.allInvalidated();
 	}
@@ -246,7 +205,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	 * Informs listeners that the whole document has been invalidated.
 	 */
 	public void allInvalidated() {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.allInvalidated();
 		}
@@ -262,32 +221,14 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 			synchronized (this.treeLock) {
 				this.styleSheetAggregator = null;
 				forgetRenderState();
-				for (Node node : Nodes.iterable(nodeList)) {
+				nodeList.forEach(node -> {
 					if (node instanceof HTMLElementImpl) {
 						((HTMLElementImpl) node).forgetStyle(true);
 					}
-				}
+				});
 			}
 		}
 		this.allInvalidated();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void close() {
-		synchronized (this.treeLock) {
-			if (this.reader instanceof LocalWritableLineReader) {
-				try {
-					this.reader.close();
-				} catch (final java.io.IOException ioe) {
-					// ignore
-				}
-				this.reader = null;
-			} else {
-				// do nothing - could be parsing document off the web.
-			}
-			// TODO: cause it to render
-		}
 	}
 
 	/** {@inheritDoc} */
@@ -300,10 +241,10 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/**
 	 * <p>externalScriptLoading.</p>
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void externalScriptLoading(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.externalScriptLoading(node);
 		}
@@ -326,9 +267,9 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	public String getCookie() {
 		final SecurityManager sm = System.getSecurityManager();
 		if (sm != null) {
-			return (String) AccessController.doPrivileged((PrivilegedAction<Object>) () -> HTMLDocumentImpl.this.ucontext.getCookie(HTMLDocumentImpl.this.documentURL));
+			return (String) AccessController.doPrivileged((PrivilegedAction<Object>) () -> HTMLDocumentImpl.this.getUcontext().getCookie(HTMLDocumentImpl.this.documentURL));
 		} else {
-			return this.ucontext.getCookie(this.documentURL);
+			return this.getUcontext().getCookie(this.documentURL);
 		}
 	}
 
@@ -343,7 +284,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	/** {@inheritDoc} */
 	@Override
-	public AbstractView getDefaultView() {
+	public Window getDefaultView() {
 		return this.window;
 	}
 
@@ -365,32 +306,34 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 		return this.domain;
 	}
 	
-	/**
-	 * <p>getReadyState.</p>
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getReadyState() {
-		return "complete"; //TODO stub
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * Gets the collection of elements whose name attribute is
-	 * elementName.
-	 */
-	@Override
-	public NodeList getElementsByName(String elementName) {
-		return getNodeList(new ElementNameFilter(elementName));
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public final URL getFullURL(String uri) {
 		try {
 			final String baseURI = getBaseURI();
+			final URL documentURL = baseURI == null ? null : new URL(baseURI);
+			return Urls.createURL(documentURL, uri);
+		} catch (Exception mfu) {
+			// Try agan, without the baseURI.
+			try {
+				return new URL(uri);
+			} catch (Exception mfu2) {
+				logger.log(Level.WARNING,
+						"Unable to create URL for URI=[" + uri + "], with base=[" + getBaseURI() + "].", mfu);
+				return null;
+			}
+		}
+	}
+
+	/**
+	 * <p>getFullURL.</p>
+	 *
+	 * @param uri a {@link java.lang.String} object.
+	 * @param baseURI a {@link java.lang.String} object.
+	 * @return a {@link java.net.URL} object.
+	 */
+	public final URL getFullURL(String uri, String baseURI) {
+		try {
 			final URL documentURL = baseURI == null ? null : new URL(baseURI);
 			return Urls.createURL(documentURL, uri);
 		} catch (Exception mfu) {
@@ -421,7 +364,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	public DOMImplementation getImplementation() {
 		synchronized (this) {
 			if (this.domImplementation == null) {
-				this.domImplementation = new DOMImplementationImpl(this.ucontext);
+				this.domImplementation = new DOMImplementationImpl(this.getUcontext());
 			}
 			return this.domImplementation;
 		}
@@ -430,76 +373,22 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/** {@inheritDoc} */
 	@Override
 	public String getInputEncoding() {
-		return this.inputEncoding;
+		return "UTF-8";
 	}
-
-    
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getForms() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new FormFilter());
-        }
-    }
-    
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getImages() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new ImageFilter());
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getLinks() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new LinkFilter());
-        }
-    }
-    
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getEmbeds() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new EmbedFilter());
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getPlugins() {
-        return getEmbeds();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getScripts() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new ScriptFilter());
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public HTMLCollection getCommands() {
-        synchronized (this) {
-            return new HTMLCollectionImpl(this, new CommandFilter());
-        }
-    }
-    
-    /** {@inheritDoc} */
-    @Override
-	public HTMLCollection getAnchors() {
-		synchronized (this) {
-			if (this.anchors == null) {
-				this.anchors = new HTMLCollectionImpl(this, new AnchorFilter());
-			}
-			return this.anchors;
-		}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getCharacterSet() {
+		return "UTF-8";
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String getCharset() {
+		return "UTF-8";
 	}
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public HTMLHeadElementImpl getHead() {
 		synchronized (this) {
@@ -512,7 +401,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 		}
 	}
     
-    /** {@inheritDoc} */
+	/** {@inheritDoc} */
     @Override
 	public HTMLElement getBody() {
 		synchronized (this) {
@@ -541,7 +430,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/**
 	 * <p>getLocation.</p>
 	 *
-	 * @return a {@link org.loboevolution.html.js.Location} object.
+	 * @return a {@link org.loboevolution.html.node.js.Location} object.
 	 */
 	public final Location getLocation() {
 		return this.window.getLocation();
@@ -589,14 +478,8 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	/** {@inheritDoc} */
 	@Override
-	public String getTextContent() throws DOMException {
+	public String getTextContent() {
 		return null;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String getTitle() {
-		return this.title;
 	}
 
 	/** {@inheritDoc} */
@@ -608,7 +491,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/** {@inheritDoc} */
 	@Override
 	public UserAgentContext getUserAgentContext() {
-		return this.ucontext;
+		return this.getUcontext();
 	}
 
 	/** {@inheritDoc} */
@@ -619,18 +502,18 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	/** {@inheritDoc} */
 	@Override
-	public Node importNode(Node importedNode, boolean deep) throws DOMException {
-		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "Not implemented");
+	public Node importNode(Node importedNode, boolean deep) {
+		throw new DOMException(Code.NOT_SUPPORTED_ERR, "Not implemented");
 	}
 
 	/**
 	 * This is called when the node has changed, but it is unclear if it's a size
 	 * change or a look change. An attribute change should trigger this.
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void invalidated(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.invalidated(node);
 		}
@@ -670,7 +553,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 		if (reader != null) {
 			try {
 				final ErrorHandler errorHandler = new LocalErrorHandler();
-				final HtmlParser parser = new HtmlParser(ucontext, document, errorHandler, true);
+				final HtmlParser parser = new HtmlParser(getUcontext(), document, errorHandler, true);
 				parser.parse(reader);
 			} finally {
 				if (closeReader) {
@@ -692,10 +575,10 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	 * something which does not affect the rendered size, and can be revalidated
 	 * with a simple repaint.
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void lookInvalidated(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.lookInvalidated(node);
 		}
@@ -710,7 +593,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	public Element namedItem(String name) {
 		Element element;
 		synchronized (this) {
-			element = (Element) this.elementsByName.get(name);
+			element = this.elementsByName.get(name);
 		}
 		return element;
 	}
@@ -718,10 +601,10 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/**
 	 * <p>nodeLoaded.</p>
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void nodeLoaded(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.nodeLoaded(node);
 		}
@@ -732,54 +615,17 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	public void normalizeDocument() {
 		// TODO: Normalization options from domConfig
 		synchronized (this.treeLock) {
-			visitImpl(node -> node.normalize());
+			visitImpl(Node::normalize);
 		}
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void open() {
-		synchronized (this.treeLock) {
-			if (this.reader != null) {
-				if (this.reader instanceof LocalWritableLineReader) {
-					try {
-						this.reader.close();
-					} catch (final IOException ioe) {
-						// ignore
-					}
-					this.reader = null;
-				} else {
-					// Already open, return.
-					// Do not close http/file documents in progress.
-					return;
-				}
-			}
-			removeAllChildrenImpl();
-			this.reader = new LocalWritableLineReader(new LineNumberReader(this.reader));
-		}
-	}
-
-	private void openBufferChanged(String text) {
-		// Assumed to execute in a lock
-		// Assumed that text is not broken up HTML.
-		final ErrorHandler errorHandler = new LocalErrorHandler();
-		final HtmlParser parser = new HtmlParser(this.ucontext, this, errorHandler, true);
-		final StringReader strReader = new StringReader(text);
-		try {
-			// This sets up another Javascript scope Window. Does it matter?
-			parser.parse(strReader);
-		} catch (final Exception err) {
-			this.warn("Unable to parse written HTML text. BaseURI=[" + getBaseURI() + "].", err);
-		}
-	}
-
+	
 	/**
 	 * Changed if the position of the node in a parent has changed.
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void positionInParentInvalidated(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.positionInvalidated(node);
 		}
@@ -791,7 +637,7 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	 * @param listener a {@link org.loboevolution.html.dom.domimpl.DocumentNotificationListener} object.
 	 */
 	public void removeDocumentNotificationListener(DocumentNotificationListener listener) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		synchronized (listenersList) {
 			listenersList.remove(listener);
 		}
@@ -811,8 +657,8 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	/** {@inheritDoc} */
 	@Override
-	public Node renameNode(Node n, String namespaceURI, String qualifiedName) throws DOMException {
-		throw new DOMException(DOMException.NOT_SUPPORTED_ERR, "No renaming");
+	public Node renameNode(Node n, String namespaceURI, String qualifiedName) {
+		throw new DOMException(Code.NOT_SUPPORTED_ERR, "No renaming");
 	}
 
 	/**
@@ -834,15 +680,15 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 	/** {@inheritDoc} */
 	@Override
-	public void setCookie(final String cookie) throws DOMException {
+	public void setCookie(final String cookie) {
 		final SecurityManager sm = System.getSecurityManager();
 		if (sm != null) {
 			AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-				HTMLDocumentImpl.this.ucontext.setCookie(HTMLDocumentImpl.this.documentURL, cookie);
+				HTMLDocumentImpl.this.getUcontext().setCookie(HTMLDocumentImpl.this.documentURL, cookie);
 				return null;
 			});
 		} else {
-			this.ucontext.setCookie(this.documentURL, cookie);
+			this.getUcontext().setCookie(this.documentURL, cookie);
 		}
 	}
 
@@ -857,9 +703,9 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 
 
 	/**
-	 * <p>Setter for the field domain.</p>
+	 * {@inheritDoc}
 	 *
-	 * @param domain a {@link java.lang.String} object.
+	 * <p>Setter for the field domain.</p>
 	 */
 	public void setDomain(String domain) {
 		final String oldDomain = this.domain;
@@ -924,17 +770,23 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 		this.referrer = value;
 	}
 	
-	/** {@inheritDoc} */
-	@Override
-	public void setTextContent(String textContent) throws DOMException {
-		// NOP, per spec
+	
+	/**
+	 * <p>Getter for the field <code>window</code>.</p>
+	 *
+	 * @return the window
+	 */
+	public Window getWindow() {
+		return window;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTextContent(String textContent) {
+		// NOP, per spec
 	}
+
+
 
 	/** {@inheritDoc} */
 	@Override
@@ -951,10 +803,10 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/**
 	 * <p>sizeInvalidated.</p>
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void sizeInvalidated(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.sizeInvalidated(node);
 		}
@@ -963,42 +815,21 @@ public class HTMLDocumentImpl extends DocumentImpl implements HTMLDocument, Docu
 	/**
 	 * This is called when children of the node might have changed.
 	 *
-	 * @param node a {@link org.loboevolution.html.dom.domimpl.NodeImpl} object.
+	 * @param node a {@link org.loboevolution.html.dom.nodeimpl.NodeImpl} object.
 	 */
 	public void structureInvalidated(NodeImpl node) {
-		final ArrayList<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
+		final List<DocumentNotificationListener> listenersList = this.documentNotificationListeners;
 		for (DocumentNotificationListener dnl : listenersList) {
 			dnl.structureInvalidated(node);
 		}
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void write(String text) {
-		synchronized (this.treeLock) {
-			if (this.reader != null) {
-				try {
-					// This can end up in openBufferChanged
-					this.reader.write(text);
-				} catch (final IOException ioe) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void writeln(String text) {
-		synchronized (this.treeLock) {
-			if (this.reader != null) {
-				try {
-					// This can end up in openBufferChanged
-					this.reader.write(text + "\r\n");
-				} catch (final IOException ioe) {
-					// ignore
-				}
-			}
-		}
+	/**
+	 * <p>Getter for the field <code>ucontext</code>.</p>
+	 *
+	 * @return the ucontext
+	 */
+	public UserAgentContext getUcontext() {
+		return ucontext;
 	}
 }

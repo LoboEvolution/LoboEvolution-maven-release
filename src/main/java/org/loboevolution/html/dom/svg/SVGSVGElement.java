@@ -1,40 +1,37 @@
 /*
-    GNU GENERAL LICENSE
-    Copyright (C) 2014 - 2020 Lobo Evolution
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public
-    License as published by the Free Software Foundation; either
-    verion 3 of the License, or (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General License for more details.
-
-    You should have received a copy of the GNU General Public
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-
-    Contact info: ivan.difrancesco@yahoo.it
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
  */
 package org.loboevolution.html.dom.svg;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.css.DocumentCSS;
-import org.w3c.dom.css.ViewCSS;
-import org.w3c.dom.events.DocumentEvent;
+
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.NodeList;
+import org.loboevolution.html.node.events.Event;
 
 /**
  * <p>SVGSVGElement interface.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGStylable,
-		SVGLocatable, SVGFitToViewBox, SVGZoomAndPan, DocumentEvent, ViewCSS, DocumentCSS {
+		SVGLocatable, SVGFitToViewBox, SVGZoomAndPan {
 	/**
 	 * <p>getX.</p>
 	 *
@@ -111,7 +108,7 @@ public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGEx
 	 * @param useCurrentView a boolean.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setUseCurrentView(boolean useCurrentView) throws DOMException;
+	void setUseCurrentView(boolean useCurrentView);
 
 	/**
 	 * <p>getCurrentView.</p>
@@ -133,7 +130,7 @@ public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGEx
 	 * @param currentScale a float.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void setCurrentScale(float currentScale) throws DOMException;
+	void setCurrentScale(float currentScale);
 
 	/**
 	 * <p>getCurrentTranslate.</p>
@@ -156,7 +153,7 @@ public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGEx
 	 * @param suspend_handle_id a int.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	void unsuspendRedraw(int suspend_handle_id) throws DOMException;
+	void unsuspendRedraw(int suspend_handle_id);
 
 	/**
 	 * <p>unsuspendRedrawAll.</p>
@@ -199,23 +196,23 @@ public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGEx
 	 */
 	void setCurrentTime(float seconds);
 
-	/**
-	 * <p>getIntersectionList.</p>
-	 *
-	 * @param rect a {@link org.loboevolution.html.dom.svg.SVGRect} object.
-	 * @param referenceElement a {@link org.loboevolution.html.dom.svg.SVGElement} object.
-	 * @return a {@link org.w3c.dom.NodeList} object.
-	 */
-	public NodeList getIntersectionList(SVGRect rect, SVGElement referenceElement);
+    /**
+     * <p>getIntersectionList.</p>
+     *
+     * @param rect a {@link org.loboevolution.html.dom.svg.SVGRect} object.
+     * @param referenceElement a {@link org.loboevolution.html.dom.svg.SVGElement} object.
+     * @return a {@link org.w3c.dom.NodeList} object.
+     */
+    NodeList getIntersectionList(SVGRect rect, SVGElement referenceElement);
 
-	/**
-	 * <p>getEnclosureList.</p>
-	 *
-	 * @param rect a {@link org.loboevolution.html.dom.svg.SVGRect} object.
-	 * @param referenceElement a {@link org.loboevolution.html.dom.svg.SVGElement} object.
-	 * @return a {@link org.w3c.dom.NodeList} object.
-	 */
-	public NodeList getEnclosureList(SVGRect rect, SVGElement referenceElement);
+    /**
+     * <p>getEnclosureList.</p>
+     *
+     * @param rect a {@link org.loboevolution.html.dom.svg.SVGRect} object.
+     * @param referenceElement a {@link org.loboevolution.html.dom.svg.SVGElement} object.
+     * @return a {@link org.w3c.dom.NodeList} object.
+     */
+    NodeList getEnclosureList(SVGRect rect, SVGElement referenceElement);
 
 	/**
 	 * <p>checkIntersection.</p>
@@ -297,11 +294,19 @@ public interface SVGSVGElement extends SVGElement, SVGTests, SVGLangSpace, SVGEx
 	 */
 	SVGTransform createSVGTransformFromMatrix(SVGMatrix matrix);
 
-	/**
-	 * <p>getElementById.</p>
-	 *
-	 * @param elementId a {@link java.lang.String} object.
-	 * @return a {@link org.w3c.dom.Element} object.
-	 */
-	public Element getElementById(String elementId);
+    /**
+     * <p>getElementById.</p>
+     *
+     * @param elementId a {@link java.lang.String} object.
+     * @return a {@link org.w3c.dom.Element} object.
+     */
+    Element getElementById(String elementId);
+    
+    /**
+     * <p>createEvent.</p>
+     *
+     * @param eventType a {@link java.lang.String} object.
+     * @return a {@link org.loboevolution.html.node.events.Event} object.
+     */
+    Event createEvent(String eventType);
 }

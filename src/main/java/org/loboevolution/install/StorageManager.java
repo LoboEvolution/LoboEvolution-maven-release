@@ -1,3 +1,23 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.install;
 
 import java.awt.Toolkit;
@@ -10,6 +30,8 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.SwingWorker;
@@ -22,10 +44,13 @@ import org.loboevolution.store.SQLiteCommon;
 /**
  * <p>StorageManager class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class StorageManager extends SwingWorker<Void, Void> {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(StorageManager.class.getName());
 
 	private final JFrame frame;
 
@@ -64,7 +89,7 @@ public class StorageManager extends SwingWorker<Void, Void> {
 			Thread.sleep(1000);
 
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		return null;
@@ -80,14 +105,14 @@ public class StorageManager extends SwingWorker<Void, Void> {
 			Toolkit.getDefaultToolkit().beep();
 			this.frame.dispose();
 			this.frame.setVisible(false);
-			new GuiInit().createAndShowGui();
+			GuiInit.createAndShowGui();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
 	private List<String> getList() {
-		final List<String> files = new ArrayList<String>();
+		final List<String> files = new ArrayList<>();
 		files.add(0, "table.sql");
 		files.add("char.sql");
 		files.add("color.sql");
@@ -97,6 +122,7 @@ public class StorageManager extends SwingWorker<Void, Void> {
 		files.add("searchEngine.sql");
 		files.add("size.sql");
 		files.add("userAgent.sql");
+		files.add("lookAndFeel.sql");
 		return files;
 	}
 
@@ -105,7 +131,7 @@ public class StorageManager extends SwingWorker<Void, Void> {
 				Statement stmt = conn.createStatement()) {
 			String s = new String();
 			final StringBuilder sb = new StringBuilder();
-			final boolean isTable = "table.sql".equals(fl.getName()) ? true : false;
+			final boolean isTable = "table.sql".equals(fl.getName());
 			try (FileReader fr = new FileReader(fl); BufferedReader br = new BufferedReader(fr)) {
 				while ((s = br.readLine()) != null) {
 					sb.append(s);
@@ -122,7 +148,7 @@ public class StorageManager extends SwingWorker<Void, Void> {
 				}
 			}
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

@@ -1,8 +1,26 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.input;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
@@ -16,14 +34,14 @@ import org.loboevolution.html.js.Executor;
 /**
  * <p>InputColorPicker class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class InputColorPicker {
 	
-	private HTMLInputElementImpl modelNode;
+	private final HTMLInputElementImpl modelNode;
 	
-	JButton widget = new JButton("Choose Color");
+	final JButton widget = new JButton("Choose Color");
 
 	/**
 	 * <p>Constructor for InputColorPicker.</p>
@@ -38,17 +56,14 @@ public class InputColorPicker {
 		}
 		widget.setVisible(!modelNode.getHidden());
 		widget.applyComponentOrientation(ic.direction(modelNode.getDir()));
-		widget.setEnabled(!modelNode.getDisabled());
+		widget.setEnabled(!modelNode.isDisabled());
 
-		widget.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				Color c = JColorChooser.showDialog(null, "Choose a Color", null);
-				String value = "#" + Integer.toHexString(c.getRGB()).substring(2);
-				modelNode.setValue(value);
-				widget.setToolTipText(value);
-				widget.setBackground(c);
-			}
+		widget.addActionListener(event -> {
+			Color c = JColorChooser.showDialog(null, "Choose a Color", null);
+			String value = "#" + Integer.toHexString(c.getRGB()).substring(2);
+			modelNode.setValue(value);
+			widget.setToolTipText(value);
+			widget.setBackground(c);
 		});
 
 		MouseInputAdapter mouseHandler = new MouseInputAdapter() {

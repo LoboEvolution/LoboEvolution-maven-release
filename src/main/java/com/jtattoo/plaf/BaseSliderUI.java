@@ -44,8 +44,8 @@ import javax.swing.plaf.basic.BasicSliderUI;
 /**
  * <p>BaseSliderUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class BaseSliderUI extends BasicSliderUI {
 
@@ -388,7 +388,7 @@ public class BaseSliderUI extends BasicSliderUI {
 				fillLeft = middleOfThumb;
 				fillRight = trackRight - 2;
 			}
-			Color colors[];
+			Color[] colors;
 			if (!JTattooUtilities.isActive(slider)) {
 				colors = AbstractLookAndFeel.getTheme().getInActiveColors();
 			} else {
@@ -417,7 +417,7 @@ public class BaseSliderUI extends BasicSliderUI {
 				fillTop = trackTop + 1;
 				fillBottom = middleOfThumb;
 			}
-			Color colors[];
+			Color[] colors;
 			if (!JTattooUtilities.isActive(slider)) {
 				colors = AbstractLookAndFeel.getTheme().getInActiveColors();
 			} else {

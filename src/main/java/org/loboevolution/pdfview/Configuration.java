@@ -8,8 +8,8 @@ package org.loboevolution.pdfview;
  * Typically you would configure the global instance before using any other
  * PDFRenderer API.
  *
- * @author utente
- * @version $Id: $Id
+  *
+  *
  */
 public class Configuration {
 	private static Configuration INSTANCE;
@@ -49,7 +49,8 @@ public class Configuration {
 	/**
 	 * Enables or disables the conversion of greyscale images to ARGB.
 	 * Disabling this may have a lower memory overhead with high resolution
-	 * (e.g. scanned) images. 
+	 * (e.g. scanned) images. Note that this has to be called before
+	 *  is called to have an effect.
 	 *
 	 * Enabled by default.
 	 *
@@ -60,7 +61,7 @@ public class Configuration {
 	}
 
 	/**
-	 * Returns true if greyscale images will be converted to ARGB
+	 * Returns <code>true</code> if greyscale images will be converted to ARGB
 	 *
 	 * @return a boolean.
 	 */
@@ -74,6 +75,9 @@ public class Configuration {
 	 * This may lead to lower memory consumption for e.g. scanned PDFs with
 	 * large images.
 	 *
+	 * Set to a value &lt;= 0 to disable banded image rendering.
+	 * Defaults to 0 (off)
+	 *
 	 * @param aSize the height threshold at which to enable banded image rendering
 	 */
 	public void setThresholdForBandedImageRendering(int aSize) {
@@ -83,7 +87,7 @@ public class Configuration {
 	/**
 	 * Returns the image height threshold at which to enable banded image rendering.
 	 *
-	 * @return the threshold value
+	 * @return the threshold value, or a value {@literal <}= 0 if banded rendering is disabled
 	 */
 	public int getThresholdForBandedImageRendering() {
 		return thresholdForBandedImageRendering;
@@ -102,7 +106,7 @@ public class Configuration {
      * Set this to false to switch off the
      * use of this color convert op which may segfault on some platforms
      * due to a variety of problems related to thread safety and
-     * the native cmm library underlying this conversion op, e.g.,
+     * the native cmm library underlying this conversion op
      *
      * If the system is bug-free, though, this does make use
      * of native libraries and sees a not insignificant speed-up,
@@ -146,7 +150,7 @@ public class Configuration {
     /**
      * <p>isPrintSignatureFields.</p>
      *
-     * @return true if signature fields will be printed on pdf
+     * @return <code>true</code> if signature fields will be printed on pdf
      */
     public boolean isPrintSignatureFields() {
     	return this.printSigantureFields;
@@ -164,7 +168,7 @@ public class Configuration {
     /**
      * <p>isPrintStampAnnotations.</p>
      *
-     * @return true if stamp annotations will be printed on pdf
+     * @return <code>true</code> if stamp annotations will be printed on pdf
      */
     public boolean isPrintStampAnnotations() {
     	return this.printStampAnnotations;
@@ -182,7 +186,7 @@ public class Configuration {
     /**
      * <p>isPrintWidgetAnnotations.</p>
      *
-     * @return true if widget annotations will be printed on pdf
+     * @return <code>true</code> if widget annotations will be printed on pdf
      */
     public boolean isPrintWidgetAnnotations() {
 		return this.printWidgetAnnotations;
@@ -200,7 +204,7 @@ public class Configuration {
     /**
      * <p>isPrintFreetextAnnotations.</p>
      *
-     * @return true if freetext annotations will be printed on pdf
+     * @return <code>true</code> if freetext annotations will be printed on pdf
      */
     public boolean isPrintFreetextAnnotations() {
     	return this.printFreetextAnnotations;
@@ -218,7 +222,7 @@ public class Configuration {
     /**
      * <p>isPrintLinkAnnotations.</p>
      *
-     * @return true if link annotations will be printed on pdf
+     * @return <code>true</code> if link annotations will be printed on pdf
      */
     public boolean isPrintLinkAnnotations() {
     	return this.printLinkAnnotations;

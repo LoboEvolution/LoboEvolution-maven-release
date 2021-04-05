@@ -10,8 +10,8 @@ package org.mozilla.javascript;
 /**
  * The class of exceptions thrown by the JavaScript engine.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class EvaluatorException extends RhinoException
 {

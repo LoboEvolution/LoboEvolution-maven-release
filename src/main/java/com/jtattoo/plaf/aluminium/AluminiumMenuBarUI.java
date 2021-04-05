@@ -36,8 +36,8 @@ import com.jtattoo.plaf.JTattooUtilities;
 /**
  * <p>AluminiumMenuBarUI class.</p>
  *
- * @author Michael Hagen
- * @version $Id: $Id
+ * Author Michael Hagen
+ *
  */
 public class AluminiumMenuBarUI extends BaseMenuBarUI {
 
@@ -51,7 +51,7 @@ public class AluminiumMenuBarUI extends BaseMenuBarUI {
 	public void installUI(JComponent c) {
 		super.installUI(c);
 		if (c != null && c instanceof JMenuBar) {
-			((JMenuBar) c).setBorder(BaseBorders.getMenuBarBorder());
+			c.setBorder(BaseBorders.getMenuBarBorder());
 		}
 	}
 

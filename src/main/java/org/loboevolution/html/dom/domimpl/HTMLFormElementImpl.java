@@ -1,23 +1,22 @@
 /*
-    GNU LESSER GENERAL PUBLIC LICENSE
-    Copyright (C) 2006 The Lobo Project. Copyright (C) 2014 Lobo Evolution
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Contact info: lobochief@users.sourceforge.net; ivan.difrancesco@yahoo.it
-*/
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
 /*
  * Created on Jan 14, 2006
  */
@@ -26,24 +25,26 @@ package org.loboevolution.html.dom.domimpl;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
-import org.loboevolution.html.dom.input.FormInput;
 import org.loboevolution.html.dom.HTMLCollection;
 import org.loboevolution.html.dom.HTMLFormElement;
 import org.loboevolution.html.dom.filter.InputFilter;
+import org.loboevolution.html.dom.input.FormInput;
+import org.loboevolution.html.dom.nodeimpl.NodeVisitor;
 import org.loboevolution.html.js.Executor;
 import org.loboevolution.http.HtmlRendererContext;
 import org.mozilla.javascript.Function;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.loboevolution.html.node.Element;
+import org.loboevolution.html.node.Node;
 
 /**
  * <p>HTMLFormElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFormElement {
+public class HTMLFormElementImpl extends HTMLElementImpl implements HTMLFormElement {
 
 	/**
 	 * <p>isInput.</p>
@@ -57,8 +58,6 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 	}
 
 	private HTMLCollection elements;
-
-	private Function onsubmit;
 
 	/**
 	 * <p>Constructor for HTMLFormElementImpl.</p>
@@ -126,16 +125,8 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 	public String getName() {
 		return getAttribute("name");
 	}
-
-	/**
-	 * <p>Getter for the field onsubmit.</p>
-	 *
-	 * @return a {@link org.mozilla.javascript.Function} object.
-	 */
-	public Function getOnsubmit() {
-		return getEventFunction(this.onsubmit, "onsubmit");
-	}
-
+	
+	
 	/** {@inheritDoc} */
 	@Override
 	public String getTarget() {
@@ -242,15 +233,6 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 		setAttribute("name", name);
 	}
 
-	/**
-	 * <p>Setter for the field onsubmit.</p>
-	 *
-	 * @param value a {@link org.mozilla.javascript.Function} object.
-	 */
-	public void setOnsubmit(Function value) {
-		this.onsubmit = value;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public void setTarget(String target) {
@@ -272,18 +254,15 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 	public final void submit(final FormInput[] extraFormInputs) {
 		final Function onsubmit = getOnsubmit();
 		if (onsubmit != null) {
-			// TODO: onsubmit event object?
 			if (!Executor.executeFunction(this, onsubmit, null, new Object[0])) {
 				return;
 			}
 		}
 		final HtmlRendererContext context = getHtmlRendererContext();
 		if (context != null) {
-			final ArrayList<FormInput> formInputs = new ArrayList<FormInput>();
+			final ArrayList<FormInput> formInputs = new ArrayList<>();
 			if (extraFormInputs != null) {
-				for (final FormInput extraFormInput : extraFormInputs) {
-					formInputs.add(extraFormInput);
-				}
+				Collections.addAll(formInputs, extraFormInputs);
 			}
 			visit(node -> {
 				if (node instanceof HTMLElementImpl) {
@@ -298,7 +277,7 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 					}
 				}
 			});
-			final FormInput[] fia = (FormInput[]) formInputs.toArray(FormInput.EMPTY_ARRAY);
+			final FormInput[] fia = formInputs.toArray(FormInput.EMPTY_ARRAY);
 			String href = getAction();
 			if (href == null) {
 				href = getBaseURI();
@@ -310,5 +289,172 @@ public class HTMLFormElementImpl extends HTMLAbstractUIElement implements HTMLFo
 				this.warn("submit()", mfu);
 			}
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAccessKeyLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocapitalize() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Element getOffsetParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isSpellcheck() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isDraggable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isHidden() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isTranslate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAccessKey(String accessKey) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocapitalize(String autocapitalize) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setDraggable(boolean draggable) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setHidden(boolean hidden) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setSpellcheck(boolean spellcheck) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setTranslate(boolean translate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void click() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getAutocomplete() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setAutocomplete(String autocomplete) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String getEncoding() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setEncoding(String encoding) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean isNoValidate() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void setNoValidate(boolean noValidate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean checkValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean reportValidity() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "[object HTMLFormElement]";
 	}
 }

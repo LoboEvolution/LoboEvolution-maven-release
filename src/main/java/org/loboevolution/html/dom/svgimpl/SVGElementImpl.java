@@ -1,19 +1,39 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.html.dom.svgimpl;
 
-import org.loboevolution.html.dom.domimpl.HTMLAbstractUIElement;
+import org.loboevolution.html.dom.domimpl.HTMLElementImpl;
 import org.loboevolution.html.dom.svg.SVGAnimatedBoolean;
 import org.loboevolution.html.dom.svg.SVGElement;
 import org.loboevolution.html.dom.svg.SVGSVGElement;
 import org.loboevolution.html.dom.svg.SVGStringList;
-import org.w3c.dom.DOMException;
+
 
 /**
  * <p>SVGElementImpl class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
-public class SVGElementImpl extends HTMLAbstractUIElement implements SVGElement {
+public class SVGElementImpl extends HTMLElementImpl implements SVGElement {
 
 	private SVGSVGElement ownerSvg;
 
@@ -89,11 +109,7 @@ public class SVGElementImpl extends HTMLAbstractUIElement implements SVGElement 
 	 * @return a boolean.
 	 */
 	public boolean hasExtension(String extension) {
-		if (extension.equalsIgnoreCase("svg")) {
-			return true;
-		} else {
-			return false;
-		}
+		return extension.equalsIgnoreCase("svg");
 	}
 	
 	/**
@@ -111,7 +127,7 @@ public class SVGElementImpl extends HTMLAbstractUIElement implements SVGElement 
 	 * @param xmllang a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	public void setXMLlang(String xmllang) throws DOMException {
+	public void setXMLlang(String xmllang) {
 		setAttribute("xml:lang", xmllang);
 	}
 
@@ -130,7 +146,7 @@ public class SVGElementImpl extends HTMLAbstractUIElement implements SVGElement 
 	 * @param xmlspace a {@link java.lang.String} object.
 	 * @throws org.w3c.dom.DOMException if any.
 	 */
-	public void setXMLspace(String xmlspace) throws DOMException {
+	public void setXMLspace(String xmlspace) {
 		setAttribute("xml:space", xmlspace);
 	}
 

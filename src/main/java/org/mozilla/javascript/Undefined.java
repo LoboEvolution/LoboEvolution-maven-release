@@ -14,14 +14,14 @@ import java.lang.reflect.Proxy;
 /**
  * This class implements the Undefined value in JavaScript.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Undefined implements Serializable
 {
     private static final long serialVersionUID = 9195680630202616767L;
 
-    /** Constant instance */
+    /** Constant <code>instance</code> */
     public static final Object instance = new Undefined();
 
     private Undefined()
@@ -51,16 +51,16 @@ public class Undefined implements Serializable
         return 0;
     }
 
-    /** Constant SCRIPTABLE_UNDEFINED */
+    /** Constant <code>SCRIPTABLE_UNDEFINED</code> */
     public static final Scriptable SCRIPTABLE_UNDEFINED;
 
     static {
         SCRIPTABLE_UNDEFINED = (Scriptable) Proxy.newProxyInstance(Undefined.class.getClassLoader(), new Class[]{Scriptable.class}, new InvocationHandler() {
             @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            public Object invoke(Object proxy, Method method, Object[] args) {
                 if (method.getName().equals("toString")) return "undefined";
                 if (method.getName().equals("equals")) {
-                    return args.length > 0 && isUndefined(args[0]);
+                    return Boolean.valueOf(args.length > 0 && isUndefined(args[0]));
                 }
                 throw new UnsupportedOperationException("undefined doesn't support " + method.getName());
             }

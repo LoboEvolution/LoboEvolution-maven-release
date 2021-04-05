@@ -14,8 +14,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>BreakStatement</i> :
  *   <b>break</b> [<i>no LineTerminator here</i>] [Identifier] ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class BreakStatement extends Jump {
 

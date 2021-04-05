@@ -1,9 +1,27 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.component.input;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -14,11 +32,13 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.loboevolution.common.Strings;
+
 /**
  * <p>Autocomplete class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class Autocomplete {
 
@@ -29,27 +49,25 @@ public class Autocomplete {
 	 * @param items a {@link java.util.List} object.
 	 */
 	public static void setupAutoComplete(final JTextField txtInput, final List<String> items) {
-		final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+		final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 		final JComboBox<String> cbInput = new JComboBox<String>(model) {
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			public Dimension getPreferredSize() {
-				return new Dimension(super.getPreferredSize().width, 0);
-			}
-		};
+            public Dimension getPreferredSize() {
+                return new Dimension(super.getPreferredSize().width, 0);
+            }
+        };
 		setAdjusting(cbInput, false);
 		for (String item : items) {
 			model.addElement(item);
 		}
 		cbInput.removeAll();
 		cbInput.removeAllItems();
-		cbInput.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!isAdjusting(cbInput)) {
-					if (cbInput.getSelectedItem() != null) {
-						txtInput.setText(cbInput.getSelectedItem().toString());
-					}
+		
+		cbInput.addActionListener(e -> {
+			if (!isAdjusting(cbInput)) {
+				if (cbInput.getSelectedItem() != null) {
+					txtInput.setText(cbInput.getSelectedItem().toString());
 				}
 			}
 		});
@@ -69,7 +87,8 @@ public class Autocomplete {
 					e.setSource(cbInput);
 					cbInput.dispatchEvent(e);
 					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						txtInput.setText(cbInput.getSelectedItem().toString());
+						if(cbInput.getSelectedItem() != null)
+							txtInput.setText((String)cbInput.getSelectedItem());
 						cbInput.setPopupVisible(false);
 					}
 				}
@@ -96,7 +115,7 @@ public class Autocomplete {
 				setAdjusting(cbInput, true);
 				model.removeAllElements();
 				String input = txtInput.getText();
-				if (!input.isEmpty()) {
+				if (Strings.isNotBlank(input)) {
 					for (String item : items) {
 						if (item.toLowerCase().contains(input.toLowerCase())) {
 							model.addElement(item);

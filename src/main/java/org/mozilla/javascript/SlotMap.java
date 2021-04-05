@@ -16,8 +16,8 @@ package org.mozilla.javascript;
  * ScriptableObject are complex. Many attempts to make this interface more elegant have
  * resulted in substantial performance regressions so we are doing the best that we can.
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public interface SlotMap
     extends Iterable<ScriptableObject.Slot> {

@@ -14,8 +14,8 @@ import org.mozilla.javascript.ast.ScriptNode;
 /**
  * <p>OptFunctionNode class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public final class OptFunctionNode
 {
@@ -60,7 +60,7 @@ public final class OptFunctionNode
     }
 
     /**
-     * <p>Getter for the field directTargetIndex.</p>
+     * <p>Getter for the field <code>directTargetIndex</code>.</p>
      *
      * @return a int.
      */

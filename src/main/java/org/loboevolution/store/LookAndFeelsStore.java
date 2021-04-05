@@ -1,25 +1,50 @@
+/*
+ * GNU GENERAL LICENSE
+ * Copyright (C) 2014 - 2021 Lobo Evolution
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * verion 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Contact info: ivan.difrancesco@yahoo.it
+ */
+
 package org.loboevolution.store;
 
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.loboevolution.laf.LAFSettings;
 
 /**
  * <p>LookAndFeelsStore class.</p>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class LookAndFeelsStore {
+	
+	/** The Constant logger. */
+	private static final Logger logger = Logger.getLogger(LookAndFeelsStore.class.getName());
 
 	private final String DELETE_LAF = "DELETE FROM LOOK_AND_FEEL";
 
 	private final String INSERT_LAF = " INSERT INTO LOOK_AND_FEEL (acryl, aero, aluminium, bernstein, fast, graphite,"
 			+ "hiFi,luna, mcWin, mint, noire, smart, texture, subscript, superscript, underline, italic, "
-			+ "strikethrough, fontSize, font, color, bold) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ "strikethrough, fontSize, font, color, bold, modern, black, white) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	private final String INSERT_SEARCH2 = "INSERT INTO SEARCH (name, description, type, selected) VALUES(?,?,?,?)";
 
@@ -33,7 +58,7 @@ public class LookAndFeelsStore {
 		try {
 			conn = DriverManager.getConnection(dbPath);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 		return conn;
 	}
@@ -46,7 +71,7 @@ public class LookAndFeelsStore {
 				PreparedStatement pstmt = conn.prepareStatement(this.DELETE_LAF)) {
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -64,7 +89,7 @@ public class LookAndFeelsStore {
 			pstmt.setInt(4, search.isSelected() ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
@@ -101,9 +126,12 @@ public class LookAndFeelsStore {
 			final Color c = laf.getColor();
 			pstmt.setString(21, "rgb(" + c.getRed() + "," + c.getGreen() + "," + c.getBlue() + ")");
 			pstmt.setInt(22, laf.isBold() ? 1 : 0);
+			pstmt.setInt(23, laf.isModern() ? 1 : 0);
+			pstmt.setInt(24, laf.isBlackWhite() ? 1 : 0);
+			pstmt.setInt(25, laf.isWhiteBlack() ? 1 : 0);
 			pstmt.executeUpdate();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

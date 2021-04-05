@@ -15,8 +15,8 @@ import org.mozilla.javascript.Token;
  * <pre><i>ContinueStatement</i> :
  *   <b>continue</b> [<i>no LineTerminator here</i>] [Identifier] ;</pre>
  *
- * @author utente
- * @version $Id: $Id
+ *
+ *
  */
 public class ContinueStatement extends Jump {
 
